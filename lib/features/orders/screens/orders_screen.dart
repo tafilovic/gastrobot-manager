@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/order.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
 
-  static const _dummyOrders = [
-    Order(id: 'P207U', tableNumber: 15, dishCount: 3, timeAgo: 'Pre 1 minut'),
-    Order(id: 'P208N', tableNumber: 13, dishCount: 2, timeAgo: 'Pre 1 minut'),
-    Order(id: 'P209N', tableNumber: 15, dishCount: 4, timeAgo: 'Pre 30 sekundi'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final accentColor = theme.colorScheme.primary;
+    final dummyOrders = [
+      Order(id: 'P207U', tableNumber: 15, dishCount: 3, timeAgo: l10n.orderTimeAgoMinutes(1)),
+      Order(id: 'P208N', tableNumber: 13, dishCount: 2, timeAgo: l10n.orderTimeAgoMinutes(1)),
+      Order(id: 'P209N', tableNumber: 15, dishCount: 4, timeAgo: l10n.orderTimeAgoSeconds(30)),
+    ];
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -25,7 +26,7 @@ class OrdersScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
               child: Text(
-                'Porudžbine',
+                l10n.ordersTitle,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF333333),
@@ -35,7 +36,7 @@ class OrdersScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
               child: Text(
-                '${_dummyOrders.length} porudžbine',
+                l10n.ordersCount(dummyOrders.length),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: const Color(0xFF757575),
                 ),
@@ -44,13 +45,14 @@ class OrdersScreen extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                itemCount: _dummyOrders.length,
+                itemCount: dummyOrders.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  final order = _dummyOrders[index];
+                  final order = dummyOrders[index];
                   return _OrderCard(
                     order: order,
                     accentColor: accentColor,
+                    l10n: l10n,
                     onSeeDetails: () {},
                   );
                 },
@@ -67,11 +69,13 @@ class _OrderCard extends StatelessWidget {
   const _OrderCard({
     required this.order,
     required this.accentColor,
+    required this.l10n,
     required this.onSeeDetails,
   });
 
   final Order order;
   final Color accentColor;
+  final AppLocalizations l10n;
   final VoidCallback onSeeDetails;
 
   @override
@@ -114,7 +118,7 @@ class _OrderCard extends StatelessWidget {
                 Icon(Icons.table_restaurant, size: 18, color: Colors.grey[600]),
                 const SizedBox(width: 8),
                 Text(
-                  'Sto broj ${order.tableNumber}',
+                  l10n.orderTableNumber(order.tableNumber),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: const Color(0xFF333333),
                   ),
@@ -131,7 +135,7 @@ class _OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Broj jela: ${order.dishCount}',
+              l10n.orderDishCount(order.dishCount),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: const Color(0xFF333333),
               ),
@@ -146,7 +150,7 @@ class _OrderCard extends StatelessWidget {
                   side: BorderSide(color: accentColor),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                child: const Text('VIDI DETALJE'),
+                child: Text(l10n.orderSeeDetails),
               ),
             ),
           ],

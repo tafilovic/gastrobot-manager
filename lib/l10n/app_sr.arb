@@ -1,0 +1,91 @@
+{
+  "@@locale": "sr",
+
+  "appTitle": "GastroBot Manager",
+
+  "loginSubtitle": "Prijavite se da biste nastavili",
+  "loginEmailLabel": "Email",
+  "loginEmailHint": "npr. korisnik@example.com",
+  "loginEmailRequired": "Unesite email",
+  "loginEmailInvalid": "Unesite ispravan email",
+  "loginPasswordLabel": "Lozinka",
+  "loginPasswordRequired": "Unesite lozinku",
+  "loginRememberEmail": "Zapamti email",
+  "loginButton": "Prijava",
+  "loginFailed": "Prijava nije uspela. Pokušajte ponovo.",
+
+  "profileTitle": "Moj profil",
+  "profileLabelName": "IME",
+  "profileLabelEmail": "EMAIL",
+  "profileLabelPassword": "LOZINKA",
+  "profileChangePassword": "Promeni",
+  "profileReservationReminder": "NAPOMENA ZA REZERVACIJU",
+  "profileReservationReminderHint": "*Koliko ranije dobijate obaveštenje za spremanje unapred naručene hrane",
+  "profileReservationReminderValue": "1h unapr",
+  "profileLabelLanguage": "JEZIK",
+  "profileLanguageValue": "Srpski",
+  "profileLogout": "IZLOGUJ SE",
+  "logoutDialogTitle": "Odjava",
+  "logoutDialogMessage": "Da li ste sigurni da želite da se odjavite?",
+  "logoutCancel": "Odustani",
+  "logoutConfirm": "Odjavi se",
+
+  "navOrders": "PORUDŽBINE",
+  "navPreparing": "U PRIPREMI",
+  "navReservations": "REZERVACIJE",
+  "navMenu": "JELOVNIK",
+  "navProfile": "PROFIL",
+
+  "ordersTitle": "Porudžbine",
+  "ordersCount": "{count} porudžbine",
+  "@ordersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTableNumber": "Sto broj {number}",
+  "@orderTableNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "orderDishCount": "Broj jela: {count}",
+  "@orderDishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderSeeDetails": "VIDI DETALJE",
+  "orderTimeAgoMinutes": "Pre {count} minuta",
+  "@orderTimeAgoMinutes": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "orderTimeAgoSeconds": "Pre {count} sekundi",
+  "@orderTimeAgoSeconds": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "reservationsTitle": "Rezervacije",
+  "reservationsSubtitle": "Upravljajte rezervacijama stolova",
+  "preparingTitle": "U pripremi",
+  "preparingSubtitle": "Stavke u pripremi",
+  "menuTitle": "Jelovnik",
+  "menuSubtitle": "Pregledajte stavke jelovnika",
+
+  "profileTypeWaiter": "Konobar",
+  "profileTypeKitchen": "Kuhinja",
+  "profileTypeBar": "Šank",
+
+  "authLoginFailed": "Prijava nije uspela.",
+  "authInvalidResponse": "Neispravan odgovor servera."
+}

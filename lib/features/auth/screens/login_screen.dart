@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
+import '../data/auth_remote.dart';
 import '../providers/auth_provider.dart';
 
-/// Login screen. On submit, fetches user data; user type from API decides app flow.
+/// Login screen. Email + password; optional "remember email". Session is persisted.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -13,20 +15,36 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _rememberEmail = true;
   bool _isLoading = false;
   String? _error;
 
   @override
+  void initState() {
+    super.initState();
+    _loadRememberedEmail();
+  }
+
+  Future<void> _loadRememberedEmail() async {
+    final email = await context.read<AuthProvider>().getRememberedEmail();
+    if (mounted && email != null && email.isNotEmpty) {
+      _emailController.text = email;
+    }
+  }
+
+  @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   Future<void> _submit() async {
     if (_isLoading) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
     setState(() {
       _error = null;
       _isLoading = true;
@@ -34,13 +52,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await context.read<AuthProvider>().login(
-            _usernameController.text.trim(),
+            _emailController.text.trim(),
             _passwordController.text,
+            rememberEmail: _rememberEmail,
           );
+    } on AuthApiException catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.message;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = 'Login failed. Please try again.';
+          _error = AppLocalizations.of(context)!.loginFailed;
           _isLoading = false;
         });
       }
@@ -49,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -60,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'GastroBot Manager',
+                  l10n.appTitle,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -68,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Sign in to continue',
+                  l10n.loginSubtitle,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -76,24 +103,44 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    hintText: 'waiter, kitchen, or bar',
-                    border: OutlineInputBorder(),
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: l10n.loginEmailLabel,
+                    hintText: l10n.loginEmailHint,
+                    border: const OutlineInputBorder(),
                   ),
+                  keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   enabled: !_isLoading,
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return l10n.loginEmailRequired;
+                    if (!v.contains('@')) return l10n.loginEmailInvalid;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.loginPasswordLabel,
+                    border: const OutlineInputBorder(),
                   ),
                   obscureText: true,
                   enabled: !_isLoading,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return l10n.loginPasswordRequired;
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                CheckboxListTile(
+                  value: _rememberEmail,
+                  onChanged: _isLoading
+                      ? null
+                      : (value) => setState(() => _rememberEmail = value ?? true),
+                  title: Text(l10n.loginRememberEmail),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
                 ),
                 if (_error != null) ...[
                   const SizedBox(height: 16),
@@ -113,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Login'),
+                        : Text(l10n.loginButton),
                   ),
                 ),
               ],

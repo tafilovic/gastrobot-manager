@@ -1,0 +1,60 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "GastroBot Manager",
+
+  "loginSubtitle": "Sign in to continue",
+  "loginEmailLabel": "Email",
+  "loginEmailHint": "e.g. user@example.com",
+  "loginEmailRequired": "Enter email",
+  "loginEmailInvalid": "Enter a valid email",
+  "loginPasswordLabel": "Password",
+  "loginPasswordRequired": "Enter password",
+  "loginRememberEmail": "Remember email",
+  "loginButton": "Sign in",
+  "loginFailed": "Sign in failed. Please try again.",
+
+  "profileTitle": "My profile",
+  "profileLabelName": "NAME",
+  "profileLabelEmail": "EMAIL",
+  "profileLabelPassword": "PASSWORD",
+  "profileChangePassword": "Change",
+  "profileReservationReminder": "RESERVATION REMINDER",
+  "profileReservationReminderHint": "*How early you receive notifications for preparing pre-ordered food",
+  "profileReservationReminderValue": "1h in advance",
+  "profileLabelLanguage": "LANGUAGE",
+  "profileLanguageValue": "English",
+  "profileLogout": "LOG OUT",
+  "logoutDialogTitle": "Log out",
+  "logoutDialogMessage": "Are you sure you want to log out?",
+  "logoutCancel": "Cancel",
+  "logoutConfirm": "Log out",
+
+  "navOrders": "ORDERS",
+  "navPreparing": "PREPARING",
+  "navReservations": "RESERVATIONS",
+  "navMenu": "MENU",
+  "navProfile": "PROFILE",
+
+  "ordersTitle": "Orders",
+  "ordersCount": "{count} orders",
+  "orderTableNumber": "Table number {number}",
+  "orderDishCount": "Dish count: {count}",
+  "orderSeeDetails": "VIEW DETAILS",
+  "orderTimeAgoMinutes": "{count} min ago",
+  "orderTimeAgoSeconds": "{count} sec ago",
+
+  "reservationsTitle": "Reservations",
+  "reservationsSubtitle": "Manage table reservations",
+  "preparingTitle": "Preparing",
+  "preparingSubtitle": "Items in preparation",
+  "menuTitle": "Menu",
+  "menuSubtitle": "Browse menu items",
+
+  "profileTypeWaiter": "Waiter",
+  "profileTypeKitchen": "Kitchen",
+  "profileTypeBar": "Bar",
+
+  "authLoginFailed": "Sign in failed.",
+  "authInvalidResponse": "Invalid server response."
+}

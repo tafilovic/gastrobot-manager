@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/navigation/nav_config.dart';
 import '../../../core/navigation/nav_item.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../menu/screens/menu_screen.dart';
 import '../../orders/screens/orders_screen.dart';
@@ -40,6 +41,7 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType!;
     final items = NavConfig.itemsFor(profileType);
@@ -71,7 +73,7 @@ class _MainShellState extends State<MainShell> {
               destinations: items
                   .map((item) => NavigationDestination(
                         icon: Icon(item.icon),
-                        label: item.label,
+                        label: NavConfig.labelFor(l10n, item.route),
                       ))
                   .toList(),
             ),

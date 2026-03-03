@@ -1,34 +1,30 @@
-import '../../../core/models/user.dart';
+import '../data/auth_remote.dart';
+import '../data/session_storage.dart';
+import '../models/auth_session.dart';
+import '../models/sign_in_request.dart';
 
-/// Dummy auth service. Simulates fetching user data from backend.
-/// In production, replace with real API call.
+/// Auth service: sign-in via API and session persistence.
 class AuthService {
   AuthService._();
 
   static final AuthService instance = AuthService._();
 
-  /// Simulates login: validates credentials, fetches user data.
-  /// User type (waiter, kitchen, bar) comes from the API response.
-  /// For dummy: use username "waiter", "kitchen", or "bar" to test each flow.
-  Future<User> login(String username, String password) async {
-    await Future<void>.delayed(const Duration(milliseconds: 800));
+  final AuthRemote _remote = AuthRemote();
 
-    // Dummy: simulate API response with user data including type
-    final response = _dummyUserResponse(username);
-    return User.fromJson(response);
+  /// Sign in with email and password. Returns session (user + tokens).
+  Future<AuthSession> signIn(SignInRequest request) async {
+    final session = await _remote.signIn(request);
+    await SessionStorage.saveSession(session);
+    return session;
   }
 
-  Map<String, dynamic> _dummyUserResponse(String username) {
-    final lower = username.toLowerCase();
-    final type = lower.contains('kitchen')
-        ? 'kitchen'
-        : lower.contains('bar')
-            ? 'bar'
-            : 'waiter';
-    return {
-      'id': '1',
-      'name': username,
-      'type': type,
-    };
+  /// Restore session from storage (e.g. on app start).
+  Future<AuthSession?> restoreSession() async {
+    return SessionStorage.getSession();
+  }
+
+  /// Clear session and all stored user data (on logout).
+  Future<void> signOut() async {
+    await SessionStorage.clearAll();
   }
 }
