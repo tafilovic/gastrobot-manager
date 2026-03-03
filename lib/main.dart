@@ -11,6 +11,7 @@ import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/services/auth_service.dart';
 import 'features/profile/data/profile_remote.dart';
 import 'features/profile/domain/repositories/profile_api.dart';
+import 'features/profile/providers/profile_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,9 @@ void main() async {
         ),
         ChangeNotifierProvider<AuthProvider>(
           create: (c) => AuthProvider(c.read<AuthService>()),
+        ),
+        ChangeNotifierProvider<ProfileProvider>(
+          create: (c) => ProfileProvider(c.read<AuthProvider>(), c.read<ProfileApi>()),
         ),
       ],
       child: const GastroBotApp(),

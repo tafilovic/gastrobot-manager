@@ -6,15 +6,14 @@ import 'package:provider/provider.dart';
 
 import '../../../core/models/user.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../auth/providers/auth_provider.dart';
 import '../domain/errors/profile_exception.dart';
-import '../domain/repositories/profile_api.dart';
+import '../providers/profile_provider.dart';
 import '../utils/profile_image_url.dart';
 
 const _maxImageBytes = 3 * 1024 * 1024; // 3MB
 const _accentBlue = Color(0xFF2196F3);
 
-/// Dialog to change or remove profile picture. Uploads via [ProfileApi] on save.
+/// Dialog to change or remove profile picture. Uploads via [ProfileProvider] on save.
 class ProfileImageDialog extends StatefulWidget {
   const ProfileImageDialog({
     super.key,
@@ -98,17 +97,9 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
     if (!_hasChanges || _isLoading) return;
     if (_selectedFile == null) {
       if (_deleteRequested) {
-        context.read<AuthProvider>().updateProfileImageUrl(null);
+        context.read<ProfileProvider>().clearProfileImage();
       }
       Navigator.of(context).pop();
-      return;
-    }
-
-    final profileApi = context.read<ProfileApi>();
-    final auth = context.read<AuthProvider>();
-    final token = auth.accessToken;
-    if (token == null || token.isEmpty) {
-      setState(() => _error = 'Not logged in');
       return;
     }
 
@@ -118,11 +109,8 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
     });
 
     try {
-      final newUrl = await profileApi.updateProfileImage(_selectedFile!, token);
+      await context.read<ProfileProvider>().updateProfileImage(_selectedFile!);
       if (!mounted) return;
-      if (newUrl != null) {
-        auth.updateProfileImageUrl(newUrl);
-      }
       Navigator.of(context).pop();
     } on ProfileException catch (e) {
       if (mounted) {

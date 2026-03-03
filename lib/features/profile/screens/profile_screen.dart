@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/models/user.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../auth/providers/auth_provider.dart';
+import '../providers/profile_provider.dart';
 import '../utils/profile_image_url.dart';
 import 'profile_image_dialog.dart';
 
@@ -16,8 +16,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final auth = context.watch<AuthProvider>();
-    final user = auth.user!;
+    final profile = context.watch<ProfileProvider>();
+    final user = profile.user!;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -86,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () => _showLogoutDialog(context, auth),
+                  onPressed: () => _showLogoutDialog(context, profile),
                   style: FilledButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
@@ -103,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context, AuthProvider auth) {
+  void _showLogoutDialog(BuildContext context, ProfileProvider profile) {
     final l10n = AppLocalizations.of(context)!;
     showDialog<bool>(
       context: context,
@@ -124,7 +124,7 @@ class ProfileScreen extends StatelessWidget {
       ),
     ).then((confirmed) {
       if (confirmed == true) {
-        auth.logout();
+        profile.logout();
       }
     });
   }
