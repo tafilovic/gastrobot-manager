@@ -9,6 +9,8 @@ import 'features/auth/data/shared_preferences_session_storage.dart';
 import 'features/auth/domain/repositories/auth_api.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/services/auth_service.dart';
+import 'features/profile/data/profile_remote.dart';
+import 'features/profile/domain/repositories/profile_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,9 @@ void main() async {
         ),
         Provider<AuthApi>(
           create: (_) => AuthRemote(),
+        ),
+        Provider<ProfileApi>(
+          create: (_) => ProfileRemote(),
         ),
         Provider<AuthService>(
           create: (c) => AuthService(c.read<SessionStorage>(), c.read<AuthApi>()),

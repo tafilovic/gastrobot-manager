@@ -23,6 +23,7 @@ class User {
   final String firstname;
   final String lastname;
   final String email;
+
   /// Backend role: waiter, kitchen, bar, etc. Drives [type] and app flow.
   final String role;
   final List<VenueUser> venueUsers;
@@ -50,8 +51,8 @@ class User {
       role: json['role'] as String? ?? 'waiter',
       venueUsers: venueUsersList != null
           ? venueUsersList
-              .map((e) => VenueUser.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => VenueUser.fromJson(e as Map<String, dynamic>))
+                .toList()
           : const [],
       profileImageUrl: json['profileImageUrl'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
@@ -64,20 +65,40 @@ class User {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'firstname': firstname,
-        'lastname': lastname,
-        'email': email,
-        'role': role,
-        'venueUsers': venueUsers.map((e) => e.toJson()).toList(),
-        'profileImageUrl': profileImageUrl,
-        'phoneNumber': phoneNumber,
-        'organizationId': organizationId,
-        'isVerified': isVerified,
-        'isSmsVerified': isSmsVerified,
-        'lastTableId': lastTableId,
-        'brandOwnerId': brandOwnerId,
-      };
+    'id': id,
+    'firstname': firstname,
+    'lastname': lastname,
+    'email': email,
+    'role': role,
+    'venueUsers': venueUsers.map((e) => e.toJson()).toList(),
+    'profileImageUrl': profileImageUrl,
+    'phoneNumber': phoneNumber,
+    'organizationId': organizationId,
+    'isVerified': isVerified,
+    'isSmsVerified': isSmsVerified,
+    'lastTableId': lastTableId,
+    'brandOwnerId': brandOwnerId,
+  };
+
+  User copyWith({Object? profileImageUrl = _omit}) => User(
+    id: id,
+    firstname: firstname,
+    lastname: lastname,
+    email: email,
+    role: role,
+    venueUsers: venueUsers,
+    profileImageUrl: profileImageUrl == _omit
+        ? this.profileImageUrl
+        : profileImageUrl as String?,
+    phoneNumber: phoneNumber,
+    organizationId: organizationId,
+    isVerified: isVerified,
+    isSmsVerified: isSmsVerified,
+    lastTableId: lastTableId,
+    brandOwnerId: brandOwnerId,
+  );
+
+  static const _omit = Object();
 
   static ProfileType _roleToProfileType(String value) {
     switch (value.toLowerCase()) {

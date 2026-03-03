@@ -61,4 +61,11 @@ class AuthProvider extends ChangeNotifier {
 
   /// Pre-fill email from "remember me". Call once when showing login.
   Future<String?> getRememberedEmail() => _authService.getRememberedEmail();
+
+  /// Update the current user's profile image URL (e.g. after upload).
+  void updateProfileImageUrl(String? newUrl) {
+    if (_user == null) return;
+    _user = _user!.copyWith(profileImageUrl: newUrl);
+    notifyListeners();
+  }
 }

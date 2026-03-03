@@ -76,6 +76,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileLogout => 'LOG OUT';
 
   @override
+  String get profileImageDialogTitle => 'Profile picture';
+
+  @override
+  String get profileImageUploadButton => 'UPLOAD PICTURE';
+
+  @override
+  String get profileImageMaxSize => '3MB (maximum image size)';
+
+  @override
+  String get profileImageSaveChanges => 'SAVE CHANGES';
+
+  @override
   String get logoutDialogTitle => 'Log out';
 
   @override

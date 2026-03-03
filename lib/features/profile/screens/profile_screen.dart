@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../core/models/user.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../utils/profile_image_url.dart';
+import 'profile_image_dialog.dart';
 
 /// Profile screen: header with avatar, user details, settings rows, logout with confirmation.
 class ProfileScreen extends StatelessWidget {
@@ -29,7 +31,10 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _ProfileHeader(user: user),
+            _ProfileHeader(
+              user: user,
+              onEditPhoto: () => ProfileImageDialog.show(context, user),
+            ),
             const Divider(height: 1),
             _ProfileRow(
               icon: Icons.person_outline,
@@ -126,14 +131,16 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.user});
+  const _ProfileHeader({required this.user, required this.onEditPhoto});
 
   final User user;
+  final VoidCallback onEditPhoto;
 
   static const _accentBlue = Color(0xFF2196F3);
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = resolveProfileImageUrl(user.profileImageUrl);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: Column(
@@ -141,23 +148,17 @@ class _ProfileHeader extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              CircleAvatar(
-                radius: 48,
-                backgroundColor: _accentBlue,
-                backgroundImage: user.profileImageUrl != null && user.profileImageUrl!.isNotEmpty
-                    ? NetworkImage(user.profileImageUrl!)
-                    : null,
-                child: user.profileImageUrl == null || user.profileImageUrl!.isEmpty
-                    ? const Icon(Icons.person, size: 56, color: Colors.white)
-                    : null,
-              ),
+              _ProfileAvatar(imageUrl: imageUrl, accentBlue: _accentBlue),
               Positioned(
                 right: 0,
                 bottom: 0,
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: _accentBlue,
-                  child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                child: GestureDetector(
+                  onTap: onEditPhoto,
+                  child: CircleAvatar(
+                    radius: 14,
+                    backgroundColor: _accentBlue,
+                    child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                  ),
                 ),
               ),
             ],
@@ -179,6 +180,37 @@ class _ProfileHeader extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ProfileAvatar extends StatelessWidget {
+  const _ProfileAvatar({this.imageUrl, required this.accentBlue});
+
+  final String? imageUrl;
+  final Color accentBlue;
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl == null || imageUrl!.isEmpty) {
+      return CircleAvatar(
+        radius: 48,
+        backgroundColor: accentBlue,
+        child: const Icon(Icons.person, size: 56, color: Colors.white),
+      );
+    }
+    return CircleAvatar(
+      radius: 48,
+      backgroundColor: accentBlue,
+      child: ClipOval(
+        child: Image.network(
+          imageUrl!,
+          width: 96,
+          height: 96,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 56, color: Colors.white),
+        ),
       ),
     );
   }

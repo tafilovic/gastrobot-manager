@@ -76,6 +76,18 @@ class AppLocalizationsSr extends AppLocalizations {
   String get profileLogout => 'IZLOGUJ SE';
 
   @override
+  String get profileImageDialogTitle => 'Profilna slika';
+
+  @override
+  String get profileImageUploadButton => 'UBACI SLIKU';
+
+  @override
+  String get profileImageMaxSize => '3MB (maksimalna veličina slike)';
+
+  @override
+  String get profileImageSaveChanges => 'SAČUVAJ IZMENE';
+
+  @override
   String get logoutDialogTitle => 'Odjava';
 
   @override

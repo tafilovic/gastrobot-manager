@@ -230,6 +230,30 @@ abstract class AppLocalizations {
   /// **'IZLOGUJ SE'**
   String get profileLogout;
 
+  /// No description provided for @profileImageDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Profilna slika'**
+  String get profileImageDialogTitle;
+
+  /// No description provided for @profileImageUploadButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'UBACI SLIKU'**
+  String get profileImageUploadButton;
+
+  /// No description provided for @profileImageMaxSize.
+  ///
+  /// In sr, this message translates to:
+  /// **'3MB (maksimalna veličina slike)'**
+  String get profileImageMaxSize;
+
+  /// No description provided for @profileImageSaveChanges.
+  ///
+  /// In sr, this message translates to:
+  /// **'SAČUVAJ IZMENE'**
+  String get profileImageSaveChanges;
+
   /// No description provided for @logoutDialogTitle.
   ///
   /// In sr, this message translates to:
