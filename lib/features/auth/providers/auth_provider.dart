@@ -2,17 +2,17 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/models/profile_type.dart';
 import '../../../core/models/user.dart';
-import '../data/session_storage.dart';
-import '../models/auth_session.dart';
 import '../models/sign_in_request.dart';
 import '../services/auth_service.dart';
 
 /// Auth state: current user, tokens, and session persistence.
 /// [profileType] (from user.role) drives app flow. Tokens available for API calls.
 class AuthProvider extends ChangeNotifier {
-  AuthProvider() {
+  AuthProvider(this._authService) {
     _restoreSession();
   }
+
+  final AuthService _authService;
 
   User? _user;
   String? _accessToken;
@@ -30,7 +30,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isRestoring => _isRestoring;
 
   Future<void> _restoreSession() async {
-    final session = await AuthService.instance.restoreSession();
+    final session = await _authService.restoreSession();
     if (session != null) {
       _user = session.user;
       _accessToken = session.accessToken;
@@ -41,22 +41,18 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> login(String email, String password, {bool rememberEmail = false}) async {
-    final session = await AuthService.instance.signIn(
+    final session = await _authService.signIn(
       SignInRequest(email: email.trim(), password: password),
     );
     _user = session.user;
     _accessToken = session.accessToken;
     _refreshToken = session.refreshToken;
-    if (rememberEmail) {
-      await SessionStorage.saveRememberedEmail(email.trim());
-    } else {
-      await SessionStorage.saveRememberedEmail(null);
-    }
+    await _authService.setRememberedEmail(rememberEmail ? email.trim() : null);
     notifyListeners();
   }
 
   Future<void> logout() async {
-    await AuthService.instance.signOut();
+    await _authService.signOut();
     _user = null;
     _accessToken = null;
     _refreshToken = null;
@@ -64,5 +60,5 @@ class AuthProvider extends ChangeNotifier {
   }
 
   /// Pre-fill email from "remember me". Call once when showing login.
-  Future<String?> getRememberedEmail() => SessionStorage.getRememberedEmail();
+  Future<String?> getRememberedEmail() => _authService.getRememberedEmail();
 }

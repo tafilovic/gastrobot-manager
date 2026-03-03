@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
-import '../data/auth_remote.dart';
+import '../domain/errors/auth_exception.dart';
 import '../providers/auth_provider.dart';
 
 /// Login screen. Email + password; optional "remember email". Session is persisted.
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _passwordController.text,
             rememberEmail: _rememberEmail,
           );
-    } on AuthApiException catch (e) {
+    } on AuthException catch (e) {
       if (mounted) {
         setState(() {
           _error = e.message;

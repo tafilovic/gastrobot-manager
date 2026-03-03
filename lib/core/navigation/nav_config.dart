@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../l10n/generated/app_localizations.dart';
 import '../models/profile_type.dart';
 import 'nav_item.dart';
 
-/// Bottom navigation configuration per profile type.
+/// Bottom navigation configuration per profile type (routes and icons only).
+/// Localized labels are resolved in the presentation layer.
 /// - Waiter: all 5 items (orders, preparing, reservations, menu, profile)
 /// - Kitchen: 4 items (orders, preparing, menu, profile)
 /// - Bar: 4 items (orders, preparing, menu, profile)
@@ -48,24 +48,6 @@ class NavConfig {
       case ProfileType.kitchen:
       case ProfileType.bar:
         return [orders, preparing, menu, profile];
-    }
-  }
-
-  /// Returns localized label for the given route.
-  static String labelFor(AppLocalizations l10n, String route) {
-    switch (route) {
-      case 'orders':
-        return l10n.navOrders;
-      case 'preparing':
-        return l10n.navPreparing;
-      case 'reservations':
-        return l10n.navReservations;
-      case 'menu':
-        return l10n.navMenu;
-      case 'profile':
-        return l10n.navProfile;
-      default:
-        return l10n.navOrders;
     }
   }
 }

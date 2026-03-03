@@ -12,6 +12,7 @@ import '../../profile/screens/profile_screen.dart';
 import '../../reservations/screens/reservations_screen.dart';
 
 /// Main shell with bottom navigation. Items depend on [ProfileType].
+/// Presentation layer: resolves localized nav labels from [AppLocalizations].
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -21,6 +22,23 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
+
+  static String _navLabel(AppLocalizations l10n, String route) {
+    switch (route) {
+      case 'orders':
+        return l10n.navOrders;
+      case 'preparing':
+        return l10n.navPreparing;
+      case 'reservations':
+        return l10n.navReservations;
+      case 'menu':
+        return l10n.navMenu;
+      case 'profile':
+        return l10n.navProfile;
+      default:
+        return l10n.navOrders;
+    }
+  }
 
   Widget _buildPage(String route) {
     switch (route) {
@@ -73,7 +91,7 @@ class _MainShellState extends State<MainShell> {
               destinations: items
                   .map((item) => NavigationDestination(
                         icon: Icon(item.icon),
-                        label: NavConfig.labelFor(l10n, item.route),
+                        label: _navLabel(l10n, item.route),
                       ))
                   .toList(),
             ),
