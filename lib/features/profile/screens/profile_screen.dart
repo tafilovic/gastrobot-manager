@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/models/user.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/profile_provider.dart';
-import '../utils/profile_image_url.dart';
+import '../widgets/profile_header.dart';
+import '../widgets/profile_row.dart';
+import '../widgets/profile_row_with_subtitle.dart';
 import 'profile_image_dialog.dart';
 
 /// Profile screen: header with avatar, user details, settings rows, logout with confirmation.
@@ -30,25 +31,25 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _ProfileHeader(
+            ProfileHeader(
               user: user,
               onEditPhoto: () => ProfileImageDialog.show(context, user),
             ),
             const Divider(height: 1),
-            _ProfileRow(
+            ProfileRow(
               icon: Icons.person_outline,
               label: l10n.profileLabelName,
               value: user.name,
               valueColor: AppColors.accent,
             ),
             const Divider(height: 1, indent: 56),
-            _ProfileRow(
+            ProfileRow(
               icon: Icons.email_outlined,
               label: l10n.profileLabelEmail,
               value: user.email,
             ),
             const Divider(height: 1, indent: 56),
-            _ProfileRow(
+            ProfileRow(
               icon: Icons.lock_outline,
               label: l10n.profileLabelPassword,
               trailing: TextButton(
@@ -65,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const Divider(height: 1, indent: 56),
-            _ProfileRowWithSubtitle(
+            ProfileRowWithSubtitle(
               icon: Icons.notifications_outlined,
               label: l10n.profileReservationReminder,
               subtitle: l10n.profileReservationReminderHint,
@@ -73,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
               trailing: Icon(Icons.more_horiz, color: AppColors.textMuted, size: 20),
             ),
             const Divider(height: 1, indent: 56),
-            _ProfileRow(
+            ProfileRow(
               icon: Icons.language,
               label: l10n.profileLabelLanguage,
               value: l10n.profileLanguageValue,
@@ -126,182 +127,5 @@ class ProfileScreen extends StatelessWidget {
         profile.logout();
       }
     });
-  }
-}
-
-class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.user, required this.onEditPhoto});
-
-  final User user;
-  final VoidCallback onEditPhoto;
-
-  @override
-  Widget build(BuildContext context) {
-    final imageUrl = resolveProfileImageUrl(user.profileImageUrl);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Column(
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              _ProfileAvatar(imageUrl: imageUrl),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: GestureDetector(
-                  onTap: onEditPhoto,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: AppColors.accent,
-                    child: const Icon(Icons.edit, size: 16, color: AppColors.onPrimary),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            user.name,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            user.email,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textMuted,
-                ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProfileAvatar extends StatelessWidget {
-  const _ProfileAvatar({this.imageUrl});
-
-  final String? imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    if (imageUrl == null || imageUrl!.isEmpty) {
-      return CircleAvatar(
-        radius: 48,
-        backgroundColor: AppColors.accent,
-        child: const Icon(Icons.person, size: 56, color: AppColors.onPrimary),
-      );
-    }
-    return CircleAvatar(
-      radius: 48,
-      backgroundColor: AppColors.accent,
-      child: ClipOval(
-        child: Image.network(
-          imageUrl!,
-          width: 96,
-          height: 96,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 56, color: AppColors.onPrimary),
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileRow extends StatelessWidget {
-  const _ProfileRow({
-    required this.icon,
-    required this.label,
-    this.value,
-    this.valueColor,
-    this.trailing,
-  });
-
-  final IconData icon;
-  final String label;
-  final String? value;
-  final Color? valueColor;
-  final Widget? trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.accent, size: 24),
-      title: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.5,
-        ),
-      ),
-      trailing: trailing ??
-          (value != null
-              ? Text(
-                  value!,
-                  style: TextStyle(
-                    color: valueColor ?? AppColors.textPrimary,
-                    fontWeight: valueColor != null ? FontWeight.w500 : null,
-                  ),
-                )
-              : null),
-    );
-  }
-}
-
-class _ProfileRowWithSubtitle extends StatelessWidget {
-  const _ProfileRowWithSubtitle({
-    required this.icon,
-    required this.label,
-    required this.subtitle,
-    required this.value,
-    this.trailing,
-  });
-
-  final IconData icon;
-  final String label;
-  final String subtitle;
-  final String value;
-  final Widget? trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.accent, size: 24),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 11,
-              fontStyle: FontStyle.italic,
-              color: AppColors.textMuted,
-            ),
-          ),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(value, style: const TextStyle(color: AppColors.textPrimary)),
-          if (trailing != null) ...[const SizedBox(width: 8), trailing!],
-        ],
-      ),
-    );
   }
 }
