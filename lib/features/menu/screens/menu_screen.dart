@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -16,12 +17,12 @@ class MenuScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.menu_book, size: 64, color: Colors.grey),
+            const Icon(Icons.menu_book, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 16),
             Text(l10n.menuTitle),
             Text(
               l10n.menuSubtitle,
-              style: const TextStyle(color: Colors.grey),
+              style: const TextStyle(color: AppColors.textMuted),
             ),
           ],
         ),

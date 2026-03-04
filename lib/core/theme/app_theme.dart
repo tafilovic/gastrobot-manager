@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class AppTheme {
   AppTheme._();
-
-  static const _accentBlue = Color(0xFF2196F3);
 
   static ThemeData get light {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: _accentBlue, brightness: Brightness.light),
+      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.accent, brightness: Brightness.light),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
-        indicatorColor: _accentBlue.withValues(alpha: 0.15),
+        backgroundColor: AppColors.surface,
+        indicatorColor: AppColors.accent.withValues(alpha: 0.15),
         labelTextStyle: MaterialStateProperty.resolveWith((states) {
           if (states.contains(MaterialState.selected)) {
             return const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: _accentBlue,
+              color: AppColors.accent,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             fontSize: 11,
-            color: Colors.grey[600],
+            color: AppColors.textMuted,
           );
         }),
         iconTheme: MaterialStateProperty.resolveWith((states) {
           if (states.contains(MaterialState.selected)) {
-            return const IconThemeData(color: _accentBlue, size: 24);
+            return const IconThemeData(color: AppColors.accent, size: 24);
           }
-          return IconThemeData(color: Colors.grey[600], size: 24);
+          return const IconThemeData(color: AppColors.textMuted, size: 24);
         }),
       ),
     );

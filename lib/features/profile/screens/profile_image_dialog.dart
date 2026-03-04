@@ -5,13 +5,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/models/user.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../domain/errors/profile_exception.dart';
 import '../providers/profile_provider.dart';
 import '../utils/profile_image_url.dart';
 
 const _maxImageBytes = 3 * 1024 * 1024; // 3MB
-const _accentBlue = Color(0xFF2196F3);
 
 /// Dialog to change or remove profile picture. Uploads via [ProfileProvider] on save.
 class ProfileImageDialog extends StatefulWidget {
@@ -51,16 +51,16 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
     }
     if (_deleteRequested || !_hasCurrentImage) {
       return Container(
-        color: _accentBlue,
-        child: const Icon(Icons.person, size: 64, color: Colors.white),
+        color: AppColors.accent,
+        child: const Icon(Icons.person, size: 64, color: AppColors.onPrimary),
       );
     }
     return Image.network(
       resolveProfileImageUrl(widget.user.profileImageUrl)!,
       fit: BoxFit.cover,
       errorBuilder: (_, __, ___) => Container(
-        color: _accentBlue,
-        child: const Icon(Icons.person, size: 64, color: Colors.white),
+        color: AppColors.accent,
+        child: const Icon(Icons.person, size: 64, color: AppColors.onPrimary),
       ),
     );
   }
@@ -166,7 +166,7 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: _accentBlue.withValues(alpha: 0.5), width: 2),
+                  border: Border.all(color: AppColors.accent.withValues(alpha: 0.5), width: 2),
                 ),
                 child: ClipOval(child: _buildImage()),
               ),
@@ -178,8 +178,8 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
                     onTap: _isLoading ? null : _onDelete,
                     child: CircleAvatar(
                       radius: 16,
-                      backgroundColor: Colors.red,
-                      child: const Icon(Icons.delete_outline, color: Colors.white, size: 20),
+                      backgroundColor: AppColors.destructive,
+                      child: const Icon(Icons.delete_outline, color: AppColors.onDestructive, size: 20),
                     ),
                   ),
                 ),
@@ -191,15 +191,15 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
             icon: const Icon(Icons.upload_file, size: 20),
             label: Text(l10n.profileImageUploadButton),
             style: OutlinedButton.styleFrom(
-              foregroundColor: _accentBlue,
-              side: const BorderSide(color: _accentBlue),
+              foregroundColor: AppColors.accent,
+              side: const BorderSide(color: AppColors.accent),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             l10n.profileImageMaxSize,
-            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 12, color: AppColors.textMuted),
           ),
           if (_error != null) ...[
             const SizedBox(height: 12),
@@ -211,8 +211,8 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
             child: FilledButton(
               onPressed: (_hasChanges && !_isLoading) ? _onSave : null,
               style: FilledButton.styleFrom(
-                backgroundColor: _accentBlue,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.accent,
+                foregroundColor: AppColors.onPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 elevation: 0,
               ),
@@ -220,7 +220,7 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
                   ? const SizedBox(
                       height: 24,
                       width: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.onPrimary),
                     )
                   : Text(l10n.profileImageSaveChanges),
             ),

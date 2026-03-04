@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/models/profile_type.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_pending_order.dart';
@@ -89,7 +90,7 @@ class _KitchenOrdersContentState extends State<_KitchenOrdersContent> {
     final orders = provider.orders;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.backgroundMuted,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +101,7 @@ class _KitchenOrdersContentState extends State<_KitchenOrdersContent> {
                 widget.l10n.ordersTitle,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF333333),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -109,7 +110,7 @@ class _KitchenOrdersContentState extends State<_KitchenOrdersContent> {
               child: Text(
                 widget.l10n.ordersCount(orders.length),
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF757575),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),
@@ -123,7 +124,7 @@ class _KitchenOrdersContentState extends State<_KitchenOrdersContent> {
                             child: Text(
                               provider.error!,
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: theme.colorScheme.error),
+                              style: TextStyle(color: AppColors.error),
                             ),
                           ),
                         )
@@ -181,12 +182,12 @@ class _KitchenOrderCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: AppColors.shadow,
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -199,21 +200,31 @@ class _KitchenOrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.access_time, size: 18, color: Colors.grey[600]),
+                Icon(Icons.access_time, size: 18, color: accentColor),
                 const SizedBox(width: 8),
                 Text(
                   timeAgo,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF333333),
+                    color: accentColor,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
+                const Spacer(),
+                Text(
+                  l10n.orderTableNumber(tableNum),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Icon(Icons.table_bar, size: 18, color: AppColors.textMuted),
               ],
             ),
             const SizedBox(height: 8),
             Text(
               l10n.orderDishCount(order.itemCount),
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: const Color(0xFF333333),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -221,30 +232,17 @@ class _KitchenOrderCard extends StatelessWidget {
               '#${order.orderNumber}',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: accentColor,
+                color: AppColors.textPrimary,
               ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.table_restaurant, size: 18, color: Colors.grey[600]),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.orderTableNumber(tableNum),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF333333),
-                  ),
-                ),
-              ],
             ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(
+              child: FilledButton(
                 onPressed: onSeeDetails,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: accentColor,
-                  side: BorderSide(color: accentColor),
+                style: FilledButton.styleFrom(
+                  backgroundColor: accentColor,
+                  foregroundColor: AppColors.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: Text(l10n.orderSeeDetails),
@@ -269,7 +267,7 @@ class _StandardOrdersPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.backgroundMuted,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +278,7 @@ class _StandardOrdersPlaceholder extends StatelessWidget {
                 l10n.ordersTitle,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF333333),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -289,7 +287,7 @@ class _StandardOrdersPlaceholder extends StatelessWidget {
               child: Text(
                 l10n.ordersCount(0),
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF757575),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),

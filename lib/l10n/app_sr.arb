@@ -67,6 +67,21 @@
     }
   },
   "orderSeeDetails": "VIDI DETALJE",
+  "orderTimeAgoDays": "Pre {count} dan",
+  "@orderTimeAgoDays": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "orderTimeAgoHoursMinutes": "Pre {hours}h {minutes}min",
+  "@orderTimeAgoHoursMinutes": {
+    "placeholders": {
+      "hours": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "orderTimeAgoHours": "Pre {count} sat",
+  "@orderTimeAgoHours": {
+    "placeholders": { "count": {"type": "int"} }
+  },
   "orderTimeAgoMinutes": "Pre {count} minuta",
   "@orderTimeAgoMinutes": {
     "placeholders": {

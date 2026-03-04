@@ -141,6 +141,21 @@ class AppLocalizationsSr extends AppLocalizations {
   String get orderSeeDetails => 'VIDI DETALJE';
 
   @override
+  String orderTimeAgoDays(int count) {
+    return 'Pre $count dan';
+  }
+
+  @override
+  String orderTimeAgoHoursMinutes(int hours, int minutes) {
+    return 'Pre ${hours}h ${minutes}min';
+  }
+
+  @override
+  String orderTimeAgoHours(int count) {
+    return 'Pre $count sat';
+  }
+
+  @override
   String orderTimeAgoMinutes(int count) {
     return 'Pre $count minuta';
   }

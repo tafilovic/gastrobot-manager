@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/navigation/nav_item.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// Custom bottom nav with labels limited to 1 line.
 class AppBottomNav extends StatelessWidget {
@@ -18,8 +19,6 @@ class AppBottomNav extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
 
-  static const _accentBlue = Color(0xFF2196F3);
-
   String _label(int index) {
     if (labels != null && index < labels!.length) return labels![index];
     return items[index].label;
@@ -28,7 +27,7 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: AppColors.surface,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -50,7 +49,7 @@ class AppBottomNav extends StatelessWidget {
                         Icon(
                           item.icon,
                           size: 24,
-                          color: isSelected ? _accentBlue : Colors.grey[600],
+                          color: isSelected ? AppColors.accent : AppColors.textMuted,
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -61,7 +60,7 @@ class AppBottomNav extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                            color: isSelected ? _accentBlue : Colors.grey[600],
+                            color: isSelected ? AppColors.accent : AppColors.textMuted,
                           ),
                         ),
                       ],

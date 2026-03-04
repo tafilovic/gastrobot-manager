@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class ReservationsScreen extends StatelessWidget {
@@ -16,12 +17,12 @@ class ReservationsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.calendar_today, size: 64, color: Colors.grey),
+            const Icon(Icons.calendar_today, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 16),
             Text(l10n.reservationsTitle),
             Text(
               l10n.reservationsSubtitle,
-              style: const TextStyle(color: Colors.grey),
+              style: const TextStyle(color: AppColors.textMuted),
             ),
           ],
         ),

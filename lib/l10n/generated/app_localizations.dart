@@ -344,6 +344,24 @@ abstract class AppLocalizations {
   /// **'VIDI DETALJE'**
   String get orderSeeDetails;
 
+  /// No description provided for @orderTimeAgoDays.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pre {count} dan'**
+  String orderTimeAgoDays(int count);
+
+  /// No description provided for @orderTimeAgoHoursMinutes.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pre {hours}h {minutes}min'**
+  String orderTimeAgoHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @orderTimeAgoHours.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pre {count} sat'**
+  String orderTimeAgoHours(int count);
+
   /// No description provided for @orderTimeAgoMinutes.
   ///
   /// In sr, this message translates to:

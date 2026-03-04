@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/models/user.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/profile_provider.dart';
 import '../utils/profile_image_url.dart';
@@ -11,8 +12,6 @@ import 'profile_image_dialog.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  static const _accentBlue = Color(0xFF2196F3);
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -20,12 +19,12 @@ class ProfileScreen extends StatelessWidget {
     final user = profile.user!;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       appBar: AppBar(
         title: Text(l10n.profileTitle),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: AppColors.appBarBackground,
+        foregroundColor: AppColors.appBarForeground,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -40,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.person_outline,
               label: l10n.profileLabelName,
               value: user.name,
-              valueColor: _accentBlue,
+              valueColor: AppColors.accent,
             ),
             const Divider(height: 1, indent: 56),
             _ProfileRow(
@@ -57,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                   // TODO: change password flow
                 },
                 style: TextButton.styleFrom(
-                  foregroundColor: _accentBlue,
+                  foregroundColor: AppColors.accent,
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -71,14 +70,14 @@ class ProfileScreen extends StatelessWidget {
               label: l10n.profileReservationReminder,
               subtitle: l10n.profileReservationReminderHint,
               value: l10n.profileReservationReminderValue,
-              trailing: Icon(Icons.more_horiz, color: Colors.grey[600], size: 20),
+              trailing: Icon(Icons.more_horiz, color: AppColors.textMuted, size: 20),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileRow(
               icon: Icons.language,
               label: l10n.profileLabelLanguage,
               value: l10n.profileLanguageValue,
-              valueColor: _accentBlue,
+              valueColor: AppColors.accent,
             ),
             const SizedBox(height: 32),
             Padding(
@@ -88,8 +87,8 @@ class ProfileScreen extends StatelessWidget {
                 child: FilledButton(
                   onPressed: () => _showLogoutDialog(context, profile),
                   style: FilledButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.destructive,
+                    foregroundColor: AppColors.onDestructive,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: Text(l10n.profileLogout),
@@ -117,7 +116,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.destructive),
             child: Text(l10n.logoutConfirm),
           ),
         ],
@@ -136,8 +135,6 @@ class _ProfileHeader extends StatelessWidget {
   final User user;
   final VoidCallback onEditPhoto;
 
-  static const _accentBlue = Color(0xFF2196F3);
-
   @override
   Widget build(BuildContext context) {
     final imageUrl = resolveProfileImageUrl(user.profileImageUrl);
@@ -148,7 +145,7 @@ class _ProfileHeader extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              _ProfileAvatar(imageUrl: imageUrl, accentBlue: _accentBlue),
+              _ProfileAvatar(imageUrl: imageUrl),
               Positioned(
                 right: 0,
                 bottom: 0,
@@ -156,8 +153,8 @@ class _ProfileHeader extends StatelessWidget {
                   onTap: onEditPhoto,
                   child: CircleAvatar(
                     radius: 14,
-                    backgroundColor: _accentBlue,
-                    child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                    backgroundColor: AppColors.accent,
+                    child: const Icon(Icons.edit, size: 16, color: AppColors.onPrimary),
                   ),
                 ),
               ),
@@ -175,7 +172,7 @@ class _ProfileHeader extends StatelessWidget {
           Text(
             user.email,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: AppColors.textMuted,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -186,30 +183,29 @@ class _ProfileHeader extends StatelessWidget {
 }
 
 class _ProfileAvatar extends StatelessWidget {
-  const _ProfileAvatar({this.imageUrl, required this.accentBlue});
+  const _ProfileAvatar({this.imageUrl});
 
   final String? imageUrl;
-  final Color accentBlue;
 
   @override
   Widget build(BuildContext context) {
     if (imageUrl == null || imageUrl!.isEmpty) {
       return CircleAvatar(
         radius: 48,
-        backgroundColor: accentBlue,
-        child: const Icon(Icons.person, size: 56, color: Colors.white),
+        backgroundColor: AppColors.accent,
+        child: const Icon(Icons.person, size: 56, color: AppColors.onPrimary),
       );
     }
     return CircleAvatar(
       radius: 48,
-      backgroundColor: accentBlue,
+      backgroundColor: AppColors.accent,
       child: ClipOval(
         child: Image.network(
           imageUrl!,
           width: 96,
           height: 96,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 56, color: Colors.white),
+          errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 56, color: AppColors.onPrimary),
         ),
       ),
     );
@@ -231,12 +227,10 @@ class _ProfileRow extends StatelessWidget {
   final Color? valueColor;
   final Widget? trailing;
 
-  static const _accentBlue = Color(0xFF2196F3);
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: _accentBlue, size: 24),
+      leading: Icon(icon, color: AppColors.accent, size: 24),
       title: Text(
         label,
         style: const TextStyle(
@@ -250,7 +244,7 @@ class _ProfileRow extends StatelessWidget {
               ? Text(
                   value!,
                   style: TextStyle(
-                    color: valueColor ?? Colors.black87,
+                    color: valueColor ?? AppColors.textPrimary,
                     fontWeight: valueColor != null ? FontWeight.w500 : null,
                   ),
                 )
@@ -274,12 +268,10 @@ class _ProfileRowWithSubtitle extends StatelessWidget {
   final String value;
   final Widget? trailing;
 
-  static const _accentBlue = Color(0xFF2196F3);
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: _accentBlue, size: 24),
+      leading: Icon(icon, color: AppColors.accent, size: 24),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -298,7 +290,7 @@ class _ProfileRowWithSubtitle extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontStyle: FontStyle.italic,
-              color: Colors.grey[600],
+              color: AppColors.textMuted,
             ),
           ),
         ],
@@ -306,7 +298,7 @@ class _ProfileRowWithSubtitle extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(value, style: const TextStyle(color: Colors.black87)),
+          Text(value, style: const TextStyle(color: AppColors.textPrimary)),
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ),

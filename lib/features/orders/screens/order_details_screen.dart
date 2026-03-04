@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../domain/models/kitchen_order_item.dart';
 import '../domain/models/kitchen_pending_order.dart';
@@ -18,7 +19,8 @@ class OrderDetailsScreen extends StatefulWidget {
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final Set<String> _checkedItemIds = {};
 
-  bool _isItemChecked(KitchenOrderItem item) => _checkedItemIds.contains(item.id);
+  bool _isItemChecked(KitchenOrderItem item) =>
+      _checkedItemIds.contains(item.id);
 
   void _toggleItem(KitchenOrderItem item) {
     setState(() {
@@ -40,7 +42,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -48,8 +50,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         ),
         title: Text(l10n.ordersTitle),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: AppColors.appBarBackground,
+        foregroundColor: AppColors.appBarForeground,
         elevation: 0,
         actions: [
           Center(
@@ -73,21 +75,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
             child: Row(
               children: [
-                Icon(Icons.access_time, size: 18, color: Colors.grey[600]),
+                Icon(Icons.access_time, size: 18, color: AppColors.textMuted),
                 const SizedBox(width: 8),
                 Text(
                   timeAgo,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF333333),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.table_restaurant, size: 18, color: Colors.grey[600]),
+                Icon(Icons.table_bar, size: 18, color: AppColors.textMuted),
                 const SizedBox(width: 8),
                 Text(
                   l10n.orderTableNumber(tableNum),
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF333333),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],
@@ -97,7 +99,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               itemCount: order.items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final item = order.items[index];
                 return _OrderItemTile(
@@ -119,8 +121,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   child: FilledButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: FilledButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.destructive,
+                      foregroundColor: AppColors.onDestructive,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     child: Text(l10n.orderRejectAll),
@@ -132,8 +134,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   child: FilledButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: FilledButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.success,
+                      foregroundColor: AppColors.onSuccess,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     child: Text(l10n.orderAccept),
@@ -166,14 +168,14 @@ class _OrderItemTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Material(
-      color: Colors.white,
+      color: AppColors.surface,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: AppColors.border),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
@@ -188,7 +190,7 @@ class _OrderItemTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Icon(Icons.restaurant, size: 22, color: Colors.grey[600]),
+              Icon(Icons.restaurant, size: 22, color: AppColors.textMuted),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -197,7 +199,7 @@ class _OrderItemTile extends StatelessWidget {
                     Text(
                       item.name,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF333333),
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -206,7 +208,7 @@ class _OrderItemTile extends StatelessWidget {
                       Text(
                         item.notes,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
+                          color: AppColors.textMuted,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -218,7 +220,7 @@ class _OrderItemTile extends StatelessWidget {
               Text(
                 'x${item.quantity}',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF333333),
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

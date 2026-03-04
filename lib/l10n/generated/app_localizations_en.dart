@@ -140,6 +140,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderSeeDetails => 'VIEW DETAILS';
 
   @override
+  String orderTimeAgoDays(int count) {
+    return '$count day ago';
+  }
+
+  @override
+  String orderTimeAgoHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}min ago';
+  }
+
+  @override
+  String orderTimeAgoHours(int count) {
+    return '$count hr ago';
+  }
+
+  @override
   String orderTimeAgoMinutes(int count) {
     return '$count min ago';
   }

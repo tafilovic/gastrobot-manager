@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class PreparingScreen extends StatelessWidget {
@@ -16,12 +17,12 @@ class PreparingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.restaurant, size: 64, color: Colors.grey),
+            const Icon(Icons.restaurant, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 16),
             Text(l10n.preparingTitle),
             Text(
               l10n.preparingSubtitle,
-              style: const TextStyle(color: Colors.grey),
+              style: const TextStyle(color: AppColors.textMuted),
             ),
           ],
         ),
