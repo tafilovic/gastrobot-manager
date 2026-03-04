@@ -13,6 +13,7 @@
   "loginRememberEmail": "Zapamti email",
   "loginButton": "Prijava",
   "loginFailed": "Prijava nije uspela. Pokušajte ponovo.",
+  "loginRoleNotSupported": "Vaša uloga nije podržana. Aplikacija je namenjena konobarima, kuvarima i šankerima.",
 
   "profileTitle": "Moj profil",
   "profileLabelName": "IME",

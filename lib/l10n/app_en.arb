@@ -13,6 +13,7 @@
   "loginRememberEmail": "Remember email",
   "loginButton": "Sign in",
   "loginFailed": "Sign in failed. Please try again.",
+  "loginRoleNotSupported": "Your role is not supported. This app is for waiters, chefs and bartenders.",
 
   "profileTitle": "My profile",
   "profileLabelName": "NAME",

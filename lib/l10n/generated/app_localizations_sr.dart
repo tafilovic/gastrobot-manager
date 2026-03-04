@@ -42,6 +42,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get loginFailed => 'Prijava nije uspela. Pokušajte ponovo.';
 
   @override
+  String get loginRoleNotSupported =>
+      'Vaša uloga nije podržana. Aplikacija je namenjena konobarima, kuvarima i šankerima.';
+
+  @override
   String get profileTitle => 'Moj profil';
 
   @override

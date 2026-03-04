@@ -1,7 +1,9 @@
+import '../domain/errors/auth_exception.dart';
 import '../domain/repositories/auth_api.dart';
 import '../domain/repositories/session_storage.dart';
 import '../models/auth_session.dart';
 import '../models/sign_in_request.dart';
+import '../utils/supported_roles.dart';
 
 /// Auth use case: sign-in and session persistence.
 /// Depends only on domain abstractions ([SessionStorage], [AuthApi]).
@@ -12,8 +14,12 @@ class AuthService {
   final AuthApi _authApi;
 
   /// Sign in with email and password. Returns session (user + tokens).
+  /// Throws [AuthException] with message [AuthException.unsupportedRoleMessage] if user role is not supported.
   Future<AuthSession> signIn(SignInRequest request) async {
     final session = await _authApi.signIn(request);
+    if (!isSupportedRole(session.user.role)) {
+      throw AuthException(AuthException.funsupportedRoleMessage);
+    }
     await _sessionStorage.saveSession(session);
     return session;
   }

@@ -164,6 +164,12 @@ abstract class AppLocalizations {
   /// **'Prijava nije uspela. Pokušajte ponovo.'**
   String get loginFailed;
 
+  /// No description provided for @loginRoleNotSupported.
+  ///
+  /// In sr, this message translates to:
+  /// **'Vaša uloga nije podržana. Aplikacija je namenjena konobarima, kuvarima i šankerima.'**
+  String get loginRoleNotSupported;
+
   /// No description provided for @profileTitle.
   ///
   /// In sr, this message translates to:

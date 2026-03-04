@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _rememberEmail = true;
+  bool _obscurePassword = true;
   bool _isLoading = false;
   String? _error;
 
@@ -58,8 +59,11 @@ class _LoginScreenState extends State<LoginScreen> {
           );
     } on AuthException catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         setState(() {
-          _error = e.message;
+          _error = e.message == AuthException.funsupportedRoleMessage
+              ? l10n.loginRoleNotSupported
+              : e.message;
           _isLoading = false;
         });
       }
@@ -124,8 +128,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     labelText: l10n.loginPasswordLabel,
                     border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                      ),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
+                    ),
                   ),
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   enabled: !_isLoading,
                   validator: (v) {
                     if (v == null || v.isEmpty) return l10n.loginPasswordRequired;

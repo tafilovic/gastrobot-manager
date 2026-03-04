@@ -104,8 +104,10 @@ class User {
     switch (value.toLowerCase()) {
       case 'waiter':
         return ProfileType.waiter;
+      case 'chef':
       case 'kitchen':
         return ProfileType.kitchen;
+      case 'bartender':
       case 'bar':
         return ProfileType.bar;
       default:

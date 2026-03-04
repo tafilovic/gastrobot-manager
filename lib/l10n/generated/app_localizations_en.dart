@@ -42,6 +42,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginFailed => 'Sign in failed. Please try again.';
 
   @override
+  String get loginRoleNotSupported =>
+      'Your role is not supported. This app is for waiters, chefs and bartenders.';
+
+  @override
   String get profileTitle => 'My profile';
 
   @override

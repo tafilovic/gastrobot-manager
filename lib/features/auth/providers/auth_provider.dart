@@ -4,6 +4,7 @@ import '../../../core/models/profile_type.dart';
 import '../../../core/models/user.dart';
 import '../models/sign_in_request.dart';
 import '../services/auth_service.dart';
+import '../utils/supported_roles.dart';
 
 /// Auth state: current user, tokens, and session persistence.
 /// [profileType] (from user.role) drives app flow. Tokens available for API calls.
@@ -30,7 +31,11 @@ class AuthProvider extends ChangeNotifier {
   bool get isRestoring => _isRestoring;
 
   Future<void> _restoreSession() async {
-    final session = await _authService.restoreSession();
+    var session = await _authService.restoreSession();
+    if (session != null && !isSupportedRole(session.user.role)) {
+      await _authService.signOut();
+      session = null;
+    }
     if (session != null) {
       _user = session.user;
       _accessToken = session.accessToken;
