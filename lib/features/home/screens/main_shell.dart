@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/navigation/nav_config.dart';
-import '../../../core/navigation/nav_item.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../widgets/app_bottom_nav.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../menu/screens/menu_screen.dart';
 import '../../orders/screens/orders_screen.dart';
@@ -77,26 +77,11 @@ class _MainShellState extends State<MainShell> {
         index: safeIndex,
         children: items.map((item) => _buildPage(item.route)).toList(),
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: NavigationBar(
-              selectedIndex: safeIndex,
-              onDestinationSelected: (i) => setState(() => _selectedIndex = i),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              height: 64,
-              destinations: items
-                  .map((item) => NavigationDestination(
-                        icon: Icon(item.icon),
-                        label: _navLabel(l10n, item.route),
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
+      bottomNavigationBar: AppBottomNav(
+        items: items,
+        labels: items.map((i) => _navLabel(l10n, i.route)).toList(),
+        selectedIndex: safeIndex,
+        onDestinationSelected: (i) => setState(() => _selectedIndex = i),
       ),
     );
   }
