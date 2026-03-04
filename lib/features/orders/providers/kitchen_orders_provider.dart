@@ -21,6 +21,7 @@ class KitchenOrdersProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   Timer? _refreshTimer;
+  String? _currentVenueId;
 
   List<KitchenPendingOrder> get orders => List.unmodifiable(_orders);
   bool get isLoading => _isLoading;
@@ -33,6 +34,7 @@ class KitchenOrdersProvider extends ChangeNotifier {
 
   /// Starts loading and schedules refresh every [kitchenOrdersRefreshInterval]. Call with [venueId] from current user.
   void startPeriodicRefresh(String venueId) {
+    _currentVenueId = venueId;
     stopPeriodicRefresh();
     _load(venueId);
     _refreshTimer = Timer.periodic(
@@ -44,6 +46,18 @@ class KitchenOrdersProvider extends ChangeNotifier {
   void stopPeriodicRefresh() {
     _refreshTimer?.cancel();
     _refreshTimer = null;
+  }
+
+  /// Manual refresh (e.g. pull-to-refresh). Reloads data and resets the 30s timer from this moment.
+  Future<void> pullRefresh() async {
+    final venueId = _currentVenueId;
+    if (venueId == null) return;
+    await _load(venueId);
+    stopPeriodicRefresh();
+    _refreshTimer = Timer.periodic(
+      kitchenOrdersRefreshInterval,
+      (_) => _load(venueId),
+    );
   }
 
   Future<void> _load(String venueId) async {

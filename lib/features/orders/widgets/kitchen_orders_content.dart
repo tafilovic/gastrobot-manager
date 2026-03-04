@@ -66,43 +66,59 @@ class _KitchenOrdersContentState extends State<KitchenOrdersContent> {
               ),
             ),
             Expanded(
-              child: provider.isLoading && orders.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : provider.error != null && orders.isEmpty
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(
-                          provider.error!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.error),
+              child: RefreshIndicator(
+                onRefresh: () => provider.pullRefresh(),
+                child: orders.isEmpty
+                    ? ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            child: provider.isLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(24),
+                                      child: Text(
+                                        provider.error ?? '',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: AppColors.error,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      )
+                    : ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
                         ),
+                        itemCount: orders.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final order = orders[index];
+                          return KitchenOrderCard(
+                            order: order,
+                            accentColor: widget.accentColor,
+                            l10n: widget.l10n,
+                            onSeeDetails: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) =>
+                                      OrderDetailsScreen(order: order),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 8,
-                      ),
-                      itemCount: orders.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final order = orders[index];
-                        return KitchenOrderCard(
-                          order: order,
-                          accentColor: widget.accentColor,
-                          l10n: widget.l10n,
-                          onSeeDetails: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) =>
-                                    OrderDetailsScreen(order: order),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+              ),
             ),
           ],
         ),
