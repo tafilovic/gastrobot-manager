@@ -21,47 +21,67 @@ import 'features/profile/data/profile_remote.dart';
 import 'features/profile/domain/repositories/profile_api.dart';
 import 'features/profile/providers/profile_provider.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  runApp(
-    MultiProvider(
-      providers: [
-        Provider<SessionStorage>(
-          create: (_) => SharedPreferencesSessionStorage(prefs),
-        ),
-        Provider<AuthApi>(
-          create: (_) => AuthRemote(),
-        ),
-        Provider<ProfileApi>(
-          create: (_) => ProfileRemote(),
-        ),
-        Provider<AuthService>(
-          create: (c) => AuthService(c.read<SessionStorage>(), c.read<AuthApi>()),
-        ),
-        ChangeNotifierProvider<AuthProvider>(
-          create: (c) => AuthProvider(c.read<AuthService>()),
-        ),
-        ChangeNotifierProvider<ProfileProvider>(
-          create: (c) => ProfileProvider(c.read<AuthProvider>(), c.read<ProfileApi>()),
-        ),
-        Provider<KitchenPendingApi>(
-          create: (_) => KitchenPendingRemote(),
-        ),
-        Provider<OrderItemsApi>(
-          create: (_) => OrderItemsRemote(),
-        ),
-        ChangeNotifierProvider<KitchenOrdersProvider>(
-          create: (c) => KitchenOrdersProvider(c.read<AuthProvider>(), c.read<KitchenPendingApi>()),
-        ),
-        Provider<MenusApi>(
-          create: (_) => VenueMenusRemote(),
-        ),
-        ChangeNotifierProvider<MenuProvider>(
-          create: (c) => MenuProvider(c.read<AuthProvider>(), c.read<MenusApi>()),
-        ),
-      ],
-      child: const GastroBotApp(),
-    ),
-  );
+  // Defer SharedPreferences until after first frame so native splash doesn't hang
+  runApp(const _AppLoader());
+}
+
+class _AppLoader extends StatelessWidget {
+  const _AppLoader();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const MaterialApp(
+            home: Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+          );
+        }
+        final prefs = snapshot.data!;
+        return MultiProvider(
+          providers: [
+            Provider<SessionStorage>(
+              create: (_) => SharedPreferencesSessionStorage(prefs),
+            ),
+            Provider<AuthApi>(
+              create: (_) => AuthRemote(),
+            ),
+            Provider<ProfileApi>(
+              create: (_) => ProfileRemote(),
+            ),
+            Provider<AuthService>(
+              create: (c) => AuthService(c.read<SessionStorage>(), c.read<AuthApi>()),
+            ),
+            ChangeNotifierProvider<AuthProvider>(
+              create: (c) => AuthProvider(c.read<AuthService>()),
+            ),
+            ChangeNotifierProvider<ProfileProvider>(
+              create: (c) => ProfileProvider(c.read<AuthProvider>(), c.read<ProfileApi>()),
+            ),
+            Provider<KitchenPendingApi>(
+              create: (_) => KitchenPendingRemote(),
+            ),
+            Provider<OrderItemsApi>(
+              create: (_) => OrderItemsRemote(),
+            ),
+            ChangeNotifierProvider<KitchenOrdersProvider>(
+              create: (c) => KitchenOrdersProvider(c.read<AuthProvider>(), c.read<KitchenPendingApi>()),
+            ),
+            Provider<MenusApi>(
+              create: (_) => VenueMenusRemote(),
+            ),
+            ChangeNotifierProvider<MenuProvider>(
+              create: (c) => MenuProvider(c.read<AuthProvider>(), c.read<MenusApi>()),
+            ),
+          ],
+          child: const GastroBotApp(),
+        );
+      },
+    );
+  }
 }

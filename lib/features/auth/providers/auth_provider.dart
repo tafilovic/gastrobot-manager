@@ -31,18 +31,23 @@ class AuthProvider extends ChangeNotifier {
   bool get isRestoring => _isRestoring;
 
   Future<void> _restoreSession() async {
-    var session = await _authService.restoreSession();
-    if (session != null && !isSupportedRole(session.user.role)) {
-      await _authService.signOut();
-      session = null;
+    try {
+      var session = await _authService.restoreSession();
+      if (session != null && !isSupportedRole(session.user.role)) {
+        await _authService.signOut();
+        session = null;
+      }
+      if (session != null) {
+        _user = session.user;
+        _accessToken = session.accessToken;
+        _refreshToken = session.refreshToken;
+      }
+    } catch (_) {
+      // On any error, treat as logged out so user can retry
+    } finally {
+      _isRestoring = false;
+      notifyListeners();
     }
-    if (session != null) {
-      _user = session.user;
-      _accessToken = session.accessToken;
-      _refreshToken = session.refreshToken;
-    }
-    _isRestoring = false;
-    notifyListeners();
   }
 
   Future<void> login(String email, String password, {bool rememberEmail = false}) async {
