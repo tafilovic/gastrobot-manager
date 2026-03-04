@@ -6,7 +6,10 @@ import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_pending_order.dart';
 import '../domain/repositories/kitchen_pending_api.dart';
 
-/// Holds kitchen pending orders and refreshes every 30 seconds.
+/// Interval for refreshing kitchen pending orders. Change this value to adjust refresh rate.
+const Duration kitchenOrdersRefreshInterval = Duration(seconds: 30);
+
+/// Holds kitchen pending orders and refreshes periodically ([kitchenOrdersRefreshInterval]).
 /// Call [startPeriodicRefresh] when the kitchen orders screen is shown, [stopPeriodicRefresh] when left.
 class KitchenOrdersProvider extends ChangeNotifier {
   KitchenOrdersProvider(this._authProvider, this._api);
@@ -28,12 +31,12 @@ class KitchenOrdersProvider extends ChangeNotifier {
     return a.targetTime.compareTo(b.targetTime);
   }
 
-  /// Starts loading and schedules refresh every 30 seconds. Call with [venueId] from current user.
+  /// Starts loading and schedules refresh every [kitchenOrdersRefreshInterval]. Call with [venueId] from current user.
   void startPeriodicRefresh(String venueId) {
     stopPeriodicRefresh();
     _load(venueId);
     _refreshTimer = Timer.periodic(
-      const Duration(seconds: 30),
+      kitchenOrdersRefreshInterval,
       (_) => _load(venueId),
     );
   }
