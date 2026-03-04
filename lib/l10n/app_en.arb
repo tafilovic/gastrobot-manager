@@ -1,8 +1,6 @@
 {
   "@@locale": "en",
-
   "appTitle": "GastroBot Manager",
-
   "loginSubtitle": "Sign in to continue",
   "loginEmailLabel": "Email",
   "loginEmailHint": "e.g. user@example.com",
@@ -14,7 +12,6 @@
   "loginButton": "Sign in",
   "loginFailed": "Sign in failed. Please try again.",
   "loginRoleNotSupported": "Your role is not supported. This app is for waiters, chefs and bartenders.",
-
   "profileTitle": "My profile",
   "profileLabelName": "NAME",
   "profileLabelEmail": "EMAIL",
@@ -34,13 +31,11 @@
   "logoutDialogMessage": "Are you sure you want to log out?",
   "logoutCancel": "Cancel",
   "logoutConfirm": "Log out",
-
   "navOrders": "ORDERS",
   "navPreparing": "PREPARING",
   "navReservations": "RESERVATIONS",
   "navMenu": "MENU",
   "navProfile": "PROFILE",
-
   "ordersTitle": "Orders",
   "ordersCount": "{count} orders",
   "orderTableNumber": "Table number {number}",
@@ -53,18 +48,16 @@
   "orderTimeAgoSeconds": "{count} sec ago",
   "orderRejectAll": "REJECT ALL",
   "orderAccept": "ACCEPT",
-
+  "orderProcessingComplete": "Order \"{orderNumber}\" processing complete",
   "reservationsTitle": "Reservations",
   "reservationsSubtitle": "Manage table reservations",
   "preparingTitle": "Preparing",
   "preparingSubtitle": "Items in preparation",
   "menuTitle": "Menu",
   "menuSubtitle": "Browse menu items",
-
   "profileTypeWaiter": "Waiter",
   "profileTypeKitchen": "Kitchen",
   "profileTypeBar": "Bar",
-
   "authLoginFailed": "Sign in failed.",
   "authInvalidResponse": "Invalid server response."
 }

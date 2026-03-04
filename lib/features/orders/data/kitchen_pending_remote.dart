@@ -23,7 +23,7 @@ class KitchenPendingRemote implements KitchenPendingApi {
         queryParameters: {'source': 'walk_in'},
         options: Options(
           headers: {'Authorization': 'Bearer $accessToken'},
-          validateStatus: (status) => status != null && status! < 400,
+          validateStatus: (status) => status != null && status < 400,
         ),
       );
 

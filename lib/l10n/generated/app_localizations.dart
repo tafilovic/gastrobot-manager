@@ -386,6 +386,12 @@ abstract class AppLocalizations {
   /// **'PRIHVATI'**
   String get orderAccept;
 
+  /// No description provided for @orderProcessingComplete.
+  ///
+  /// In sr, this message translates to:
+  /// **'Završena obrada porudžbine \"{orderNumber}\"'**
+  String orderProcessingComplete(String orderNumber);
+
   /// No description provided for @reservationsTitle.
   ///
   /// In sr, this message translates to:

@@ -10,7 +10,9 @@ import 'features/auth/domain/repositories/auth_api.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/services/auth_service.dart';
 import 'features/orders/data/kitchen_pending_remote.dart';
+import 'features/orders/data/order_items_remote.dart';
 import 'features/orders/domain/repositories/kitchen_pending_api.dart';
+import 'features/orders/domain/repositories/order_items_api.dart';
 import 'features/orders/providers/kitchen_orders_provider.dart';
 import 'features/profile/data/profile_remote.dart';
 import 'features/profile/domain/repositories/profile_api.dart';
@@ -42,6 +44,9 @@ void main() async {
         ),
         Provider<KitchenPendingApi>(
           create: (_) => KitchenPendingRemote(),
+        ),
+        Provider<OrderItemsApi>(
+          create: (_) => OrderItemsRemote(),
         ),
         ChangeNotifierProvider<KitchenOrdersProvider>(
           create: (c) => KitchenOrdersProvider(c.read<AuthProvider>(), c.read<KitchenPendingApi>()),

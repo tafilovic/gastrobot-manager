@@ -171,6 +171,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderAccept => 'ACCEPT';
 
   @override
+  String orderProcessingComplete(String orderNumber) {
+    return 'Order \"$orderNumber\" processing complete';
+  }
+
+  @override
   String get reservationsTitle => 'Reservations';
 
   @override

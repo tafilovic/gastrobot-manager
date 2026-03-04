@@ -172,6 +172,11 @@ class AppLocalizationsSr extends AppLocalizations {
   String get orderAccept => 'PRIHVATI';
 
   @override
+  String orderProcessingComplete(String orderNumber) {
+    return 'Završena obrada porudžbine \"$orderNumber\"';
+  }
+
+  @override
   String get reservationsTitle => 'Rezervacije';
 
   @override

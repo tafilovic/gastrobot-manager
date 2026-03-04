@@ -1,124 +1,213 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../domain/models/kitchen_order_item.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_pending_order.dart';
-import '../utils/order_time_ago.dart';
+import '../domain/repositories/order_items_api.dart';
 import '../widgets/order_item_tile.dart';
 
-/// Detail view for a single kitchen order: header with order number, time and table, items list, Accept/Reject.
-class OrderDetailsScreen extends StatefulWidget {
-  const OrderDetailsScreen({super.key, required this.order});
+/// Order details: order number in title, items with checkboxes, Accept / Reject.
+/// One request per checked item; when done item is disabled; when all done, pop and show message.
+class OrderDetailsScreen extends StatelessWidget {
+  const OrderDetailsScreen({
+    super.key,
+    required this.order,
+  });
 
   final KitchenPendingOrder order;
 
   @override
-  State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
+  Widget build(BuildContext context) {
+    return _OrderDetailsContent(order: order);
+  }
 }
 
-class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
-  final Set<String> _checkedItemIds = {};
+class _OrderDetailsContent extends StatefulWidget {
+  const _OrderDetailsContent({required this.order});
+
+  final KitchenPendingOrder order;
+
+  @override
+  State<_OrderDetailsContent> createState() => _OrderDetailsContentState();
+}
+
+class _OrderDetailsContentState extends State<_OrderDetailsContent> {
+  late Set<String> _checkedIds;
+  final Set<String> _processedIds = {};
 
   @override
   void initState() {
     super.initState();
-    for (final item in widget.order.items) {
-      _checkedItemIds.add(item.id);
+    _checkedIds = {
+      for (final item in widget.order.items) item.id,
+    };
+  }
+
+  bool get _allProcessed =>
+      widget.order.items.every((i) => _processedIds.contains(i.id));
+
+  Future<void> _runRejectAll(BuildContext context) async {
+    final auth = context.read<AuthProvider>();
+    final api = context.read<OrderItemsApi>();
+    final venueId = auth.user?.venueUsers.isNotEmpty == true
+        ? auth.user!.venueUsers.first.venueId
+        : null;
+    final accessToken = auth.accessToken;
+    if (venueId == null || accessToken == null) return;
+
+    final toProcess =
+        _checkedIds.where((id) => !_processedIds.contains(id)).toList();
+    if (toProcess.isEmpty) return;
+
+    for (final itemId in toProcess) {
+      try {
+        await api.rejectOrderItem(
+          venueId,
+          widget.order.orderId,
+          itemId,
+          accessToken,
+        );
+        if (!mounted) return;
+        setState(() => _processedIds.add(itemId));
+      } catch (_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.authInvalidResponse),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_allProcessed) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!
+                .orderProcessingComplete(widget.order.orderNumber),
+          ),
+          backgroundColor: AppColors.success,
+        ),
+      );
     }
   }
 
-  bool _isItemChecked(KitchenOrderItem item) =>
-      _checkedItemIds.contains(item.id);
+  Future<void> _runAccept(BuildContext context) async {
+    final auth = context.read<AuthProvider>();
+    final api = context.read<OrderItemsApi>();
+    final venueId = auth.user?.venueUsers.isNotEmpty == true
+        ? auth.user!.venueUsers.first.venueId
+        : null;
+    final accessToken = auth.accessToken;
+    if (venueId == null || accessToken == null) return;
 
-  void _toggleItem(KitchenOrderItem item) {
-    setState(() {
-      if (_checkedItemIds.contains(item.id)) {
-        _checkedItemIds.remove(item.id);
-      } else {
-        _checkedItemIds.add(item.id);
+    final toProcess =
+        _checkedIds.where((id) => !_processedIds.contains(id)).toList();
+    if (toProcess.isEmpty) return;
+
+    for (final itemId in toProcess) {
+      try {
+        await api.acceptOrderItem(
+          venueId,
+          widget.order.orderId,
+          itemId,
+          accessToken,
+        );
+        if (!mounted) return;
+        setState(() => _processedIds.add(itemId));
+      } catch (_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.authInvalidResponse),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
       }
-    });
+    }
+    if (!mounted) return;
+    if (_allProcessed) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!
+                .orderProcessingComplete(widget.order.orderNumber),
+          ),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final accentColor = theme.colorScheme.primary;
-    final order = widget.order;
-    final tableNum = int.tryParse(order.tableNumber) ?? 0;
-    final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
+    final accentColor = Theme.of(context).colorScheme.primary;
+    final toReject = _checkedIds.where((id) => !_processedIds.contains(id));
+    final toAccept = toReject;
+    final isRejectDisabled = toReject.isEmpty;
+    final isAcceptDisabled = toAccept.isEmpty;
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.backgroundMuted,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text('# ${order.orderNumber}'),
-        centerTitle: true,
-        backgroundColor: AppColors.appBarBackground,
-        foregroundColor: AppColors.appBarForeground,
-        elevation: 0,
+        title: Text(widget.order.orderNumber),
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-            child: Row(
-              children: [
-                Icon(Icons.access_time, size: 18, color: AppColors.textMuted),
-                const SizedBox(width: 8),
-                Text(
-                  timeAgo,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const Spacer(),
-                Icon(Icons.table_bar, size: 18, color: AppColors.textMuted),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.orderTableNumber(tableNum),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              itemCount: order.items.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              padding: const EdgeInsets.all(20),
+              itemCount: widget.order.items.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final item = order.items[index];
+                final item = widget.order.items[index];
+                final isChecked = _checkedIds.contains(item.id);
+                final isDisabled = _processedIds.contains(item.id);
                 return OrderItemTile(
                   item: item,
-                  isChecked: _isItemChecked(item),
+                  isChecked: isChecked,
                   accentColor: accentColor,
-                  onTap: () => _toggleItem(item),
+                  isDisabled: isDisabled,
+                  onTap: isDisabled
+                      ? null
+                      : () {
+                          setState(() {
+                            if (isChecked) {
+                              _checkedIds.remove(item.id);
+                            } else {
+                              _checkedIds.add(item.id);
+                            }
+                          });
+                        },
                 );
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          Container(
+            padding: const EdgeInsets.all(20),
+            color: AppColors.surface,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: isRejectDisabled
+                        ? null
+                        : () => _runRejectAll(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.destructive,
                       foregroundColor: AppColors.onDestructive,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     child: Text(l10n.orderRejectAll),
                   ),
@@ -127,15 +216,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: _checkedItemIds.isEmpty
-                        ? null
-                        : () => Navigator.of(context).pop(),
+                    onPressed:
+                        isAcceptDisabled ? null : () => _runAccept(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.success,
                       foregroundColor: AppColors.onSuccess,
-                      disabledBackgroundColor: AppColors.success.withValues(alpha: 0.5),
-                      disabledForegroundColor: AppColors.onSuccess.withValues(alpha: 0.7),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     child: Text(l10n.orderAccept),
                   ),

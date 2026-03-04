@@ -1,8 +1,6 @@
 {
   "@@locale": "sr",
-
   "appTitle": "GastroBot Manager",
-
   "loginSubtitle": "Prijavite se da biste nastavili",
   "loginEmailLabel": "Email",
   "loginEmailHint": "npr. korisnik@example.com",
@@ -14,7 +12,6 @@
   "loginButton": "Prijava",
   "loginFailed": "Prijava nije uspela. Pokušajte ponovo.",
   "loginRoleNotSupported": "Vaša uloga nije podržana. Aplikacija je namenjena konobarima, kuvarima i šankerima.",
-
   "profileTitle": "Moj profil",
   "profileLabelName": "IME",
   "profileLabelEmail": "EMAIL",
@@ -34,13 +31,11 @@
   "logoutDialogMessage": "Da li ste sigurni da želite da se odjavite?",
   "logoutCancel": "Odustani",
   "logoutConfirm": "Odjavi se",
-
   "navOrders": "PORUDŽBINE",
   "navPreparing": "U PRIPREMI",
   "navReservations": "REZERVACIJE",
   "navMenu": "JELOVNIK",
   "navProfile": "PROFIL",
-
   "ordersTitle": "Porudžbine",
   "ordersCount": "{count} porudžbine",
   "@ordersCount": {
@@ -69,45 +64,66 @@
   "orderSeeDetails": "VIDI DETALJE",
   "orderTimeAgoDays": "Pre {count} dan",
   "@orderTimeAgoDays": {
-    "placeholders": { "count": {"type": "int"} }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "orderTimeAgoHoursMinutes": "Pre {hours}h {minutes}min",
   "@orderTimeAgoHoursMinutes": {
     "placeholders": {
-      "hours": {"type": "int"},
-      "minutes": {"type": "int"}
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "orderTimeAgoHours": "Pre {count} sat",
   "@orderTimeAgoHours": {
-    "placeholders": { "count": {"type": "int"} }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "orderTimeAgoMinutes": "Pre {count} minuta",
   "@orderTimeAgoMinutes": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "orderTimeAgoSeconds": "Pre {count} sekundi",
   "@orderTimeAgoSeconds": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "orderRejectAll": "ODBIJ SVE",
   "orderAccept": "PRIHVATI",
-
+  "orderProcessingComplete": "Završena obrada porudžbine \"{orderNumber}\"",
+  "@orderProcessingComplete": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
   "reservationsTitle": "Rezervacije",
   "reservationsSubtitle": "Upravljajte rezervacijama stolova",
   "preparingTitle": "U pripremi",
   "preparingSubtitle": "Stavke u pripremi",
   "menuTitle": "Jelovnik",
   "menuSubtitle": "Pregledajte stavke jelovnika",
-
   "profileTypeWaiter": "Konobar",
   "profileTypeKitchen": "Kuhinja",
   "profileTypeBar": "Šank",
-
   "authLoginFailed": "Prijava nije uspela.",
   "authInvalidResponse": "Neispravan odgovor servera."
 }
