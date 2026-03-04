@@ -9,6 +9,9 @@ import 'features/auth/data/shared_preferences_session_storage.dart';
 import 'features/auth/domain/repositories/auth_api.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/services/auth_service.dart';
+import 'features/orders/data/kitchen_pending_remote.dart';
+import 'features/orders/domain/repositories/kitchen_pending_api.dart';
+import 'features/orders/providers/kitchen_orders_provider.dart';
 import 'features/profile/data/profile_remote.dart';
 import 'features/profile/domain/repositories/profile_api.dart';
 import 'features/profile/providers/profile_provider.dart';
@@ -36,6 +39,12 @@ void main() async {
         ),
         ChangeNotifierProvider<ProfileProvider>(
           create: (c) => ProfileProvider(c.read<AuthProvider>(), c.read<ProfileApi>()),
+        ),
+        Provider<KitchenPendingApi>(
+          create: (_) => KitchenPendingRemote(),
+        ),
+        ChangeNotifierProvider<KitchenOrdersProvider>(
+          create: (c) => KitchenOrdersProvider(c.read<AuthProvider>(), c.read<KitchenPendingApi>()),
         ),
       ],
       child: const GastroBotApp(),

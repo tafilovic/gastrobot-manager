@@ -1,0 +1,72 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+
+import '../../auth/providers/auth_provider.dart';
+import '../domain/models/kitchen_pending_order.dart';
+import '../domain/repositories/kitchen_pending_api.dart';
+
+/// Holds kitchen pending orders and refreshes every 30 seconds.
+/// Call [startPeriodicRefresh] when the kitchen orders screen is shown, [stopPeriodicRefresh] when left.
+class KitchenOrdersProvider extends ChangeNotifier {
+  KitchenOrdersProvider(this._authProvider, this._api);
+
+  final AuthProvider _authProvider;
+  final KitchenPendingApi _api;
+
+  List<KitchenPendingOrder> _orders = [];
+  bool _isLoading = false;
+  String? _error;
+  Timer? _refreshTimer;
+
+  List<KitchenPendingOrder> get orders => List.unmodifiable(_orders);
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  /// Sorts by [KitchenPendingOrder.targetTime] ascending (oldest first).
+  static int _orderByTargetTime(KitchenPendingOrder a, KitchenPendingOrder b) {
+    return a.targetTime.compareTo(b.targetTime);
+  }
+
+  /// Starts loading and schedules refresh every 30 seconds. Call with [venueId] from current user.
+  void startPeriodicRefresh(String venueId) {
+    stopPeriodicRefresh();
+    _load(venueId);
+    _refreshTimer = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) => _load(venueId),
+    );
+  }
+
+  void stopPeriodicRefresh() {
+    _refreshTimer?.cancel();
+    _refreshTimer = null;
+  }
+
+  Future<void> _load(String venueId) async {
+    final token = _authProvider.accessToken;
+    if (token == null || token.isEmpty) return;
+
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final list = await _api.getPendingOrders(venueId, token);
+      _orders = list..sort(_orderByTargetTime);
+      _error = null;
+    } catch (e) {
+      _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
+      _orders = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    stopPeriodicRefresh();
+    super.dispose();
+  }
+}
