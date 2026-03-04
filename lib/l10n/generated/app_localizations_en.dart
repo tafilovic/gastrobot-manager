@@ -194,6 +194,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuSubtitle => 'Browse menu items';
 
   @override
+  String get menuInstruction =>
+      'Mark when a dish or drink is available or unavailable';
+
+  @override
+  String get menuSearchHint => 'Search dish...';
+
+  @override
+  String menuAvailableCount(int available, int total) {
+    return '$available available out of $total total';
+  }
+
+  @override
+  String get menuAvailableCountMiddle => ' available out of ';
+
+  @override
   String get profileTypeWaiter => 'Waiter';
 
   @override

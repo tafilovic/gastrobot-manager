@@ -121,6 +121,20 @@
   "preparingSubtitle": "Stavke u pripremi",
   "menuTitle": "Jelovnik",
   "menuSubtitle": "Pregledajte stavke jelovnika",
+  "menuInstruction": "Označi kada je neko jelo dostupno ili nedostupno",
+  "menuSearchHint": "Pretraži jelo...",
+  "menuAvailableCount": "{available} dostupnih od ukupno {total}",
+  "menuAvailableCountMiddle": " dostupnih od ukupno ",
+  "@menuAvailableCount": {
+    "placeholders": {
+      "available": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "profileTypeWaiter": "Konobar",
   "profileTypeKitchen": "Kuhinja",
   "profileTypeBar": "Šank",

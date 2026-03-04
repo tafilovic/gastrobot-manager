@@ -428,6 +428,30 @@ abstract class AppLocalizations {
   /// **'Pregledajte stavke jelovnika'**
   String get menuSubtitle;
 
+  /// No description provided for @menuInstruction.
+  ///
+  /// In sr, this message translates to:
+  /// **'Označi kada je neko jelo dostupno ili nedostupno'**
+  String get menuInstruction;
+
+  /// No description provided for @menuSearchHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pretraži jelo...'**
+  String get menuSearchHint;
+
+  /// No description provided for @menuAvailableCount.
+  ///
+  /// In sr, this message translates to:
+  /// **'{available} dostupnih od ukupno {total}'**
+  String menuAvailableCount(int available, int total);
+
+  /// No description provided for @menuAvailableCountMiddle.
+  ///
+  /// In sr, this message translates to:
+  /// **' dostupnih od ukupno '**
+  String get menuAvailableCountMiddle;
+
   /// No description provided for @profileTypeWaiter.
   ///
   /// In sr, this message translates to:

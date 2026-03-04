@@ -14,6 +14,9 @@ import 'features/orders/data/order_items_remote.dart';
 import 'features/orders/domain/repositories/kitchen_pending_api.dart';
 import 'features/orders/domain/repositories/order_items_api.dart';
 import 'features/orders/providers/kitchen_orders_provider.dart';
+import 'features/menu/data/venue_menus_remote.dart';
+import 'features/menu/domain/repositories/menus_api.dart';
+import 'features/menu/providers/menu_provider.dart';
 import 'features/profile/data/profile_remote.dart';
 import 'features/profile/domain/repositories/profile_api.dart';
 import 'features/profile/providers/profile_provider.dart';
@@ -50,6 +53,12 @@ void main() async {
         ),
         ChangeNotifierProvider<KitchenOrdersProvider>(
           create: (c) => KitchenOrdersProvider(c.read<AuthProvider>(), c.read<KitchenPendingApi>()),
+        ),
+        Provider<MenusApi>(
+          create: (_) => VenueMenusRemote(),
+        ),
+        ChangeNotifierProvider<MenuProvider>(
+          create: (c) => MenuProvider(c.read<AuthProvider>(), c.read<MenusApi>()),
         ),
       ],
       child: const GastroBotApp(),

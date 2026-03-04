@@ -195,6 +195,21 @@ class AppLocalizationsSr extends AppLocalizations {
   String get menuSubtitle => 'Pregledajte stavke jelovnika';
 
   @override
+  String get menuInstruction =>
+      'Označi kada je neko jelo dostupno ili nedostupno';
+
+  @override
+  String get menuSearchHint => 'Pretraži jelo...';
+
+  @override
+  String menuAvailableCount(int available, int total) {
+    return '$available dostupnih od ukupno $total';
+  }
+
+  @override
+  String get menuAvailableCountMiddle => ' dostupnih od ukupno ';
+
+  @override
   String get profileTypeWaiter => 'Konobar';
 
   @override
