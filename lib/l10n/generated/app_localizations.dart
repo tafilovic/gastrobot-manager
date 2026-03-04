@@ -356,6 +356,18 @@ abstract class AppLocalizations {
   /// **'Pre {count} sekundi'**
   String orderTimeAgoSeconds(int count);
 
+  /// No description provided for @orderRejectAll.
+  ///
+  /// In sr, this message translates to:
+  /// **'ODBIJ SVE'**
+  String get orderRejectAll;
+
+  /// No description provided for @orderAccept.
+  ///
+  /// In sr, this message translates to:
+  /// **'PRIHVATI'**
+  String get orderAccept;
+
   /// No description provided for @reservationsTitle.
   ///
   /// In sr, this message translates to:

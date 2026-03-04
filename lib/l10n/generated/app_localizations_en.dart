@@ -150,6 +150,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get orderRejectAll => 'REJECT ALL';
+
+  @override
+  String get orderAccept => 'ACCEPT';
+
+  @override
   String get reservationsTitle => 'Reservations';
 
   @override

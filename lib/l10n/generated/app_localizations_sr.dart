@@ -151,6 +151,12 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String get orderRejectAll => 'ODBIJ SVE';
+
+  @override
+  String get orderAccept => 'PRIHVATI';
+
+  @override
   String get reservationsTitle => 'Rezervacije';
 
   @override

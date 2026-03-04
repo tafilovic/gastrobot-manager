@@ -79,6 +79,8 @@
       "count": {"type": "int"}
     }
   },
+  "orderRejectAll": "ODBIJ SVE",
+  "orderAccept": "PRIHVATI",
 
   "reservationsTitle": "Rezervacije",
   "reservationsSubtitle": "Upravljajte rezervacijama stolova",

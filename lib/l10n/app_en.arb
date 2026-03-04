@@ -48,6 +48,8 @@
   "orderSeeDetails": "VIEW DETAILS",
   "orderTimeAgoMinutes": "{count} min ago",
   "orderTimeAgoSeconds": "{count} sec ago",
+  "orderRejectAll": "REJECT ALL",
+  "orderAccept": "ACCEPT",
 
   "reservationsTitle": "Reservations",
   "reservationsSubtitle": "Manage table reservations",

@@ -7,6 +7,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_pending_order.dart';
 import '../providers/kitchen_orders_provider.dart';
 import '../utils/order_time_ago.dart';
+import 'order_details_screen.dart';
 
 /// Orders list. For kitchen/chef: fetches pending orders from API (refresh every 30s), oldest first.
 /// For waiter/bar: shows empty state (standard placeholder).
@@ -139,7 +140,15 @@ class _KitchenOrdersContentState extends State<_KitchenOrdersContent> {
                               order: order,
                               accentColor: widget.accentColor,
                               l10n: widget.l10n,
-                              onSeeDetails: () {},
+                              onSeeDetails: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => OrderDetailsScreen(
+                                      order: order,
+                                    ),
+                                  ),
+                                );
+                              },
                             );
                           },
                         ),
