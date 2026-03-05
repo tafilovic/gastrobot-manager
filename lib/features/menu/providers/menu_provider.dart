@@ -32,11 +32,7 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final menus = await _menusApi.getMenus(
-        venueId,
-        menuType,
-        _authProvider.accessToken ?? '',
-      );
+      final menus = await _menusApi.getMenus(venueId, menuType);
       _items = menus.expand((m) => m.allItems).toList();
       _menuId = menus.isNotEmpty ? menus.first.id : null;
       _error = null;
@@ -55,10 +51,9 @@ class MenuProvider extends ChangeNotifier {
     final venueId = _authProvider.user?.venueUsers.isNotEmpty == true
         ? _authProvider.user!.venueUsers.first.venueId
         : null;
-    final accessToken = _authProvider.accessToken;
     final menuId = _menuId;
 
-    if (venueId == null || accessToken == null || menuId == null) return false;
+    if (venueId == null || menuId == null) return false;
 
     final index = _items.indexWhere((i) => i.id == menuItemId);
     if (index < 0) return false;
@@ -72,7 +67,6 @@ class MenuProvider extends ChangeNotifier {
         venueId,
         menuId,
         menuItemId,
-        accessToken,
       );
       setItemAvailable(menuItemId, newAvailable);
       _error = null;

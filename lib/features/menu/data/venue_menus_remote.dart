@@ -5,7 +5,6 @@ import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dar
 
 import '../../../core/api/api_config.dart';
 
-
 /// Fetches venue menus via GET /v1/venues/{venueId}/menus?type=food|drinks.
 class VenueMenusRemote implements MenusApi {
   VenueMenusRemote([Dio? dio])
@@ -14,17 +13,12 @@ class VenueMenusRemote implements MenusApi {
   final Dio _dio;
 
   @override
-  Future<List<VenueMenu>> getMenus(
-    String venueId,
-    String menuType,
-    String accessToken,
-  ) async {
+  Future<List<VenueMenu>> getMenus(String venueId, String menuType) async {
     try {
       final response = await _dio.get<List<dynamic>>(
         '/v1/venues/$venueId/menus',
         queryParameters: {'type': menuType},
         options: Options(
-          headers: {'Authorization': 'Bearer $accessToken'},
           validateStatus: (status) => status != null && status < 400,
         ),
       );
@@ -47,9 +41,7 @@ class VenueMenusRemote implements MenusApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw MenuException(
-        message ?? e.message ?? 'Network error',
-      );
+      throw MenuException(message ?? e.message ?? 'Network error');
     }
   }
 
@@ -58,17 +50,12 @@ class VenueMenusRemote implements MenusApi {
     String venueId,
     String menuId,
     String menuItemId,
-    String accessToken,
   ) async {
     try {
       final response = await _dio.patch<Map<String, dynamic>>(
         '/venues/$venueId/menus/$menuId/menu-items/$menuItemId/toggle-availability',
         data: {'isProtected': false},
         options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $accessToken',
-          },
           validateStatus: (status) => status != null && status < 400,
         ),
       );
@@ -78,7 +65,8 @@ class VenueMenusRemote implements MenusApi {
       }
 
       if (response.statusCode != 200) {
-        final msg = (response.data!['message'] ?? response.data!['error'])?.toString();
+        final msg =
+            (response.data!['message'] ?? response.data!['error'])?.toString();
         throw MenuException(msg ?? 'Failed to update availability');
       }
 
@@ -88,9 +76,7 @@ class VenueMenusRemote implements MenusApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw MenuException(
-        message ?? e.message ?? 'Network error',
-      );
+      throw MenuException(message ?? e.message ?? 'Network error');
     }
   }
 }

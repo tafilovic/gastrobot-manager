@@ -34,18 +34,13 @@ class ProfileProvider extends ChangeNotifier {
   /// Uploads new profile image and updates the current user's profileImageUrl on success.
   /// Throws [ProfileException] on API failure.
   Future<void> updateProfileImage(File imageFile) async {
-    final token = _authProvider.accessToken;
-    if (token == null || token.isEmpty) {
-      throw ProfileException('Not logged in');
-    }
-    final newUrl = await _profileApi.updateProfileImage(imageFile, token);
+    final newUrl = await _profileApi.updateProfileImage(imageFile);
     if (newUrl != null) {
       _authProvider.updateProfileImageUrl(newUrl);
     }
   }
 
   /// Clears the profile image in local state (e.g. after user chose to remove it).
-  /// Does not call backend; use when backend has no delete endpoint or after upload of removal.
   void clearProfileImage() {
     _authProvider.updateProfileImageUrl(null);
   }

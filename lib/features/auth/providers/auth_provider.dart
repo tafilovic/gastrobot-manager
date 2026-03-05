@@ -1,19 +1,23 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/api/token_store.dart';
 import '../../../core/models/profile_type.dart';
 import '../../../core/models/user.dart';
+import '../models/auth_session.dart';
 import '../models/sign_in_request.dart';
 import '../services/auth_service.dart';
 import '../utils/supported_roles.dart';
 
 /// Auth state: current user, tokens, and session persistence.
-/// [profileType] (from user.role) drives app flow. Tokens available for API calls.
+/// [profileType] (from user.role) drives app flow.
+/// Writes tokens into [TokenStore] so [AuthInterceptor] always has fresh values.
 class AuthProvider extends ChangeNotifier {
-  AuthProvider(this._authService) {
+  AuthProvider(this._authService, this._tokenStore) {
     _restoreSession();
   }
 
   final AuthService _authService;
+  final TokenStore _tokenStore;
 
   User? _user;
   String? _accessToken;
@@ -30,6 +34,11 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoggedIn => _user != null;
   bool get isRestoring => _isRestoring;
 
+  void _syncTokenStore() {
+    _tokenStore.accessToken = _accessToken;
+    _tokenStore.refreshToken = _refreshToken;
+  }
+
   Future<void> _restoreSession() async {
     try {
       var session = await _authService.restoreSession();
@@ -41,6 +50,7 @@ class AuthProvider extends ChangeNotifier {
         _user = session.user;
         _accessToken = session.accessToken;
         _refreshToken = session.refreshToken;
+        _syncTokenStore();
       }
     } catch (_) {
       // On any error, treat as logged out so user can retry
@@ -50,13 +60,18 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> login(String email, String password, {bool rememberEmail = false}) async {
+  Future<void> login(
+    String email,
+    String password, {
+    bool rememberEmail = false,
+  }) async {
     final session = await _authService.signIn(
       SignInRequest(email: email.trim(), password: password),
     );
     _user = session.user;
     _accessToken = session.accessToken;
     _refreshToken = session.refreshToken;
+    _syncTokenStore();
     await _authService.setRememberedEmail(rememberEmail ? email.trim() : null);
     notifyListeners();
   }
@@ -66,6 +81,25 @@ class AuthProvider extends ChangeNotifier {
     _user = null;
     _accessToken = null;
     _refreshToken = null;
+    _tokenStore.clear();
+    notifyListeners();
+  }
+
+  /// Called by [AuthInterceptor] after a successful background token refresh.
+  /// Updates in-memory state, syncs [TokenStore], and persists the new session.
+  Future<void> updateTokens(String accessToken, String refreshToken) async {
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
+    _syncTokenStore();
+    if (_user != null) {
+      await _authService.updateSession(
+        AuthSession(
+          user: _user!,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        ),
+      );
+    }
     notifyListeners();
   }
 

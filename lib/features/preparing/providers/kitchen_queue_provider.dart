@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_queue_order.dart';
 import '../domain/repositories/kitchen_queue_api.dart';
 
@@ -11,9 +10,8 @@ const Duration kitchenQueueRefreshInterval = Duration(seconds: 30);
 
 /// Holds kitchen queue (preparing) orders and refreshes periodically ([kitchenQueueRefreshInterval]).
 class KitchenQueueProvider extends ChangeNotifier {
-  KitchenQueueProvider(this._authProvider, this._api);
+  KitchenQueueProvider(this._api);
 
-  final AuthProvider _authProvider;
   final KitchenQueueApi _api;
 
   List<KitchenQueueOrder> _orders = [];
@@ -57,15 +55,12 @@ class KitchenQueueProvider extends ChangeNotifier {
   }
 
   Future<void> _load(String venueId) async {
-    final token = _authProvider.accessToken;
-    if (token == null || token.isEmpty) return;
-
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final list = await _api.getQueue(venueId, token);
+      final list = await _api.getQueue(venueId);
       _orders = list..sort(_orderByTargetTime);
       _error = null;
     } catch (e) {
@@ -81,14 +76,13 @@ class KitchenQueueProvider extends ChangeNotifier {
   /// Returns [true] on success, [false] on failure (error stored in [error]).
   Future<bool> markOrderAsReady(KitchenQueueOrder order) async {
     final venueId = _currentVenueId;
-    final token = _authProvider.accessToken;
-    if (venueId == null || token == null || token.isEmpty) return false;
+    if (venueId == null) return false;
 
     final itemIds = order.items.map((e) => e.id).toList();
     if (itemIds.isEmpty) return false;
 
     try {
-      final success = await _api.markAsReady(venueId, itemIds, token);
+      final success = await _api.markAsReady(venueId, itemIds);
       if (success) {
         _orders = _orders.where((o) => o.orderId != order.orderId).toList();
         _error = null;

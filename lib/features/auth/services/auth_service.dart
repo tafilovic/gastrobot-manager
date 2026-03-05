@@ -29,6 +29,11 @@ class AuthService {
     return _sessionStorage.getSession();
   }
 
+  /// Persist updated tokens after a background token refresh.
+  Future<void> updateSession(AuthSession session) async {
+    await _sessionStorage.saveSession(session);
+  }
+
   /// Clear session and all stored user data (on logout).
   Future<void> signOut() async {
     await _sessionStorage.clearAll();

@@ -6,7 +6,6 @@ import 'package:gastrobotmanager/features/profile/domain/repositories/profile_ap
 
 import '../../../core/api/api_config.dart';
 
-
 /// Profile API implementation. PATCH /users/profile-image with multipart.
 class ProfileRemote implements ProfileApi {
   ProfileRemote([Dio? dio])
@@ -15,7 +14,7 @@ class ProfileRemote implements ProfileApi {
   final Dio _dio;
 
   @override
-  Future<String?> updateProfileImage(File imageFile, String accessToken) async {
+  Future<String?> updateProfileImage(File imageFile) async {
     try {
       final formData = FormData.fromMap({
         'image': await MultipartFile.fromFile(
@@ -28,9 +27,8 @@ class ProfileRemote implements ProfileApi {
         '/users/profile-image',
         data: formData,
         options: Options(
-          headers: {'Authorization': 'Bearer $accessToken'},
           contentType: 'multipart/form-data',
-          validateStatus: (status) => status != null && status! < 400,
+          validateStatus: (status) => status != null && status < 400,
         ),
       );
 
@@ -46,11 +44,14 @@ class ProfileRemote implements ProfileApi {
 
       return data['profileImageUrl'] as String? ??
           (data['user'] is Map
-              ? (data['user'] as Map<String, dynamic>)['profileImageUrl'] as String?
+              ? (data['user'] as Map<String, dynamic>)['profileImageUrl']
+                  as String?
               : null);
     } on DioException catch (e) {
       throw ProfileException(e.response?.data is Map
-          ? (e.response!.data as Map)['message'] as String? ?? e.message ?? 'Upload failed'
+          ? (e.response!.data as Map)['message'] as String? ??
+              e.message ??
+              'Upload failed'
           : e.message ?? 'Upload failed');
     }
   }

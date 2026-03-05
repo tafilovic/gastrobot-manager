@@ -1,22 +1,25 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'core/api/api_config.dart';
+import 'core/api/auth_interceptor.dart';
+import 'core/api/token_store.dart';
 import 'features/auth/data/auth_remote.dart';
 import 'features/auth/data/shared_preferences_session_storage.dart';
-import 'features/auth/domain/repositories/auth_api.dart';
+import 'features/auth/domain/repositories/session_storage.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/services/auth_service.dart';
+import 'features/menu/data/venue_menus_remote.dart';
+import 'features/menu/domain/repositories/menus_api.dart';
+import 'features/menu/providers/menu_provider.dart';
 import 'features/orders/data/kitchen_pending_remote.dart';
 import 'features/orders/data/order_items_remote.dart';
 import 'features/orders/domain/repositories/kitchen_pending_api.dart';
 import 'features/orders/domain/repositories/order_items_api.dart';
 import 'features/orders/providers/kitchen_orders_provider.dart';
-import 'features/menu/data/venue_menus_remote.dart';
-import 'features/menu/domain/repositories/menus_api.dart';
-import 'features/menu/providers/menu_provider.dart';
 import 'features/preparing/data/kitchen_queue_remote.dart';
 import 'features/preparing/domain/repositories/kitchen_queue_api.dart';
 import 'features/preparing/providers/kitchen_queue_provider.dart';
@@ -26,71 +29,136 @@ import 'features/profile/providers/profile_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Defer SharedPreferences until after first frame so native splash doesn't hang
   runApp(const _AppLoader());
 }
 
-class _AppLoader extends StatelessWidget {
+/// Waits for [SharedPreferences] then hands off to [_GastroBotProviders].
+class _AppLoader extends StatefulWidget {
   const _AppLoader();
 
   @override
+  State<_AppLoader> createState() => _AppLoaderState();
+}
+
+class _AppLoaderState extends State<_AppLoader> {
+  SharedPreferences? _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      if (mounted) setState(() => _prefs = prefs);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SharedPreferences>(
-      future: SharedPreferences.getInstance(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const MaterialApp(
-            home: Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-          );
-        }
-        final prefs = snapshot.data!;
-        return MultiProvider(
-          providers: [
-            Provider<SessionStorage>(
-              create: (_) => SharedPreferencesSessionStorage(prefs),
-            ),
-            Provider<AuthApi>(
-              create: (_) => AuthRemote(),
-            ),
-            Provider<ProfileApi>(
-              create: (_) => ProfileRemote(),
-            ),
-            Provider<AuthService>(
-              create: (c) => AuthService(c.read<SessionStorage>(), c.read<AuthApi>()),
-            ),
-            ChangeNotifierProvider<AuthProvider>(
-              create: (c) => AuthProvider(c.read<AuthService>()),
-            ),
-            ChangeNotifierProvider<ProfileProvider>(
-              create: (c) => ProfileProvider(c.read<AuthProvider>(), c.read<ProfileApi>()),
-            ),
-            Provider<KitchenPendingApi>(
-              create: (_) => KitchenPendingRemote(),
-            ),
-            Provider<OrderItemsApi>(
-              create: (_) => OrderItemsRemote(),
-            ),
-            ChangeNotifierProvider<KitchenOrdersProvider>(
-              create: (c) => KitchenOrdersProvider(c.read<AuthProvider>(), c.read<KitchenPendingApi>()),
-            ),
-            Provider<MenusApi>(
-              create: (_) => VenueMenusRemote(),
-            ),
-            ChangeNotifierProvider<MenuProvider>(
-              create: (c) => MenuProvider(c.read<AuthProvider>(), c.read<MenusApi>()),
-            ),
-            Provider<KitchenQueueApi>(
-              create: (_) => KitchenQueueRemote(),
-            ),
-            ChangeNotifierProvider<KitchenQueueProvider>(
-              create: (c) => KitchenQueueProvider(c.read<AuthProvider>(), c.read<KitchenQueueApi>()),
-            ),
-          ],
-          child: const GastroBotApp(),
-        );
-      },
+    final prefs = _prefs;
+    if (prefs == null) {
+      return const MaterialApp(
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
+    }
+    return _GastroBotProviders(prefs: prefs);
+  }
+}
+
+/// Creates all dependencies exactly once (in [initState]) and wires them into
+/// a [MultiProvider] tree. The authenticated [Dio] instance is shared by all
+/// Remote classes; the [AuthInterceptor] handles token injection and refresh
+/// transparently, so no provider needs to deal with tokens directly.
+class _GastroBotProviders extends StatefulWidget {
+  const _GastroBotProviders({required this.prefs});
+
+  final SharedPreferences prefs;
+
+  @override
+  State<_GastroBotProviders> createState() => _GastroBotProvidersState();
+}
+
+class _GastroBotProvidersState extends State<_GastroBotProviders> {
+  late final TokenStore _tokenStore;
+  late final AuthProvider _authProvider;
+  late final Dio _authenticatedDio;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tokenStore = TokenStore();
+
+    final sessionStorage = SharedPreferencesSessionStorage(widget.prefs);
+    final authService = AuthService(sessionStorage, AuthRemote());
+    _authProvider = AuthProvider(authService, _tokenStore);
+
+    _authenticatedDio = Dio(BaseOptions(baseUrl: ApiConfig.baseUrl))
+      ..interceptors.add(
+        AuthInterceptor(
+          tokenStore: _tokenStore,
+          onTokensRefreshed: (a, r) => _authProvider.updateTokens(a, r),
+          onLogout: () => _authProvider.logout(),
+        ),
+      );
+  }
+
+  @override
+  void dispose() {
+    _authProvider.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        // Auth
+        Provider<SessionStorage>(
+          create: (_) => SharedPreferencesSessionStorage(widget.prefs),
+        ),
+        ChangeNotifierProvider<AuthProvider>.value(value: _authProvider),
+
+        // Profile
+        Provider<ProfileApi>(
+          create: (_) => ProfileRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<ProfileProvider>(
+          create: (c) => ProfileProvider(
+            c.read<AuthProvider>(),
+            c.read<ProfileApi>(),
+          ),
+        ),
+
+        // Orders
+        Provider<KitchenPendingApi>(
+          create: (_) => KitchenPendingRemote(_authenticatedDio),
+        ),
+        Provider<OrderItemsApi>(
+          create: (_) => OrderItemsRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<KitchenOrdersProvider>(
+          create: (c) => KitchenOrdersProvider(c.read<KitchenPendingApi>()),
+        ),
+
+        // Menu
+        Provider<MenusApi>(
+          create: (_) => VenueMenusRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<MenuProvider>(
+          create: (c) => MenuProvider(
+            c.read<AuthProvider>(),
+            c.read<MenusApi>(),
+          ),
+        ),
+
+        // Preparing
+        Provider<KitchenQueueApi>(
+          create: (_) => KitchenQueueRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<KitchenQueueProvider>(
+          create: (c) => KitchenQueueProvider(c.read<KitchenQueueApi>()),
+        ),
+      ],
+      child: const GastroBotApp(),
     );
   }
 }

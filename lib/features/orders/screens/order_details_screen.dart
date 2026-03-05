@@ -54,8 +54,7 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
     final venueId = auth.user?.venueUsers.isNotEmpty == true
         ? auth.user!.venueUsers.first.venueId
         : null;
-    final accessToken = auth.accessToken;
-    if (venueId == null || accessToken == null) return;
+    if (venueId == null) return;
 
     final toProcess =
         _checkedIds.where((id) => !_processedIds.contains(id)).toList();
@@ -67,7 +66,6 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
           venueId,
           widget.order.orderId,
           itemId,
-          accessToken,
         );
         if (!mounted) return;
         setState(() => _processedIds.add(itemId));
@@ -103,8 +101,7 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
     final venueId = auth.user?.venueUsers.isNotEmpty == true
         ? auth.user!.venueUsers.first.venueId
         : null;
-    final accessToken = auth.accessToken;
-    if (venueId == null || accessToken == null) return;
+    if (venueId == null) return;
 
     final toProcess =
         _checkedIds.where((id) => !_processedIds.contains(id)).toList();
@@ -116,7 +113,6 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
           venueId,
           widget.order.orderId,
           itemId,
-          accessToken,
         );
         if (!mounted) return;
         setState(() => _processedIds.add(itemId));

@@ -6,7 +6,7 @@ import '../../../core/api/api_config.dart';
 /// Accept/reject order items via PATCH endpoints.
 class OrderItemsRemote implements OrderItemsApi {
   OrderItemsRemote([Dio? dio])
-    : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+      : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   final Dio _dio;
 
@@ -15,12 +15,10 @@ class OrderItemsRemote implements OrderItemsApi {
     String venueId,
     String orderId,
     String itemId,
-    String accessToken,
   ) async {
     await _dio.patch<void>(
       '/venues/$venueId/orders/$orderId/order-items/$itemId/accept',
       options: Options(
-        headers: {'Authorization': 'Bearer $accessToken'},
         validateStatus: (status) => status != null && status < 400,
       ),
     );
@@ -30,8 +28,7 @@ class OrderItemsRemote implements OrderItemsApi {
   Future<void> rejectOrderItem(
     String venueId,
     String orderId,
-    String itemId,
-    String accessToken, {
+    String itemId, {
     String? rejectionReason,
   }) async {
     // Body structure prepared for future use; not sent for now.
@@ -39,7 +36,6 @@ class OrderItemsRemote implements OrderItemsApi {
     await _dio.patch<void>(
       '/venues/$venueId/orders/$orderId/order-items/$itemId/reject',
       options: Options(
-        headers: {'Authorization': 'Bearer $accessToken'},
         validateStatus: (status) => status != null && status < 400,
       ),
     );

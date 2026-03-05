@@ -6,7 +6,6 @@ abstract class OrderItemsApi {
     String venueId,
     String orderId,
     String itemId,
-    String accessToken,
   );
 
   /// Rejects a single order item.
@@ -15,8 +14,7 @@ abstract class OrderItemsApi {
   Future<void> rejectOrderItem(
     String venueId,
     String orderId,
-    String itemId,
-    String accessToken, {
+    String itemId, {
     String? rejectionReason,
   });
 }

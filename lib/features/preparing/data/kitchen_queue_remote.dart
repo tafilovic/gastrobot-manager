@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:gastrobotmanager/features/preparing/domain/errors/preparing_exception.dart';
-import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_order.dart';
-import 'package:gastrobotmanager/features/preparing/domain/repositories/kitchen_queue_api.dart';
 
 import '../../../core/api/api_config.dart';
+import '../domain/errors/preparing_exception.dart';
+import '../domain/models/kitchen_queue_order.dart';
+import '../domain/repositories/kitchen_queue_api.dart';
 
-/// Fetches kitchen queue (preparing) via proxy GET .../venues/{venueId}/kitchen/queue?prepStatus=ready.
+/// Fetches kitchen queue (preparing) via GET /venues/{venueId}/kitchen/queue?prepStatus=ready.
 class KitchenQueueRemote implements KitchenQueueApi {
   KitchenQueueRemote([Dio? dio])
     : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
@@ -13,16 +13,12 @@ class KitchenQueueRemote implements KitchenQueueApi {
   final Dio _dio;
 
   @override
-  Future<List<KitchenQueueOrder>> getQueue(
-    String venueId,
-    String accessToken,
-  ) async {
+  Future<List<KitchenQueueOrder>> getQueue(String venueId) async {
     try {
       final response = await _dio.get<List<dynamic>>(
         '/venues/$venueId/kitchen/queue',
         queryParameters: {'prepStatus': 'ready'},
         options: Options(
-          headers: {'Authorization': 'Bearer $accessToken'},
           validateStatus: (status) => status != null && status < 400,
         ),
       );
@@ -50,24 +46,18 @@ class KitchenQueueRemote implements KitchenQueueApi {
   }
 
   @override
-  Future<bool> markAsReady(
-    String venueId,
-    List<String> orderItemIds,
-    String accessToken,
-  ) async {
+  Future<bool> markAsReady(String venueId, List<String> orderItemIds) async {
     try {
       final response = await _dio.patch<Map<String, dynamic>>(
         '/venues/$venueId/kitchen/ready',
         data: {'orderItemIds': orderItemIds},
         options: Options(
-          headers: {'Authorization': 'Bearer $accessToken'},
           validateStatus: (status) => status != null && status < 400,
         ),
       );
 
       if (response.data == null) return false;
-      final success = response.data!['success'] as bool? ?? false;
-      return success;
+      return response.data!['success'] as bool? ?? false;
     } on DioException catch (e) {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()

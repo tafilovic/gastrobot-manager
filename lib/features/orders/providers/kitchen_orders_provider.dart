@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_pending_order.dart';
 import '../domain/repositories/kitchen_pending_api.dart';
 
@@ -12,9 +11,8 @@ const Duration kitchenOrdersRefreshInterval = Duration(seconds: 30);
 /// Holds kitchen pending orders and refreshes periodically ([kitchenOrdersRefreshInterval]).
 /// Call [startPeriodicRefresh] when the kitchen orders screen is shown, [stopPeriodicRefresh] when left.
 class KitchenOrdersProvider extends ChangeNotifier {
-  KitchenOrdersProvider(this._authProvider, this._api);
+  KitchenOrdersProvider(this._api);
 
-  final AuthProvider _authProvider;
   final KitchenPendingApi _api;
 
   List<KitchenPendingOrder> _orders = [];
@@ -32,7 +30,7 @@ class KitchenOrdersProvider extends ChangeNotifier {
     return a.targetTime.compareTo(b.targetTime);
   }
 
-  /// Starts loading and schedules refresh every [kitchenOrdersRefreshInterval]. Call with [venueId] from current user.
+  /// Starts loading and schedules refresh every [kitchenOrdersRefreshInterval].
   void startPeriodicRefresh(String venueId) {
     _currentVenueId = venueId;
     stopPeriodicRefresh();
@@ -48,7 +46,7 @@ class KitchenOrdersProvider extends ChangeNotifier {
     _refreshTimer = null;
   }
 
-  /// Manual refresh (e.g. pull-to-refresh). Reloads data and resets the 30s timer from this moment.
+  /// Manual refresh (e.g. pull-to-refresh). Reloads data and resets the timer from this moment.
   Future<void> pullRefresh() async {
     final venueId = _currentVenueId;
     if (venueId == null) return;
@@ -61,15 +59,12 @@ class KitchenOrdersProvider extends ChangeNotifier {
   }
 
   Future<void> _load(String venueId) async {
-    final token = _authProvider.accessToken;
-    if (token == null || token.isEmpty) return;
-
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final list = await _api.getPendingOrders(venueId, token);
+      final list = await _api.getPendingOrders(venueId);
       _orders = list..sort(_orderByTargetTime);
       _error = null;
     } catch (e) {

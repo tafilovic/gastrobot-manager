@@ -13,16 +13,12 @@ class KitchenPendingRemote implements KitchenPendingApi {
   final Dio _dio;
 
   @override
-  Future<List<KitchenPendingOrder>> getPendingOrders(
-    String venueId,
-    String accessToken,
-  ) async {
+  Future<List<KitchenPendingOrder>> getPendingOrders(String venueId) async {
     try {
       final response = await _dio.get<List<dynamic>>(
         '/venues/$venueId/kitchen/pending',
         queryParameters: {'source': 'walk_in'},
         options: Options(
-          headers: {'Authorization': 'Bearer $accessToken'},
           validateStatus: (status) => status != null && status < 400,
         ),
       );
@@ -45,9 +41,7 @@ class KitchenPendingRemote implements KitchenPendingApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw KitchenOrdersException(
-        message ?? e.message ?? 'Network error',
-      );
+      throw KitchenOrdersException(message ?? e.message ?? 'Network error');
     }
   }
 }

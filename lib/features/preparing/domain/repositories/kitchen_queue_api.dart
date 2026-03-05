@@ -4,15 +4,8 @@ import '../models/kitchen_queue_order.dart';
 /// GET .../venues/{venueId}/kitchen/queue?prepStatus=ready
 /// POST .../venues/{venueId}/kitchen/ready
 abstract class KitchenQueueApi {
-  Future<List<KitchenQueueOrder>> getQueue(
-    String venueId,
-    String accessToken,
-  );
+  Future<List<KitchenQueueOrder>> getQueue(String venueId);
 
   /// Marks order items as ready. Returns [true] if the server reported success.
-  Future<bool> markAsReady(
-    String venueId,
-    List<String> orderItemIds,
-    String accessToken,
-  );
+  Future<bool> markAsReady(String venueId, List<String> orderItemIds);
 }
