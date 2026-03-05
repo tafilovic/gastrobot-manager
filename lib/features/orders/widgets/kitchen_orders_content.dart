@@ -58,10 +58,21 @@ class _KitchenOrdersContentState extends State<KitchenOrdersContent> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Text(
-                widget.l10n.ordersCount(orders.length),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
+              child: Text.rich(
+                TextSpan(
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '${orders.length}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: widget.accentColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextSpan(text: widget.l10n.ordersCountSuffix),
+                  ],
                 ),
               ),
             ),

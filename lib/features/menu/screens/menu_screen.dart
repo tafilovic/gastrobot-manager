@@ -76,16 +76,13 @@ class _MenuScreenState extends State<MenuScreen> {
         profileType == ProfileType.kitchen ? 'food' : 'drinks';
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
-      appBar: AppBar(
-        title: Text(l10n.menuTitle),
-        backgroundColor: AppColors.surface,
-        foregroundColor: AppColors.textPrimary,
-      ),
-      body: _MenuContent(
-        menuType: menuType,
-        searchQuery: _searchQuery,
-        searchController: _searchController,
-        accentColor: accentColor,
+      body: SafeArea(
+        child: _MenuContent(
+          menuType: menuType,
+          searchQuery: _searchQuery,
+          searchController: _searchController,
+          accentColor: accentColor,
+        ),
       ),
     );
   }
@@ -154,10 +151,20 @@ class _MenuContentState extends State<_MenuContent> {
     }).toList();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+          child: Text(
+            l10n.menuTitle,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
           child: Text(
             l10n.menuInstruction,
             style: theme.textTheme.bodyMedium?.copyWith(

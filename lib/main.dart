@@ -17,6 +17,9 @@ import 'features/orders/providers/kitchen_orders_provider.dart';
 import 'features/menu/data/venue_menus_remote.dart';
 import 'features/menu/domain/repositories/menus_api.dart';
 import 'features/menu/providers/menu_provider.dart';
+import 'features/preparing/data/kitchen_queue_remote.dart';
+import 'features/preparing/domain/repositories/kitchen_queue_api.dart';
+import 'features/preparing/providers/kitchen_queue_provider.dart';
 import 'features/profile/data/profile_remote.dart';
 import 'features/profile/domain/repositories/profile_api.dart';
 import 'features/profile/providers/profile_provider.dart';
@@ -77,6 +80,12 @@ class _AppLoader extends StatelessWidget {
             ),
             ChangeNotifierProvider<MenuProvider>(
               create: (c) => MenuProvider(c.read<AuthProvider>(), c.read<MenusApi>()),
+            ),
+            Provider<KitchenQueueApi>(
+              create: (_) => KitchenQueueRemote(),
+            ),
+            ChangeNotifierProvider<KitchenQueueProvider>(
+              create: (c) => KitchenQueueProvider(c.read<AuthProvider>(), c.read<KitchenQueueApi>()),
             ),
           ],
           child: const GastroBotApp(),

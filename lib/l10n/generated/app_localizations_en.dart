@@ -127,6 +127,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get ordersCountSuffix => ' orders';
+
+  @override
   String orderTableNumber(int number) {
     return 'Table number $number';
   }
@@ -186,6 +189,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preparingSubtitle => 'Items in preparation';
+
+  @override
+  String preparingDishCount(int count) {
+    return '$count dishes';
+  }
+
+  @override
+  String get preparingDishCountSuffix => ' dishes';
+
+  @override
+  String get preparingMarkAsReady => 'MARK AS READY';
+
+  @override
+  String get preparingMarkAsReadySuccess => 'Order marked as ready';
+
+  @override
+  String get preparingMarkAsReadyError => 'Failed to mark as ready';
 
   @override
   String get menuTitle => 'Menu';

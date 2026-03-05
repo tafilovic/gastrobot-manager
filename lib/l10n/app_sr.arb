@@ -38,6 +38,7 @@
   "navProfile": "PROFIL",
   "ordersTitle": "Porudžbine",
   "ordersCount": "{count} porudžbine",
+  "ordersCountSuffix": " porudžbine",
   "@ordersCount": {
     "placeholders": {
       "count": {
@@ -119,6 +120,18 @@
   "reservationsSubtitle": "Upravljajte rezervacijama stolova",
   "preparingTitle": "U pripremi",
   "preparingSubtitle": "Stavke u pripremi",
+  "preparingDishCount": "{count} jela",
+  "preparingDishCountSuffix": " jela",
+  "@preparingDishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preparingMarkAsReady": "OZNAČI KAO GOTOVO",
+  "preparingMarkAsReadySuccess": "Porudžbina označena kao gotova",
+  "preparingMarkAsReadyError": "Greška pri označavanju",
   "menuTitle": "Jelovnik",
   "menuSubtitle": "Pregledajte stavke jelovnika",
   "menuInstruction": "Označi kada je neko jelo dostupno ili nedostupno",

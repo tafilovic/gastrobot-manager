@@ -128,6 +128,9 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String get ordersCountSuffix => ' porudžbine';
+
+  @override
   String orderTableNumber(int number) {
     return 'Sto broj $number';
   }
@@ -187,6 +190,23 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get preparingSubtitle => 'Stavke u pripremi';
+
+  @override
+  String preparingDishCount(int count) {
+    return '$count jela';
+  }
+
+  @override
+  String get preparingDishCountSuffix => ' jela';
+
+  @override
+  String get preparingMarkAsReady => 'OZNAČI KAO GOTOVO';
+
+  @override
+  String get preparingMarkAsReadySuccess => 'Porudžbina označena kao gotova';
+
+  @override
+  String get preparingMarkAsReadyError => 'Greška pri označavanju';
 
   @override
   String get menuTitle => 'Jelovnik';

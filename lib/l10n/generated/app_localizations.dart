@@ -326,6 +326,12 @@ abstract class AppLocalizations {
   /// **'{count} porudžbine'**
   String ordersCount(int count);
 
+  /// No description provided for @ordersCountSuffix.
+  ///
+  /// In sr, this message translates to:
+  /// **' porudžbine'**
+  String get ordersCountSuffix;
+
   /// No description provided for @orderTableNumber.
   ///
   /// In sr, this message translates to:
@@ -415,6 +421,36 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Stavke u pripremi'**
   String get preparingSubtitle;
+
+  /// No description provided for @preparingDishCount.
+  ///
+  /// In sr, this message translates to:
+  /// **'{count} jela'**
+  String preparingDishCount(int count);
+
+  /// No description provided for @preparingDishCountSuffix.
+  ///
+  /// In sr, this message translates to:
+  /// **' jela'**
+  String get preparingDishCountSuffix;
+
+  /// No description provided for @preparingMarkAsReady.
+  ///
+  /// In sr, this message translates to:
+  /// **'OZNAČI KAO GOTOVO'**
+  String get preparingMarkAsReady;
+
+  /// No description provided for @preparingMarkAsReadySuccess.
+  ///
+  /// In sr, this message translates to:
+  /// **'Porudžbina označena kao gotova'**
+  String get preparingMarkAsReadySuccess;
+
+  /// No description provided for @preparingMarkAsReadyError.
+  ///
+  /// In sr, this message translates to:
+  /// **'Greška pri označavanju'**
+  String get preparingMarkAsReadyError;
 
   /// No description provided for @menuTitle.
   ///
