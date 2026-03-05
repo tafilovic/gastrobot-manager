@@ -82,15 +82,25 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  MediaQuery.of(context).padding.bottom -
+                  MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: IntrinsicHeight(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                 Text(
                   l10n.appTitle,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -177,7 +187,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         : Text(l10n.loginButton),
                   ),
                 ),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
