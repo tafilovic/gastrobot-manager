@@ -61,6 +61,7 @@
   "preparingSubtitle": "Items in preparation",
   "preparingDishCount": "{count} dishes",
   "preparingDishCountSuffix": " dishes",
+  "preparingDrinksCountSuffix": " drinks",
   "preparingMarkAsReady": "MARK AS READY",
   "preparingMarkAsReadySuccess": "Order marked as ready",
   "preparingMarkAsReadyError": "Failed to mark as ready",

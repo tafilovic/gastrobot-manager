@@ -1,22 +1,47 @@
 import 'package:dio/dio.dart';
 
 import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/preparing/domain/errors/preparing_exception.dart';
-import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_order.dart';
-import 'package:gastrobotmanager/features/preparing/domain/repositories/kitchen_queue_api.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
+import 'package:gastrobotmanager/features/preparing/domain/repositories/queue_api.dart';
 
-/// Fetches kitchen queue (preparing) via GET /venues/{venueId}/kitchen/queue?prepStatus=ready.
-class KitchenQueueRemote implements KitchenQueueApi {
-  KitchenQueueRemote([Dio? dio])
-    : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+/// Fetches queue (preparing) by role: kitchen/queue or bar/queue (bar via proxy).
+/// Uses [dio] for both; bar requests use full URL with [ApiConfig.proxyBaseUrl] so auth is sent.
+class QueueRemote implements QueueApi {
+  QueueRemote([Dio? dio])
+      : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   final Dio _dio;
 
+  String _queueUrl(String venueId, ProfileType profileType) {
+    if (profileType == ProfileType.bar) {
+      return '${ApiConfig.baseUrl}/venues/$venueId/bar/queue';
+    }
+    return '/venues/$venueId/kitchen/queue';
+  }
+
+  String _readyUrl(String venueId, ProfileType profileType) {
+    if (profileType == ProfileType.bar) {
+      return '${ApiConfig.baseUrl}/venues/$venueId/bar/ready';
+    }
+    return '/venues/$venueId/kitchen/ready';
+  }
+
   @override
-  Future<List<KitchenQueueOrder>> getQueue(String venueId) async {
+  Future<List<QueueOrder>> getQueue(
+    String venueId,
+    ProfileType profileType,
+  ) async {
+    if (profileType == ProfileType.waiter) {
+      return [];
+    }
+
+    final url = _queueUrl(venueId, profileType);
+
     try {
       final response = await _dio.get<List<dynamic>>(
-        '/venues/$venueId/kitchen/queue',
+        url,
         queryParameters: {'prepStatus': 'ready'},
         options: Options(
           validateStatus: (status) => status != null && status < 400,
@@ -35,7 +60,7 @@ class KitchenQueueRemote implements KitchenQueueApi {
       }
 
       return (response.data!)
-          .map((e) => KitchenQueueOrder.fromJson(e as Map<String, dynamic>))
+          .map((e) => QueueOrder.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       final message = e.response?.data is Map
@@ -46,10 +71,18 @@ class KitchenQueueRemote implements KitchenQueueApi {
   }
 
   @override
-  Future<bool> markAsReady(String venueId, List<String> orderItemIds) async {
+  Future<bool> markAsReady(
+    String venueId,
+    List<String> orderItemIds,
+    ProfileType profileType,
+  ) async {
+    if (profileType == ProfileType.waiter) return false;
+
+    final url = _readyUrl(venueId, profileType);
+
     try {
       final response = await _dio.patch<Map<String, dynamic>>(
-        '/venues/$venueId/kitchen/ready',
+        url,
         data: {'orderItemIds': orderItemIds},
         options: Options(
           validateStatus: (status) => status != null && status < 400,

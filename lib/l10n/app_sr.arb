@@ -134,6 +134,7 @@
   "preparingSubtitle": "Stavke u pripremi",
   "preparingDishCount": "{count} jela",
   "preparingDishCountSuffix": " jela",
+  "preparingDrinksCountSuffix": " pića",
   "@preparingDishCount": {
     "placeholders": {
       "count": {

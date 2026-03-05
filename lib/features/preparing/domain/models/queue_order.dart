@@ -1,8 +1,8 @@
-import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_item.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/queue_item.dart';
 
-/// Kitchen queue order from GET .../kitchen/queue?prepStatus=ready.
-class KitchenQueueOrder {
-  const KitchenQueueOrder({
+/// Queue order from GET .../kitchen/queue or .../bar/queue?prepStatus=ready.
+class QueueOrder {
+  const QueueOrder({
     required this.orderId,
     required this.orderNumber,
     required this.tableNumber,
@@ -20,14 +20,14 @@ class KitchenQueueOrder {
   final String type;
   final String targetTime;
   final bool isFuture;
-  final List<KitchenQueueItem> items;
+  final List<QueueItem> items;
 
-  /// Total number of dish items in this order.
+  /// Total number of items in this order.
   int get itemCount => items.fold<int>(0, (sum, i) => sum + i.quantity);
 
-  factory KitchenQueueOrder.fromJson(Map<String, dynamic> json) {
+  factory QueueOrder.fromJson(Map<String, dynamic> json) {
     final itemsList = json['items'] as List<dynamic>?;
-    return KitchenQueueOrder(
+    return QueueOrder(
       orderId: json['orderId'] as String,
       orderNumber: json['orderNumber'] as String? ?? '',
       tableNumber: json['tableNumber']?.toString() ?? '0',
@@ -37,7 +37,7 @@ class KitchenQueueOrder {
       isFuture: json['isFuture'] as bool? ?? false,
       items: itemsList != null
           ? itemsList
-              .map((e) => KitchenQueueItem.fromJson(e as Map<String, dynamic>))
+              .map((e) => QueueItem.fromJson(e as Map<String, dynamic>))
               .toList()
           : const [],
     );

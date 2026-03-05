@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/preparing/providers/kitchen_queue_provider.dart';
-import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dart';
 import 'package:gastrobotmanager/features/preparing/widgets/preparing_order_card.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Preparing list for chef: title, dish count, loading/error/list of [PreparingOrderCard].
+/// Preparing list for kitchen/bar: title, item count (jela/pića), loading/error/list of [PreparingOrderCard].
 class PreparingContent extends StatefulWidget {
   const PreparingContent({
     super.key,
@@ -32,9 +34,13 @@ class _PreparingContentState extends State<PreparingContent> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final provider = context.watch<KitchenQueueProvider>();
+    final provider = context.watch<QueueProvider>();
+    final profileType = context.watch<AuthProvider>().profileType;
     final orders = provider.orders;
-    final totalDishes = orders.fold<int>(0, (sum, o) => sum + o.itemCount);
+    final totalItems = orders.fold<int>(0, (sum, o) => sum + o.itemCount);
+    final countSuffix = profileType == ProfileType.bar
+        ? l10n.preparingDrinksCountSuffix
+        : l10n.preparingDishCountSuffix;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
@@ -61,13 +67,13 @@ class _PreparingContentState extends State<PreparingContent> {
                   ),
                   children: [
                     TextSpan(
-                      text: '$totalDishes',
+                      text: '$totalItems',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: widget.accentColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    TextSpan(text: l10n.preparingDishCountSuffix),
+                    TextSpan(text: countSuffix),
                   ],
                 ),
               ),

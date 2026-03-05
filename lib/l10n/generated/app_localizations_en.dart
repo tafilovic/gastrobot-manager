@@ -217,6 +217,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preparingDishCountSuffix => ' dishes';
 
   @override
+  String get preparingDrinksCountSuffix => ' drinks';
+
+  @override
   String get preparingMarkAsReady => 'MARK AS READY';
 
   @override

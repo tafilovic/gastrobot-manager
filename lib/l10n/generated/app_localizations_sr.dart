@@ -218,6 +218,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get preparingDishCountSuffix => ' jela';
 
   @override
+  String get preparingDrinksCountSuffix => ' pića';
+
+  @override
   String get preparingMarkAsReady => 'OZNAČI KAO GOTOVO';
 
   @override

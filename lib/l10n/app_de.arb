@@ -60,6 +60,7 @@
   "preparingSubtitle": "Gerichte in Bereitung",
   "preparingDishCount": "{count} Gerichte",
   "preparingDishCountSuffix": " Gerichte",
+  "preparingDrinksCountSuffix": " Getränke",
   "preparingMarkAsReady": "ALS FERTIG MARKIEREN",
   "preparingMarkAsReadySuccess": "Bestellung als fertig markiert",
   "preparingMarkAsReadyError": "Markierung fehlgeschlagen",

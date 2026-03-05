@@ -218,6 +218,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preparingDishCountSuffix => ' Gerichte';
 
   @override
+  String get preparingDrinksCountSuffix => ' Getränke';
+
+  @override
   String get preparingMarkAsReady => 'ALS FERTIG MARKIEREN';
 
   @override

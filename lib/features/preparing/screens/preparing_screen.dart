@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/preparing/providers/kitchen_queue_provider.dart';
+import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dart';
 import 'package:gastrobotmanager/features/preparing/widgets/preparing_content.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -61,7 +61,7 @@ class PreparingScreen extends StatelessWidget {
             ? auth.user!.venueUsers.first.venueId
             : null;
         if (venueId != null) {
-          context.read<KitchenQueueProvider>().startPeriodicRefresh(venueId);
+          context.read<QueueProvider>().startPeriodicRefresh(venueId);
         }
       },
     );

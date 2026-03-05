@@ -1,6 +1,6 @@
-/// Single item in a kitchen queue (preparing) order.
-class KitchenQueueItem {
-  const KitchenQueueItem({
+/// Single item in a queue (preparing) order.
+class QueueItem {
+  const QueueItem({
     required this.id,
     required this.name,
     required this.quantity,
@@ -16,9 +16,9 @@ class KitchenQueueItem {
   final String status;
   final List<dynamic> addons;
 
-  factory KitchenQueueItem.fromJson(Map<String, dynamic> json) {
+  factory QueueItem.fromJson(Map<String, dynamic> json) {
     final addonsList = json['addons'] as List<dynamic>?;
-    return KitchenQueueItem(
+    return QueueItem(
       id: json['id'] as String,
       name: json['name'] as String? ?? '',
       quantity: json['quantity'] as int? ?? 1,

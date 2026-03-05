@@ -21,9 +21,9 @@ import 'package:gastrobotmanager/features/orders/data/pending_orders_remote.dart
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/pending_orders_api.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
-import 'package:gastrobotmanager/features/preparing/data/kitchen_queue_remote.dart';
-import 'package:gastrobotmanager/features/preparing/domain/repositories/kitchen_queue_api.dart';
-import 'package:gastrobotmanager/features/preparing/providers/kitchen_queue_provider.dart';
+import 'package:gastrobotmanager/features/preparing/data/queue_remote.dart';
+import 'package:gastrobotmanager/features/preparing/domain/repositories/queue_api.dart';
+import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dart';
 import 'package:gastrobotmanager/features/profile/data/profile_remote.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
@@ -159,12 +159,15 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           ),
         ),
 
-        // Preparing
-        Provider<KitchenQueueApi>(
-          create: (_) => KitchenQueueRemote(_authenticatedDio),
+        // Preparing (queue for kitchen + bar)
+        Provider<QueueApi>(
+          create: (_) => QueueRemote(_authenticatedDio),
         ),
-        ChangeNotifierProvider<KitchenQueueProvider>(
-          create: (c) => KitchenQueueProvider(c.read<KitchenQueueApi>()),
+        ChangeNotifierProvider<QueueProvider>(
+          create: (c) => QueueProvider(
+            c.read<AuthProvider>(),
+            c.read<QueueApi>(),
+          ),
         ),
       ],
       child: const GastroBotApp(),

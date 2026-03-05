@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_order.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
 import 'package:gastrobotmanager/features/preparing/utils/format_queue_time_ago.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -15,12 +15,12 @@ class PreparingOrderCard extends StatelessWidget {
     required this.onMarkReady,
   });
 
-  final KitchenQueueOrder order;
+  final QueueOrder order;
   final AppLocalizations l10n;
   final Color accentColor;
   final VoidCallback onMarkReady;
 
-  static int _tableNumber(KitchenQueueOrder order) {
+  static int _tableNumber(QueueOrder order) {
     return int.tryParse(order.tableNumber) ?? 0;
   }
 

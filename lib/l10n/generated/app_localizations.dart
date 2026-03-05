@@ -466,6 +466,12 @@ abstract class AppLocalizations {
   /// **' jela'**
   String get preparingDishCountSuffix;
 
+  /// No description provided for @preparingDrinksCountSuffix.
+  ///
+  /// In sr, this message translates to:
+  /// **' pića'**
+  String get preparingDrinksCountSuffix;
+
   /// No description provided for @preparingMarkAsReady.
   ///
   /// In sr, this message translates to:
