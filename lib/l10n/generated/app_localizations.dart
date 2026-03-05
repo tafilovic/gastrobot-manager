@@ -398,6 +398,30 @@ abstract class AppLocalizations {
   /// **'Završena obrada porudžbine \"{orderNumber}\"'**
   String orderProcessingComplete(String orderNumber);
 
+  /// No description provided for @timeEstimationTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Procjena vremena'**
+  String get timeEstimationTitle;
+
+  /// No description provided for @timeEstimationQuestion.
+  ///
+  /// In sr, this message translates to:
+  /// **'Za koliko vremena će ova porudžbina biti spremna?'**
+  String get timeEstimationQuestion;
+
+  /// No description provided for @timeEstimationSkip.
+  ///
+  /// In sr, this message translates to:
+  /// **'PRESKOČI PROCENU'**
+  String get timeEstimationSkip;
+
+  /// No description provided for @timeEstimationConfirm.
+  ///
+  /// In sr, this message translates to:
+  /// **'POTVRDI VREME'**
+  String get timeEstimationConfirm;
+
   /// No description provided for @reservationsTitle.
   ///
   /// In sr, this message translates to:

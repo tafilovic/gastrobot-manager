@@ -180,6 +180,19 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String get timeEstimationTitle => 'Procjena vremena';
+
+  @override
+  String get timeEstimationQuestion =>
+      'Za koliko vremena će ova porudžbina biti spremna?';
+
+  @override
+  String get timeEstimationSkip => 'PRESKOČI PROCENU';
+
+  @override
+  String get timeEstimationConfirm => 'POTVRDI VREME';
+
+  @override
   String get reservationsTitle => 'Rezervacije';
 
   @override

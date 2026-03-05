@@ -2,11 +2,13 @@
 abstract class OrderItemsApi {
   /// Accepts a single order item.
   /// PATCH /venues/{venueId}/orders/{orderId}/order-items/{itemId}/accept
+  /// [estimatedPrepTimeMinutes] optional; when set, sent in body for "confirm time" flow.
   Future<void> acceptOrderItem(
     String venueId,
     String orderId,
-    String itemId,
-  );
+    String itemId, {
+    int? estimatedPrepTimeMinutes,
+  });
 
   /// Rejects a single order item.
   /// PATCH /venues/{venueId}/orders/{orderId}/order-items/{itemId}/reject

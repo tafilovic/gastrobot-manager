@@ -179,6 +179,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get timeEstimationTitle => 'Time estimation';
+
+  @override
+  String get timeEstimationQuestion =>
+      'In how much time will this order be ready?';
+
+  @override
+  String get timeEstimationSkip => 'SKIP ESTIMATION';
+
+  @override
+  String get timeEstimationConfirm => 'CONFIRM TIME';
+
+  @override
   String get reservationsTitle => 'Reservations';
 
   @override

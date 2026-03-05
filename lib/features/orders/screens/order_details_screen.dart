@@ -7,9 +7,12 @@ import '../../auth/providers/auth_provider.dart';
 import '../domain/models/kitchen_pending_order.dart';
 import '../domain/repositories/order_items_api.dart';
 import '../widgets/order_item_tile.dart';
+import 'time_estimation_screen.dart';
 
-/// Order details: order number in title, items with checkboxes, Accept / Reject.
-/// One request per checked item; when done item is disabled; when all done, pop and show message.
+/// Order details: order number in title, items with checkboxes, Reject All / Accept.
+/// Reject All = reject all items (regardless of checked). Accept = go to time estimation
+/// screen; there, confirm time or skip, then checked items are accepted (with/without time)
+/// and unchecked are rejected.
 class OrderDetailsScreen extends StatelessWidget {
   const OrderDetailsScreen({
     super.key,
@@ -48,6 +51,7 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
   bool get _allProcessed =>
       widget.order.items.every((i) => _processedIds.contains(i.id));
 
+  /// Reject all items that are not yet processed (regardless of checked state).
   Future<void> _runRejectAll(BuildContext context) async {
     final auth = context.read<AuthProvider>();
     final api = context.read<OrderItemsApi>();
@@ -56,8 +60,10 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
         : null;
     if (venueId == null) return;
 
-    final toProcess =
-        _checkedIds.where((id) => !_processedIds.contains(id)).toList();
+    final toProcess = [
+      for (final item in widget.order.items)
+        if (!_processedIds.contains(item.id)) item.id,
+    ];
     if (toProcess.isEmpty) return;
 
     for (final itemId in toProcess) {
@@ -95,40 +101,23 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
     }
   }
 
-  Future<void> _runAccept(BuildContext context) async {
-    final auth = context.read<AuthProvider>();
-    final api = context.read<OrderItemsApi>();
-    final venueId = auth.user?.venueUsers.isNotEmpty == true
-        ? auth.user!.venueUsers.first.venueId
-        : null;
-    if (venueId == null) return;
+  /// Navigate to time estimation screen. Checked = accept (with/without time),
+  /// unchecked = reject (handled on that screen).
+  void _openTimeEstimation(BuildContext context) {
+    final toAccept = _checkedIds.where((id) => !_processedIds.contains(id));
+    if (toAccept.isEmpty) return;
 
-    final toProcess =
-        _checkedIds.where((id) => !_processedIds.contains(id)).toList();
-    if (toProcess.isEmpty) return;
-
-    for (final itemId in toProcess) {
-      try {
-        await api.acceptOrderItem(
-          venueId,
-          widget.order.orderId,
-          itemId,
-        );
-        if (!mounted) return;
-        setState(() => _processedIds.add(itemId));
-      } catch (_) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.authInvalidResponse),
-            backgroundColor: AppColors.error,
+    Navigator.of(context)
+        .push<bool>(
+          MaterialPageRoute<bool>(
+            builder: (_) => TimeEstimationScreen(
+              order: widget.order,
+              checkedItemIds: Set.from(_checkedIds),
+            ),
           ),
-        );
-        return;
-      }
-    }
-    if (!mounted) return;
-    if (_allProcessed) {
+        )
+        .then((result) {
+      if (!context.mounted || result != true) return;
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -139,17 +128,16 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
           backgroundColor: AppColors.success,
         ),
       );
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
-    final toReject = _checkedIds.where((id) => !_processedIds.contains(id));
-    final toAccept = toReject;
-    final isRejectDisabled = toReject.isEmpty;
-    final isAcceptDisabled = toAccept.isEmpty;
+    final unprocessed = _checkedIds.where((id) => !_processedIds.contains(id));
+    final isRejectDisabled = unprocessed.isEmpty;
+    final isAcceptDisabled = unprocessed.isEmpty;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
@@ -198,9 +186,8 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: isRejectDisabled
-                        ? null
-                        : () => _runRejectAll(context),
+                    onPressed:
+                        isRejectDisabled ? null : () => _runRejectAll(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.destructive,
                       foregroundColor: AppColors.onDestructive,
@@ -212,8 +199,9 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed:
-                        isAcceptDisabled ? null : () => _runAccept(context),
+                    onPressed: isAcceptDisabled
+                        ? null
+                        : () => _openTimeEstimation(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.success,
                       foregroundColor: AppColors.onSuccess,

@@ -116,6 +116,10 @@
       }
     }
   },
+  "timeEstimationTitle": "Procjena vremena",
+  "timeEstimationQuestion": "Za koliko vremena će ova porudžbina biti spremna?",
+  "timeEstimationSkip": "PRESKOČI PROCENU",
+  "timeEstimationConfirm": "POTVRDI VREME",
   "reservationsTitle": "Rezervacije",
   "reservationsSubtitle": "Upravljajte rezervacijama stolova",
   "preparingTitle": "U pripremi",

@@ -14,10 +14,14 @@ class OrderItemsRemote implements OrderItemsApi {
   Future<void> acceptOrderItem(
     String venueId,
     String orderId,
-    String itemId,
-  ) async {
+    String itemId, {
+    int? estimatedPrepTimeMinutes,
+  }) async {
     await _dio.patch<void>(
       '/venues/$venueId/orders/$orderId/order-items/$itemId/accept',
+      data: estimatedPrepTimeMinutes != null
+          ? {'estimatedPrepTime': estimatedPrepTimeMinutes}
+          : null,
       options: Options(
         validateStatus: (status) => status != null && status < 400,
       ),
