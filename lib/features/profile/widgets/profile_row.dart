@@ -11,6 +11,7 @@ class ProfileRow extends StatelessWidget {
     this.value,
     this.valueColor,
     this.trailing,
+    this.onTap,
   });
 
   final IconData icon;
@@ -18,10 +19,12 @@ class ProfileRow extends StatelessWidget {
   final String? value;
   final Color? valueColor;
   final Widget? trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       leading: Icon(icon, color: AppColors.accent, size: 24),
       title: Text(
         label,

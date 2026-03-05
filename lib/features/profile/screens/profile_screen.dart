@@ -8,6 +8,8 @@ import 'package:gastrobotmanager/features/profile/widgets/profile_row.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_row_with_subtitle.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 import 'package:gastrobotmanager/features/profile/screens/profile_image_dialog.dart';
+import 'package:gastrobotmanager/features/profile/widgets/language_selection_dialog.dart';
+import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 
 /// Profile screen: header with avatar, user details, settings rows, logout with confirmation.
 class ProfileScreen extends StatelessWidget {
@@ -17,6 +19,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final profile = context.watch<ProfileProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
     final user = profile.user!;
 
     return Scaffold(
@@ -77,8 +80,9 @@ class ProfileScreen extends StatelessWidget {
             ProfileRow(
               icon: Icons.language,
               label: l10n.profileLabelLanguage,
-              value: l10n.profileLanguageValue,
+              value: localeProvider.currentLocaleName,
               valueColor: AppColors.accent,
+              onTap: () => LanguageSelectionDialog.show(context),
             ),
             const SizedBox(height: 32),
             Padding(

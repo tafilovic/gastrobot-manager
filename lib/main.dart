@@ -7,6 +7,7 @@ import 'package:gastrobotmanager/app.dart';
 import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/api/auth_interceptor.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
+import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 import 'package:gastrobotmanager/features/auth/data/auth_remote.dart';
 import 'package:gastrobotmanager/features/auth/data/shared_preferences_session_storage.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
@@ -116,6 +117,11 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           create: (_) => SharedPreferencesSessionStorage(widget.prefs),
         ),
         ChangeNotifierProvider<AuthProvider>.value(value: _authProvider),
+
+        // Locale
+        ChangeNotifierProvider<LocaleProvider>(
+          create: (_) => LocaleProvider(widget.prefs),
+        ),
 
         // Profile
         Provider<ProfileApi>(
