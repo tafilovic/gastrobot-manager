@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../providers/kitchen_queue_provider.dart';
-import 'preparing_order_card.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/preparing/providers/kitchen_queue_provider.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/features/preparing/widgets/preparing_order_card.dart';
 
 /// Preparing list for chef: title, dish count, loading/error/list of [PreparingOrderCard].
 class PreparingContent extends StatefulWidget {

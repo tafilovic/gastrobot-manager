@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../domain/models/kitchen_pending_order.dart';
-import '../domain/repositories/kitchen_pending_api.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/domain/repositories/kitchen_pending_api.dart';
 
 /// Interval for refreshing kitchen pending orders. Change this value to adjust refresh rate.
 const Duration kitchenOrdersRefreshInterval = Duration(seconds: 30);

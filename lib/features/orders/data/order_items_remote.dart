@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
 
-import '../../../core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
 
 /// Accept/reject order items via PATCH endpoints.
 class OrderItemsRemote implements OrderItemsApi {

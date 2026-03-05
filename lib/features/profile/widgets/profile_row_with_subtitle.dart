@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
 
 /// Profile row with label, subtitle and value.
 class ProfileRowWithSubtitle extends StatelessWidget {

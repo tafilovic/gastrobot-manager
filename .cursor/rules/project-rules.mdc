@@ -77,7 +77,15 @@ Do not add obscure dependencies.
 
 ---
 
-## 7. Code Quality
+## 7. Imports
+
+- **Always use package imports**: `import 'package:gastrobotmanager/...'`
+- **Never use relative imports** (`../`, `../../`) for project code.
+- Ensures consistent type resolution across machines (avoids path casing issues on Windows).
+
+---
+
+## 8. Code Quality
 
 - Follow `flutter_lints`.
 - Prefer `const`.
@@ -88,7 +96,7 @@ Do not add obscure dependencies.
 
 ---
 
-## 8. Performance
+## 9. Performance
 
 - Avoid unnecessary rebuilds.
 - No heavy work in `build()`.
@@ -97,7 +105,7 @@ Do not add obscure dependencies.
 
 ---
 
-## 9. Error Handling
+## 10. Error Handling
 
 - Never silently swallow errors.
 - Use structured error types.
@@ -106,7 +114,7 @@ Do not add obscure dependencies.
 
 ---
 
-## 10. Code Generation
+## 11. Code Generation
 
 - Use `build_runner` for `freezed` and `json_serializable`.
 - Never edit generated files.

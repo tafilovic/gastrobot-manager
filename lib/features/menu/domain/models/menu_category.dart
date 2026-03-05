@@ -1,4 +1,4 @@
-import 'menu_item.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
 
 /// Menu category (e.g. "GLAVNA JELA") with its items.
 class MenuCategory {

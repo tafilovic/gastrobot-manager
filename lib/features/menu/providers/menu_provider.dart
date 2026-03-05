@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import '../../auth/providers/auth_provider.dart';
-import '../domain/models/menu_item.dart';
-import '../domain/repositories/menus_api.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
+import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dart';
 
 /// Holds menu items (flattened from all categories), loading and error state.
 /// Used by chef (type=food) and bartender (type=drinks).

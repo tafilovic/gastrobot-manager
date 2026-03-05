@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
 
 /// Single profile settings row: icon, label, optional value or trailing.
 class ProfileRow extends StatelessWidget {

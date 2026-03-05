@@ -3,7 +3,7 @@ import 'package:gastrobotmanager/features/menu/domain/errors/menu_exception.dart
 import 'package:gastrobotmanager/features/menu/domain/models/venue_menu.dart';
 import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dart';
 
-import '../../../core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
 
 /// Fetches venue menus via GET /v1/venues/{venueId}/menus?type=food|drinks.
 class VenueMenusRemote implements MenusApi {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 class ReservationsScreen extends StatelessWidget {
   const ReservationsScreen({super.key});

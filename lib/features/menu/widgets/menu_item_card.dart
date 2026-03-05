@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../domain/models/menu_item.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
 
 /// Single menu item row: thumbnail, name, availability switch.
 class MenuItemCard extends StatelessWidget {

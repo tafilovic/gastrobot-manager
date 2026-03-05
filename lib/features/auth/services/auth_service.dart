@@ -1,9 +1,9 @@
-import '../domain/errors/auth_exception.dart';
-import '../domain/repositories/auth_api.dart';
-import '../domain/repositories/session_storage.dart';
-import '../models/auth_session.dart';
-import '../models/sign_in_request.dart';
-import '../utils/supported_roles.dart';
+import 'package:gastrobotmanager/features/auth/domain/errors/auth_exception.dart';
+import 'package:gastrobotmanager/features/auth/domain/repositories/auth_api.dart';
+import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
+import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
+import 'package:gastrobotmanager/features/auth/utils/supported_roles.dart';
 
 /// Auth use case: sign-in and session persistence.
 /// Depends only on domain abstractions ([SessionStorage], [AuthApi]).

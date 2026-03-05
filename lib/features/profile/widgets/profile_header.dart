@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/models/user.dart';
-import '../../../core/theme/app_colors.dart';
-import '../utils/profile_image_url.dart';
-import 'profile_avatar.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/profile/utils/profile_image_url.dart';
+import 'package:gastrobotmanager/features/profile/widgets/profile_avatar.dart';
 
 /// Profile header: avatar with edit button, name, email.
 class ProfileHeader extends StatelessWidget {

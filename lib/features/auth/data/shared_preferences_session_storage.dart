@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
 
 /// [SessionStorage] implementation using [SharedPreferences].
 class SharedPreferencesSessionStorage implements SessionStorage {

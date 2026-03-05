@@ -1,4 +1,4 @@
-import '../../../l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Formats [targetTimeIso] (ISO 8601) relative to now.
 /// >= 1 day → days; < 1 day and >= 1h → hours and minutes; < 1h and >= 1 min → minutes; else seconds.

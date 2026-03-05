@@ -1,4 +1,4 @@
-import 'kitchen_queue_item.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_item.dart';
 
 /// Kitchen queue order from GET .../kitchen/queue?prepStatus=ready.
 class KitchenQueueOrder {

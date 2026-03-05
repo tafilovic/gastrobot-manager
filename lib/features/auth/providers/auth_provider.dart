@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
-
-import '../../../core/api/token_store.dart';
-import '../../../core/models/profile_type.dart';
-import '../../../core/models/user.dart';
-import '../models/auth_session.dart';
-import '../models/sign_in_request.dart';
-import '../services/auth_service.dart';
-import '../utils/supported_roles.dart';
+import 'package:gastrobotmanager/core/api/token_store.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
+import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
+import 'package:gastrobotmanager/features/auth/services/auth_service.dart';
+import 'package:gastrobotmanager/features/auth/utils/supported_roles.dart';
 
 /// Auth state: current user, tokens, and session persistence.
 /// [profileType] (from user.role) drives app flow.

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../providers/profile_provider.dart';
-import '../widgets/profile_header.dart';
-import '../widgets/profile_row.dart';
-import '../widgets/profile_row_with_subtitle.dart';
-import 'profile_image_dialog.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
+import 'package:gastrobotmanager/features/profile/widgets/profile_header.dart';
+import 'package:gastrobotmanager/features/profile/widgets/profile_row.dart';
+import 'package:gastrobotmanager/features/profile/widgets/profile_row_with_subtitle.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/features/profile/screens/profile_image_dialog.dart';
 
 /// Profile screen: header with avatar, user details, settings rows, logout with confirmation.
 class ProfileScreen extends StatelessWidget {

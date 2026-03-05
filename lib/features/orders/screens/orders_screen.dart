@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/models/profile_type.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../providers/kitchen_orders_provider.dart';
-import '../widgets/kitchen_orders_content.dart';
-import '../widgets/standard_orders_placeholder.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/orders/providers/kitchen_orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/widgets/kitchen_orders_content.dart';
+import 'package:gastrobotmanager/features/orders/widgets/standard_orders_placeholder.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Orders list. For kitchen/chef: fetches pending orders from API (refresh every 30s), oldest first.
 /// For waiter/bar: shows empty state (standard placeholder).

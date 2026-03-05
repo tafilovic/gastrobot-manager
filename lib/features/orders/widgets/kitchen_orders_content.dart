@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gastrobotmanager/features/orders/screens/order_details_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../domain/models/kitchen_pending_order.dart';
-import '../providers/kitchen_orders_provider.dart';
-import 'kitchen_order_card.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/providers/kitchen_orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/widgets/kitchen_order_card.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Kitchen orders list: title, count, loading/error/ListView of [KitchenOrderCard].
 class KitchenOrdersContent extends StatefulWidget {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/navigation/nav_config.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../widgets/app_bottom_nav.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../../menu/screens/menu_screen.dart';
-import '../../orders/screens/orders_screen.dart';
-import '../../preparing/screens/preparing_screen.dart';
-import '../../profile/screens/profile_screen.dart';
-import '../../reservations/screens/reservations_screen.dart';
+import 'package:gastrobotmanager/core/navigation/nav_config.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/home/widgets/app_bottom_nav.dart';
+import 'package:gastrobotmanager/features/menu/screens/menu_screen.dart';
+import 'package:gastrobotmanager/features/orders/screens/orders_screen.dart';
+import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dart';
+import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
+import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Main shell with bottom navigation. Items depend on [ProfileType].
 /// Presentation layer: resolves localized nav labels from [AppLocalizations].

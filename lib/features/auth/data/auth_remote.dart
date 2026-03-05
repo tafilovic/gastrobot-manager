@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/auth/domain/errors/auth_exception.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/auth_api.dart';
-
-import '../../../core/api/api_config.dart';
-import '../../../core/models/user.dart';
-import '../models/auth_session.dart';
-import '../models/sign_in_request.dart';
+import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
 
 /// Auth API implementation using Dio. Throws [AuthException] on failure.
 class AuthRemote implements AuthApi {
@@ -20,7 +19,7 @@ class AuthRemote implements AuthApi {
       data: request.toJson(),
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus: (status) => status != null && status! < 400,
+        validateStatus: (status) => status != null && status < 400,
       ),
     );
 

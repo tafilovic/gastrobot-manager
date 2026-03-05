@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-import '../../../core/api/api_config.dart';
-import '../domain/errors/preparing_exception.dart';
-import '../domain/models/kitchen_queue_order.dart';
-import '../domain/repositories/kitchen_queue_api.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/features/preparing/domain/errors/preparing_exception.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_order.dart';
+import 'package:gastrobotmanager/features/preparing/domain/repositories/kitchen_queue_api.dart';
 
 /// Fetches kitchen queue (preparing) via GET /venues/{venueId}/kitchen/queue?prepStatus=ready.
 class KitchenQueueRemote implements KitchenQueueApi {

@@ -1,4 +1,4 @@
-import '../models/kitchen_queue_order.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_order.dart';
 
 /// Contract for fetching kitchen queue (preparing) orders and marking items ready.
 /// GET .../venues/{venueId}/kitchen/queue?prepStatus=ready

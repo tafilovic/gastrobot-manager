@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
 
 /// User avatar: network image or placeholder icon.
 class ProfileAvatar extends StatelessWidget {

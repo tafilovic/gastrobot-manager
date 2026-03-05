@@ -1,4 +1,4 @@
-import '../../../core/models/user.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
 
 /// Persisted auth session: user + tokens for API calls.
 class AuthSession {

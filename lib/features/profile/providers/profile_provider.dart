@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-import '../../../core/models/user.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../domain/errors/profile_exception.dart';
-import '../domain/repositories/profile_api.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
+import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 
 /// Profile use-case state: current user, update image, clear image, logout.
 /// Delegates to [AuthProvider] and [ProfileApi]; notifies when auth state changes.

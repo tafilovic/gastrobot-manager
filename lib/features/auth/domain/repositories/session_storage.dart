@@ -1,4 +1,4 @@
-import '../../models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
 
 /// Contract for persisting and restoring auth session and remembered email.
 /// Implementations live in the data layer (e.g. SharedPreferences).

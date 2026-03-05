@@ -1,4 +1,4 @@
-import '../../../l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Formats [targetTimeIso] (ISO 8601) relative to now for queue/preparing.
 String formatQueueTimeAgo(String targetTimeIso, AppLocalizations l10n) {

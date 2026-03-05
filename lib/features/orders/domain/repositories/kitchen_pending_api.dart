@@ -1,4 +1,4 @@
-import '../models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
 
 /// Contract for fetching kitchen pending orders for a venue.
 abstract class KitchenPendingApi {

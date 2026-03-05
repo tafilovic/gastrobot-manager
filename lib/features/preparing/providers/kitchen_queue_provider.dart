@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../domain/models/kitchen_queue_order.dart';
-import '../domain/repositories/kitchen_queue_api.dart';
+import 'package:gastrobotmanager/features/preparing/domain/models/kitchen_queue_order.dart';
+import 'package:gastrobotmanager/features/preparing/domain/repositories/kitchen_queue_api.dart';
 
 /// Interval for refreshing kitchen queue (preparing). Change this value to adjust refresh rate.
 const Duration kitchenQueueRefreshInterval = Duration(seconds: 30);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/navigation/nav_item.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/navigation/nav_item.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
 
 /// Custom bottom nav with labels limited to 1 line.
 class AppBottomNav extends StatelessWidget {

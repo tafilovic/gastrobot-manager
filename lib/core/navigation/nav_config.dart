@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/profile_type.dart';
-import 'nav_item.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/navigation/nav_item.dart';
 
 /// Bottom navigation configuration per profile type (routes and icons only).
 /// Localized labels are resolved in the presentation layer.

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../domain/models/kitchen_pending_order.dart';
-import '../domain/repositories/order_items_api.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Minutes available in the time picker (format "00 : MM").
 const List<int> _minuteOptions = [5, 10, 15, 20, 25, 30, 45, 60];

@@ -1,4 +1,4 @@
-import '../models/venue_menu.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/venue_menu.dart';
 
 /// Contract for fetching venue menus (food or drinks) and toggling item availability.
 abstract class MenusApi {

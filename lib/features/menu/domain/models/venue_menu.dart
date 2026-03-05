@@ -1,5 +1,5 @@
-import 'menu_category.dart';
-import 'menu_item.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/menu_category.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
 
 /// Venue menu (food or drinks) with categories.
 class VenueMenu {

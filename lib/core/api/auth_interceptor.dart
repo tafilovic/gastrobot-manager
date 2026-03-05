@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import 'api_config.dart';
-import 'token_store.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/token_store.dart';
 
 /// Dio interceptor that:
 /// - Injects `Authorization: Bearer <token>` on every outgoing request.

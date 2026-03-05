@@ -3,7 +3,7 @@ import 'package:gastrobotmanager/features/orders/domain/errors/kitchen_orders_ex
 import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/kitchen_pending_api.dart';
 
-import '../../../core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
 
 /// Fetches kitchen pending orders via GET /venues/{venueId}/kitchen/pending?source=walk_in.
 class KitchenPendingRemote implements KitchenPendingApi {

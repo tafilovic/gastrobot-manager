@@ -1,4 +1,4 @@
-import '../../../core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
 
 /// Resolves full URL for profile image. Use in presentation when displaying.
 /// Relative paths are prepended with [ApiConfig.baseUrl].

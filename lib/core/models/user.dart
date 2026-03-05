@@ -1,5 +1,5 @@
-import 'profile_type.dart';
-import 'venue_user.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/venue_user.dart';
 
 /// User model from auth API. [role] determines app flow (ProfileType).
 class User {

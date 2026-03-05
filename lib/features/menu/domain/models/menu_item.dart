@@ -1,4 +1,4 @@
-import 'menu_product.dart';
+import 'package:gastrobotmanager/features/menu/domain/models/menu_product.dart';
 
 /// Single menu item (price, availability, product) from API.
 class MenuItem {

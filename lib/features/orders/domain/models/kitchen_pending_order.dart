@@ -1,4 +1,4 @@
-import 'kitchen_order_item.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_order_item.dart';
 
 /// Kitchen pending order from GET /venues/{venueId}/kitchen/pending.
 class KitchenPendingOrder {

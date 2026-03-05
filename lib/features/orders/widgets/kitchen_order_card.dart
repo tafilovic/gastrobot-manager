@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../domain/models/kitchen_pending_order.dart';
-import '../utils/order_time_ago.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Card for a single kitchen pending order in the list.
 class KitchenOrderCard extends StatelessWidget {

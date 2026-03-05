@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../domain/models/kitchen_order_item.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/kitchen_order_item.dart';
 
 /// Single order item row in order details: checkbox, icon, name, notes, quantity.
 /// When [isDisabled] is true the row is not tappable (item already accepted/rejected).

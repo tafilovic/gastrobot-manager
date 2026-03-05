@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/models/profile_type.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../providers/menu_provider.dart';
-import '../widgets/menu_item_card.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
+import 'package:gastrobotmanager/features/menu/widgets/menu_item_card.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Menu screen: for chef (food) and bartender (drinks) shows list with search and toggles.
 /// For waiter shows placeholder.

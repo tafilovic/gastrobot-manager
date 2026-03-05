@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 
-import '../../../core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/api_config.dart';
 
 /// Profile API implementation. PATCH /users/profile-image with multipart.
 class ProfileRemote implements ProfileApi {

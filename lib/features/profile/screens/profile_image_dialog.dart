@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/models/user.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../domain/errors/profile_exception.dart';
-import '../providers/profile_provider.dart';
-import '../utils/profile_image_url.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
+import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
+import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
+import 'package:gastrobotmanager/features/profile/utils/profile_image_url.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 const _maxImageBytes = 3 * 1024 * 1024; // 3MB
 

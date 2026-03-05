@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'core/theme/app_theme.dart';
-import 'features/auth/providers/auth_provider.dart';
-import 'features/auth/screens/login_screen.dart';
-import 'features/home/screens/main_shell.dart';
-import 'l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/core/theme/app_theme.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/auth/screens/login_screen.dart';
+import 'package:gastrobotmanager/features/home/screens/main_shell.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 class GastroBotApp extends StatelessWidget {
   const GastroBotApp({super.key});
