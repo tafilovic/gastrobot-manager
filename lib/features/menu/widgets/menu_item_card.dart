@@ -68,13 +68,13 @@ class MenuItemCard extends StatelessWidget {
               Theme(
                 data: Theme.of(context).copyWith(
                   switchTheme: SwitchThemeData(
-                    trackColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    trackColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return accentColor;
                       }
                       return AppColors.border;
                     }),
-                    thumbColor: const MaterialStatePropertyAll(Colors.white),
+                    thumbColor: const WidgetStatePropertyAll(Colors.white),
                   ),
                 ),
                 child: Switch(
