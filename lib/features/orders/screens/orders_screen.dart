@@ -4,13 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/orders/providers/kitchen_orders_provider.dart';
-import 'package:gastrobotmanager/features/orders/widgets/kitchen_orders_content.dart';
+import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/widgets/orders_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/standard_orders_placeholder.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Orders list. For kitchen/chef: fetches pending orders from API (refresh every 30s), oldest first.
-/// For waiter/bar: shows empty state (standard placeholder).
+/// Orders list. For kitchen/bar: one [OrdersContent] + [OrdersProvider] (source by role).
+/// For waiter: placeholder.
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 
@@ -19,11 +19,11 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  KitchenOrdersProvider? _kitchenProvider;
+  OrdersProvider? _ordersProvider;
 
   @override
   void dispose() {
-    _kitchenProvider?.stopPeriodicRefresh();
+    _ordersProvider?.stopPeriodicRefresh();
     super.dispose();
   }
 
@@ -35,27 +35,27 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType;
 
-    if (profileType == ProfileType.kitchen) {
-      final kitchenProvider = context.read<KitchenOrdersProvider>();
-      _kitchenProvider = kitchenProvider;
-      return KitchenOrdersContent(
-        accentColor: accentColor,
+    if (profileType == ProfileType.waiter) {
+      _ordersProvider = null;
+      return StandardOrdersPlaceholder(
         l10n: l10n,
-        onStartRefresh: () {
-          final user = auth.user;
-          final venueId = user?.venueUsers.isNotEmpty == true
-              ? user!.venueUsers.first.venueId
-              : null;
-          if (venueId != null) {
-            kitchenProvider.startPeriodicRefresh(venueId);
-          }
-        },
+        theme: theme,
       );
     }
 
-    return StandardOrdersPlaceholder(
+    final ordersProvider = context.read<OrdersProvider>();
+    _ordersProvider = ordersProvider;
+    return OrdersContent(
+      accentColor: accentColor,
       l10n: l10n,
-      theme: theme,
+      onStartRefresh: () {
+        final venueId = auth.user?.venueUsers.isNotEmpty == true
+            ? auth.user!.venueUsers.first.venueId
+            : null;
+        if (venueId != null) {
+          ordersProvider.startPeriodicRefresh(venueId);
+        }
+      },
     );
   }
 }

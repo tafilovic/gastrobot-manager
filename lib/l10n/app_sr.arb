@@ -62,6 +62,14 @@
       }
     }
   },
+  "orderDrinksCount": "Broj pića: {count}",
+  "@orderDrinksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "orderSeeDetails": "VIDI DETALJE",
   "orderTimeAgoDays": "Pre {count} dan",
   "@orderTimeAgoDays": {

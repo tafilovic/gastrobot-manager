@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/kitchen_order_item.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 
 /// Single order item row in order details: checkbox, icon, name, notes, quantity.
 /// When [isDisabled] is true the row is not tappable (item already accepted/rejected).
@@ -15,7 +15,7 @@ class OrderItemTile extends StatelessWidget {
     this.isDisabled = false,
   });
 
-  final KitchenOrderItem item;
+  final PendingOrderItem item;
   final bool isChecked;
   final Color accentColor;
   final VoidCallback? onTap;

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:gastrobotmanager/features/orders/screens/order_details_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
-import 'package:gastrobotmanager/features/orders/providers/kitchen_orders_provider.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/screens/order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/kitchen_order_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Kitchen orders list: title, count, loading/error/ListView of [KitchenOrderCard].
-class KitchenOrdersContent extends StatefulWidget {
-  const KitchenOrdersContent({
+/// Single orders list for kitchen and bar: title, count, loading/error/ListView.
+/// Item count label is derived from [AuthProvider.profileType] (e.g. "Broj pića" for bar).
+class OrdersContent extends StatefulWidget {
+  const OrdersContent({
     super.key,
     required this.accentColor,
     required this.l10n,
@@ -22,10 +25,10 @@ class KitchenOrdersContent extends StatefulWidget {
   final VoidCallback onStartRefresh;
 
   @override
-  State<KitchenOrdersContent> createState() => _KitchenOrdersContentState();
+  State<OrdersContent> createState() => _OrdersContentState();
 }
 
-class _KitchenOrdersContentState extends State<KitchenOrdersContent> {
+class _OrdersContentState extends State<OrdersContent> {
   @override
   void initState() {
     super.initState();
@@ -34,10 +37,23 @@ class _KitchenOrdersContentState extends State<KitchenOrdersContent> {
     );
   }
 
+  /// Bar uses "Broj pića"; kitchen uses card default (Broj jela). Null = use default.
+  static String? _itemCountLabel(
+    AppLocalizations l10n,
+    ProfileType? profileType,
+    PendingOrder order,
+  ) {
+    if (profileType == ProfileType.bar) {
+      return l10n.orderDrinksCount(order.itemCount);
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final provider = context.watch<KitchenOrdersProvider>();
+    final provider = context.watch<OrdersProvider>();
+    final profileType = context.watch<AuthProvider>().profileType;
     final orders = provider.orders;
 
     return Scaffold(
@@ -111,20 +127,29 @@ class _KitchenOrdersContentState extends State<KitchenOrdersContent> {
                           vertical: 8,
                         ),
                         itemCount: orders.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 12),
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final order = orders[index];
                           return KitchenOrderCard(
                             order: order,
                             accentColor: widget.accentColor,
                             l10n: widget.l10n,
-                            onSeeDetails: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute<void>(
+                            itemCountLabel: _itemCountLabel(
+                              widget.l10n,
+                              profileType,
+                              order,
+                            ),
+                            onSeeDetails: () async {
+                              final completed = await Navigator.of(context)
+                                  .push<bool>(
+                                MaterialPageRoute<bool>(
                                   builder: (_) =>
                                       OrderDetailsScreen(order: order),
                                 ),
                               );
+                              if (completed == true && context.mounted) {
+                                provider.pullRefresh();
+                              }
                             },
                           );
                         },

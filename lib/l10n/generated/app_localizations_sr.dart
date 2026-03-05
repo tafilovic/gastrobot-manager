@@ -141,6 +141,11 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String orderDrinksCount(int count) {
+    return 'Broj pića: $count';
+  }
+
+  @override
   String get orderSeeDetails => 'VIDI DETALJE';
 
   @override

@@ -16,11 +16,11 @@ import 'package:gastrobotmanager/features/auth/services/auth_service.dart';
 import 'package:gastrobotmanager/features/menu/data/venue_menus_remote.dart';
 import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dart';
 import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
-import 'package:gastrobotmanager/features/orders/data/kitchen_pending_remote.dart';
 import 'package:gastrobotmanager/features/orders/data/order_items_remote.dart';
-import 'package:gastrobotmanager/features/orders/domain/repositories/kitchen_pending_api.dart';
+import 'package:gastrobotmanager/features/orders/data/pending_orders_remote.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
-import 'package:gastrobotmanager/features/orders/providers/kitchen_orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/domain/repositories/pending_orders_api.dart';
+import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/preparing/data/kitchen_queue_remote.dart';
 import 'package:gastrobotmanager/features/preparing/domain/repositories/kitchen_queue_api.dart';
 import 'package:gastrobotmanager/features/preparing/providers/kitchen_queue_provider.dart';
@@ -135,14 +135,17 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
 
         // Orders
-        Provider<KitchenPendingApi>(
-          create: (_) => KitchenPendingRemote(_authenticatedDio),
+        Provider<PendingOrdersApi>(
+          create: (_) => PendingOrdersRemote(_authenticatedDio),
         ),
         Provider<OrderItemsApi>(
           create: (_) => OrderItemsRemote(_authenticatedDio),
         ),
-        ChangeNotifierProvider<KitchenOrdersProvider>(
-          create: (c) => KitchenOrdersProvider(c.read<KitchenPendingApi>()),
+        ChangeNotifierProvider<OrdersProvider>(
+          create: (c) => OrdersProvider(
+            c.read<AuthProvider>(),
+            c.read<PendingOrdersApi>(),
+          ),
         ),
 
         // Menu

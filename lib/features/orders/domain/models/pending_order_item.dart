@@ -1,6 +1,6 @@
-/// Single item in a kitchen pending order.
-class KitchenOrderItem {
-  const KitchenOrderItem({
+/// Single item in a pending order (kitchen, bar, etc.).
+class PendingOrderItem {
+  const PendingOrderItem({
     required this.id,
     required this.name,
     required this.quantity,
@@ -16,9 +16,9 @@ class KitchenOrderItem {
   final String status;
   final List<dynamic> addons;
 
-  factory KitchenOrderItem.fromJson(Map<String, dynamic> json) {
+  factory PendingOrderItem.fromJson(Map<String, dynamic> json) {
     final addonsList = json['addons'] as List<dynamic>?;
-    return KitchenOrderItem(
+    return PendingOrderItem(
       id: json['id'] as String,
       name: json['name'] as String? ?? '',
       quantity: json['quantity'] as int? ?? 1,

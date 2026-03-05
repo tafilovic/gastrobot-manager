@@ -346,6 +346,12 @@ abstract class AppLocalizations {
   /// **'Broj jela: {count}'**
   String orderDishCount(int count);
 
+  /// No description provided for @orderDrinksCount.
+  ///
+  /// In sr, this message translates to:
+  /// **'Broj pića: {count}'**
+  String orderDrinksCount(int count);
+
   /// No description provided for @orderSeeDetails.
   ///
   /// In sr, this message translates to:

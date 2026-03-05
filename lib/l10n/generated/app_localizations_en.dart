@@ -140,6 +140,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String orderDrinksCount(int count) {
+    return 'Number of drinks: $count';
+  }
+
+  @override
   String get orderSeeDetails => 'VIEW DETAILS';
 
   @override

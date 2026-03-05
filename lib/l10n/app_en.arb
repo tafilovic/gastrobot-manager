@@ -41,6 +41,7 @@
   "ordersCountSuffix": " orders",
   "orderTableNumber": "Table number {number}",
   "orderDishCount": "Dish count: {count}",
+  "orderDrinksCount": "Number of drinks: {count}",
   "orderSeeDetails": "VIEW DETAILS",
   "orderTimeAgoDays": "{count} day ago",
   "orderTimeAgoHoursMinutes": "{hours}h {minutes}min ago",

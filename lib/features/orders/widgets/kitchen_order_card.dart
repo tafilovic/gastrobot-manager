@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Card for a single kitchen pending order in the list.
+/// Card for a single pending order in the list.
 class KitchenOrderCard extends StatelessWidget {
   const KitchenOrderCard({
     super.key,
@@ -13,12 +13,15 @@ class KitchenOrderCard extends StatelessWidget {
     required this.accentColor,
     required this.l10n,
     required this.onSeeDetails,
+    this.itemCountLabel,
   });
 
-  final KitchenPendingOrder order;
+  final PendingOrder order;
   final Color accentColor;
   final AppLocalizations l10n;
   final VoidCallback onSeeDetails;
+  /// If set (e.g. for bar "Broj pića"), used instead of [AppLocalizations.orderDishCount].
+  final String? itemCountLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +71,7 @@ class KitchenOrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              l10n.orderDishCount(order.itemCount),
+              itemCountLabel ?? l10n.orderDishCount(order.itemCount),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: AppColors.textPrimary,
               ),

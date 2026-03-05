@@ -1,8 +1,8 @@
-import 'package:gastrobotmanager/features/orders/domain/models/kitchen_order_item.dart';
+import 'pending_order_item.dart';
 
-/// Kitchen pending order from GET /venues/{venueId}/kitchen/pending.
-class KitchenPendingOrder {
-  const KitchenPendingOrder({
+/// Pending order from kitchen/pending or bar/pending.
+class PendingOrder {
+  const PendingOrder({
     required this.orderId,
     required this.orderNumber,
     required this.tableNumber,
@@ -20,24 +20,26 @@ class KitchenPendingOrder {
   final String orderType;
   final String targetTime;
   final dynamic reservationDetails;
-  final List<KitchenOrderItem> items;
+  final List<PendingOrderItem> items;
 
-  /// Total number of dish items in this order.
+  /// Total number of items in this order.
   int get itemCount => items.fold<int>(0, (sum, i) => sum + i.quantity);
 
-  factory KitchenPendingOrder.fromJson(Map<String, dynamic> json) {
+  factory PendingOrder.fromJson(Map<String, dynamic> json) {
     final itemsList = json['items'] as List<dynamic>?;
-    return KitchenPendingOrder(
+    final orderType =
+        (json['orderType'] ?? json['type']) as String? ?? 'walk_in';
+    return PendingOrder(
       orderId: json['orderId'] as String,
       orderNumber: json['orderNumber'] as String? ?? '',
       tableNumber: json['tableNumber']?.toString() ?? '0',
       note: json['note'] as String?,
-      orderType: json['orderType'] as String? ?? 'walk_in',
+      orderType: orderType,
       targetTime: json['targetTime'] as String? ?? '',
       reservationDetails: json['reservationDetails'],
       items: itemsList != null
           ? itemsList
-              .map((e) => KitchenOrderItem.fromJson(e as Map<String, dynamic>))
+              .map((e) => PendingOrderItem.fromJson(e as Map<String, dynamic>))
               .toList()
           : const [],
     );

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/kitchen_pending_order.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
 import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/order_item_tile.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Order details: order number in title, items with checkboxes, Reject All / Accept.
-/// Reject All = reject all items (regardless of checked). Accept = go to time estimation
-/// screen; there, confirm time or skip, then checked items are accepted (with/without time)
-/// and unchecked are rejected.
+/// Reject All = reject all items (regardless of checked).
+/// Accept: for kitchen → time estimation screen; for bar → accept/reject immediately (no time).
 class OrderDetailsScreen extends StatelessWidget {
   const OrderDetailsScreen({
     super.key,
     required this.order,
   });
 
-  final KitchenPendingOrder order;
+  final PendingOrder order;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class OrderDetailsScreen extends StatelessWidget {
 class _OrderDetailsContent extends StatefulWidget {
   const _OrderDetailsContent({required this.order});
 
-  final KitchenPendingOrder order;
+  final PendingOrder order;
 
   @override
   State<_OrderDetailsContent> createState() => _OrderDetailsContentState();
@@ -39,6 +39,7 @@ class _OrderDetailsContent extends StatefulWidget {
 class _OrderDetailsContentState extends State<_OrderDetailsContent> {
   late Set<String> _checkedIds;
   final Set<String> _processedIds = {};
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -88,7 +89,7 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
     }
     if (!mounted) return;
     if (_allProcessed) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(true);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -96,6 +97,66 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
                 .orderProcessingComplete(widget.order.orderNumber),
           ),
           backgroundColor: AppColors.success,
+        ),
+      );
+    }
+  }
+
+  /// For bar: accept checked items (no time), reject unchecked; then pop and show success.
+  Future<void> _runBarAccept(BuildContext context) async {
+    final auth = context.read<AuthProvider>();
+    final api = context.read<OrderItemsApi>();
+    final venueId = auth.user?.venueUsers.isNotEmpty == true
+        ? auth.user!.venueUsers.first.venueId
+        : null;
+    if (venueId == null) return;
+
+    final unprocessed = [
+      for (final item in widget.order.items)
+        if (!_processedIds.contains(item.id)) item.id,
+    ];
+    if (unprocessed.isEmpty) return;
+
+    final toReject =
+        unprocessed.where((id) => !_checkedIds.contains(id)).toList();
+    final toAccept =
+        unprocessed.where((id) => _checkedIds.contains(id)).toList();
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      for (final itemId in toReject) {
+        await api.rejectOrderItem(
+          venueId,
+          widget.order.orderId,
+          itemId,
+        );
+      }
+      for (final itemId in toAccept) {
+        await api.acceptOrderItem(
+          venueId,
+          widget.order.orderId,
+          itemId,
+        );
+      }
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!
+                .orderProcessingComplete(widget.order.orderNumber),
+          ),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isSubmitting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.authInvalidResponse),
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -118,7 +179,7 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
         )
         .then((result) {
       if (!context.mounted || result != true) return;
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(true);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -131,13 +192,22 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
     });
   }
 
+  void _onAcceptPressed(BuildContext context) {
+    final profileType = context.read<AuthProvider>().profileType;
+    if (profileType == ProfileType.bar) {
+      _runBarAccept(context);
+    } else {
+      _openTimeEstimation(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
     final unprocessed = _checkedIds.where((id) => !_processedIds.contains(id));
-    final isRejectDisabled = unprocessed.isEmpty;
-    final isAcceptDisabled = unprocessed.isEmpty;
+    final isRejectDisabled = unprocessed.isEmpty || _isSubmitting;
+    final isAcceptDisabled = unprocessed.isEmpty || _isSubmitting;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
@@ -146,7 +216,9 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
       ),
-      body: Column(
+      body: Stack(
+        children: [
+          Column(
         children: [
           Expanded(
             child: ListView.separated(
@@ -201,7 +273,7 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
                   child: FilledButton(
                     onPressed: isAcceptDisabled
                         ? null
-                        : () => _openTimeEstimation(context),
+                        : () => _onAcceptPressed(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.success,
                       foregroundColor: AppColors.onSuccess,
@@ -212,6 +284,15 @@ class _OrderDetailsContentState extends State<_OrderDetailsContent> {
               ],
             ),
           ),
+        ],
+      ),
+          if (_isSubmitting)
+            Container(
+              color: Colors.black26,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );
