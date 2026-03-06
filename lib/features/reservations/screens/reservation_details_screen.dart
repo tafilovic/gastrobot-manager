@@ -183,6 +183,10 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
+    final profileType = context.watch<AuthProvider>().profileType;
+    final itemIcon = profileType == ProfileType.kitchen
+        ? Icons.restaurant
+        : Icons.local_bar;
     final locale = Localizations.localeOf(context).languageCode;
     final dateStr = formatReservationDate(
       widget.order.targetTime,
@@ -266,6 +270,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                       isChecked: isChecked,
                       accentColor: accentColor,
                       isDisabled: isDisabled,
+                      itemIcon: itemIcon,
                       onTap: isDisabled
                           ? null
                           : () {
