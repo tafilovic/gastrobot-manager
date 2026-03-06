@@ -170,15 +170,20 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                       l10n: l10n,
                                       accentColor: widget.accentColor,
                                       itemCountLabel: itemCountForCard(order),
-                                      onSeeDetails: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute<void>(
+                                      onSeeDetails: () async {
+                                        final completed =
+                                            await Navigator.of(context).push<bool>(
+                                          MaterialPageRoute<bool>(
                                             builder: (_) =>
                                                 ReservationDetailsScreen(
                                               order: order,
                                             ),
                                           ),
                                         );
+                                        if (completed == true &&
+                                            context.mounted) {
+                                          provider.pullRefresh();
+                                        }
                                       },
                                     );
                                   },
