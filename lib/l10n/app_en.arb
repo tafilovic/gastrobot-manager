@@ -57,7 +57,7 @@
   "timeEstimationConfirm": "CONFIRM TIME",
   "reservationsTitle": "Reservations",
   "reservationsSubtitle": "Manage table reservations",
-  "reservationsRequestsTitle": "Reservations - Requests",
+  "reservationsRequestsTitle": "Reservations",
   "reservationsTabRequests": "Requests",
   "reservationsTabAccepted": "Accepted",
   "reservationToday": "Today",

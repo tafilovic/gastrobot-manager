@@ -204,7 +204,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reservationsSubtitle => 'Tischreservierungen verwalten';
 
   @override
-  String get reservationsRequestsTitle => 'Reservierungen - Anfragen';
+  String get reservationsRequestsTitle => 'Reservierungen';
 
   @override
   String get reservationsTabRequests => 'Anfragen';

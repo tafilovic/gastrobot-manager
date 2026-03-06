@@ -204,7 +204,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get reservationsSubtitle => 'Upravljajte rezervacijama stolova';
 
   @override
-  String get reservationsRequestsTitle => 'Rezervacije - Zahtevi';
+  String get reservationsRequestsTitle => 'Rezervacije';
 
   @override
   String get reservationsTabRequests => 'Zahtevi';

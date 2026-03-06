@@ -445,7 +445,7 @@ abstract class AppLocalizations {
   /// No description provided for @reservationsRequestsTitle.
   ///
   /// In sr, this message translates to:
-  /// **'Rezervacije - Zahtevi'**
+  /// **'Rezervacije'**
   String get reservationsRequestsTitle;
 
   /// No description provided for @reservationsTabRequests.

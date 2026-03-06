@@ -203,7 +203,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reservationsSubtitle => 'Manage table reservations';
 
   @override
-  String get reservationsRequestsTitle => 'Reservations - Requests';
+  String get reservationsRequestsTitle => 'Reservations';
 
   @override
   String get reservationsTabRequests => 'Requests';
