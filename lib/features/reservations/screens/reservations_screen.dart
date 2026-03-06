@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/reservations_content.dart';
 
+/// Reservations screen: requests (and accepted) for current role (kitchen / bar / waiter).
 class ReservationsScreen extends StatelessWidget {
   const ReservationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.reservationsTitle),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.calendar_today, size: 64, color: AppColors.textMuted),
-            const SizedBox(height: 16),
-            Text(l10n.reservationsTitle),
-            Text(
-              l10n.reservationsSubtitle,
-              style: const TextStyle(color: AppColors.textMuted),
-            ),
-          ],
-        ),
-      ),
+    final auth = context.watch<AuthProvider>();
+    final accentColor = Theme.of(context).colorScheme.primary;
+
+    return ReservationsContent(
+      accentColor: accentColor,
+      onStartRefresh: () {
+        final venueId = auth.user?.venueUsers.isNotEmpty == true
+            ? auth.user!.venueUsers.first.venueId
+            : null;
+        if (venueId != null) {
+          context.read<ReservationsProvider>().startPeriodicRefresh(venueId);
+        }
+      },
     );
   }
 }

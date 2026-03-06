@@ -442,6 +442,42 @@ abstract class AppLocalizations {
   /// **'Upravljajte rezervacijama stolova'**
   String get reservationsSubtitle;
 
+  /// No description provided for @reservationsRequestsTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Rezervacije - Zahtevi'**
+  String get reservationsRequestsTitle;
+
+  /// No description provided for @reservationsTabRequests.
+  ///
+  /// In sr, this message translates to:
+  /// **'Zahtevi'**
+  String get reservationsTabRequests;
+
+  /// No description provided for @reservationsTabAccepted.
+  ///
+  /// In sr, this message translates to:
+  /// **'Prihvaćeno'**
+  String get reservationsTabAccepted;
+
+  /// No description provided for @reservationToday.
+  ///
+  /// In sr, this message translates to:
+  /// **'Danas'**
+  String get reservationToday;
+
+  /// No description provided for @reservationCountDrinks.
+  ///
+  /// In sr, this message translates to:
+  /// **'{count} piće'**
+  String reservationCountDrinks(int count);
+
+  /// No description provided for @reservationCountDishes.
+  ///
+  /// In sr, this message translates to:
+  /// **'{count} jela'**
+  String reservationCountDishes(int count);
+
   /// No description provided for @preparingTitle.
   ///
   /// In sr, this message translates to:

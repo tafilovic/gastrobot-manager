@@ -204,6 +204,28 @@ class AppLocalizationsSr extends AppLocalizations {
   String get reservationsSubtitle => 'Upravljajte rezervacijama stolova';
 
   @override
+  String get reservationsRequestsTitle => 'Rezervacije - Zahtevi';
+
+  @override
+  String get reservationsTabRequests => 'Zahtevi';
+
+  @override
+  String get reservationsTabAccepted => 'Prihvaćeno';
+
+  @override
+  String get reservationToday => 'Danas';
+
+  @override
+  String reservationCountDrinks(int count) {
+    return '$count piće';
+  }
+
+  @override
+  String reservationCountDishes(int count) {
+    return '$count jela';
+  }
+
+  @override
   String get preparingTitle => 'U pripremi';
 
   @override

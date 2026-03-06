@@ -27,6 +27,9 @@ import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dar
 import 'package:gastrobotmanager/features/profile/data/profile_remote.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
+import 'package:gastrobotmanager/features/reservations/data/reservations_remote.dart';
+import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
+import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -167,6 +170,17 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           create: (c) => QueueProvider(
             c.read<AuthProvider>(),
             c.read<QueueApi>(),
+          ),
+        ),
+
+        // Reservations (requests by role: kitchen / bar / waiter)
+        Provider<ReservationsApi>(
+          create: (_) => ReservationsRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<ReservationsProvider>(
+          create: (c) => ReservationsProvider(
+            c.read<AuthProvider>(),
+            c.read<ReservationsApi>(),
           ),
         ),
       ],

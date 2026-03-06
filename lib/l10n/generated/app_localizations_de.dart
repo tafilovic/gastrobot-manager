@@ -204,6 +204,28 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reservationsSubtitle => 'Tischreservierungen verwalten';
 
   @override
+  String get reservationsRequestsTitle => 'Reservierungen - Anfragen';
+
+  @override
+  String get reservationsTabRequests => 'Anfragen';
+
+  @override
+  String get reservationsTabAccepted => 'Angenommen';
+
+  @override
+  String get reservationToday => 'Heute';
+
+  @override
+  String reservationCountDrinks(int count) {
+    return '$count Getränke';
+  }
+
+  @override
+  String reservationCountDishes(int count) {
+    return '$count Gerichte';
+  }
+
+  @override
   String get preparingTitle => 'In Bereitung';
 
   @override

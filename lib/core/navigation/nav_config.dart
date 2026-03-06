@@ -47,7 +47,7 @@ class NavConfig {
         return [orders, preparing, reservations, menu, profile];
       case ProfileType.kitchen:
       case ProfileType.bar:
-        return [orders, preparing, menu, profile];
+        return [orders, preparing, reservations, menu, profile];
     }
   }
 }

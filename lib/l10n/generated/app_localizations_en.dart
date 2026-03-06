@@ -203,6 +203,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reservationsSubtitle => 'Manage table reservations';
 
   @override
+  String get reservationsRequestsTitle => 'Reservations - Requests';
+
+  @override
+  String get reservationsTabRequests => 'Requests';
+
+  @override
+  String get reservationsTabAccepted => 'Accepted';
+
+  @override
+  String get reservationToday => 'Today';
+
+  @override
+  String reservationCountDrinks(int count) {
+    return '$count drinks';
+  }
+
+  @override
+  String reservationCountDishes(int count) {
+    return '$count dishes';
+  }
+
+  @override
   String get preparingTitle => 'Preparing';
 
   @override

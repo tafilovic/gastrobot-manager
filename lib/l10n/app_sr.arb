@@ -130,6 +130,22 @@
   "timeEstimationConfirm": "POTVRDI VREME",
   "reservationsTitle": "Rezervacije",
   "reservationsSubtitle": "Upravljajte rezervacijama stolova",
+  "reservationsRequestsTitle": "Rezervacije - Zahtevi",
+  "reservationsTabRequests": "Zahtevi",
+  "reservationsTabAccepted": "Prihvaćeno",
+  "reservationToday": "Danas",
+  "reservationCountDrinks": "{count} piće",
+  "reservationCountDishes": "{count} jela",
+  "@reservationCountDrinks": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "@reservationCountDishes": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "preparingTitle": "U pripremi",
   "preparingSubtitle": "Stavke u pripremi",
   "preparingDishCount": "{count} jela",
