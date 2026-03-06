@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sealed_countries/sealed_countries.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 const _keyLocale = 'app_locale';
 
@@ -9,20 +8,20 @@ const _keyLocale = 'app_locale';
 class SupportedLocale {
   const SupportedLocale({
     required this.locale,
-    required this.flag,
+    required this.country,
     required this.name,
   });
 
   final Locale locale;
-  final String flag;
+  final WorldCountry country;
   final String name;
 }
 
 /// App-supported locales for the language picker.
 const supportedLocales = [
-  SupportedLocale(locale: Locale('de'), flag: '🇩🇪', name: 'Deutsch'),
-  SupportedLocale(locale: Locale('en'), flag: '🇬🇧', name: 'English'),
-  SupportedLocale(locale: Locale('sr'), flag: '🇷🇸', name: 'Srpski'),
+  SupportedLocale(locale: Locale('de'), country: CountryDeu(), name: 'Deutsch'),
+  SupportedLocale(locale: Locale('en'), country: CountryGbr(), name: 'English'),
+  SupportedLocale(locale: Locale('sr'), country: CountrySrb(), name: 'Srpski'),
 ];
 
 /// Holds the selected app locale. Persists to SharedPreferences.
