@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:world_flags/world_flags.dart';
 
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
@@ -64,9 +65,13 @@ class LanguageSelectionDialog extends StatelessWidget {
                         localeProvider.locale?.languageCode ==
                             supported.locale.languageCode;
                     return ListTile(
-                      leading: Text(
-                        supported.flag,
-                        style: const TextStyle(fontSize: 28),
+                      leading: SizedBox(
+                        width: 40,
+                        height: 28,
+                        child: CountryFlag.simplified(
+                          supported.country,
+                          height: 28,
+                        ),
                       ),
                       title: Text(supported.name),
                       trailing: isSelected
