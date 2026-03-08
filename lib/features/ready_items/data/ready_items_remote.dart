@@ -7,7 +7,7 @@ import 'package:gastrobotmanager/features/ready_items/domain/errors/ready_items_
 import 'package:gastrobotmanager/features/ready_items/domain/repositories/ready_items_api.dart';
 
 /// Fetches waiter ready-to-serve items via GET .../venues/:venueId/waiter/ready-items
-/// and marks as served via PATCH .../venues/:venueId/waiter/served.
+/// and marks as delivered via PATCH .../venues/:venueId/waiter/deliver.
 /// API shape: orderId, orderNumber, tableName, note, items[] with orderItemId,
 /// productName, quantity, type, additionalInfo, addons, markedReadyAt.
 class ReadyItemsRemote implements ReadyItemsApi {
@@ -19,7 +19,7 @@ class ReadyItemsRemote implements ReadyItemsApi {
   static String _readyItemsUrl(String venueId) =>
       '/venues/$venueId/waiter/ready-items';
 
-  static String _servedUrl(String venueId) => '/venues/$venueId/waiter/served';
+  static String _deliverUrl(String venueId) => '/venues/$venueId/waiter/deliver';
 
   /// Maps waiter ready-items API response to [QueueOrder].
   static QueueOrder _orderFromWaiterJson(Map<String, dynamic> json) {
@@ -121,7 +121,7 @@ class ReadyItemsRemote implements ReadyItemsApi {
   ) async {
     try {
       final response = await _dio.patch<Map<String, dynamic>>(
-        _servedUrl(venueId),
+        _deliverUrl(venueId),
         data: {'orderItemIds': orderItemIds},
         options: Options(
           validateStatus: (int? status) => status != null && status < 400,

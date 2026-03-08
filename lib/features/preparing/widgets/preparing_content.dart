@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -79,9 +80,11 @@ class _PreparingContentState extends State<PreparingContent> {
               ),
             ),
             Expanded(
-              child: RefreshIndicator(
-                onRefresh: () => provider.pullRefresh(),
-                child: provider.isLoading && orders.isEmpty
+              child: ConstrainedContent(
+                padding: EdgeInsets.zero,
+                child: RefreshIndicator(
+                  onRefresh: () => provider.pullRefresh(),
+                  child: provider.isLoading && orders.isEmpty
                     ? ListView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         children: [
@@ -147,6 +150,7 @@ class _PreparingContentState extends State<PreparingContent> {
                               );
                             },
                           ),
+                ),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -250,13 +251,15 @@ class _MenuContentState extends State<_MenuContent> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            itemCount: filtered.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final item = filtered[index];
-              return MenuItemCard(
+          child: ConstrainedContent(
+            padding: EdgeInsets.zero,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              itemCount: filtered.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final item = filtered[index];
+                return MenuItemCard(
                 item: item,
                 accentColor: widget.accentColor,
                 isDrink: isDrinks,
@@ -272,8 +275,9 @@ class _MenuContentState extends State<_MenuContent> {
                     );
                   }
                 },
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ],

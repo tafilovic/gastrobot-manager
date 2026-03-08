@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_header.dart';
@@ -32,8 +33,10 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
+        child: ConstrainedContent(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
             ProfileHeader(
               user: user,
               onEditPhoto: () => ProfileImageDialog.show(context, user),
@@ -101,7 +104,8 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-          ],
+            ],
+          ),
         ),
       ),
     );

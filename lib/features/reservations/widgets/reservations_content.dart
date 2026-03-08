@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
@@ -119,9 +120,11 @@ class _ReservationsContentState extends State<ReservationsContent> {
               ),
             ),
             Expanded(
-              child: _selectedTabIndex == 1
-                  ? _buildAcceptedPlaceholder(l10n, provider)
-                  : RefreshIndicator(
+              child: ConstrainedContent(
+                padding: EdgeInsets.zero,
+                child: _selectedTabIndex == 1
+                    ? _buildAcceptedPlaceholder(l10n, provider)
+                    : RefreshIndicator(
                       onRefresh: () => provider.pullRefresh(),
                       child: provider.isLoading && requests.isEmpty
                           ? ListView(
@@ -189,6 +192,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                   },
                                 ),
                     ),
+              ),
             ),
           ],
         ),

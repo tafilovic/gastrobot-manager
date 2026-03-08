@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/navigation/nav_config.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_bottom_nav.dart';
+import 'package:gastrobotmanager/features/home/widgets/app_navigation_rail.dart';
 import 'package:gastrobotmanager/features/menu/screens/menu_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/orders_screen.dart';
 import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dart';
@@ -80,6 +82,31 @@ class _MainShellState extends State<MainShell> {
       });
     }
 
+    final width = MediaQuery.sizeOf(context).width;
+    final useRail = width >= AppBreakpoints.compact;
+    final labels = items.map((i) => _navLabel(l10n, i.route)).toList();
+
+    if (useRail) {
+      return Scaffold(
+        body: Row(
+          children: [
+            AppNavigationRail(
+              items: items,
+              labels: labels,
+              selectedIndex: safeIndex,
+              onDestinationSelected: (i) => setState(() => _selectedIndex = i),
+            ),
+            Expanded(
+              child: IndexedStack(
+                index: safeIndex,
+                children: items.map((item) => _buildPage(item.route)).toList(),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       body: IndexedStack(
         index: safeIndex,
@@ -87,7 +114,7 @@ class _MainShellState extends State<MainShell> {
       ),
       bottomNavigationBar: AppBottomNav(
         items: items,
-        labels: items.map((i) => _navLabel(l10n, i.route)).toList(),
+        labels: labels,
         selectedIndex: safeIndex,
         onDestinationSelected: (i) => setState(() => _selectedIndex = i),
       ),
