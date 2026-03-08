@@ -57,9 +57,7 @@ class PreparingScreen extends StatelessWidget {
     return PreparingContent(
       accentColor: accentColor,
       onStartRefresh: () {
-        final venueId = auth.user?.venueUsers.isNotEmpty == true
-            ? auth.user!.venueUsers.first.venueId
-            : null;
+        final venueId = auth.currentVenueId;
         if (venueId != null) {
           context.read<QueueProvider>().startPeriodicRefresh(venueId);
         }

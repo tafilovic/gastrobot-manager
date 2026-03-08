@@ -21,6 +21,7 @@ class AuthProvider extends ChangeNotifier {
   User? _user;
   String? _accessToken;
   String? _refreshToken;
+  String? _storedVenueId;
   bool _isRestoring = true;
 
   User? get user => _user;
@@ -29,6 +30,12 @@ class AuthProvider extends ChangeNotifier {
 
   /// Role-based type for navigation and features.
   ProfileType? get profileType => _user?.type;
+
+  /// Current venue id: from user.venueUsers first, else from locally stored value (saved on login).
+  String? get currentVenueId =>
+      _user?.venueUsers.isNotEmpty == true
+          ? _user!.venueUsers.first.venueId
+          : _storedVenueId;
 
   bool get isLoggedIn => _user != null;
   bool get isRestoring => _isRestoring;
@@ -51,6 +58,7 @@ class AuthProvider extends ChangeNotifier {
         _refreshToken = session.refreshToken;
         _syncTokenStore();
       }
+      _storedVenueId = await _authService.getVenueId();
     } catch (_) {
       // On any error, treat as logged out so user can retry
     } finally {
@@ -72,6 +80,11 @@ class AuthProvider extends ChangeNotifier {
     _refreshToken = session.refreshToken;
     _syncTokenStore();
     await _authService.setRememberedEmail(rememberEmail ? email.trim() : null);
+    if (session.user.venueUsers.isNotEmpty) {
+      final venueId = session.user.venueUsers.first.venueId;
+      _storedVenueId = venueId;
+      await _authService.saveVenueId(venueId);
+    }
     notifyListeners();
   }
 
@@ -80,6 +93,7 @@ class AuthProvider extends ChangeNotifier {
     _user = null;
     _accessToken = null;
     _refreshToken = null;
+    _storedVenueId = null;
     _tokenStore.clear();
     notifyListeners();
   }
@@ -124,6 +138,11 @@ class AuthProvider extends ChangeNotifier {
           refreshToken: _refreshToken!,
         ),
       );
+    }
+    if (user.venueUsers.isNotEmpty) {
+      final venueId = user.venueUsers.first.venueId;
+      _storedVenueId = venueId;
+      await _authService.saveVenueId(venueId);
     }
     notifyListeners();
   }

@@ -46,11 +46,8 @@ class _TimeEstimationScreenState extends State<TimeEstimationScreen> {
     super.dispose();
   }
 
-  String get _venueId {
-    final user = context.read<AuthProvider>().user;
-    if (user?.venueUsers.isEmpty ?? true) return '';
-    return user!.venueUsers.first.venueId;
-  }
+  String get _venueId =>
+      context.read<AuthProvider>().currentVenueId ?? '';
 
   /// Reject all items not in [widget.checkedItemIds]; accept items in
   /// [widget.checkedItemIds] with optional [estimatedPrepTimeMinutes].

@@ -48,9 +48,7 @@ class MenuProvider extends ChangeNotifier {
   /// Toggles item availability via API and updates local state from response.
   /// On failure reverts local state, sets [error] and returns false.
   Future<bool> toggleAvailability(String menuItemId) async {
-    final venueId = _authProvider.user?.venueUsers.isNotEmpty == true
-        ? _authProvider.user!.venueUsers.first.venueId
-        : null;
+    final venueId = _authProvider.currentVenueId;
     final menuId = _menuId;
 
     if (venueId == null || menuId == null) return false;

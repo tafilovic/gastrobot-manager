@@ -46,9 +46,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
   Future<void> _runRejectAll(BuildContext context) async {
     final auth = context.read<AuthProvider>();
     final api = context.read<OrderItemsApi>();
-    final venueId = auth.user?.venueUsers.isNotEmpty == true
-        ? auth.user!.venueUsers.first.venueId
-        : null;
+    final venueId = auth.currentVenueId;
     if (venueId == null) return;
 
     final toProcess = [
@@ -95,9 +93,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
   Future<void> _runBarAccept(BuildContext context) async {
     final auth = context.read<AuthProvider>();
     final api = context.read<OrderItemsApi>();
-    final venueId = auth.user?.venueUsers.isNotEmpty == true
-        ? auth.user!.venueUsers.first.venueId
-        : null;
+    final venueId = auth.currentVenueId;
     if (venueId == null) return;
 
     final unprocessed = [

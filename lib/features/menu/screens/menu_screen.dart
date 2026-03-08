@@ -120,9 +120,7 @@ class _MenuContentState extends State<_MenuContent> {
 
   void _loadMenu() {
     final auth = context.read<AuthProvider>();
-    final venueId = auth.user?.venueUsers.isNotEmpty == true
-        ? auth.user!.venueUsers.first.venueId
-        : null;
+    final venueId = auth.currentVenueId;
     if (venueId != null) {
       context.read<MenuProvider>().load(venueId, widget.menuType);
     }

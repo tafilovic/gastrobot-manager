@@ -17,9 +17,7 @@ class ReservationsScreen extends StatelessWidget {
     return ReservationsContent(
       accentColor: accentColor,
       onStartRefresh: () {
-        final venueId = auth.user?.venueUsers.isNotEmpty == true
-            ? auth.user!.venueUsers.first.venueId
-            : null;
+        final venueId = auth.currentVenueId;
         if (venueId != null) {
           context.read<ReservationsProvider>().startPeriodicRefresh(venueId);
         }

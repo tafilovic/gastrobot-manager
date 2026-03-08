@@ -36,9 +36,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     _ordersProvider = ordersProvider;
 
     void onStartRefresh() {
-      final venueId = auth.user?.venueUsers.isNotEmpty == true
-          ? auth.user!.venueUsers.first.venueId
-          : null;
+      final venueId = auth.currentVenueId;
       if (venueId != null) {
         ordersProvider.startPeriodicRefresh(venueId);
       }
