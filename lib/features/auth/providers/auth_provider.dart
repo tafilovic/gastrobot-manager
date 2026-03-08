@@ -111,4 +111,20 @@ class AuthProvider extends ChangeNotifier {
     _user = _user!.copyWith(profileImageUrl: newUrl);
     notifyListeners();
   }
+
+  /// Replace the current user (e.g. after fetching fresh profile from API).
+  /// Persists the updated session so it survives app restart.
+  Future<void> updateUser(User user) async {
+    _user = user;
+    if (_accessToken != null && _refreshToken != null) {
+      await _authService.updateSession(
+        AuthSession(
+          user: user,
+          accessToken: _accessToken!,
+          refreshToken: _refreshToken!,
+        ),
+      );
+    }
+    notifyListeners();
+  }
 }

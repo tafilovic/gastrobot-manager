@@ -13,8 +13,22 @@ import 'package:gastrobotmanager/features/profile/widgets/language_selection_dia
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 
 /// Profile screen: header with avatar, user details, settings rows, logout with confirmation.
-class ProfileScreen extends StatelessWidget {
+/// Loads fresh user data when the screen is opened.
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProfileProvider>().refreshUser();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

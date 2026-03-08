@@ -1,17 +1,36 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+
+import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 
-import 'package:gastrobotmanager/core/api/api_config.dart';
-
-/// Profile API implementation. PATCH /users/profile-image with multipart.
+/// Profile API implementation. GET /v1/users/{userId}, PATCH /users/profile-image.
 class ProfileRemote implements ProfileApi {
   ProfileRemote([Dio? dio])
       : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   final Dio _dio;
+
+  @override
+  Future<User?> getCurrentUser(String userId) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '/v1/users/$userId',
+        options: Options(validateStatus: (s) => s != null && s < 400),
+      );
+      final data = response.data;
+      if (data == null || response.statusCode != 200) return null;
+      final map = data['user'] is Map
+          ? Map<String, dynamic>.from(data['user'] as Map)
+          : Map<String, dynamic>.from(data);
+      return User.fromJson(map);
+    } on DioException catch (_) {
+      return null;
+    }
+  }
 
   @override
   Future<String?> updateProfileImage(File imageFile) async {
