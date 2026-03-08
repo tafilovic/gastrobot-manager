@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-/// Loads and displays an image from a URL with caching.
-/// Wraps [CachedNetworkImage] so the implementation can be replaced later
-/// (e.g. different cache or network image package) without changing call sites.
+/// Loads and displays an image from a URL.
+/// When [cache] is true (default), uses [CachedNetworkImage]. When false (e.g. profile image),
+/// uses [Image.network] so the image is always fetched fresh.
 class ImageLoader extends StatelessWidget {
   const ImageLoader({
     super.key,
@@ -13,6 +13,7 @@ class ImageLoader extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.placeholder,
     this.errorWidget,
+    this.cache = true,
   });
 
   final String imageUrl;
@@ -21,26 +22,49 @@ class ImageLoader extends StatelessWidget {
   final BoxFit fit;
   final Widget? placeholder;
   final Widget? errorWidget;
+  final bool cache;
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
+    if (cache) {
+      return CachedNetworkImage(
+        imageUrl: imageUrl,
+        width: width,
+        height: height,
+        fit: fit,
+        placeholder: placeholder != null
+            ? (_, __) => placeholder!
+            : (_, __) => const Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+        errorWidget: errorWidget != null
+            ? (_, __, ___) => errorWidget!
+            : (_, __, ___) => const Icon(Icons.broken_image_outlined),
+      );
+    }
+    return Image.network(
+      imageUrl,
       width: width,
       height: height,
       fit: fit,
-      placeholder: placeholder != null
-          ? (_, __) => placeholder!
-          : (_, __) => const Center(
-              child: SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-      errorWidget: errorWidget != null
-          ? (_, __, ___) => errorWidget!
-          : (_, __, ___) => const Icon(Icons.broken_image_outlined),
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return placeholder != null
+            ? placeholder!
+            : const Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              );
+      },
+      errorBuilder: (_, __, ___) =>
+          errorWidget ?? const Icon(Icons.broken_image_outlined),
     );
   }
 }

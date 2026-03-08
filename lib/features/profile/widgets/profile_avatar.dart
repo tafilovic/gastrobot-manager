@@ -32,6 +32,7 @@ class ProfileAvatar extends StatelessWidget {
           fit: BoxFit.cover,
           placeholder: _personPlaceholder(),
           errorWidget: _personPlaceholder(),
+          cache: false,
         ),
       ),
     );

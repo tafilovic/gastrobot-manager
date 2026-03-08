@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:gastrobotmanager/app.dart';
 import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/api/logging_interceptor.dart';
 import 'package:gastrobotmanager/core/api/auth_interceptor.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
@@ -105,7 +106,8 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           onTokensRefreshed: (a, r) => _authProvider.updateTokens(a, r),
           onLogout: () => _authProvider.logout(),
         ),
-      );
+      )
+      ..interceptors.add(LoggingInterceptor());
   }
 
   @override

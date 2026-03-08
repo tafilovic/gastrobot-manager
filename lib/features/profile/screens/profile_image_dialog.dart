@@ -63,6 +63,7 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
         color: AppColors.accent,
         child: const Icon(Icons.person, size: 64, color: AppColors.onPrimary),
       ),
+      cache: false,
     );
   }
 

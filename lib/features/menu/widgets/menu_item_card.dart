@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/image_loader.dart';
 import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
@@ -22,7 +23,7 @@ class MenuItemCard extends StatelessWidget {
   static String? _resolveImageUrl(String? url) {
     if (url == null || url.isEmpty) return null;
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return 'https://devapirestobot.brrm.eu$url';
+    return '${ApiConfig.baseUrl}$url';
   }
 
   @override
