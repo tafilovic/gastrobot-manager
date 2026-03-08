@@ -43,7 +43,7 @@ class KitchenOrderCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -69,7 +69,7 @@ class KitchenOrderCard extends StatelessWidget {
                 Icon(Icons.table_bar, size: 18, color: AppColors.textMuted),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               itemCountLabel ?? l10n.orderDishCount(order.itemCount),
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -84,7 +84,7 @@ class KitchenOrderCard extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: FilledButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
@@ -54,8 +55,13 @@ class ActiveOrderDetailsContent extends StatelessWidget {
         .toList();
     final drinkItems = order.items.where((i) => i.type == 'drink').toList();
     final billTotal = billAmount ?? _computedBillTotal(order);
+    final width = MediaQuery.sizeOf(context).width;
+    final maxWidth = width >= AppBreakpoints.expanded
+        ? AppBreakpoints.contentMaxWidthWide
+        : AppBreakpoints.contentMaxWidth;
 
     return ConstrainedContent(
+      maxWidth: maxWidth,
       padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,31 +120,85 @@ class ActiveOrderDetailsContent extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const Divider(height: 1),
-                  if (foodItems.isNotEmpty) ...[
-                    const SizedBox(height: 16),
-                    _SectionHeader(
-                        icon: Icons.restaurant, label: l10n.ordersFoodLabel),
-                    const SizedBox(height: 12),
-                    ...foodItems.map((item) => _OrderDetailItemRow(
-                          item: item,
-                          accentColor: accentColor,
-                        )),
-                    const SizedBox(height: 16),
-                    const Divider(height: 1),
-                  ],
-                  if (drinkItems.isNotEmpty) ...[
-                    const SizedBox(height: 16),
-                    _SectionHeader(
-                        icon: Icons.local_bar,
-                        label: l10n.ordersDrinksLabel),
-                    const SizedBox(height: 12),
-                    ...drinkItems.map((item) => _OrderDetailItemRow(
-                          item: item,
-                          accentColor: accentColor,
-                        )),
-                    const SizedBox(height: 16),
-                    const Divider(height: 1),
-                  ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = MediaQuery.sizeOf(context).width;
+                      final useTwoColumns = width >= AppBreakpoints.expanded;
+                      final foodSection = [
+                        if (foodItems.isNotEmpty) ...[
+                          const SizedBox(height: 16),
+                          _SectionHeader(
+                              icon: Icons.restaurant,
+                              label: l10n.ordersFoodLabel),
+                          const SizedBox(height: 12),
+                          ...foodItems.map((item) => _OrderDetailItemRow(
+                                item: item,
+                                accentColor: accentColor,
+                              )),
+                        ],
+                      ];
+                      final drinkSection = [
+                        if (drinkItems.isNotEmpty) ...[
+                          const SizedBox(height: 16),
+                          _SectionHeader(
+                              icon: Icons.local_bar,
+                              label: l10n.ordersDrinksLabel),
+                          const SizedBox(height: 12),
+                          ...drinkItems.map((item) => _OrderDetailItemRow(
+                                item: item,
+                                accentColor: accentColor,
+                              )),
+                        ],
+                      ];
+                      if (useTwoColumns &&
+                          foodItems.isNotEmpty &&
+                          drinkItems.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: foodSection,
+                                  ),
+                                ),
+                                const SizedBox(width: 24),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: drinkSection,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(height: 1),
+                          ],
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...foodSection,
+                          if (foodItems.isNotEmpty) ...[
+                            const SizedBox(height: 16),
+                            const Divider(height: 1),
+                          ],
+                          ...drinkSection,
+                          if (drinkItems.isNotEmpty) ...[
+                            const SizedBox(height: 16),
+                            const Divider(height: 1),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
                   if (billTotal != null) ...[
                     const SizedBox(height: 16),
                     _SectionHeader(

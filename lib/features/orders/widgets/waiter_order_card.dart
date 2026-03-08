@@ -80,7 +80,7 @@ class WaiterOrderCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -112,14 +112,14 @@ class WaiterOrderCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               timeAgo,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: AppColors.textMuted,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Icon(Icons.restaurant, size: 18, color: AppColors.textPrimary),
@@ -143,7 +143,7 @@ class WaiterOrderCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Row(
               children: [
                 Icon(Icons.local_bar, size: 18, color: AppColors.textPrimary),
@@ -167,7 +167,7 @@ class WaiterOrderCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -175,7 +175,7 @@ class WaiterOrderCard extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: accentColor,
                   foregroundColor: AppColors.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                 ),
                 child: Text(l10n.orderSeeDetails),
               ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/ready_items/providers/ready_items_provider.dart';
 import 'package:gastrobotmanager/features/ready_items/widgets/ready_order_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -123,11 +124,13 @@ class _ReadyItemsContentState extends State<ReadyItemsContent> {
                                 const SizedBox(height: 12),
                             itemBuilder: (context, index) {
                               final order = orders[index];
-                              return ReadyOrderCard(
-                                order: order,
-                                l10n: l10n,
-                                accentColor: widget.accentColor,
-                                onMarkServed: () async {
+                              return ListItemEntrance(
+                                index: index,
+                                child: ReadyOrderCard(
+                                  order: order,
+                                  l10n: l10n,
+                                  accentColor: widget.accentColor,
+                                  onMarkServed: () async {
                                   final ok =
                                       await provider.markOrderAsServed(order);
                                   if (!context.mounted) return;
@@ -145,7 +148,8 @@ class _ReadyItemsContentState extends State<ReadyItemsContent> {
                                     ),
                                   );
                                 },
-                              );
+                              ),
+                            );
                             },
                           ),
                 ),

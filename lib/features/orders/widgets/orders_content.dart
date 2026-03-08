@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
@@ -59,7 +61,7 @@ class _OrdersContentState extends State<OrdersContent> {
     OrdersProvider provider,
   ) async {
     final completed = await Navigator.of(context).push<bool>(
-      MaterialPageRoute<bool>(
+      FadeSlidePageRoute<bool>(
         builder: (_) => OrderDetailsScreen(order: order),
       ),
     );
@@ -283,16 +285,19 @@ class _OrdersContentState extends State<OrdersContent> {
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final order = orders[index];
-        return KitchenOrderCard(
-          order: order,
-          accentColor: widget.accentColor,
-          l10n: widget.l10n,
-          itemCountLabel: _itemCountLabel(
-            widget.l10n,
-            profileType,
-            order,
+        return ListItemEntrance(
+          index: index,
+          child: KitchenOrderCard(
+            order: order,
+            accentColor: widget.accentColor,
+            l10n: widget.l10n,
+            itemCountLabel: _itemCountLabel(
+              widget.l10n,
+              profileType,
+              order,
+            ),
+            onSeeDetails: () => onSeeDetails(order),
           ),
-          onSeeDetails: () => onSeeDetails(order),
         );
       },
     );

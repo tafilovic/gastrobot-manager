@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dart';
 import 'package:gastrobotmanager/features/preparing/widgets/preparing_order_card.dart';
@@ -128,25 +129,28 @@ class _PreparingContentState extends State<PreparingContent> {
                                 const SizedBox(height: 12),
                             itemBuilder: (context, index) {
                               final order = orders[index];
-                              return PreparingOrderCard(
-                                order: order,
-                                l10n: l10n,
-                                accentColor: widget.accentColor,
-                                onMarkReady: () async {
-                                  final ok = await provider.markOrderAsReady(order);
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        ok
-                                            ? l10n.preparingMarkAsReadySuccess
-                                            : (provider.error ?? l10n.preparingMarkAsReadyError),
+                              return ListItemEntrance(
+                                index: index,
+                                child: PreparingOrderCard(
+                                  order: order,
+                                  l10n: l10n,
+                                  accentColor: widget.accentColor,
+                                  onMarkReady: () async {
+                                    final ok = await provider.markOrderAsReady(order);
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          ok
+                                              ? l10n.preparingMarkAsReadySuccess
+                                              : (provider.error ?? l10n.preparingMarkAsReadyError),
+                                        ),
+                                        backgroundColor:
+                                            ok ? AppColors.success : AppColors.error,
                                       ),
-                                      backgroundColor:
-                                          ok ? AppColors.success : AppColors.error,
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               );
                             },
                           ),

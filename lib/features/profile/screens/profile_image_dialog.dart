@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/image_loader.dart';
 import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
 import 'package:gastrobotmanager/features/profile/utils/profile_image_url.dart';
@@ -55,10 +56,10 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
         child: const Icon(Icons.person, size: 64, color: AppColors.onPrimary),
       );
     }
-    return Image.network(
-      resolveProfileImageUrl(widget.user.profileImageUrl)!,
+    return ImageLoader(
+      imageUrl: resolveProfileImageUrl(widget.user.profileImageUrl)!,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => Container(
+      errorWidget: Container(
         color: AppColors.accent,
         child: const Icon(Icons.person, size: 64, color: AppColors.onPrimary),
       ),

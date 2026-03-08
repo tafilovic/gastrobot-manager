@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/image_loader.dart';
 import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
 
 /// Single menu item row: thumbnail, name, availability switch. Card style with border and shadow.
@@ -46,19 +47,20 @@ class MenuItemCard extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
-                        width: 56,
-                        height: 56,
+                    ? ImageLoader(
+                        imageUrl: imageUrl,
+                        width: 48,
+                        height: 48,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _placeholder(theme),
+                        placeholder: _placeholder(theme),
+                        errorWidget: _placeholder(theme),
                       )
                     : _placeholder(theme),
               ),
@@ -101,8 +103,8 @@ class MenuItemCard extends StatelessWidget {
 
   Widget _placeholder(ThemeData theme) {
     return Container(
-      width: 56,
-      height: 56,
+      width: 48,
+      height: 48,
       color: AppColors.backgroundMuted,
       child: Icon(
         isDrink ? Icons.local_bar : Icons.restaurant,

@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -168,26 +170,29 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                       const SizedBox(height: 12),
                                   itemBuilder: (context, index) {
                                     final order = requests[index];
-                                    return ReservationRequestCard(
-                                      order: order,
-                                      l10n: l10n,
-                                      accentColor: widget.accentColor,
-                                      itemCountLabel: itemCountForCard(order),
-                                      onSeeDetails: () async {
-                                        final completed =
-                                            await Navigator.of(context).push<bool>(
-                                          MaterialPageRoute<bool>(
-                                            builder: (_) =>
-                                                ReservationDetailsScreen(
-                                              order: order,
+                                    return ListItemEntrance(
+                                      index: index,
+                                      child: ReservationRequestCard(
+                                        order: order,
+                                        l10n: l10n,
+                                        accentColor: widget.accentColor,
+                                        itemCountLabel: itemCountForCard(order),
+                                        onSeeDetails: () async {
+                                          final completed =
+                                              await Navigator.of(context).push<bool>(
+                                            FadeSlidePageRoute<bool>(
+                                              builder: (_) =>
+                                                  ReservationDetailsScreen(
+                                                order: order,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                        if (completed == true &&
-                                            context.mounted) {
-                                          provider.pullRefresh();
-                                        }
-                                      },
+                                          );
+                                          if (completed == true &&
+                                              context.mounted) {
+                                            provider.pullRefresh();
+                                          }
+                                        },
+                                      ),
                                     );
                                   },
                                 ),

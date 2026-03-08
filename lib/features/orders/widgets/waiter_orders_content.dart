@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
+import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/active_order_filters.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/history_order_filters.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
@@ -114,7 +116,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Future<void> _openFilters() async {
     if (_selectedTabIndex == 0) {
       final result = await Navigator.of(context).push<ActiveOrderFilters>(
-        MaterialPageRoute<ActiveOrderFilters>(
+        FadeSlidePageRoute<ActiveOrderFilters>(
           builder: (_) => FilterActiveOrdersScreen(initialFilters: _activeFilters),
         ),
       );
@@ -123,7 +125,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       }
     } else {
       final result = await Navigator.of(context).push<HistoryOrderFilters>(
-        MaterialPageRoute<HistoryOrderFilters>(
+        FadeSlidePageRoute<HistoryOrderFilters>(
           builder: (_) => FilterHistoryOrdersScreen(initialFilters: _historyFilters),
         ),
       );
@@ -472,20 +474,20 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final order = orders[index];
-        if (_selectedTabIndex == 0) {
-          return WaiterOrderCard(
-            order: order,
-            accentColor: widget.accentColor,
-            l10n: widget.l10n,
-            onSeeDetails: () => onSeeDetails(order),
-          );
-        }
-        return WaiterOrderHistoryCard(
-          order: order,
-          accentColor: widget.accentColor,
-          l10n: widget.l10n,
-          onSeeDetails: () => onSeeDetails(order),
-        );
+        final card = _selectedTabIndex == 0
+            ? WaiterOrderCard(
+                order: order,
+                accentColor: widget.accentColor,
+                l10n: widget.l10n,
+                onSeeDetails: () => onSeeDetails(order),
+              )
+            : WaiterOrderHistoryCard(
+                order: order,
+                accentColor: widget.accentColor,
+                l10n: widget.l10n,
+                onSeeDetails: () => onSeeDetails(order),
+              );
+        return ListItemEntrance(index: index, child: card);
       },
     );
   }
@@ -493,14 +495,14 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Future<void> _openDetails(PendingOrder order, OrdersProvider provider) async {
     if (_selectedTabIndex == 1) {
       await Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(
+        FadeSlidePageRoute<void>(
           builder: (_) => HistoryOrderDetailsScreen(order: order),
         ),
       );
       return;
     }
     final completed = await Navigator.of(context).push<bool>(
-      MaterialPageRoute<bool>(
+      FadeSlidePageRoute<bool>(
         builder: (_) => ActiveOrderDetailsScreen(order: order),
       ),
     );

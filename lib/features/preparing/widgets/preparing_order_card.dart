@@ -32,7 +32,7 @@ class PreparingOrderCard extends StatelessWidget {
       color: AppColors.surface,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -59,7 +59,7 @@ class PreparingOrderCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             ...order.items.asMap().entries.expand((entry) {
               final index = entry.key;
               final item = entry.value;

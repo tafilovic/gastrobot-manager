@@ -11,4 +11,7 @@ abstract final class AppBreakpoints {
 
   /// Max width for list/content on medium+ screens (avoid stretched lists).
   static const double contentMaxWidth = 640;
+
+  /// Max width when content uses 2 columns (menu grid, food/drinks side-by-side).
+  static const double contentMaxWidthWide = 1100;
 }

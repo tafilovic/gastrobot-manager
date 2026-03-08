@@ -47,7 +47,7 @@ class WaiterOrderHistoryCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -79,21 +79,21 @@ class WaiterOrderHistoryCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               timeAgo,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: AppColors.textMuted,
               ),
             ),
-            const Divider(height: 24, color: AppColors.border),
+            const Divider(height: 16, color: AppColors.border),
             Text(
               '${l10n.orderBill} ${billAmount ?? '—'}',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -101,7 +101,7 @@ class WaiterOrderHistoryCard extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: accentColor,
                   foregroundColor: AppColors.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                 ),
                 child: Text(l10n.orderSeeDetails),
               ),

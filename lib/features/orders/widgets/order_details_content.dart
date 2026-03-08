@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
@@ -171,7 +172,7 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
 
     Navigator.of(context)
         .push<bool>(
-          MaterialPageRoute<bool>(
+          FadeSlidePageRoute<bool>(
             builder: (_) => TimeEstimationScreen(
               order: widget.order,
               checkedItemIds: Set.from(_checkedIds),

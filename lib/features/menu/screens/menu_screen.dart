@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
 import 'package:gastrobotmanager/features/menu/widgets/menu_item_card.dart';
@@ -25,7 +27,9 @@ class _MenuScreenState extends State<MenuScreen> {
   void initState() {
     super.initState();
     _searchController.addListener(() {
-      setState(() => _searchQuery = _searchController.text.trim().toLowerCase());
+      setState(
+        () => _searchQuery = _searchController.text.trim().toLowerCase(),
+      );
     });
   }
 
@@ -43,7 +47,8 @@ class _MenuScreenState extends State<MenuScreen> {
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType;
 
-    final showMenuContent = profileType == ProfileType.kitchen ||
+    final showMenuContent =
+        profileType == ProfileType.kitchen ||
         profileType == ProfileType.bar ||
         profileType == ProfileType.waiter;
 
@@ -60,10 +65,7 @@ class _MenuScreenState extends State<MenuScreen> {
             children: [
               const Icon(Icons.menu_book, size: 64, color: AppColors.textMuted),
               const SizedBox(height: 16),
-              Text(
-                l10n.menuTitle,
-                style: theme.textTheme.titleLarge,
-              ),
+              Text(l10n.menuTitle, style: theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               Text(
                 l10n.menuSubtitle,
@@ -156,8 +158,12 @@ class _MenuContentState extends State<_MenuContent> {
 
     final isDrinks = widget.menuType == 'drinks';
     final title = isDrinks ? l10n.drinksListTitle : l10n.menuTitle;
-    final instruction = isDrinks ? l10n.drinksListInstruction : l10n.menuInstruction;
-    final searchHint = isDrinks ? l10n.menuSearchHintDrinks : l10n.menuSearchHint;
+    final instruction = isDrinks
+        ? l10n.drinksListInstruction
+        : l10n.menuInstruction;
+    final searchHint = isDrinks
+        ? l10n.menuSearchHintDrinks
+        : l10n.menuSearchHint;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,33 +257,90 @@ class _MenuContentState extends State<_MenuContent> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: ConstrainedContent(
-            padding: EdgeInsets.zero,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              itemCount: filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final item = filtered[index];
-                return MenuItemCard(
-                item: item,
-                accentColor: widget.accentColor,
-                isDrink: isDrinks,
-                onAvailabilityChanged: (_) async {
-                  final ok = await provider.toggleAvailability(item.id);
-                  if (!context.mounted) return;
-                  if (!ok) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(provider.error ?? ''),
-                        backgroundColor: AppColors.error,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final width = MediaQuery.sizeOf(context).width;
+              final useTwoColumns = width >= AppBreakpoints.expanded;
+              return ConstrainedContent(
+                maxWidth: useTwoColumns
+                    ? AppBreakpoints.contentMaxWidthWide
+                    : AppBreakpoints.contentMaxWidth,
+                padding: EdgeInsets.zero,
+                child: useTwoColumns
+                    ? GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 12,
+                              mainAxisExtent: 105,
+                            ),
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final item = filtered[index];
+                          return ListItemEntrance(
+                            index: index,
+                            child: MenuItemCard(
+                              item: item,
+                              accentColor: widget.accentColor,
+                              isDrink: isDrinks,
+                              onAvailabilityChanged: (_) async {
+                                final ok = await provider.toggleAvailability(
+                                  item.id,
+                                );
+                                if (!context.mounted) return;
+                                if (!ok) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(provider.error ?? ''),
+                                      backgroundColor: AppColors.error,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        itemCount: filtered.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final item = filtered[index];
+                          return ListItemEntrance(
+                            index: index,
+                            child: MenuItemCard(
+                              item: item,
+                              accentColor: widget.accentColor,
+                              isDrink: isDrinks,
+                              onAvailabilityChanged: (_) async {
+                                final ok = await provider.toggleAvailability(
+                                  item.id,
+                                );
+                                if (!context.mounted) return;
+                                if (!ok) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(provider.error ?? ''),
+                                      backgroundColor: AppColors.error,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  }
-                },
-                );
-              },
-            ),
+              );
+            },
           ),
         ),
       ],
