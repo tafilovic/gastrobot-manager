@@ -245,6 +245,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderAccept => 'ACCEPT';
 
   @override
+  String get orderMarkAsPaid => 'MARK AS PAID';
+
+  @override
+  String get orderPaidLabel => 'PAID';
+
+  @override
+  String orderPaidAt(String dateTime) {
+    return 'Paid on $dateTime';
+  }
+
+  @override
   String orderProcessingComplete(String orderNumber) {
     return 'Order \"$orderNumber\" processing complete';
   }

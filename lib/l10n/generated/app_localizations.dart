@@ -532,6 +532,24 @@ abstract class AppLocalizations {
   /// **'PRIHVATI'**
   String get orderAccept;
 
+  /// No description provided for @orderMarkAsPaid.
+  ///
+  /// In sr, this message translates to:
+  /// **'OZNAČI KAO PLAĆENO'**
+  String get orderMarkAsPaid;
+
+  /// No description provided for @orderPaidLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'PLAĆENO'**
+  String get orderPaidLabel;
+
+  /// No description provided for @orderPaidAt.
+  ///
+  /// In sr, this message translates to:
+  /// **'Plaćeno {dateTime}'**
+  String orderPaidAt(String dateTime);
+
   /// No description provided for @orderProcessingComplete.
   ///
   /// In sr, this message translates to:

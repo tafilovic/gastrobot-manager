@@ -246,6 +246,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get orderAccept => 'ACCEPTIEREN';
 
   @override
+  String get orderMarkAsPaid => 'ALS BEZAHLT MARKIEREN';
+
+  @override
+  String get orderPaidLabel => 'BEZAHLT';
+
+  @override
+  String orderPaidAt(String dateTime) {
+    return 'Bezahlt am $dateTime';
+  }
+
+  @override
   String orderProcessingComplete(String orderNumber) {
     return 'Bestellung \"$orderNumber\" abgeschlossen';
   }

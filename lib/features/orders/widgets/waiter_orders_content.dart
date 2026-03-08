@@ -9,9 +9,11 @@ import 'package:gastrobotmanager/features/orders/domain/models/history_order_fil
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/screens/filter_active_orders_screen.dart';
+import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/filter_history_orders_screen.dart';
-import 'package:gastrobotmanager/features/orders/screens/order_details_screen.dart';
-import 'package:gastrobotmanager/features/orders/widgets/order_details_content.dart';
+import 'package:gastrobotmanager/features/orders/screens/history_order_details_screen.dart';
+import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
+import 'package:gastrobotmanager/features/orders/widgets/history_order_details_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/waiter_order_card.dart';
 import 'package:gastrobotmanager/features/orders/widgets/waiter_order_history_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -163,13 +165,17 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                 flex: 1,
                 child: _selectedOrder == null
                     ? _buildDetailPlaceholder(theme)
-                    : OrderDetailsContent(
-                        order: _selectedOrder!,
-                        onCompleted: () {
-                          setState(() => _selectedOrder = null);
-                          widget.onStartRefresh();
-                        },
-                      ),
+                    : _selectedTabIndex == 0
+                        ? ActiveOrderDetailsContent(
+                            order: _selectedOrder!,
+                            onCompleted: () {
+                              setState(() => _selectedOrder = null);
+                              widget.onStartRefresh();
+                            },
+                          )
+                        : HistoryOrderDetailsContent(
+                            order: _selectedOrder!,
+                          ),
               ),
             ],
           ),
@@ -485,9 +491,17 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   }
 
   Future<void> _openDetails(PendingOrder order, OrdersProvider provider) async {
+    if (_selectedTabIndex == 1) {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => HistoryOrderDetailsScreen(order: order),
+        ),
+      );
+      return;
+    }
     final completed = await Navigator.of(context).push<bool>(
       MaterialPageRoute<bool>(
-        builder: (_) => OrderDetailsScreen(order: order),
+        builder: (_) => ActiveOrderDetailsScreen(order: order),
       ),
     );
     if (completed == true && context.mounted) {

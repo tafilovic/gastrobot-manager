@@ -246,6 +246,17 @@ class AppLocalizationsSr extends AppLocalizations {
   String get orderAccept => 'PRIHVATI';
 
   @override
+  String get orderMarkAsPaid => 'OZNAČI KAO PLAĆENO';
+
+  @override
+  String get orderPaidLabel => 'PLAĆENO';
+
+  @override
+  String orderPaidAt(String dateTime) {
+    return 'Plaćeno $dateTime';
+  }
+
+  @override
   String orderProcessingComplete(String orderNumber) {
     return 'Završena obrada porudžbine \"$orderNumber\"';
   }

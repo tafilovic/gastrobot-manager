@@ -138,6 +138,10 @@
   },
   "orderRejectAll": "ODBIJ SVE",
   "orderAccept": "PRIHVATI",
+  "orderMarkAsPaid": "OZNAČI KAO PLAĆENO",
+  "orderPaidLabel": "PLAĆENO",
+  "orderPaidAt": "Plaćeno {dateTime}",
+  "@orderPaidAt": {"placeholders": {"dateTime": {"type": "String"}}},
   "orderProcessingComplete": "Završena obrada porudžbine \"{orderNumber}\"",
   "@orderProcessingComplete": {
     "placeholders": {
