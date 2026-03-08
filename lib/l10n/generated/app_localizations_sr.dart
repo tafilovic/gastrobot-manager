@@ -108,6 +108,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get navOrders => 'PORUDŽBINE';
 
   @override
+  String get navReady => 'SPREMNO';
+
+  @override
   String get navPreparing => 'U PRIPREMI';
 
   @override
@@ -117,7 +120,37 @@ class AppLocalizationsSr extends AppLocalizations {
   String get navMenu => 'JELOVNIK';
 
   @override
+  String get navDrinks => 'PIĆA';
+
+  @override
   String get navProfile => 'PROFIL';
+
+  @override
+  String get readyTitle => 'Spremno za usluživanje';
+
+  @override
+  String get readySubtitle => 'Porudžbine spremne za serviranje';
+
+  @override
+  String get readyOrdersCountSuffix => ' spremne porudžbine';
+
+  @override
+  String get readyMarkAsServed => 'OZNAČI KAO SERVIRANO';
+
+  @override
+  String get readyMarkAsDelivered => 'OZNAČI KAO ODNETO';
+
+  @override
+  String get readySectionFood => 'HRANA';
+
+  @override
+  String get readySectionDrinks => 'PIĆA';
+
+  @override
+  String get readyMarkAsServedSuccess => 'Porudžbina označena kao servirana';
+
+  @override
+  String get readyMarkAsServedError => 'Greška pri označavanju';
 
   @override
   String get ordersTitle => 'Porudžbine';
@@ -129,6 +162,39 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get ordersCountSuffix => ' porudžbine';
+
+  @override
+  String get ordersTabActive => 'Aktivne';
+
+  @override
+  String get ordersTabHistory => 'Istorija';
+
+  @override
+  String get ordersFilters => 'FILTERI';
+
+  @override
+  String get ordersOrderButton => 'PORUČI';
+
+  @override
+  String get ordersFoodLabel => 'Hrana:';
+
+  @override
+  String get ordersDrinksLabel => 'Piće:';
+
+  @override
+  String get orderStatusPending => 'NA ČEKANJU';
+
+  @override
+  String get orderStatusInPreparation => 'U PRIPREMI';
+
+  @override
+  String get orderStatusServed => 'SERVIRANO';
+
+  @override
+  String get orderStatusRejected => 'ODBIJENO';
+
+  @override
+  String get orderBill => 'Račun:';
 
   @override
   String orderTableNumber(int number) {
@@ -271,6 +337,19 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get menuAvailableCountMiddle => ' dostupnih od ukupno ';
+
+  @override
+  String get drinksListTitle => 'Lista pića';
+
+  @override
+  String get drinksListInstruction =>
+      'Označi kada je neko piće dostupno ili nedostupno';
+
+  @override
+  String get drinksAvailableCountSuffix => ' dostupnih pića';
+
+  @override
+  String get menuSearchHintDrinks => 'Pretraži piće...';
 
   @override
   String get profileTypeWaiter => 'Konobar';

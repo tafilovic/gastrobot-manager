@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/models/profile_type.dart';
-import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/widgets/orders_content.dart';
-import 'package:gastrobotmanager/features/orders/widgets/standard_orders_placeholder.dart';
+import 'package:gastrobotmanager/features/orders/widgets/waiter_orders_content.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Orders list. For kitchen/bar: one [OrdersContent] + [OrdersProvider] (source by role).
-/// For waiter: placeholder.
+/// Orders list. Kitchen/bar: [OrdersContent]. Waiter: [WaiterOrdersContent] (Active/History tabs).
+/// All use [OrdersProvider]; waiter fetches from venues/:venueId/waiter/pending-orders.
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 
@@ -30,32 +29,33 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final accentColor = theme.colorScheme.primary;
+    final accentColor = Theme.of(context).colorScheme.primary;
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType;
+    final ordersProvider = context.read<OrdersProvider>();
+    _ordersProvider = ordersProvider;
+
+    void onStartRefresh() {
+      final venueId = auth.user?.venueUsers.isNotEmpty == true
+          ? auth.user!.venueUsers.first.venueId
+          : null;
+      if (venueId != null) {
+        ordersProvider.startPeriodicRefresh(venueId);
+      }
+    }
 
     if (profileType == ProfileType.waiter) {
-      _ordersProvider = null;
-      return StandardOrdersPlaceholder(
+      return WaiterOrdersContent(
+        accentColor: accentColor,
         l10n: l10n,
-        theme: theme,
+        onStartRefresh: onStartRefresh,
       );
     }
 
-    final ordersProvider = context.read<OrdersProvider>();
-    _ordersProvider = ordersProvider;
     return OrdersContent(
       accentColor: accentColor,
       l10n: l10n,
-      onStartRefresh: () {
-        final venueId = auth.user?.venueUsers.isNotEmpty == true
-            ? auth.user!.venueUsers.first.venueId
-            : null;
-        if (venueId != null) {
-          ordersProvider.startPeriodicRefresh(venueId);
-        }
-      },
+      onStartRefresh: onStartRefresh,
     );
   }
 }

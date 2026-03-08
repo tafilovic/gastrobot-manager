@@ -29,17 +29,20 @@ class PendingOrder {
     final itemsList = json['items'] as List<dynamic>?;
     final orderType =
         (json['orderType'] ?? json['type']) as String? ?? 'walk_in';
+    final tableNum = json['tableNumber']?.toString() ?? json['tableName']?.toString();
+    final tableNumber = (tableNum == null || tableNum.isEmpty || tableNum == 'N/A') ? '0' : tableNum;
     return PendingOrder(
-      orderId: json['orderId'] as String,
+      orderId: json['orderId']?.toString() ?? '',
       orderNumber: json['orderNumber'] as String? ?? '',
-      tableNumber: json['tableNumber']?.toString() ?? '0',
+      tableNumber: tableNumber,
       note: json['note'] as String?,
       orderType: orderType,
       targetTime: json['targetTime'] as String? ?? '',
       reservationDetails: json['reservationDetails'],
       items: itemsList != null
           ? itemsList
-              .map((e) => PendingOrderItem.fromJson(e as Map<String, dynamic>))
+              .map((e) => PendingOrderItem.fromJson(
+                  e is Map ? Map<String, dynamic>.from(e as Map) : <String, dynamic>{}))
               .toList()
           : const [],
     );

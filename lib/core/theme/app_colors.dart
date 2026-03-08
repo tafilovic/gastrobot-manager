@@ -5,7 +5,7 @@ abstract final class AppColors {
   AppColors._();
 
   // --- Primary / accent
-  static const Color accent = Color(0xFF2196F3);
+  static const Color accent = Color(0xFF0029C1);
 
   // --- Surfaces
   static const Color surface = Color(0xFFFFFFFF);

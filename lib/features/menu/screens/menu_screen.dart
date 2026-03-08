@@ -8,8 +8,7 @@ import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
 import 'package:gastrobotmanager/features/menu/widgets/menu_item_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Menu screen: for chef (food) and bartender (drinks) shows list with search and toggles.
-/// For waiter shows placeholder.
+/// Menu screen: kitchen/bar load food; waiter loads drinks. Same list UI with search and toggles.
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
 
@@ -43,7 +42,11 @@ class _MenuScreenState extends State<MenuScreen> {
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType;
 
-    if (profileType != ProfileType.kitchen && profileType != ProfileType.bar) {
+    final showMenuContent = profileType == ProfileType.kitchen ||
+        profileType == ProfileType.bar ||
+        profileType == ProfileType.waiter;
+
+    if (!showMenuContent) {
       return Scaffold(
         appBar: AppBar(
           title: Text(l10n.menuTitle),
@@ -72,8 +75,8 @@ class _MenuScreenState extends State<MenuScreen> {
       );
     }
 
-    final menuType =
-        profileType == ProfileType.kitchen ? 'food' : 'drinks';
+    // Bar loads food; waiter loads drinks; kitchen loads food.
+    final menuType = profileType == ProfileType.waiter ? 'drinks' : 'food';
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
       body: SafeArea(
@@ -150,13 +153,18 @@ class _MenuContentState extends State<_MenuContent> {
       return i.product.name.toLowerCase().contains(widget.searchQuery);
     }).toList();
 
+    final isDrinks = widget.menuType == 'drinks';
+    final title = isDrinks ? l10n.drinksListTitle : l10n.menuTitle;
+    final instruction = isDrinks ? l10n.drinksListInstruction : l10n.menuInstruction;
+    final searchHint = isDrinks ? l10n.menuSearchHintDrinks : l10n.menuSearchHint;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
           child: Text(
-            l10n.menuTitle,
+            title,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
@@ -166,7 +174,7 @@ class _MenuContentState extends State<_MenuContent> {
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
           child: Text(
-            l10n.menuInstruction,
+            instruction,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -174,38 +182,57 @@ class _MenuContentState extends State<_MenuContent> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-          child: Text.rich(
-            TextSpan(
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w500,
-              ),
-              children: [
-                TextSpan(
-                  text: '${provider.availableCount}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: widget.accentColor,
-                    fontWeight: FontWeight.w600,
+          child: isDrinks
+              ? Text.rich(
+                  TextSpan(
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '${provider.availableCount}',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: widget.accentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextSpan(text: l10n.drinksAvailableCountSuffix),
+                    ],
+                  ),
+                )
+              : Text.rich(
+                  TextSpan(
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '${provider.availableCount}',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: widget.accentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextSpan(text: l10n.menuAvailableCountMiddle),
+                      TextSpan(
+                        text: '${provider.totalCount}',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: widget.accentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                TextSpan(text: l10n.menuAvailableCountMiddle),
-                TextSpan(
-                  text: '${provider.totalCount}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: widget.accentColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextField(
             controller: widget.searchController,
             decoration: InputDecoration(
-              hintText: l10n.menuSearchHint,
+              hintText: searchHint,
               hintStyle: const TextStyle(color: AppColors.textMuted),
               prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
               filled: true,
@@ -232,6 +259,7 @@ class _MenuContentState extends State<_MenuContent> {
               return MenuItemCard(
                 item: item,
                 accentColor: widget.accentColor,
+                isDrink: isDrinks,
                 onAvailabilityChanged: (_) async {
                   final ok = await provider.toggleAvailability(item.id);
                   if (!context.mounted) return;

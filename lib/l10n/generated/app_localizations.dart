@@ -292,6 +292,12 @@ abstract class AppLocalizations {
   /// **'PORUDŽBINE'**
   String get navOrders;
 
+  /// No description provided for @navReady.
+  ///
+  /// In sr, this message translates to:
+  /// **'SPREMNO'**
+  String get navReady;
+
   /// No description provided for @navPreparing.
   ///
   /// In sr, this message translates to:
@@ -310,11 +316,71 @@ abstract class AppLocalizations {
   /// **'JELOVNIK'**
   String get navMenu;
 
+  /// No description provided for @navDrinks.
+  ///
+  /// In sr, this message translates to:
+  /// **'PIĆA'**
+  String get navDrinks;
+
   /// No description provided for @navProfile.
   ///
   /// In sr, this message translates to:
   /// **'PROFIL'**
   String get navProfile;
+
+  /// No description provided for @readyTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Spremno za usluživanje'**
+  String get readyTitle;
+
+  /// No description provided for @readySubtitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Porudžbine spremne za serviranje'**
+  String get readySubtitle;
+
+  /// No description provided for @readyOrdersCountSuffix.
+  ///
+  /// In sr, this message translates to:
+  /// **' spremne porudžbine'**
+  String get readyOrdersCountSuffix;
+
+  /// No description provided for @readyMarkAsServed.
+  ///
+  /// In sr, this message translates to:
+  /// **'OZNAČI KAO SERVIRANO'**
+  String get readyMarkAsServed;
+
+  /// No description provided for @readyMarkAsDelivered.
+  ///
+  /// In sr, this message translates to:
+  /// **'OZNAČI KAO ODNETO'**
+  String get readyMarkAsDelivered;
+
+  /// No description provided for @readySectionFood.
+  ///
+  /// In sr, this message translates to:
+  /// **'HRANA'**
+  String get readySectionFood;
+
+  /// No description provided for @readySectionDrinks.
+  ///
+  /// In sr, this message translates to:
+  /// **'PIĆA'**
+  String get readySectionDrinks;
+
+  /// No description provided for @readyMarkAsServedSuccess.
+  ///
+  /// In sr, this message translates to:
+  /// **'Porudžbina označena kao servirana'**
+  String get readyMarkAsServedSuccess;
+
+  /// No description provided for @readyMarkAsServedError.
+  ///
+  /// In sr, this message translates to:
+  /// **'Greška pri označavanju'**
+  String get readyMarkAsServedError;
 
   /// No description provided for @ordersTitle.
   ///
@@ -333,6 +399,72 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **' porudžbine'**
   String get ordersCountSuffix;
+
+  /// No description provided for @ordersTabActive.
+  ///
+  /// In sr, this message translates to:
+  /// **'Aktivne'**
+  String get ordersTabActive;
+
+  /// No description provided for @ordersTabHistory.
+  ///
+  /// In sr, this message translates to:
+  /// **'Istorija'**
+  String get ordersTabHistory;
+
+  /// No description provided for @ordersFilters.
+  ///
+  /// In sr, this message translates to:
+  /// **'FILTERI'**
+  String get ordersFilters;
+
+  /// No description provided for @ordersOrderButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'PORUČI'**
+  String get ordersOrderButton;
+
+  /// No description provided for @ordersFoodLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Hrana:'**
+  String get ordersFoodLabel;
+
+  /// No description provided for @ordersDrinksLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Piće:'**
+  String get ordersDrinksLabel;
+
+  /// No description provided for @orderStatusPending.
+  ///
+  /// In sr, this message translates to:
+  /// **'NA ČEKANJU'**
+  String get orderStatusPending;
+
+  /// No description provided for @orderStatusInPreparation.
+  ///
+  /// In sr, this message translates to:
+  /// **'U PRIPREMI'**
+  String get orderStatusInPreparation;
+
+  /// No description provided for @orderStatusServed.
+  ///
+  /// In sr, this message translates to:
+  /// **'SERVIRANO'**
+  String get orderStatusServed;
+
+  /// No description provided for @orderStatusRejected.
+  ///
+  /// In sr, this message translates to:
+  /// **'ODBIJENO'**
+  String get orderStatusRejected;
+
+  /// No description provided for @orderBill.
+  ///
+  /// In sr, this message translates to:
+  /// **'Račun:'**
+  String get orderBill;
 
   /// No description provided for @orderTableNumber.
   ///
@@ -561,6 +693,30 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **' dostupnih od ukupno '**
   String get menuAvailableCountMiddle;
+
+  /// No description provided for @drinksListTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Lista pića'**
+  String get drinksListTitle;
+
+  /// No description provided for @drinksListInstruction.
+  ///
+  /// In sr, this message translates to:
+  /// **'Označi kada je neko piće dostupno ili nedostupno'**
+  String get drinksListInstruction;
+
+  /// No description provided for @drinksAvailableCountSuffix.
+  ///
+  /// In sr, this message translates to:
+  /// **' dostupnih pića'**
+  String get drinksAvailableCountSuffix;
+
+  /// No description provided for @menuSearchHintDrinks.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pretraži piće...'**
+  String get menuSearchHintDrinks;
 
   /// No description provided for @profileTypeWaiter.
   ///

@@ -108,6 +108,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get navOrders => 'BESTELLUNGEN';
 
   @override
+  String get navReady => 'BEREIT';
+
+  @override
   String get navPreparing => 'IN BERECHITUNG';
 
   @override
@@ -117,7 +120,37 @@ class AppLocalizationsDe extends AppLocalizations {
   String get navMenu => 'SPEISEKARTE';
 
   @override
+  String get navDrinks => 'GETRÄNKE';
+
+  @override
   String get navProfile => 'PROFIL';
+
+  @override
+  String get readyTitle => 'Bereit zum Servieren';
+
+  @override
+  String get readySubtitle => 'Bestellungen bereit zum Servieren';
+
+  @override
+  String get readyOrdersCountSuffix => ' fertige Bestellungen';
+
+  @override
+  String get readyMarkAsServed => 'ALS SERVIERT MARKIEREN';
+
+  @override
+  String get readyMarkAsDelivered => 'ALS GELIEFERT MARKIEREN';
+
+  @override
+  String get readySectionFood => 'ESSEN';
+
+  @override
+  String get readySectionDrinks => 'GETRÄNKE';
+
+  @override
+  String get readyMarkAsServedSuccess => 'Bestellung als serviert markiert';
+
+  @override
+  String get readyMarkAsServedError => 'Markierung fehlgeschlagen';
 
   @override
   String get ordersTitle => 'Bestellungen';
@@ -129,6 +162,39 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get ordersCountSuffix => ' Bestellungen';
+
+  @override
+  String get ordersTabActive => 'Aktiv';
+
+  @override
+  String get ordersTabHistory => 'Verlauf';
+
+  @override
+  String get ordersFilters => 'FILTER';
+
+  @override
+  String get ordersOrderButton => 'BESTELLEN';
+
+  @override
+  String get ordersFoodLabel => 'Essen:';
+
+  @override
+  String get ordersDrinksLabel => 'Getränke:';
+
+  @override
+  String get orderStatusPending => 'AUSSTEHEND';
+
+  @override
+  String get orderStatusInPreparation => 'IN BERECHITUNG';
+
+  @override
+  String get orderStatusServed => 'SERVIERT';
+
+  @override
+  String get orderStatusRejected => 'ABGELEHNT';
+
+  @override
+  String get orderBill => 'Rechnung:';
 
   @override
   String orderTableNumber(int number) {
@@ -271,6 +337,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get menuAvailableCountMiddle => ' von ';
+
+  @override
+  String get drinksListTitle => 'Getränkeliste';
+
+  @override
+  String get drinksListInstruction =>
+      'Markieren Sie, wenn ein Getränk verfügbar oder nicht verfügbar ist';
+
+  @override
+  String get drinksAvailableCountSuffix => ' verfügbare Getränke';
+
+  @override
+  String get menuSearchHintDrinks => 'Getränk suchen...';
 
   @override
   String get profileTypeWaiter => 'Kellner';

@@ -8,7 +8,8 @@ class AppTheme {
   static ThemeData get light {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.accent, brightness: Brightness.light),
+      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.accent, brightness: Brightness.light)
+          .copyWith(primary: AppColors.accent),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
       ),

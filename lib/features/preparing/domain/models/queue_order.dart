@@ -28,7 +28,7 @@ class QueueOrder {
   factory QueueOrder.fromJson(Map<String, dynamic> json) {
     final itemsList = json['items'] as List<dynamic>?;
     return QueueOrder(
-      orderId: json['orderId'] as String,
+      orderId: json['orderId']?.toString() ?? '',
       orderNumber: json['orderNumber'] as String? ?? '',
       tableNumber: json['tableNumber']?.toString() ?? '0',
       note: json['note'] as String?,

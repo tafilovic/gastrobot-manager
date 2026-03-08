@@ -8,6 +8,7 @@ import 'package:gastrobotmanager/features/menu/screens/menu_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/orders_screen.dart';
 import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dart';
 import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
+import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -27,12 +28,16 @@ class _MainShellState extends State<MainShell> {
     switch (route) {
       case 'orders':
         return l10n.navOrders;
+      case 'ready':
+        return l10n.navReady;
       case 'preparing':
         return l10n.navPreparing;
       case 'reservations':
         return l10n.navReservations;
       case 'menu':
         return l10n.navMenu;
+      case 'drinks':
+        return l10n.navDrinks;
       case 'profile':
         return l10n.navProfile;
       default:
@@ -44,11 +49,14 @@ class _MainShellState extends State<MainShell> {
     switch (route) {
       case 'orders':
         return const OrdersScreen();
+      case 'ready':
+        return const ReadyItemsScreen();
       case 'preparing':
         return const PreparingScreen();
       case 'reservations':
         return const ReservationsScreen();
       case 'menu':
+      case 'drinks':
         return const MenuScreen();
       case 'profile':
         return const ProfileScreen();

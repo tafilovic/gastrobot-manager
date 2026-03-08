@@ -20,20 +20,25 @@ class PendingOrdersRemote implements PendingOrdersApi {
     String venueId,
     ProfileType profileType,
   ) async {
+    final String path;
+    final Map<String, dynamic>? queryParams;
     if (profileType == ProfileType.waiter) {
-      return [];
+      path = '/venues/$venueId/waiter/pending-orders';
+      queryParams = null;
+    } else if (profileType == ProfileType.bar) {
+      path = '/venues/$venueId/bar/pending';
+      queryParams = {'source': 'walk_in'};
+    } else {
+      path = '/venues/$venueId/kitchen/pending';
+      queryParams = {'source': 'walk_in'};
     }
-
-    final path = profileType == ProfileType.bar
-        ? '/venues/$venueId/bar/pending'
-        : '/venues/$venueId/kitchen/pending';
 
     try {
       final response = await _dio.get<List<dynamic>>(
         path,
-        queryParameters: {'source': 'walk_in'},
+        queryParameters: queryParams,
         options: Options(
-          validateStatus: (status) => status != null && status < 400,
+          validateStatus: (int? status) => status != null && status < 400,
         ),
       );
 
@@ -48,8 +53,14 @@ class PendingOrdersRemote implements PendingOrdersApi {
         throw OrdersException(msg ?? 'Failed to load orders');
       }
 
-      return (response.data!)
-          .map((e) => PendingOrder.fromJson(e as Map<String, dynamic>))
+      final raw = response.data as dynamic;
+      final list = raw is List<dynamic>
+          ? raw
+          : <dynamic>[];
+      return list
+          .map((e) => PendingOrder.fromJson(
+              e is Map ? Map<String, dynamic>.from(e as Map) : <String, dynamic>{}))
+          .where((o) => o.orderId.isNotEmpty)
           .toList();
     } on DioException catch (e) {
       final message = e.response?.data is Map

@@ -27,6 +27,9 @@ import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dar
 import 'package:gastrobotmanager/features/profile/data/profile_remote.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
+import 'package:gastrobotmanager/features/ready_items/data/ready_items_remote.dart';
+import 'package:gastrobotmanager/features/ready_items/domain/repositories/ready_items_api.dart';
+import 'package:gastrobotmanager/features/ready_items/providers/ready_items_provider.dart';
 import 'package:gastrobotmanager/features/reservations/data/reservations_remote.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -170,6 +173,17 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           create: (c) => QueueProvider(
             c.read<AuthProvider>(),
             c.read<QueueApi>(),
+          ),
+        ),
+
+        // Ready items (waiter: ready-to-serve)
+        Provider<ReadyItemsApi>(
+          create: (_) => ReadyItemsRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<ReadyItemsProvider>(
+          create: (c) => ReadyItemsProvider(
+            c.read<AuthProvider>(),
+            c.read<ReadyItemsApi>(),
           ),
         ),
 

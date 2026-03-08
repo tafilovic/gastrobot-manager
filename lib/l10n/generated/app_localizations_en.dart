@@ -107,6 +107,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navOrders => 'ORDERS';
 
   @override
+  String get navReady => 'READY';
+
+  @override
   String get navPreparing => 'PREPARING';
 
   @override
@@ -116,7 +119,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMenu => 'MENU';
 
   @override
+  String get navDrinks => 'DRINKS';
+
+  @override
   String get navProfile => 'PROFILE';
+
+  @override
+  String get readyTitle => 'Ready for serving';
+
+  @override
+  String get readySubtitle => 'Orders ready to be served';
+
+  @override
+  String get readyOrdersCountSuffix => ' ready orders';
+
+  @override
+  String get readyMarkAsServed => 'MARK AS SERVED';
+
+  @override
+  String get readyMarkAsDelivered => 'MARK AS DELIVERED';
+
+  @override
+  String get readySectionFood => 'FOOD';
+
+  @override
+  String get readySectionDrinks => 'DRINKS';
+
+  @override
+  String get readyMarkAsServedSuccess => 'Order marked as served';
+
+  @override
+  String get readyMarkAsServedError => 'Failed to mark as served';
 
   @override
   String get ordersTitle => 'Orders';
@@ -128,6 +161,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ordersCountSuffix => ' orders';
+
+  @override
+  String get ordersTabActive => 'Active';
+
+  @override
+  String get ordersTabHistory => 'History';
+
+  @override
+  String get ordersFilters => 'FILTERS';
+
+  @override
+  String get ordersOrderButton => 'ORDER';
+
+  @override
+  String get ordersFoodLabel => 'Food:';
+
+  @override
+  String get ordersDrinksLabel => 'Drinks:';
+
+  @override
+  String get orderStatusPending => 'PENDING';
+
+  @override
+  String get orderStatusInPreparation => 'IN PREPARATION';
+
+  @override
+  String get orderStatusServed => 'SERVED';
+
+  @override
+  String get orderStatusRejected => 'REJECTED';
+
+  @override
+  String get orderBill => 'Bill:';
 
   @override
   String orderTableNumber(int number) {
@@ -270,6 +336,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuAvailableCountMiddle => ' available out of ';
+
+  @override
+  String get drinksListTitle => 'List of drinks';
+
+  @override
+  String get drinksListInstruction =>
+      'Mark when a drink is available or unavailable';
+
+  @override
+  String get drinksAvailableCountSuffix => ' available drinks';
+
+  @override
+  String get menuSearchHintDrinks => 'Search drink...';
 
   @override
   String get profileTypeWaiter => 'Waiter';
