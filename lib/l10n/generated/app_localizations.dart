@@ -747,6 +747,120 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Neispravan odgovor servera.'**
   String get authInvalidResponse;
+
+  /// No description provided for @filterTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Filteri'**
+  String get filterTitle;
+
+  /// No description provided for @filterTableNumber.
+  ///
+  /// In sr, this message translates to:
+  /// **'Broj stola:'**
+  String get filterTableNumber;
+
+  /// No description provided for @filterFood.
+  ///
+  /// In sr, this message translates to:
+  /// **'Hrana:'**
+  String get filterFood;
+
+  /// No description provided for @filterDrinks.
+  ///
+  /// In sr, this message translates to:
+  /// **'Piće:'**
+  String get filterDrinks;
+
+  /// No description provided for @filterBillAmount.
+  ///
+  /// In sr, this message translates to:
+  /// **'Iznos računa:'**
+  String get filterBillAmount;
+
+  /// No description provided for @filterStatusPending.
+  ///
+  /// In sr, this message translates to:
+  /// **'Na čekanju ?'**
+  String get filterStatusPending;
+
+  /// No description provided for @filterStatusInPreparation.
+  ///
+  /// In sr, this message translates to:
+  /// **'U pripremi ⏱'**
+  String get filterStatusInPreparation;
+
+  /// No description provided for @filterStatusServed.
+  ///
+  /// In sr, this message translates to:
+  /// **'Servirano ✔'**
+  String get filterStatusServed;
+
+  /// No description provided for @filterStatusRejected.
+  ///
+  /// In sr, this message translates to:
+  /// **'Odbijeno ✖'**
+  String get filterStatusRejected;
+
+  /// No description provided for @filterReset.
+  ///
+  /// In sr, this message translates to:
+  /// **'RESETUJ FILTERE'**
+  String get filterReset;
+
+  /// No description provided for @filterApply.
+  ///
+  /// In sr, this message translates to:
+  /// **'PRIMENI FILTERE'**
+  String get filterApply;
+
+  /// No description provided for @filterBillRSD.
+  ///
+  /// In sr, this message translates to:
+  /// **'{min} - {max} RSD'**
+  String filterBillRSD(String min, String max);
+
+  /// No description provided for @filterDate.
+  ///
+  /// In sr, this message translates to:
+  /// **'Datum:'**
+  String get filterDate;
+
+  /// No description provided for @filterDateFrom.
+  ///
+  /// In sr, this message translates to:
+  /// **'Od:'**
+  String get filterDateFrom;
+
+  /// No description provided for @filterDateTo.
+  ///
+  /// In sr, this message translates to:
+  /// **'Do:'**
+  String get filterDateTo;
+
+  /// No description provided for @filterDateToday.
+  ///
+  /// In sr, this message translates to:
+  /// **'Danas'**
+  String get filterDateToday;
+
+  /// No description provided for @filterOrderContent.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sadržaj porudžbine:'**
+  String get filterOrderContent;
+
+  /// No description provided for @filterOrderContentDrinks.
+  ///
+  /// In sr, this message translates to:
+  /// **'Piće'**
+  String get filterOrderContentDrinks;
+
+  /// No description provided for @filterOrderContentFood.
+  ///
+  /// In sr, this message translates to:
+  /// **'Hrana'**
+  String get filterOrderContentFood;
 }
 
 class _AppLocalizationsDelegate

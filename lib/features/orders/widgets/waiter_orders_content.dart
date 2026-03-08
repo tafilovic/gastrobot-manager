@@ -4,8 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/active_order_filters.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/history_order_filters.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/screens/filter_active_orders_screen.dart';
+import 'package:gastrobotmanager/features/orders/screens/filter_history_orders_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/order_details_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/waiter_order_card.dart';
@@ -33,6 +37,8 @@ class WaiterOrdersContent extends StatefulWidget {
 class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   int _selectedTabIndex = 0; // 0 = Active, 1 = History
   PendingOrder? _selectedOrder;
+  ActiveOrderFilters? _activeFilters;
+  HistoryOrderFilters? _historyFilters;
 
   @override
   void initState() {
@@ -40,11 +46,98 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
     WidgetsBinding.instance.addPostFrameCallback((_) => widget.onStartRefresh());
   }
 
+  List<PendingOrder> _applyFilters(List<PendingOrder> orders) {
+    if (_activeFilters == null || _activeFilters!.isEmpty) return orders;
+    final f = _activeFilters!;
+    return orders.where((order) {
+      if (f.tableNumbers.isNotEmpty &&
+          !f.tableNumbers.contains(order.tableNumber)) {
+        return false;
+      }
+      if (f.foodStatuses.isNotEmpty) {
+        final hasMatchingFood = order.items.any((item) {
+          if (item.type != 'food') return false;
+          final s = item.status == 'ready' ? 'served' : item.status;
+          return f.foodStatuses.contains(s);
+        });
+        if (!hasMatchingFood) return false;
+      }
+      if (f.drinkStatuses.isNotEmpty) {
+        final hasMatchingDrink = order.items.any((item) {
+          if (item.type != 'drink') return false;
+          final s = item.status == 'ready' ? 'served' : item.status;
+          return f.drinkStatuses.contains(s);
+        });
+        if (!hasMatchingDrink) return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  List<PendingOrder> _applyHistoryFilters(List<PendingOrder> orders) {
+    if (_historyFilters == null || _historyFilters!.isEmpty) return orders;
+    final f = _historyFilters!;
+    return orders.where((order) {
+      if (f.dateFrom != null || f.dateTo != null) {
+        DateTime? orderDate;
+        try {
+          orderDate = DateTime.tryParse(order.targetTime);
+        } catch (_) {}
+        if (orderDate != null) {
+          final orderDay = DateTime(orderDate.year, orderDate.month, orderDate.day);
+          if (f.dateFrom != null) {
+            final from = DateTime(f.dateFrom!.year, f.dateFrom!.month, f.dateFrom!.day);
+            if (orderDay.isBefore(from)) return false;
+          }
+          if (f.dateTo != null) {
+            final to = DateTime(f.dateTo!.year, f.dateTo!.month, f.dateTo!.day);
+            if (orderDay.isAfter(to)) return false;
+          }
+        }
+      }
+      if (f.tableNumbers.isNotEmpty &&
+          !f.tableNumbers.contains(order.tableNumber)) {
+        return false;
+      }
+      if (f.orderContentTypes.isNotEmpty) {
+        if (f.orderContentTypes.contains(HistoryOrderFilters.orderContentFood) &&
+            !order.items.any((i) => i.type == 'food')) return false;
+        if (f.orderContentTypes.contains(HistoryOrderFilters.orderContentDrink) &&
+            !order.items.any((i) => i.type == 'drink')) return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  Future<void> _openFilters() async {
+    if (_selectedTabIndex == 0) {
+      final result = await Navigator.of(context).push<ActiveOrderFilters>(
+        MaterialPageRoute<ActiveOrderFilters>(
+          builder: (_) => FilterActiveOrdersScreen(initialFilters: _activeFilters),
+        ),
+      );
+      if (result != null && mounted) {
+        setState(() => _activeFilters = result);
+      }
+    } else {
+      final result = await Navigator.of(context).push<HistoryOrderFilters>(
+        MaterialPageRoute<HistoryOrderFilters>(
+          builder: (_) => FilterHistoryOrdersScreen(initialFilters: _historyFilters),
+        ),
+      );
+      if (result != null && mounted) {
+        setState(() => _historyFilters = result);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final provider = context.watch<OrdersProvider>();
-    final orders = provider.orders;
+    final orders = _selectedTabIndex == 0
+        ? _applyFilters(provider.orders)
+        : _applyHistoryFilters(provider.orders);
     final width = MediaQuery.sizeOf(context).width;
     final useMasterDetail = width >= AppBreakpoints.expanded;
 
@@ -179,7 +272,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                   ),
                   const Spacer(),
                   TextButton.icon(
-                    onPressed: () {},
+                    onPressed: _openFilters,
                     icon: Icon(Icons.filter_list, size: 18, color: widget.accentColor),
                     label: Text(
                       widget.l10n.ordersFilters,
@@ -305,7 +398,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
               ),
               const Spacer(),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: _openFilters,
                 icon: Icon(Icons.filter_list, size: 18, color: widget.accentColor),
                 label: Text(
                   widget.l10n.ordersFilters,

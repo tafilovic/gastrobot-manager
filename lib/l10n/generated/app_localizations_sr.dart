@@ -365,4 +365,63 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get authInvalidResponse => 'Neispravan odgovor servera.';
+
+  @override
+  String get filterTitle => 'Filteri';
+
+  @override
+  String get filterTableNumber => 'Broj stola:';
+
+  @override
+  String get filterFood => 'Hrana:';
+
+  @override
+  String get filterDrinks => 'Piće:';
+
+  @override
+  String get filterBillAmount => 'Iznos računa:';
+
+  @override
+  String get filterStatusPending => 'Na čekanju ?';
+
+  @override
+  String get filterStatusInPreparation => 'U pripremi ⏱';
+
+  @override
+  String get filterStatusServed => 'Servirano ✔';
+
+  @override
+  String get filterStatusRejected => 'Odbijeno ✖';
+
+  @override
+  String get filterReset => 'RESETUJ FILTERE';
+
+  @override
+  String get filterApply => 'PRIMENI FILTERE';
+
+  @override
+  String filterBillRSD(String min, String max) {
+    return '$min - $max RSD';
+  }
+
+  @override
+  String get filterDate => 'Datum:';
+
+  @override
+  String get filterDateFrom => 'Od:';
+
+  @override
+  String get filterDateTo => 'Do:';
+
+  @override
+  String get filterDateToday => 'Danas';
+
+  @override
+  String get filterOrderContent => 'Sadržaj porudžbine:';
+
+  @override
+  String get filterOrderContentDrinks => 'Piće';
+
+  @override
+  String get filterOrderContentFood => 'Hrana';
 }

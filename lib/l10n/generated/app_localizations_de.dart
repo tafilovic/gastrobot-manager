@@ -365,4 +365,63 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get authInvalidResponse => 'Ungültige Serverantwort.';
+
+  @override
+  String get filterTitle => 'Filter';
+
+  @override
+  String get filterTableNumber => 'Tischnummer:';
+
+  @override
+  String get filterFood => 'Essen:';
+
+  @override
+  String get filterDrinks => 'Getränke:';
+
+  @override
+  String get filterBillAmount => 'Rechnungsbetrag:';
+
+  @override
+  String get filterStatusPending => 'Ausstehend ?';
+
+  @override
+  String get filterStatusInPreparation => 'In Bereitung ⏱';
+
+  @override
+  String get filterStatusServed => 'Serviert ✔';
+
+  @override
+  String get filterStatusRejected => 'Abgelehnt ✖';
+
+  @override
+  String get filterReset => 'FILTER ZURÜCKSETZEN';
+
+  @override
+  String get filterApply => 'FILTER ANWENDEN';
+
+  @override
+  String filterBillRSD(String min, String max) {
+    return '$min - $max RSD';
+  }
+
+  @override
+  String get filterDate => 'Datum:';
+
+  @override
+  String get filterDateFrom => 'Von:';
+
+  @override
+  String get filterDateTo => 'Bis:';
+
+  @override
+  String get filterDateToday => 'Heute';
+
+  @override
+  String get filterOrderContent => 'Bestellinhalt:';
+
+  @override
+  String get filterOrderContentDrinks => 'Getränke';
+
+  @override
+  String get filterOrderContentFood => 'Essen';
 }

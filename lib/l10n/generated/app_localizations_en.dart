@@ -364,4 +364,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authInvalidResponse => 'Invalid server response.';
+
+  @override
+  String get filterTitle => 'Filters';
+
+  @override
+  String get filterTableNumber => 'Table number:';
+
+  @override
+  String get filterFood => 'Food:';
+
+  @override
+  String get filterDrinks => 'Drinks:';
+
+  @override
+  String get filterBillAmount => 'Bill amount:';
+
+  @override
+  String get filterStatusPending => 'Pending ?';
+
+  @override
+  String get filterStatusInPreparation => 'In preparation ⏱';
+
+  @override
+  String get filterStatusServed => 'Served ✔';
+
+  @override
+  String get filterStatusRejected => 'Rejected ✖';
+
+  @override
+  String get filterReset => 'RESET FILTERS';
+
+  @override
+  String get filterApply => 'APPLY FILTERS';
+
+  @override
+  String filterBillRSD(String min, String max) {
+    return '$min - $max RSD';
+  }
+
+  @override
+  String get filterDate => 'Date:';
+
+  @override
+  String get filterDateFrom => 'From:';
+
+  @override
+  String get filterDateTo => 'To:';
+
+  @override
+  String get filterDateToday => 'Today';
+
+  @override
+  String get filterOrderContent => 'Order content:';
+
+  @override
+  String get filterOrderContentDrinks => 'Drinks';
+
+  @override
+  String get filterOrderContentFood => 'Food';
 }
