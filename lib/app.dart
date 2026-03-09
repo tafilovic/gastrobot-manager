@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
+import 'package:gastrobotmanager/core/theme/app_scroll_behavior.dart';
 import 'package:gastrobotmanager/core/theme/app_theme.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -33,6 +34,7 @@ class _GastroBotAppState extends State<GastroBotApp> {
           title: 'GastroBot Manager',
           theme: AppTheme.light,
           debugShowCheckedModeBanner: false,
+          scrollBehavior: const AppScrollBehavior(),
           locale: localeProvider.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
