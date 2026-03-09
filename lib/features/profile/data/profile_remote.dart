@@ -7,7 +7,7 @@ import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 
-/// Profile API implementation. GET /v1/users/{userId}, PATCH /users/profile-image.
+/// Profile API implementation. GET /v1/users/me, PATCH /users/profile-image.
 class ProfileRemote implements ProfileApi {
   ProfileRemote([Dio? dio])
       : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
@@ -15,10 +15,10 @@ class ProfileRemote implements ProfileApi {
   final Dio _dio;
 
   @override
-  Future<User?> getCurrentUser(String userId) async {
+  Future<User?> getMe() async {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
-        '/v1/users/$userId',
+        '/v1/users/me',
         options: Options(validateStatus: (s) => s != null && s < 400),
       );
       final data = response.data;

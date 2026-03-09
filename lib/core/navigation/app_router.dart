@@ -67,11 +67,10 @@ abstract class AppRouteNames {
 /// The router is auth-aware:
 /// - While [auth.isRestoring] is true, no redirects are performed.
 /// - When not logged in, any route except `/login` is redirected to `/login`.
-/// - After login, navigation continues to the originally requested route if any.
+/// - After login, navigates to the initial page (orders or ready by role).
 class AppRouter {
   AppRouter._();
 
-  static String? _pendingLocation;
   static bool _didInitialWaiterRedirect = false;
 
   static GoRouter create(AuthProvider auth) {
@@ -243,27 +242,20 @@ class AppRouter {
     if (!loggedIn) {
       _didInitialWaiterRedirect = false;
       if (isOnLogin) return null;
-      final location = state.uri.toString();
-      if (location != AppRouteNames.pathLogin) {
-        _pendingLocation = location;
-      }
       return AppRouteNames.pathLogin;
     }
 
     if (isOnLogin) {
-      final target = _pendingLocation;
-      _pendingLocation = null;
       final defaultHome = auth.profileType == ProfileType.waiter
           ? AppRouteNames.pathReady
           : AppRouteNames.pathOrders;
-      return target ?? defaultHome;
+      return defaultHome;
     }
 
     // One-time post-restore redirect: waiter lands on /orders at cold start.
     final profileType = auth.profileType;
     if (!_didInitialWaiterRedirect &&
         profileType == ProfileType.waiter &&
-        _pendingLocation == null &&
         state.matchedLocation == AppRouteNames.pathOrders) {
       _didInitialWaiterRedirect = true;
       return AppRouteNames.pathReady;

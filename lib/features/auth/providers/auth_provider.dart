@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
@@ -15,36 +17,34 @@ class AuthProvider extends ChangeNotifier {
     _restoreSession();
   }
 
+  // --- Dependencies ---
   final AuthService _authService;
   final TokenStore _tokenStore;
 
+  // --- State ---
   User? _user;
   String? _accessToken;
   String? _refreshToken;
   String? _storedVenueId;
   bool _isRestoring = true;
 
+  // --- Getters ---
   User? get user => _user;
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
-
-  /// Role-based type for navigation and features.
   ProfileType? get profileType => _user?.type;
-
-  /// Current venue id: from user.venueUsers first, else from locally stored value (saved on login).
   String? get currentVenueId =>
       _user?.venueUsers.isNotEmpty == true
           ? _user!.venueUsers.first.venueId
           : _storedVenueId;
-
   bool get isLoggedIn => _user != null;
   bool get isRestoring => _isRestoring;
 
-  void _syncTokenStore() {
-    _tokenStore.accessToken = _accessToken;
-    _tokenStore.refreshToken = _refreshToken;
-  }
+  /// Completes when session restore has finished. Use for app bootstrap.
+  Future<void> get whenRestoreComplete => _restoreCompleter.future;
+  final Completer<void> _restoreCompleter = Completer<void>();
 
+  // --- Session restore ---
   Future<void> _restoreSession() async {
     try {
       var session = await _authService.restoreSession();
@@ -63,10 +63,19 @@ class AuthProvider extends ChangeNotifier {
       // On any error, treat as logged out so user can retry
     } finally {
       _isRestoring = false;
+      if (!_restoreCompleter.isCompleted) {
+        _restoreCompleter.complete();
+      }
       notifyListeners();
     }
   }
 
+  void _syncTokenStore() {
+    _tokenStore.accessToken = _accessToken;
+    _tokenStore.refreshToken = _refreshToken;
+  }
+
+  // --- Auth lifecycle ---
   Future<void> login(
     String email,
     String password, {
@@ -98,8 +107,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Called by [AuthInterceptor] after a successful background token refresh.
-  /// Updates in-memory state, syncs [TokenStore], and persists the new session.
+  // --- Token refresh (called by AuthInterceptor) ---
   Future<void> updateTokens(String accessToken, String refreshToken) async {
     _accessToken = accessToken;
     _refreshToken = refreshToken;
@@ -116,18 +124,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Pre-fill email from "remember me". Call once when showing login.
-  Future<String?> getRememberedEmail() => _authService.getRememberedEmail();
-
-  /// Update the current user's profile image URL (e.g. after upload).
-  void updateProfileImageUrl(String? newUrl) {
-    if (_user == null) return;
-    _user = _user!.copyWith(profileImageUrl: newUrl);
-    notifyListeners();
-  }
-
-  /// Replace the current user (e.g. after fetching fresh profile from API).
-  /// Persists the updated session so it survives app restart.
+  // --- User state ---
   Future<void> updateUser(User user) async {
     _user = user;
     if (_accessToken != null && _refreshToken != null) {
@@ -146,4 +143,13 @@ class AuthProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void updateProfileImageUrl(String? newUrl) {
+    if (_user == null) return;
+    _user = _user!.copyWith(profileImageUrl: newUrl);
+    notifyListeners();
+  }
+
+  // --- Misc ---
+  Future<String?> getRememberedEmail() => _authService.getRememberedEmail();
 }

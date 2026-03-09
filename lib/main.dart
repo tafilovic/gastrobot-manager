@@ -88,6 +88,9 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   late final TokenStore _tokenStore;
   late final AuthProvider _authProvider;
   late final Dio _authenticatedDio;
+  late final ProfileApi _profileApi;
+
+  bool _bootstrapComplete = false;
 
   @override
   void initState() {
@@ -108,6 +111,25 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
       )
       ..interceptors.add(LoggingInterceptor());
+
+    _profileApi = ProfileRemote(_authenticatedDio);
+
+    _runSessionBootstrap();
+  }
+
+  /// Validates session on start: if logged in, refresh token (via getMe) and user.
+  /// If not logged in or validation fails, ensure login screen is shown.
+  Future<void> _runSessionBootstrap() async {
+    await _authProvider.whenRestoreComplete;
+    if (_authProvider.isLoggedIn) {
+      final user = await _profileApi.getMe();
+      if (user != null) {
+        await _authProvider.updateUser(user);
+      } else {
+        await _authProvider.logout();
+      }
+    }
+    if (mounted) setState(() => _bootstrapComplete = true);
   }
 
   @override
@@ -118,6 +140,13 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_bootstrapComplete) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
     return MultiProvider(
       providers: [
         // Auth
@@ -132,9 +161,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
 
         // Profile
-        Provider<ProfileApi>(
-          create: (_) => ProfileRemote(_authenticatedDio),
-        ),
+        Provider<ProfileApi>.value(value: _profileApi),
         ChangeNotifierProvider<ProfileProvider>(
           create: (c) => ProfileProvider(
             c.read<AuthProvider>(),
