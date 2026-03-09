@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
-import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/active_order_filters.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/history_order_filters.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
-import 'package:gastrobotmanager/features/orders/screens/filter_active_orders_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
-import 'package:gastrobotmanager/features/orders/screens/filter_history_orders_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/history_order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/history_order_details_content.dart';
@@ -115,19 +113,17 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
 
   Future<void> _openFilters() async {
     if (_selectedTabIndex == 0) {
-      final result = await Navigator.of(context).push<ActiveOrderFilters>(
-        FadeSlidePageRoute<ActiveOrderFilters>(
-          builder: (_) => FilterActiveOrdersScreen(initialFilters: _activeFilters),
-        ),
+      final result = await context.push<ActiveOrderFilters>(
+        '/orders/filter/active',
+        extra: _activeFilters,
       );
       if (result != null && mounted) {
         setState(() => _activeFilters = result);
       }
     } else {
-      final result = await Navigator.of(context).push<HistoryOrderFilters>(
-        FadeSlidePageRoute<HistoryOrderFilters>(
-          builder: (_) => FilterHistoryOrdersScreen(initialFilters: _historyFilters),
-        ),
+      final result = await context.push<HistoryOrderFilters>(
+        '/orders/filter/history',
+        extra: _historyFilters,
       );
       if (result != null && mounted) {
         setState(() => _historyFilters = result);
@@ -494,17 +490,15 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
 
   Future<void> _openDetails(PendingOrder order, OrdersProvider provider) async {
     if (_selectedTabIndex == 1) {
-      await Navigator.of(context).push<void>(
-        FadeSlidePageRoute<void>(
-          builder: (_) => HistoryOrderDetailsScreen(order: order),
-        ),
+      await context.push(
+        '/orders/history',
+        extra: HistoryOrderDetailsScreen(order: order),
       );
       return;
     }
-    final completed = await Navigator.of(context).push<bool>(
-      FadeSlidePageRoute<bool>(
-        builder: (_) => ActiveOrderDetailsScreen(order: order),
-      ),
+    final completed = await context.push<bool>(
+      '/orders/active',
+      extra: ActiveOrderDetailsScreen(order: order),
     );
     if (completed == true && context.mounted) {
       provider.pullRefresh();

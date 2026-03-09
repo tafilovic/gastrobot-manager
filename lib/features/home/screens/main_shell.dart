@@ -1,30 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/navigation/nav_config.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_bottom_nav.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_navigation_rail.dart';
-import 'package:gastrobotmanager/features/menu/screens/menu_screen.dart';
-import 'package:gastrobotmanager/features/orders/screens/orders_screen.dart';
-import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dart';
-import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
-import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
-import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Main shell with bottom navigation. Items depend on [ProfileType].
 /// Presentation layer: resolves localized nav labels from [AppLocalizations].
-class MainShell extends StatefulWidget {
-  const MainShell({super.key});
+class MainShell extends StatelessWidget {
+  const MainShell({
+    super.key,
+    required this.navigationShell,
+  });
 
-  @override
-  State<MainShell> createState() => _MainShellState();
-}
-
-class _MainShellState extends State<MainShell> {
-  int _selectedIndex = 0;
+  final StatefulNavigationShell navigationShell;
 
   static String _navLabel(AppLocalizations l10n, String route) {
     switch (route) {
@@ -47,39 +41,40 @@ class _MainShellState extends State<MainShell> {
     }
   }
 
-  Widget _buildPage(String route) {
-    switch (route) {
-      case 'orders':
-        return const OrdersScreen();
-      case 'ready':
-        return const ReadyItemsScreen();
-      case 'preparing':
-        return const PreparingScreen();
-      case 'reservations':
-        return const ReservationsScreen();
-      case 'menu':
-      case 'drinks':
-        return const MenuScreen();
-      case 'profile':
-        return const ProfileScreen();
-      default:
-        return const OrdersScreen();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType!;
+    final currentLocation = GoRouterState.of(context).matchedLocation;
     final items = NavConfig.itemsFor(profileType);
 
-    // Clamp index if profile changed and current index is out of range
-    final safeIndex = _selectedIndex >= items.length ? 0 : _selectedIndex;
-    if (safeIndex != _selectedIndex) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() => _selectedIndex = safeIndex);
-      });
+    int selectedIndex = 0;
+    for (var i = 0; i < items.length; i++) {
+      final route = items[i].route;
+      switch (route) {
+        case 'ready':
+          if (currentLocation.startsWith('/ready')) selectedIndex = i;
+          break;
+        case 'orders':
+          if (currentLocation.startsWith('/orders')) selectedIndex = i;
+          break;
+        case 'preparing':
+          if (currentLocation.startsWith('/preparing')) selectedIndex = i;
+          break;
+        case 'reservations':
+          if (currentLocation.startsWith('/reservations')) selectedIndex = i;
+          break;
+        case 'menu':
+          if (currentLocation.startsWith('/menu')) selectedIndex = i;
+          break;
+        case 'drinks':
+          if (currentLocation.startsWith('/drinks')) selectedIndex = i;
+          break;
+        case 'profile':
+          if (currentLocation.startsWith('/profile')) selectedIndex = i;
+          break;
+      }
     }
 
     final width = MediaQuery.sizeOf(context).width;
@@ -93,31 +88,58 @@ class _MainShellState extends State<MainShell> {
             AppNavigationRail(
               items: items,
               labels: labels,
-              selectedIndex: safeIndex,
-              onDestinationSelected: (i) => setState(() => _selectedIndex = i),
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (i) {
+                final target = items[i].route;
+                _goToBranch(context, target);
+              },
             ),
-            Expanded(
-              child: IndexedStack(
-                index: safeIndex,
-                children: items.map((item) => _buildPage(item.route)).toList(),
-              ),
-            ),
+            Expanded(child: navigationShell),
           ],
         ),
       );
     }
 
     return Scaffold(
-      body: IndexedStack(
-        index: safeIndex,
-        children: items.map((item) => _buildPage(item.route)).toList(),
-      ),
+      body: navigationShell,
       bottomNavigationBar: AppBottomNav(
         items: items,
         labels: labels,
-        selectedIndex: safeIndex,
-        onDestinationSelected: (i) => setState(() => _selectedIndex = i),
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (i) {
+          final target = items[i].route;
+          _goToBranch(context, target);
+        },
       ),
     );
+  }
+
+  void _goToBranch(BuildContext context, String route) {
+    switch (route) {
+      case 'ready':
+        context.goNamed(AppRouteNames.ready);
+        break;
+      case 'orders':
+        context.goNamed(AppRouteNames.orders);
+        break;
+      case 'preparing':
+        context.goNamed(AppRouteNames.preparing);
+        break;
+      case 'reservations':
+        context.goNamed(AppRouteNames.reservations);
+        break;
+      case 'menu':
+        context.goNamed(AppRouteNames.menu);
+        break;
+      case 'drinks':
+        context.goNamed(AppRouteNames.drinks);
+        break;
+      case 'profile':
+        context.goNamed(AppRouteNames.profile);
+        break;
+      default:
+        context.goNamed(AppRouteNames.orders);
+        break;
+    }
   }
 }
