@@ -142,9 +142,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   Widget build(BuildContext context) {
     if (!_bootstrapComplete) {
       return const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
       );
     }
     return MultiProvider(
@@ -163,10 +161,8 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         // Profile
         Provider<ProfileApi>.value(value: _profileApi),
         ChangeNotifierProvider<ProfileProvider>(
-          create: (c) => ProfileProvider(
-            c.read<AuthProvider>(),
-            c.read<ProfileApi>(),
-          ),
+          create: (c) =>
+              ProfileProvider(c.read<AuthProvider>(), c.read<ProfileApi>()),
         ),
 
         // Orders
@@ -184,25 +180,17 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
 
         // Menu
-        Provider<MenusApi>(
-          create: (_) => VenueMenusRemote(_authenticatedDio),
-        ),
+        Provider<MenusApi>(create: (_) => VenueMenusRemote(_authenticatedDio)),
         ChangeNotifierProvider<MenuProvider>(
-          create: (c) => MenuProvider(
-            c.read<AuthProvider>(),
-            c.read<MenusApi>(),
-          ),
+          create: (c) =>
+              MenuProvider(c.read<AuthProvider>(), c.read<MenusApi>()),
         ),
 
         // Preparing (queue for kitchen + bar)
-        Provider<QueueApi>(
-          create: (_) => QueueRemote(_authenticatedDio),
-        ),
+        Provider<QueueApi>(create: (_) => QueueRemote(_authenticatedDio)),
         ChangeNotifierProvider<QueueProvider>(
-          create: (c) => QueueProvider(
-            c.read<AuthProvider>(),
-            c.read<QueueApi>(),
-          ),
+          create: (c) =>
+              QueueProvider(c.read<AuthProvider>(), c.read<QueueApi>()),
         ),
 
         // Ready items (waiter: ready-to-serve)
@@ -210,9 +198,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           create: (_) => ReadyItemsRemote(_authenticatedDio),
         ),
         ChangeNotifierProvider<ReadyItemsProvider>(
-          create: (c) => ReadyItemsProvider(
-            c.read<ReadyItemsApi>(),
-          ),
+          create: (c) => ReadyItemsProvider(c.read<ReadyItemsApi>()),
         ),
 
         // Reservations (requests by role: kitchen / bar / waiter)

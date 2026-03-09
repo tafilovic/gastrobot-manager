@@ -63,6 +63,7 @@
   "orderBill": "Rechnung:",
   "orderTableNumber": "Tisch nummer {number}",
   "orderDishCount": "Anzahl Gerichte: {count}",
+  "orderDrinksCount": "Anzahl Getränke: {count}",
   "orderSeeDetails": "DETAILS ANZEIGEN",
   "orderTimeAgoDays": "vor {count} Tag",
   "orderTimeAgoHoursMinutes": "vor {hours}h {minutes}min",

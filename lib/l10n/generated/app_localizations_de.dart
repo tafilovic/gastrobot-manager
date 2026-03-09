@@ -208,7 +208,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String orderDrinksCount(int count) {
-    return 'Broj pića: $count';
+    return 'Anzahl Getränke: $count';
   }
 
   @override

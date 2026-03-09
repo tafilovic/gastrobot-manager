@@ -32,6 +32,7 @@ class _GastroBotAppState extends State<GastroBotApp> {
         return MaterialApp.router(
           title: 'GastroBot Manager',
           theme: AppTheme.light,
+          debugShowCheckedModeBanner: false,
           locale: localeProvider.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
