@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/auth/screens/login_screen.dart';
 import 'package:gastrobotmanager/features/home/screens/main_shell.dart';
@@ -18,7 +19,7 @@ import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
 import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 
-/// Centralized route names to avoid string duplication.
+/// Centralized route names and path constants.
 abstract class AppRouteNames {
   static const login = 'login';
 
@@ -42,6 +43,23 @@ abstract class AppRouteNames {
 
   // Reservations details (placeholder for future expansion)
   static const reservationDetails = 'reservation-details';
+
+  // Path constants
+  static const pathLogin = '/login';
+  static const pathReady = '/ready';
+  static const pathOrders = '/orders';
+  static const pathPreparing = '/preparing';
+  static const pathReservations = '/reservations';
+  static const pathMenu = '/menu';
+  static const pathDrinks = '/drinks';
+  static const pathProfile = '/profile';
+
+  // Orders sub-routes (full paths for context.push)
+  static const pathOrdersActive = '/orders/active';
+  static const pathOrdersHistory = '/orders/history';
+  static const pathOrdersDetails = '/orders/details';
+  static const pathOrdersFilterActive = '/orders/filter/active';
+  static const pathOrdersFilterHistory = '/orders/filter/history';
 }
 
 /// Centralized app router factory.
@@ -54,15 +72,16 @@ class AppRouter {
   AppRouter._();
 
   static String? _pendingLocation;
+  static bool _didInitialWaiterRedirect = false;
 
   static GoRouter create(AuthProvider auth) {
     return GoRouter(
-      initialLocation: '/orders',
+      initialLocation: AppRouteNames.pathOrders,
       refreshListenable: auth,
       debugLogDiagnostics: false,
       routes: [
         GoRoute(
-          path: '/login',
+          path: AppRouteNames.pathLogin,
           name: AppRouteNames.login,
           builder: (context, state) => const LoginScreen(),
         ),
@@ -74,7 +93,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/ready',
+                  path: AppRouteNames.pathReady,
                   name: AppRouteNames.ready,
                   builder: (context, state) => const ReadyItemsScreen(),
                 ),
@@ -83,7 +102,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/orders',
+                  path: AppRouteNames.pathOrders,
                   name: AppRouteNames.orders,
                   builder: (context, state) => const OrdersScreen(),
                   routes: [
@@ -170,7 +189,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/preparing',
+                  path: AppRouteNames.pathPreparing,
                   name: AppRouteNames.preparing,
                   builder: (context, state) => const PreparingScreen(),
                 ),
@@ -179,7 +198,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/reservations',
+                  path: AppRouteNames.pathReservations,
                   name: AppRouteNames.reservations,
                   builder: (context, state) => const ReservationsScreen(),
                 ),
@@ -188,12 +207,12 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/menu',
+                  path: AppRouteNames.pathMenu,
                   name: AppRouteNames.menu,
                   builder: (context, state) => const MenuScreen(),
                 ),
                 GoRoute(
-                  path: '/drinks',
+                  path: AppRouteNames.pathDrinks,
                   name: AppRouteNames.drinks,
                   builder: (context, state) => const MenuScreen(),
                 ),
@@ -202,7 +221,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/profile',
+                  path: AppRouteNames.pathProfile,
                   name: AppRouteNames.profile,
                   builder: (context, state) => const ProfileScreen(),
                 ),
@@ -211,37 +230,45 @@ class AppRouter {
           ],
         ),
       ],
-      redirect: (context, state) {
-        final restoring = auth.isRestoring;
-        if (restoring) {
-          return null;
-        }
-
-        final loggedIn = auth.isLoggedIn;
-        final isLoggingIn = state.matchedLocation == '/login';
-
-        if (!loggedIn) {
-          if (isLoggingIn) {
-            return null;
-          }
-          // Remember the target for after successful login.
-          final location = state.uri.toString();
-          if (location != '/login') {
-            _pendingLocation = location;
-          }
-          return '/login';
-        }
-
-        // Logged in: prevent returning to login and honor pending deep links.
-        if (isLoggingIn) {
-          final target = _pendingLocation;
-          _pendingLocation = null;
-          return target ?? '/orders';
-        }
-
-        return null;
-      },
+      redirect: (context, state) => _redirect(auth, state),
     );
   }
-}
 
+  static String? _redirect(AuthProvider auth, GoRouterState state) {
+    if (auth.isRestoring) return null;
+
+    final loggedIn = auth.isLoggedIn;
+    final isOnLogin = state.matchedLocation == AppRouteNames.pathLogin;
+
+    if (!loggedIn) {
+      _didInitialWaiterRedirect = false;
+      if (isOnLogin) return null;
+      final location = state.uri.toString();
+      if (location != AppRouteNames.pathLogin) {
+        _pendingLocation = location;
+      }
+      return AppRouteNames.pathLogin;
+    }
+
+    if (isOnLogin) {
+      final target = _pendingLocation;
+      _pendingLocation = null;
+      final defaultHome = auth.profileType == ProfileType.waiter
+          ? AppRouteNames.pathReady
+          : AppRouteNames.pathOrders;
+      return target ?? defaultHome;
+    }
+
+    // One-time post-restore redirect: waiter lands on /orders at cold start.
+    final profileType = auth.profileType;
+    if (!_didInitialWaiterRedirect &&
+        profileType == ProfileType.waiter &&
+        _pendingLocation == null &&
+        state.matchedLocation == AppRouteNames.pathOrders) {
+      _didInitialWaiterRedirect = true;
+      return AppRouteNames.pathReady;
+    }
+
+    return null;
+  }
+}

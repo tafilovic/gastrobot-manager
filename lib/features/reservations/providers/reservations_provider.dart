@@ -1,12 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
-
-const Duration _reservationsRefreshInterval = Duration(seconds: 30);
 
 /// Holds reservation requests for current role and refreshes periodically.
 class ReservationsProvider extends ChangeNotifier {
@@ -18,7 +14,6 @@ class ReservationsProvider extends ChangeNotifier {
   List<PendingOrder> _requests = [];
   bool _isLoading = false;
   String? _error;
-  Timer? _refreshTimer;
   String? _currentVenueId;
 
   List<PendingOrder> get requests => List.unmodifiable(_requests);
@@ -29,30 +24,15 @@ class ReservationsProvider extends ChangeNotifier {
     return a.targetTime.compareTo(b.targetTime);
   }
 
-  void startPeriodicRefresh(String venueId) {
+  Future<void> loadOnce(String venueId) async {
     _currentVenueId = venueId;
-    stopPeriodicRefresh();
-    _load(venueId);
-    _refreshTimer = Timer.periodic(
-      _reservationsRefreshInterval,
-      (_) => _load(venueId),
-    );
-  }
-
-  void stopPeriodicRefresh() {
-    _refreshTimer?.cancel();
-    _refreshTimer = null;
+    await _load(venueId);
   }
 
   Future<void> pullRefresh() async {
     final venueId = _currentVenueId;
     if (venueId == null) return;
     await _load(venueId);
-    stopPeriodicRefresh();
-    _refreshTimer = Timer.periodic(
-      _reservationsRefreshInterval,
-      (_) => _load(venueId),
-    );
   }
 
   Future<void> _load(String venueId) async {

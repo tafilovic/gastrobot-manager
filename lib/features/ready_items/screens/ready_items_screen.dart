@@ -59,7 +59,7 @@ class ReadyItemsScreen extends StatelessWidget {
       onStartRefresh: () {
         final venueId = auth.currentVenueId;
         if (venueId != null) {
-          context.read<ReadyItemsProvider>().startPeriodicRefresh(venueId);
+          context.read<ReadyItemsProvider>().loadOnce(venueId);
         }
       },
     );

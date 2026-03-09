@@ -59,7 +59,7 @@ class PreparingScreen extends StatelessWidget {
       onStartRefresh: () {
         final venueId = auth.currentVenueId;
         if (venueId != null) {
-          context.read<QueueProvider>().startPeriodicRefresh(venueId);
+          context.read<QueueProvider>().loadOnce(venueId);
         }
       },
     );

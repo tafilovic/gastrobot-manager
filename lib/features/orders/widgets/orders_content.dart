@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
@@ -61,7 +62,7 @@ class _OrdersContentState extends State<OrdersContent> {
     OrdersProvider provider,
   ) async {
     final completed = await context.push<bool>(
-      '/orders/details',
+      AppRouteNames.pathOrdersDetails,
       extra: OrderDetailsScreen(order: order),
     );
     if (completed == true && context.mounted) {

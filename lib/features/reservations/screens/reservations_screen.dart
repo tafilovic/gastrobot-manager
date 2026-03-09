@@ -19,7 +19,7 @@ class ReservationsScreen extends StatelessWidget {
       onStartRefresh: () {
         final venueId = auth.currentVenueId;
         if (venueId != null) {
-          context.read<ReservationsProvider>().startPeriodicRefresh(venueId);
+          context.read<ReservationsProvider>().loadOnce(venueId);
         }
       },
     );

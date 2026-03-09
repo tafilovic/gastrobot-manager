@@ -184,7 +184,6 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
         ChangeNotifierProvider<ReadyItemsProvider>(
           create: (c) => ReadyItemsProvider(
-            c.read<AuthProvider>(),
             c.read<ReadyItemsApi>(),
           ),
         ),

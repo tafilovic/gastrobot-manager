@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 
-import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
 import 'package:gastrobotmanager/features/ready_items/domain/repositories/ready_items_api.dart';
 
@@ -11,15 +8,13 @@ const Duration readyItemsRefreshInterval = Duration(seconds: 30);
 
 /// Holds ready-to-serve orders for waiter and refreshes periodically.
 class ReadyItemsProvider extends ChangeNotifier {
-  ReadyItemsProvider(this._authProvider, this._api);
+  ReadyItemsProvider(this._api);
 
-  final AuthProvider _authProvider;
   final ReadyItemsApi _api;
 
   List<QueueOrder> _orders = [];
   bool _isLoading = false;
   String? _error;
-  Timer? _refreshTimer;
   String? _currentVenueId;
 
   List<QueueOrder> get orders => List.unmodifiable(_orders);
@@ -30,30 +25,15 @@ class ReadyItemsProvider extends ChangeNotifier {
     return a.targetTime.compareTo(b.targetTime);
   }
 
-  void startPeriodicRefresh(String venueId) {
+  Future<void> loadOnce(String venueId) async {
     _currentVenueId = venueId;
-    stopPeriodicRefresh();
-    _load(venueId);
-    _refreshTimer = Timer.periodic(
-      readyItemsRefreshInterval,
-      (_) => _load(venueId),
-    );
-  }
-
-  void stopPeriodicRefresh() {
-    _refreshTimer?.cancel();
-    _refreshTimer = null;
+    await _load(venueId);
   }
 
   Future<void> pullRefresh() async {
     final venueId = _currentVenueId;
     if (venueId == null) return;
     await _load(venueId);
-    stopPeriodicRefresh();
-    _refreshTimer = Timer.periodic(
-      readyItemsRefreshInterval,
-      (_) => _load(venueId),
-    );
   }
 
   Future<void> _load(String venueId) async {
@@ -101,9 +81,4 @@ class ReadyItemsProvider extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    stopPeriodicRefresh();
-    super.dispose();
-  }
 }

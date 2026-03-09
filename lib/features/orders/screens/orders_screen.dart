@@ -18,14 +18,6 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  OrdersProvider? _ordersProvider;
-
-  @override
-  void dispose() {
-    _ordersProvider?.stopPeriodicRefresh();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -33,12 +25,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final auth = context.watch<AuthProvider>();
     final profileType = auth.profileType;
     final ordersProvider = context.read<OrdersProvider>();
-    _ordersProvider = ordersProvider;
 
     void onStartRefresh() {
       final venueId = auth.currentVenueId;
       if (venueId != null) {
-        ordersProvider.startPeriodicRefresh(venueId);
+        ordersProvider.loadOnce(venueId);
       }
     }
 

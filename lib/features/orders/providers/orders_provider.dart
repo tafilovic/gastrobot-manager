@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 
 import '../../auth/providers/auth_provider.dart';
@@ -20,7 +18,6 @@ class OrdersProvider extends ChangeNotifier {
   List<PendingOrder> _orders = [];
   bool _isLoading = false;
   String? _error;
-  Timer? _refreshTimer;
   String? _currentVenueId;
 
   List<PendingOrder> get orders => List.unmodifiable(_orders);
@@ -31,30 +28,15 @@ class OrdersProvider extends ChangeNotifier {
     return a.targetTime.compareTo(b.targetTime);
   }
 
-  void startPeriodicRefresh(String venueId) {
+  Future<void> loadOnce(String venueId) async {
     _currentVenueId = venueId;
-    stopPeriodicRefresh();
-    _load(venueId);
-    _refreshTimer = Timer.periodic(
-      ordersRefreshInterval,
-      (_) => _load(venueId),
-    );
-  }
-
-  void stopPeriodicRefresh() {
-    _refreshTimer?.cancel();
-    _refreshTimer = null;
+    await _load(venueId);
   }
 
   Future<void> pullRefresh() async {
     final venueId = _currentVenueId;
     if (venueId == null) return;
     await _load(venueId);
-    stopPeriodicRefresh();
-    _refreshTimer = Timer.periodic(
-      ordersRefreshInterval,
-      (_) => _load(venueId),
-    );
   }
 
   Future<void> _load(String venueId) async {
@@ -78,9 +60,4 @@ class OrdersProvider extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    stopPeriodicRefresh();
-    super.dispose();
-  }
 }

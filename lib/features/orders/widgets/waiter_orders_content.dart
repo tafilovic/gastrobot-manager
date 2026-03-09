@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
@@ -114,7 +115,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Future<void> _openFilters() async {
     if (_selectedTabIndex == 0) {
       final result = await context.push<ActiveOrderFilters>(
-        '/orders/filter/active',
+        AppRouteNames.pathOrdersFilterActive,
         extra: _activeFilters,
       );
       if (result != null && mounted) {
@@ -122,7 +123,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       }
     } else {
       final result = await context.push<HistoryOrderFilters>(
-        '/orders/filter/history',
+        AppRouteNames.pathOrdersFilterHistory,
         extra: _historyFilters,
       );
       if (result != null && mounted) {
@@ -491,13 +492,13 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Future<void> _openDetails(PendingOrder order, OrdersProvider provider) async {
     if (_selectedTabIndex == 1) {
       await context.push(
-        '/orders/history',
+        AppRouteNames.pathOrdersHistory,
         extra: HistoryOrderDetailsScreen(order: order),
       );
       return;
     }
     final completed = await context.push<bool>(
-      '/orders/active',
+      AppRouteNames.pathOrdersActive,
       extra: ActiveOrderDetailsScreen(order: order),
     );
     if (completed == true && context.mounted) {
