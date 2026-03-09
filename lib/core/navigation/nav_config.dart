@@ -14,42 +14,49 @@ class NavConfig {
     label: "SPREMNO",
     icon: Icons.done_all,
     route: "ready",
+    svgAssetPath: 'assets/icons/ready.svg',
   );
 
   static const orders = NavItem(
     label: 'PORUDŽBINE',
     icon: Icons.receipt_long,
     route: 'orders',
+    svgAssetPath: 'assets/icons/orders.svg',
   );
 
   static const preparing = NavItem(
     label: 'U PRIPREMI',
     icon: Icons.pending_actions,
     route: 'preparing',
+    svgAssetPath: 'assets/icons/preparing.svg',
   );
 
   static const reservations = NavItem(
     label: 'REZERVACIJE',
     icon: Icons.calendar_today,
     route: 'reservations',
+    svgAssetPath: 'assets/icons/reservations.svg',
   );
 
   static const menu = NavItem(
     label: 'JELOVNIK',
     icon: Icons.restaurant_menu,
     route: 'menu',
+    svgAssetPath: 'assets/icons/menu.svg',
   );
 
   static const drinks = NavItem(
     label: 'PIĆA',
     icon: Icons.local_bar,
     route: 'drinks',
+    svgAssetPath: 'assets/icons/wine_glasses.svg',
   );
 
   static const profile = NavItem(
     label: 'PROFIL',
     icon: Icons.person,
     route: 'profile',
+    svgAssetPath: 'assets/icons/profile.svg',
   );
 
   static List<NavItem> itemsFor(ProfileType type) {

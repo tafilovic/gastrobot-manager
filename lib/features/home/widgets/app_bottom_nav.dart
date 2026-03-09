@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gastrobotmanager/core/navigation/nav_item.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 
@@ -14,6 +14,7 @@ class AppBottomNav extends StatelessWidget {
   });
 
   final List<NavItem> items;
+
   /// Optional display labels (e.g. localized). If null, uses [NavItem.label].
   final List<String>? labels;
   final int selectedIndex;
@@ -46,11 +47,25 @@ class AppBottomNav extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          item.icon,
-                          size: 24,
-                          color: isSelected ? AppColors.accent : AppColors.textMuted,
-                        ),
+                        item.svgAssetPath != null
+                            ? SvgPicture.asset(
+                                item.svgAssetPath!,
+                                width: 24,
+                                height: 24,
+                                colorFilter: ColorFilter.mode(
+                                  isSelected
+                                      ? AppColors.accent
+                                      : AppColors.textMuted,
+                                  BlendMode.srcIn,
+                                ),
+                              )
+                            : Icon(
+                                item.icon!,
+                                size: 24,
+                                color: isSelected
+                                    ? AppColors.accent
+                                    : AppColors.textMuted,
+                              ),
                         const SizedBox(height: 4),
                         Text(
                           _label(index),
@@ -59,8 +74,12 @@ class AppBottomNav extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 10,
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                            color: isSelected ? AppColors.accent : AppColors.textMuted,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                            color: isSelected
+                                ? AppColors.accent
+                                : AppColors.textMuted,
                           ),
                         ),
                       ],

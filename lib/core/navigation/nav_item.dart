@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class NavItem {
   const NavItem({
     required this.label,
-    required this.icon,
+    this.icon, // optional for Material icons
+    this.svgAssetPath, // e.g. 'assets/icons/orders.svg'
     required this.route,
-  });
+  }) : assert(icon != null || svgAssetPath != null);
 
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final String? svgAssetPath;
   final String route;
 }
