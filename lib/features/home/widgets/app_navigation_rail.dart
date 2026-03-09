@@ -24,16 +24,24 @@ class AppNavigationRail extends StatelessWidget {
     return items[index].label;
   }
 
+  static const double _compactHeightThreshold = 500;
+
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.sizeOf(context).height;
+    final isCompactHeight = height < _compactHeightThreshold;
+    final labelType = isCompactHeight
+        ? NavigationRailLabelType.selected
+        : NavigationRailLabelType.all;
+
     return Container(
       color: AppColors.surface,
       child: NavigationRail(
         backgroundColor: AppColors.surface,
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
-        labelType: NavigationRailLabelType.all,
-        leading: const SizedBox(height: 24),
+        labelType: labelType,
+        leading: SizedBox(height: isCompactHeight ? 8 : 24),
         trailing: const Spacer(),
         destinations: [
           for (int i = 0; i < items.length; i++)
