@@ -22,6 +22,10 @@ const supportedLocales = [
   SupportedLocale(locale: Locale('de'), country: CountryDeu(), name: 'Deutsch'),
   SupportedLocale(locale: Locale('en'), country: CountryGbr(), name: 'English'),
   SupportedLocale(locale: Locale('sr'), country: CountrySrb(), name: 'Srpski'),
+  SupportedLocale(locale: Locale('it'), country: CountryIta(), name: 'Italiano'),
+  SupportedLocale(locale: Locale('ru'), country: CountryRus(), name: 'Русский'),
+  SupportedLocale(locale: Locale('es'), country: CountryEsp(), name: 'Español'),
+  SupportedLocale(locale: Locale('hr'), country: CountryHrv(), name: 'Hrvatski'),
 ];
 
 /// Holds the selected app locale. Persists to SharedPreferences.
