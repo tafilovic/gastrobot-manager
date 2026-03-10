@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:gastrobotmanager/core/log/app_logger.dart';
+
 /// Dio interceptor that logs HTTP requests and responses in debug mode.
 /// Request: method, URI, headers (Authorization redacted), body.
 /// Response: status code, response data (truncated if large).
@@ -19,7 +21,7 @@ class LoggingInterceptor extends Interceptor {
       headers['Authorization'] = '<redacted>';
     }
     final body = options.data != null ? _stringify(options.data) : null;
-    debugPrint(
+    debugLog(
       '[HTTP] → ${options.method} ${options.uri}\n'
       '  Headers: $headers\n'
       '${body != null ? '  Body: ${_truncate(body)}\n' : ''}',
@@ -39,7 +41,7 @@ class LoggingInterceptor extends Interceptor {
     final dataStr = response.data != null
         ? _truncate(_stringify(response.data))
         : '<empty>';
-    debugPrint(
+    debugLog(
       '[HTTP] ← ${response.statusCode} ${response.requestOptions.uri}\n'
       '  Data: $dataStr\n',
     );
@@ -56,7 +58,7 @@ class LoggingInterceptor extends Interceptor {
     final dataStr = response?.data != null
         ? _truncate(_stringify(response!.data))
         : null;
-    debugPrint(
+    debugLog(
       '[HTTP] ✗ ${err.requestOptions.method} ${err.requestOptions.uri}\n'
       '  Error: ${err.message}\n'
       '  Type: ${err.type}\n'
