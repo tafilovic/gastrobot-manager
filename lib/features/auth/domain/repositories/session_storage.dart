@@ -8,8 +8,4 @@ abstract class SessionStorage {
   Future<void> clearAll();
   Future<void> saveRememberedEmail(String? email);
   Future<String?> getRememberedEmail();
-
-  /// Persists the current venue id (e.g. first venue of the user). Cleared on logout.
-  Future<void> saveVenueId(String? venueId);
-  Future<String?> getVenueId();
 }

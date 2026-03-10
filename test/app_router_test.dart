@@ -40,17 +40,13 @@ class _DummySessionStorage implements SessionStorage {
   @override
   Future<AuthSession?> getSession() async => null;
 
-  @override
-  Future<String?> getVenueId() async => null;
-
+ 
   @override
   Future<void> saveRememberedEmail(String? email) async {}
 
   @override
   Future<void> saveSession(AuthSession session) async {}
 
-  @override
-  Future<void> saveVenueId(String? venueId) async {}
 }
 
 class _DummyAuthApi implements AuthApi {

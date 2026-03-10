@@ -48,14 +48,4 @@ class AuthService {
   Future<void> setRememberedEmail(String? email) async {
     await _sessionStorage.saveRememberedEmail(email);
   }
-
-  /// Persist venue id (e.g. after login). Cleared on [signOut].
-  Future<void> saveVenueId(String? venueId) async {
-    await _sessionStorage.saveVenueId(venueId);
-  }
-
-  /// Restore persisted venue id (e.g. on app start).
-  Future<String?> getVenueId() async {
-    return _sessionStorage.getVenueId();
-  }
 }

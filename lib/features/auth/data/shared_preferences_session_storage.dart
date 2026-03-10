@@ -12,7 +12,6 @@ class SharedPreferencesSessionStorage implements SessionStorage {
 
   static const _keySession = 'auth_session';
   static const _keyRememberedEmail = 'auth_remembered_email';
-  static const _keyVenueId = 'auth_venue_id';
 
   @override
   Future<void> saveSession(AuthSession session) async {
@@ -35,7 +34,6 @@ class SharedPreferencesSessionStorage implements SessionStorage {
   Future<void> clearAll() async {
     await _prefs.remove(_keySession);
     await _prefs.remove(_keyRememberedEmail);
-    await _prefs.remove(_keyVenueId);
   }
 
   @override
@@ -50,19 +48,5 @@ class SharedPreferencesSessionStorage implements SessionStorage {
   @override
   Future<String?> getRememberedEmail() async {
     return _prefs.getString(_keyRememberedEmail);
-  }
-
-  @override
-  Future<void> saveVenueId(String? venueId) async {
-    if (venueId == null || venueId.isEmpty) {
-      await _prefs.remove(_keyVenueId);
-    } else {
-      await _prefs.setString(_keyVenueId, venueId);
-    }
-  }
-
-  @override
-  Future<String?> getVenueId() async {
-    return _prefs.getString(_keyVenueId);
   }
 }
