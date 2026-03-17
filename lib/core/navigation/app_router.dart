@@ -18,6 +18,7 @@ import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dar
 import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
 import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
+import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
 
 /// Centralized route names and path constants.
 abstract class AppRouteNames {
@@ -31,6 +32,7 @@ abstract class AppRouteNames {
   static const reservations = 'reservations';
   static const menu = 'menu';
   static const drinks = 'drinks';
+  static const tables = 'tables';
   static const profile = 'profile';
 
   // Orders details / filters
@@ -52,6 +54,7 @@ abstract class AppRouteNames {
   static const pathReservations = '/reservations';
   static const pathMenu = '/menu';
   static const pathDrinks = '/drinks';
+  static const pathTables = '/tables';
   static const pathProfile = '/profile';
 
   // Orders sub-routes (full paths for context.push)
@@ -200,6 +203,15 @@ class AppRouter {
                   path: AppRouteNames.pathReservations,
                   name: AppRouteNames.reservations,
                   builder: (context, state) => const ReservationsScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRouteNames.pathTables,
+                  name: AppRouteNames.tables,
+                  builder: (context, state) => const TablesScreen(),
                 ),
               ],
             ),

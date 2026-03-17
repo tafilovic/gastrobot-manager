@@ -77,6 +77,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileLanguageValue => 'English';
 
   @override
+  String get profileDrinksList => 'DRINKS LIST';
+
+  @override
   String get profileLogout => 'LOG OUT';
 
   @override
@@ -120,6 +123,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navDrinks => 'DRINKS';
+
+  @override
+  String get navTables => 'TABLES';
 
   @override
   String get navProfile => 'PROFILE';

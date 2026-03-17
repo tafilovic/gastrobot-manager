@@ -47,6 +47,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         return l10n.navMenu;
       case 'drinks':
         return l10n.navDrinks;
+      case 'tables':
+        return l10n.navTables;
       case 'profile':
         return l10n.navProfile;
       default:
@@ -166,6 +168,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         case 'drinks':
           if (currentLocation.startsWith(AppRouteNames.pathDrinks)) selectedIndex = i;
           break;
+        case 'tables':
+          if (currentLocation.startsWith(AppRouteNames.pathTables)) selectedIndex = i;
+          break;
         case 'profile':
           if (currentLocation.startsWith(AppRouteNames.pathProfile)) selectedIndex = i;
           break;
@@ -237,6 +242,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         break;
       case 'drinks':
         context.goNamed(AppRouteNames.drinks);
+        break;
+      case 'tables':
+        context.goNamed(AppRouteNames.tables);
         break;
       case 'profile':
         context.goNamed(AppRouteNames.profile);

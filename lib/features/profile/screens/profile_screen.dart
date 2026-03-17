@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_header.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_row.dart';
@@ -35,7 +39,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     final profile = context.watch<ProfileProvider>();
     final localeProvider = context.watch<LocaleProvider>();
+    final auth = context.watch<AuthProvider>();
     final user = profile.user!;
+    final isWaiter = auth.profileType == ProfileType.waiter;
 
     return Scaffold(
       backgroundColor: AppColors.surface,
@@ -102,6 +108,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () => LanguageSelectionDialog.show(context),
             ),
             const SizedBox(height: 32),
+            if (isWaiter)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => context.pushNamed(AppRouteNames.drinks),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.accent,
+                      side: BorderSide(color: AppColors.accent),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    icon: const Icon(Icons.local_bar),
+                    label: Text(l10n.profileDrinksList),
+                  ),
+                ),
+              ),
+            if (isWaiter) const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SizedBox(

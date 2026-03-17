@@ -240,6 +240,12 @@ abstract class AppLocalizations {
   /// **'Srpski'**
   String get profileLanguageValue;
 
+  /// No description provided for @profileDrinksList.
+  ///
+  /// In sr, this message translates to:
+  /// **'LISTA PIĆA'**
+  String get profileDrinksList;
+
   /// No description provided for @profileLogout.
   ///
   /// In sr, this message translates to:
@@ -329,6 +335,12 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'PIĆA'**
   String get navDrinks;
+
+  /// No description provided for @navTables.
+  ///
+  /// In sr, this message translates to:
+  /// **'STOLOVI'**
+  String get navTables;
 
   /// No description provided for @navProfile.
   ///

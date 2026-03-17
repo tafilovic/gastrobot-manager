@@ -77,6 +77,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get profileLanguageValue => 'Italiano';
 
   @override
+  String get profileDrinksList => 'LISTA BEVANDE';
+
+  @override
   String get profileLogout => 'ESCI';
 
   @override
@@ -120,6 +123,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get navDrinks => 'BEVANDE';
+
+  @override
+  String get navTables => 'TAVOLI';
 
   @override
   String get navProfile => 'PROFILO';

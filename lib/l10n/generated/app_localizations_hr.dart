@@ -77,6 +77,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get profileLanguageValue => 'Hrvatski';
 
   @override
+  String get profileDrinksList => 'LISTA PIĆA';
+
+  @override
   String get profileLogout => 'ODJAVA';
 
   @override
@@ -120,6 +123,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get navDrinks => 'PIĆA';
+
+  @override
+  String get navTables => 'STOLOVI';
 
   @override
   String get navProfile => 'PROFIL';

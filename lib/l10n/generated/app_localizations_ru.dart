@@ -77,6 +77,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileLanguageValue => 'Русский';
 
   @override
+  String get profileDrinksList => 'СПИСОК НАПИТКОВ';
+
+  @override
   String get profileLogout => 'ВЫЙТИ';
 
   @override
@@ -120,6 +123,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get navDrinks => 'НАПИТКИ';
+
+  @override
+  String get navTables => 'СТОЛЫ';
 
   @override
   String get navProfile => 'ПРОФИЛЬ';
