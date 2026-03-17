@@ -128,6 +128,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navTables => 'MESAS';
 
   @override
+  String get tablesReserve => 'RESERVAR';
+
+  @override
+  String get tablesOrder => '+ PEDIR';
+
+  @override
+  String tablesCount(int count) {
+    return '$count mesas';
+  }
+
+  @override
+  String tableNumber(String number) {
+    return 'Mesa n.º $number';
+  }
+
+  @override
+  String get tableReservationAt => 'Reserva:';
+
+  @override
+  String get tableTypeTable => 'Mesa';
+
+  @override
+  String get tableTypeRoom => 'Interior';
+
+  @override
+  String get tableTypeSunbed => 'Tumbona';
+
+  @override
   String get navProfile => 'PERFIL';
 
   @override

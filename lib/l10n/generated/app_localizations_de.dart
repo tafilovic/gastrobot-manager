@@ -129,6 +129,34 @@ class AppLocalizationsDe extends AppLocalizations {
   String get navTables => 'TISCHE';
 
   @override
+  String get tablesReserve => 'RESERVIEREN';
+
+  @override
+  String get tablesOrder => '+ BESTELLEN';
+
+  @override
+  String tablesCount(int count) {
+    return '$count Tische';
+  }
+
+  @override
+  String tableNumber(String number) {
+    return 'Tisch Nr. $number';
+  }
+
+  @override
+  String get tableReservationAt => 'Reservierung:';
+
+  @override
+  String get tableTypeTable => 'Tisch';
+
+  @override
+  String get tableTypeRoom => 'Innenbereich';
+
+  @override
+  String get tableTypeSunbed => 'Liegestuhl';
+
+  @override
   String get navProfile => 'PROFIL';
 
   @override

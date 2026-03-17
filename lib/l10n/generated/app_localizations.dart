@@ -342,6 +342,54 @@ abstract class AppLocalizations {
   /// **'STOLOVI'**
   String get navTables;
 
+  /// No description provided for @tablesReserve.
+  ///
+  /// In sr, this message translates to:
+  /// **'REZERVIŠI'**
+  String get tablesReserve;
+
+  /// No description provided for @tablesOrder.
+  ///
+  /// In sr, this message translates to:
+  /// **'+ PORUČI'**
+  String get tablesOrder;
+
+  /// No description provided for @tablesCount.
+  ///
+  /// In sr, this message translates to:
+  /// **'{count} stolova'**
+  String tablesCount(int count);
+
+  /// No description provided for @tableNumber.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sto br. {number}'**
+  String tableNumber(String number);
+
+  /// No description provided for @tableReservationAt.
+  ///
+  /// In sr, this message translates to:
+  /// **'Rezervacija:'**
+  String get tableReservationAt;
+
+  /// No description provided for @tableTypeTable.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sto'**
+  String get tableTypeTable;
+
+  /// No description provided for @tableTypeRoom.
+  ///
+  /// In sr, this message translates to:
+  /// **'Unutrašnjost'**
+  String get tableTypeRoom;
+
+  /// No description provided for @tableTypeSunbed.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ležaljka'**
+  String get tableTypeSunbed;
+
   /// No description provided for @navProfile.
   ///
   /// In sr, this message translates to:

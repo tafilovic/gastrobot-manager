@@ -34,6 +34,9 @@ import 'package:gastrobotmanager/features/ready_items/providers/ready_items_prov
 import 'package:gastrobotmanager/features/reservations/data/reservations_remote.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
+import 'package:gastrobotmanager/features/tables/data/tables_remote.dart';
+import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
+import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -210,6 +213,14 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
             c.read<AuthProvider>(),
             c.read<ReservationsApi>(),
           ),
+        ),
+
+        // Tables (waiter: venue table list with status)
+        Provider<TablesApi>(
+          create: (_) => TablesRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<TablesProvider>(
+          create: (c) => TablesProvider(c.read<TablesApi>()),
         ),
       ],
       child: const GastroBotApp(),

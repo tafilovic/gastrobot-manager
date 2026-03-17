@@ -128,6 +128,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navTables => 'СТОЛЫ';
 
   @override
+  String get tablesReserve => 'ЗАБРОНИРОВАТЬ';
+
+  @override
+  String get tablesOrder => '+ ЗАКАЗАТЬ';
+
+  @override
+  String tablesCount(int count) {
+    return '$count столов';
+  }
+
+  @override
+  String tableNumber(String number) {
+    return 'Стол №$number';
+  }
+
+  @override
+  String get tableReservationAt => 'Бронирование:';
+
+  @override
+  String get tableTypeTable => 'Стол';
+
+  @override
+  String get tableTypeRoom => 'В помещении';
+
+  @override
+  String get tableTypeSunbed => 'Шезлонг';
+
+  @override
   String get navProfile => 'ПРОФИЛЬ';
 
   @override

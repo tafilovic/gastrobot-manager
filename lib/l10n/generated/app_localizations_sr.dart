@@ -129,6 +129,34 @@ class AppLocalizationsSr extends AppLocalizations {
   String get navTables => 'STOLOVI';
 
   @override
+  String get tablesReserve => 'REZERVIŠI';
+
+  @override
+  String get tablesOrder => '+ PORUČI';
+
+  @override
+  String tablesCount(int count) {
+    return '$count stolova';
+  }
+
+  @override
+  String tableNumber(String number) {
+    return 'Sto br. $number';
+  }
+
+  @override
+  String get tableReservationAt => 'Rezervacija:';
+
+  @override
+  String get tableTypeTable => 'Sto';
+
+  @override
+  String get tableTypeRoom => 'Unutrašnjost';
+
+  @override
+  String get tableTypeSunbed => 'Ležaljka';
+
+  @override
   String get navProfile => 'PROFIL';
 
   @override
