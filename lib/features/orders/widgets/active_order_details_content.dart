@@ -119,6 +119,10 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
     final accentColor = Theme.of(context).colorScheme.primary;
     final tableNum = int.tryParse(order.tableNumber) ?? 0;
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
+    final canMarkAsPaid = order.items.isNotEmpty &&
+        order.items.every(
+          (i) => i.status == 'rejected' || i.status == 'delivered',
+        );
     final foodItems = order.items
         .where((i) => i.type == null || i.type == 'food')
         .toList();
@@ -299,7 +303,8 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: _isPaying ? null : _onMarkAsPaidPressed,
+                onPressed:
+                    (_isPaying || !canMarkAsPaid) ? null : _onMarkAsPaidPressed,
                 style: FilledButton.styleFrom(
                   backgroundColor: accentColor,
                   foregroundColor: AppColors.onPrimary,
