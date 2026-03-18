@@ -113,6 +113,33 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
     }).toList();
   }
 
+  void _onOrdersTabChanged(Set<int> selected) {
+    final idx = selected.first;
+    final wide =
+        MediaQuery.sizeOf(context).width >= AppBreakpoints.expanded;
+    setState(() {
+      _selectedTabIndex = idx;
+      if (wide) _selectedOrder = null;
+    });
+    if (idx == 1) {
+      final venueId = context.read<AuthProvider>().currentVenueId;
+      if (venueId != null) {
+        context.read<OrdersProvider>().loadWaiterPaidOrders(venueId);
+      }
+    }
+  }
+
+  Future<void> _onPullRefresh() async {
+    final venueId = context.read<AuthProvider>().currentVenueId;
+    if (venueId == null) return;
+    final provider = context.read<OrdersProvider>();
+    if (_selectedTabIndex == 0) {
+      await provider.pullRefresh();
+    } else {
+      await provider.loadWaiterPaidOrders(venueId);
+    }
+  }
+
   Future<void> _openFilters() async {
     if (_selectedTabIndex == 0) {
       final result = await context.push<ActiveOrderFilters>(
@@ -246,9 +273,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                         ),
                       ],
                       selected: {_selectedTabIndex},
-                      onSelectionChanged: (Set<int> selected) {
-                        setState(() => _selectedTabIndex = selected.first);
-                      },
+                      onSelectionChanged: _onOrdersTabChanged,
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.resolveWith((states) {
                           if (states.contains(WidgetState.selected)) {
@@ -308,7 +333,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
               child: ConstrainedContent(
                 padding: EdgeInsets.zero,
                 child: RefreshIndicator(
-                  onRefresh: () => provider.pullRefresh(),
+                  onRefresh: _onPullRefresh,
                   child: _buildList(
                     orders,
                     provider,
@@ -377,9 +402,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                     ),
                   ],
                   selected: {_selectedTabIndex},
-                  onSelectionChanged: (Set<int> selected) {
-                    setState(() => _selectedTabIndex = selected.first);
-                  },
+                  onSelectionChanged: _onOrdersTabChanged,
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.resolveWith((states) {
                       if (states.contains(WidgetState.selected)) {
@@ -437,7 +460,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
         ),
         Expanded(
           child: RefreshIndicator(
-            onRefresh: () => provider.pullRefresh(),
+            onRefresh: _onPullRefresh,
             child: _buildList(
               orders,
               provider,
@@ -469,6 +492,38 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   }) {
     if (orders.isEmpty) {
       if (isHistoryTab) {
+        if (provider.isLoadingPaidOrders) {
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+            ],
+          );
+        }
+        final paidErr = provider.paidOrdersError;
+        if (paidErr != null && paidErr.isNotEmpty) {
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      paidErr,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: AppColors.error),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
         return ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: [

@@ -39,13 +39,38 @@ void main() {
       waiterOrderActionsApi: payApi,
     );
     when(() => auth.profileType).thenReturn(ProfileType.waiter);
-    when(() => pendingApi.getPendingOrders(any(), any())).thenAnswer((_) async => [order]);
+    when(() => pendingApi.getPendingOrders(any(), any()))
+        .thenAnswer((_) async => [order]);
+    when(() => payApi.getPaidOrders(any())).thenAnswer((_) async => []);
+  });
+
+  group('OrdersProvider.loadWaiterPaidOrders', () {
+    test('stores paid orders from API', () async {
+      final paid = PendingOrder(
+        orderId: 'p1',
+        orderNumber: 'Z-9',
+        tableNumber: '1',
+        orderType: 'walk_in',
+        targetTime: '2025-02-01T10:00:00.000Z',
+        items: const [],
+      );
+      when(() => payApi.getPaidOrders('venue-1'))
+          .thenAnswer((_) async => [paid]);
+
+      await provider.loadWaiterPaidOrders('venue-1');
+
+      expect(provider.waiterHistoryOrders.length, 1);
+      expect(provider.waiterHistoryOrders.first.orderId, 'p1');
+      expect(provider.paidOrdersError, isNull);
+    });
   });
 
   group('OrdersProvider.markWaiterOrderAsPaid', () {
-    test('on success removes from orders and adds to waiterHistoryOrders', () async {
+    test('on success removes from orders and reloads paid list from API', () async {
       when(() => payApi.markOrderAsPaid('venue-1', 'o1'))
           .thenAnswer((_) async {});
+      when(() => payApi.getPaidOrders('venue-1'))
+          .thenAnswer((_) async => [order]);
 
       await provider.loadOnce('venue-1');
       expect(provider.orders.length, 1);
@@ -57,6 +82,7 @@ void main() {
       expect(provider.waiterHistoryOrders.length, 1);
       expect(provider.waiterHistoryOrders.first.orderId, 'o1');
       verify(() => payApi.markOrderAsPaid('venue-1', 'o1')).called(1);
+      verify(() => payApi.getPaidOrders('venue-1')).called(1);
     });
 
     test('on failure keeps orders and sets markPaidError', () async {
