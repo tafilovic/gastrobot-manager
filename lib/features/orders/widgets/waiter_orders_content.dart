@@ -231,29 +231,12 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.l10n.ordersTitle,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                  FilledButton.icon(
-                    onPressed: () {
-                      // TODO: navigate to new order or sheet
-                    },
-                    style: FilledButton.styleFrom(
-                      backgroundColor: widget.accentColor,
-                      foregroundColor: AppColors.onPrimary,
-                    ),
-                    icon: const Icon(Icons.add, size: 20),
-                    label: Text(widget.l10n.ordersOrderButton),
-                  ),
-                ],
+              child: Text(
+                widget.l10n.ordersTitle,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
             Padding(
@@ -360,29 +343,12 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  widget.l10n.ordersTitle,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-              FilledButton.icon(
-                onPressed: () {
-                  // TODO: navigate to new order or sheet
-                },
-                style: FilledButton.styleFrom(
-                  backgroundColor: widget.accentColor,
-                  foregroundColor: AppColors.onPrimary,
-                ),
-                icon: const Icon(Icons.add, size: 20),
-                label: Text(widget.l10n.ordersOrderButton),
-              ),
-            ],
+          child: Text(
+            widget.l10n.ordersTitle,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
         ),
         Padding(
