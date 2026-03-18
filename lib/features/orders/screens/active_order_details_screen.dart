@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -36,7 +39,14 @@ class ActiveOrderDetailsScreen extends StatelessWidget {
       body: ActiveOrderDetailsContent(
         order: order,
         billAmount: billAmount,
-        onCompleted: null,
+        markOrderAsPaid: () async {
+          final venueId = context.read<AuthProvider>().currentVenueId;
+          if (venueId == null) return false;
+          return context.read<OrdersProvider>().markWaiterOrderAsPaid(
+                venueId,
+                order,
+              );
+        },
       ),
     );
   }

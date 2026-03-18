@@ -282,6 +282,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get orderMarkAsPaid => 'MARCAR COMO PAGADO';
 
   @override
+  String get orderMarkAsPaidConfirmTitle => 'Marcar como pagado';
+
+  @override
+  String get orderMarkAsPaidConfirmMessage =>
+      '¿Seguro que desea realizar esta acción?';
+
+  @override
+  String get dialogYes => 'Sí';
+
+  @override
+  String get dialogNo => 'No';
+
+  @override
+  String get orderMarkAsPaidError => 'No se pudo marcar el pedido como pagado';
+
+  @override
+  String get orderMarkAsPaidSuccess => 'Pedido marcado como pagado';
+
+  @override
+  String get ordersHistoryEmpty => 'Aún no hay pedidos en el historial';
+
+  @override
   String get orderPaidLabel => 'PAGADO';
 
   @override

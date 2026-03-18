@@ -606,6 +606,48 @@ abstract class AppLocalizations {
   /// **'OZNAČI KAO PLAĆENO'**
   String get orderMarkAsPaid;
 
+  /// No description provided for @orderMarkAsPaidConfirmTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Označi kao plaćeno'**
+  String get orderMarkAsPaidConfirmTitle;
+
+  /// No description provided for @orderMarkAsPaidConfirmMessage.
+  ///
+  /// In sr, this message translates to:
+  /// **'Da li ste sigurni da želite da izvršite ovu radnju?'**
+  String get orderMarkAsPaidConfirmMessage;
+
+  /// No description provided for @dialogYes.
+  ///
+  /// In sr, this message translates to:
+  /// **'Da'**
+  String get dialogYes;
+
+  /// No description provided for @dialogNo.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ne'**
+  String get dialogNo;
+
+  /// No description provided for @orderMarkAsPaidError.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nije moguće označiti porudžbinu kao plaćenu'**
+  String get orderMarkAsPaidError;
+
+  /// No description provided for @orderMarkAsPaidSuccess.
+  ///
+  /// In sr, this message translates to:
+  /// **'Porudžbina označena kao plaćena'**
+  String get orderMarkAsPaidSuccess;
+
+  /// No description provided for @ordersHistoryEmpty.
+  ///
+  /// In sr, this message translates to:
+  /// **'Još nema porudžbina u istoriji'**
+  String get ordersHistoryEmpty;
+
   /// No description provided for @orderPaidLabel.
   ///
   /// In sr, this message translates to:

@@ -282,6 +282,29 @@ class AppLocalizationsHr extends AppLocalizations {
   String get orderMarkAsPaid => 'OZNAČI KAO PLAĆENO';
 
   @override
+  String get orderMarkAsPaidConfirmTitle => 'Označi kao plaćeno';
+
+  @override
+  String get orderMarkAsPaidConfirmMessage =>
+      'Jeste li sigurni da želite izvršiti ovu radnju?';
+
+  @override
+  String get dialogYes => 'Da';
+
+  @override
+  String get dialogNo => 'Ne';
+
+  @override
+  String get orderMarkAsPaidError =>
+      'Nije moguće označiti narudžbu kao plaćenu';
+
+  @override
+  String get orderMarkAsPaidSuccess => 'Narudžba označena kao plaćena';
+
+  @override
+  String get ordersHistoryEmpty => 'Još nema narudžbi u povijesti';
+
+  @override
   String get orderPaidLabel => 'PLAĆENO';
 
   @override

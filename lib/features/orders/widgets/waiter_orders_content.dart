@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
@@ -136,9 +137,11 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final provider = context.watch<OrdersProvider>();
-    final orders = _selectedTabIndex == 0
-        ? _applyFilters(provider.orders)
-        : _applyHistoryFilters(provider.orders);
+    final activeOrders = _applyFilters(provider.orders);
+    final historyOrders =
+        _applyHistoryFilters(provider.waiterHistoryOrders);
+    final orders =
+        _selectedTabIndex == 0 ? activeOrders : historyOrders;
     final width = MediaQuery.sizeOf(context).width;
     final useMasterDetail = width >= AppBreakpoints.expanded;
 
@@ -167,6 +170,17 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                     : _selectedTabIndex == 0
                         ? ActiveOrderDetailsContent(
                             order: _selectedOrder!,
+                            markOrderAsPaid: () async {
+                              final venueId =
+                                  context.read<AuthProvider>().currentVenueId;
+                              if (venueId == null) return false;
+                              return context
+                                  .read<OrdersProvider>()
+                                  .markWaiterOrderAsPaid(
+                                    venueId,
+                                    _selectedOrder!,
+                                  );
+                            },
                             onCompleted: () {
                               setState(() => _selectedOrder = null);
                               widget.onStartRefresh();
@@ -295,7 +309,12 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                 padding: EdgeInsets.zero,
                 child: RefreshIndicator(
                   onRefresh: () => provider.pullRefresh(),
-                  child: _buildList(orders, provider, onSeeDetails),
+                  child: _buildList(
+                    orders,
+                    provider,
+                    onSeeDetails,
+                    isHistoryTab: _selectedTabIndex == 1,
+                  ),
                 ),
               ),
             ),
@@ -419,7 +438,12 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => provider.pullRefresh(),
-            child: _buildList(orders, provider, onSeeDetails),
+            child: _buildList(
+              orders,
+              provider,
+              onSeeDetails,
+              isHistoryTab: _selectedTabIndex == 1,
+            ),
           ),
         ),
       ],
@@ -440,9 +464,30 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Widget _buildList(
     List<PendingOrder> orders,
     OrdersProvider provider,
-    void Function(PendingOrder) onSeeDetails,
-  ) {
+    void Function(PendingOrder) onSeeDetails, {
+    required bool isHistoryTab,
+  }) {
     if (orders.isEmpty) {
+      if (isHistoryTab) {
+        return ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    widget.l10n.ordersHistoryEmpty,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: AppColors.textSecondary),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         children: [

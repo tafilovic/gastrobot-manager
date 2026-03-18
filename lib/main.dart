@@ -19,8 +19,10 @@ import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dar
 import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
 import 'package:gastrobotmanager/features/orders/data/order_items_remote.dart';
 import 'package:gastrobotmanager/features/orders/data/pending_orders_remote.dart';
+import 'package:gastrobotmanager/features/orders/data/waiter_order_actions_remote.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/pending_orders_api.dart';
+import 'package:gastrobotmanager/features/orders/domain/repositories/waiter_order_actions_api.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/preparing/data/queue_remote.dart';
 import 'package:gastrobotmanager/features/preparing/domain/repositories/queue_api.dart';
@@ -172,6 +174,9 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         Provider<PendingOrdersApi>(
           create: (_) => PendingOrdersRemote(_authenticatedDio),
         ),
+        Provider<WaiterOrderActionsApi>(
+          create: (_) => WaiterOrderActionsRemote(_authenticatedDio),
+        ),
         Provider<OrderItemsApi>(
           create: (_) => OrderItemsRemote(_authenticatedDio),
         ),
@@ -179,6 +184,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           create: (c) => OrdersProvider(
             c.read<AuthProvider>(),
             c.read<PendingOrdersApi>(),
+            waiterOrderActionsApi: c.read<WaiterOrderActionsApi>(),
           ),
         ),
 

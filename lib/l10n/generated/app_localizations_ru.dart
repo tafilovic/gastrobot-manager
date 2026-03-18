@@ -282,6 +282,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get orderMarkAsPaid => 'ОТМЕТИТЬ ОПЛАЧЕННЫМ';
 
   @override
+  String get orderMarkAsPaidConfirmTitle => 'Отметить оплаченным';
+
+  @override
+  String get orderMarkAsPaidConfirmMessage =>
+      'Вы уверены, что хотите выполнить это действие?';
+
+  @override
+  String get dialogYes => 'Да';
+
+  @override
+  String get dialogNo => 'Нет';
+
+  @override
+  String get orderMarkAsPaidError => 'Не удалось отметить заказ оплаченным';
+
+  @override
+  String get orderMarkAsPaidSuccess => 'Заказ отмечен как оплаченный';
+
+  @override
+  String get ordersHistoryEmpty => 'В истории пока нет заказов';
+
+  @override
   String get orderPaidLabel => 'ОПЛАЧЕНО';
 
   @override

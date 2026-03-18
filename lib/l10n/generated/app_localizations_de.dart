@@ -283,6 +283,29 @@ class AppLocalizationsDe extends AppLocalizations {
   String get orderMarkAsPaid => 'ALS BEZAHLT MARKIEREN';
 
   @override
+  String get orderMarkAsPaidConfirmTitle => 'Als bezahlt markieren';
+
+  @override
+  String get orderMarkAsPaidConfirmMessage =>
+      'Möchten Sie diese Aktion wirklich ausführen?';
+
+  @override
+  String get dialogYes => 'Ja';
+
+  @override
+  String get dialogNo => 'Nein';
+
+  @override
+  String get orderMarkAsPaidError =>
+      'Bestellung konnte nicht als bezahlt markiert werden';
+
+  @override
+  String get orderMarkAsPaidSuccess => 'Bestellung als bezahlt markiert';
+
+  @override
+  String get ordersHistoryEmpty => 'Noch keine Bestellungen in der Historie';
+
+  @override
   String get orderPaidLabel => 'BEZAHLT';
 
   @override

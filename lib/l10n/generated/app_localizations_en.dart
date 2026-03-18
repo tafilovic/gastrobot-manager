@@ -282,6 +282,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderMarkAsPaid => 'MARK AS PAID';
 
   @override
+  String get orderMarkAsPaidConfirmTitle => 'Mark as paid';
+
+  @override
+  String get orderMarkAsPaidConfirmMessage =>
+      'Are you sure you want to perform this action?';
+
+  @override
+  String get dialogYes => 'Yes';
+
+  @override
+  String get dialogNo => 'No';
+
+  @override
+  String get orderMarkAsPaidError => 'Could not mark order as paid';
+
+  @override
+  String get orderMarkAsPaidSuccess => 'Order marked as paid';
+
+  @override
+  String get ordersHistoryEmpty => 'No orders in history yet';
+
+  @override
   String get orderPaidLabel => 'PAID';
 
   @override

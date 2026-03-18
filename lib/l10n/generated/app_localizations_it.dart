@@ -282,6 +282,29 @@ class AppLocalizationsIt extends AppLocalizations {
   String get orderMarkAsPaid => 'SEGNALA COME PAGATO';
 
   @override
+  String get orderMarkAsPaidConfirmTitle => 'Segnala come pagato';
+
+  @override
+  String get orderMarkAsPaidConfirmMessage =>
+      'Sei sicuro di voler eseguire questa azione?';
+
+  @override
+  String get dialogYes => 'Sì';
+
+  @override
+  String get dialogNo => 'No';
+
+  @override
+  String get orderMarkAsPaidError =>
+      'Impossibile segnare l\'ordine come pagato';
+
+  @override
+  String get orderMarkAsPaidSuccess => 'Ordine segnalato come pagato';
+
+  @override
+  String get ordersHistoryEmpty => 'Nessun ordine nella cronologia';
+
+  @override
   String get orderPaidLabel => 'PAGATO';
 
   @override

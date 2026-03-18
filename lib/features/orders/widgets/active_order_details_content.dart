@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
+import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reusable active order details body: table, time, food/drinks with status, bill, Mark as paid.
 /// Used in [ActiveOrderDetailsScreen] and in master-detail detail pane.
-/// When [onCompleted] is set (e.g. in pane), it is called on "Mark as paid"; otherwise the button pops the route.
-class ActiveOrderDetailsContent extends StatelessWidget {
+/// When [markOrderAsPaid] is set, confirms then PATCH pay; on success calls [onCompleted] or pops.
+class ActiveOrderDetailsContent extends StatefulWidget {
   const ActiveOrderDetailsContent({
     super.key,
     required this.order,
     this.billAmount,
     this.onCompleted,
+    this.markOrderAsPaid,
   });
 
   final PendingOrder order;
   final String? billAmount;
   final VoidCallback? onCompleted;
+  final Future<bool> Function()? markOrderAsPaid;
 
   static String? _computedBillTotal(PendingOrder order) {
     double sum = 0;
@@ -45,8 +49,73 @@ class ActiveOrderDetailsContent extends StatelessWidget {
   }
 
   @override
+  State<ActiveOrderDetailsContent> createState() =>
+      _ActiveOrderDetailsContentState();
+}
+
+class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
+  bool _isPaying = false;
+
+  Future<void> _onMarkAsPaidPressed() async {
+    final pay = widget.markOrderAsPaid;
+    final l10n = AppLocalizations.of(context)!;
+    if (pay == null) {
+      if (widget.onCompleted != null) {
+        widget.onCompleted!();
+      } else {
+        Navigator.of(context).pop(true);
+      }
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.orderMarkAsPaidConfirmTitle),
+        content: Text(l10n.orderMarkAsPaidConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.dialogNo),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.dialogYes),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isPaying = true);
+    final ok = await pay();
+    if (!mounted) return;
+    setState(() => _isPaying = false);
+
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (ok) {
+      messenger?.showSnackBar(
+        SnackBar(content: Text(l10n.orderMarkAsPaidSuccess)),
+      );
+      if (widget.onCompleted != null) {
+        widget.onCompleted!();
+      } else {
+        Navigator.of(context).pop(true);
+      }
+    } else {
+      final orders = context.read<OrdersProvider>();
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text(orders.markPaidError ?? l10n.orderMarkAsPaidError),
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final order = widget.order;
     final accentColor = Theme.of(context).colorScheme.primary;
     final tableNum = int.tryParse(order.tableNumber) ?? 0;
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
@@ -54,7 +123,8 @@ class ActiveOrderDetailsContent extends StatelessWidget {
         .where((i) => i.type == null || i.type == 'food')
         .toList();
     final drinkItems = order.items.where((i) => i.type == 'drink').toList();
-    final billTotal = billAmount ?? _computedBillTotal(order);
+    final billTotal = widget.billAmount ??
+        ActiveOrderDetailsContent._computedBillTotal(order);
     final width = MediaQuery.sizeOf(context).width;
     final maxWidth = width >= AppBreakpoints.expanded
         ? AppBreakpoints.contentMaxWidthWide
@@ -229,19 +299,22 @@ class ActiveOrderDetailsContent extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () {
-                  if (onCompleted != null) {
-                    onCompleted!();
-                  } else {
-                    Navigator.of(context).pop(true);
-                  }
-                },
+                onPressed: _isPaying ? null : _onMarkAsPaidPressed,
                 style: FilledButton.styleFrom(
                   backgroundColor: accentColor,
                   foregroundColor: AppColors.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: Text(l10n.orderMarkAsPaid),
+                child: _isPaying
+                    ? SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.onPrimary,
+                        ),
+                      )
+                    : Text(l10n.orderMarkAsPaid),
               ),
             ),
           ),
