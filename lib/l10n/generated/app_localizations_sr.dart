@@ -360,6 +360,20 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String reservationCountList(int count) {
+    return '$count rezervacije';
+  }
+
+  @override
+  String get reservationLabelTime => 'Vreme:';
+
+  @override
+  String get reservationLabelRegion => 'Region:';
+
+  @override
+  String get reservationLabelPartySize => 'Broj ljudi:';
+
+  @override
   String get preparingTitle => 'U pripremi';
 
   @override

@@ -359,6 +359,20 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String reservationCountList(int count) {
+    return '$count rezervacije';
+  }
+
+  @override
+  String get reservationLabelTime => 'Vrijeme:';
+
+  @override
+  String get reservationLabelRegion => 'Regija:';
+
+  @override
+  String get reservationLabelPartySize => 'Broj ljudi:';
+
+  @override
   String get preparingTitle => 'U pripremi';
 
   @override

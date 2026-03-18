@@ -47,9 +47,11 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final totalItems = requests.fold<int>(0, (sum, o) => sum + o.itemCount);
 
     final isBar = profileType == ProfileType.bar || profileType == ProfileType.waiter;
-    final countLabel = isBar
-        ? l10n.reservationCountDrinks(totalItems)
-        : l10n.reservationCountDishes(totalItems);
+    final countLabel = profileType == ProfileType.waiter
+        ? l10n.reservationCountList(requests.length)
+        : (isBar
+            ? l10n.reservationCountDrinks(totalItems)
+            : l10n.reservationCountDishes(totalItems));
 
     String itemCountForCard(PendingOrder order) {
       return isBar
@@ -91,7 +93,13 @@ class _ReservationsContentState extends State<ReservationsContent> {
                       ],
                       selected: {_selectedTabIndex},
                       onSelectionChanged: (Set<int> selected) {
-                        setState(() => _selectedTabIndex = selected.first);
+                        final idx = selected.first;
+                        setState(() => _selectedTabIndex = idx);
+                        if (idx == 0 &&
+                            profileType == ProfileType.waiter &&
+                            context.mounted) {
+                          context.read<ReservationsProvider>().pullRefresh();
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.resolveWith((states) {
@@ -177,6 +185,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                         l10n: l10n,
                                         accentColor: widget.accentColor,
                                         itemCountLabel: itemCountForCard(order),
+                                        showWaiterPendingLayout:
+                                            profileType == ProfileType.waiter,
                                         onSeeDetails: () async {
                                           final completed =
                                               await Navigator.of(context).push<bool>(

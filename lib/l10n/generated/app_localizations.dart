@@ -738,6 +738,30 @@ abstract class AppLocalizations {
   /// **'{count} jela'**
   String reservationCountDishes(int count);
 
+  /// No description provided for @reservationCountList.
+  ///
+  /// In sr, this message translates to:
+  /// **'{count} rezervacije'**
+  String reservationCountList(int count);
+
+  /// No description provided for @reservationLabelTime.
+  ///
+  /// In sr, this message translates to:
+  /// **'Vreme:'**
+  String get reservationLabelTime;
+
+  /// No description provided for @reservationLabelRegion.
+  ///
+  /// In sr, this message translates to:
+  /// **'Region:'**
+  String get reservationLabelRegion;
+
+  /// No description provided for @reservationLabelPartySize.
+  ///
+  /// In sr, this message translates to:
+  /// **'Broj ljudi:'**
+  String get reservationLabelPartySize;
+
   /// No description provided for @preparingTitle.
   ///
   /// In sr, this message translates to:

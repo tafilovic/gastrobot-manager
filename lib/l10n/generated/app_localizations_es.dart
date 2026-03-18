@@ -358,6 +358,20 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String reservationCountList(int count) {
+    return '$count reservas';
+  }
+
+  @override
+  String get reservationLabelTime => 'Hora:';
+
+  @override
+  String get reservationLabelRegion => 'Zona:';
+
+  @override
+  String get reservationLabelPartySize => 'Personas:';
+
+  @override
   String get preparingTitle => 'Preparando';
 
   @override

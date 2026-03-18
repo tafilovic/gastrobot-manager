@@ -360,6 +360,20 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String reservationCountList(int count) {
+    return '$count Reservierungen';
+  }
+
+  @override
+  String get reservationLabelTime => 'Zeit:';
+
+  @override
+  String get reservationLabelRegion => 'Bereich:';
+
+  @override
+  String get reservationLabelPartySize => 'Personen:';
+
+  @override
   String get preparingTitle => 'In Bereitung';
 
   @override

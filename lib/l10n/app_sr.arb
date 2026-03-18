@@ -191,6 +191,15 @@
       "count": {"type": "int"}
     }
   },
+  "reservationCountList": "{count} rezervacije",
+  "@reservationCountList": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reservationLabelTime": "Vreme:",
+  "reservationLabelRegion": "Region:",
+  "reservationLabelPartySize": "Broj ljudi:",
   "preparingTitle": "U pripremi",
   "preparingSubtitle": "Stavke u pripremi",
   "preparingDishCount": "{count} jela",

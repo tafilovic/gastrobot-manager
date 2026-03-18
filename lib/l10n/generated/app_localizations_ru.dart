@@ -357,6 +357,20 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String reservationCountList(int count) {
+    return '$count бронирований';
+  }
+
+  @override
+  String get reservationLabelTime => 'Время:';
+
+  @override
+  String get reservationLabelRegion => 'Зона:';
+
+  @override
+  String get reservationLabelPartySize => 'Гостей:';
+
+  @override
   String get preparingTitle => 'В подготовке';
 
   @override

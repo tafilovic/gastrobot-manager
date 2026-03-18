@@ -359,6 +359,20 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String reservationCountList(int count) {
+    return '$count prenotazioni';
+  }
+
+  @override
+  String get reservationLabelTime => 'Ora:';
+
+  @override
+  String get reservationLabelRegion => 'Zona:';
+
+  @override
+  String get reservationLabelPartySize => 'Persone:';
+
+  @override
   String get preparingTitle => 'In preparazione';
 
   @override
