@@ -67,6 +67,28 @@ Map<String, dynamic> mapWaiterReservationToPendingOrderJson(
     );
   }
 
+  // Waiter pending response often includes nested user and extra reservation fields.
+  if (m['user'] is Map) {
+    final u = Map<String, dynamic>.from(m['user'] as Map);
+    final first = u['firstname']?.toString().trim();
+    final last = u['lastname']?.toString().trim();
+    final fullName = [
+      if (first != null && first.isNotEmpty) first,
+      if (last != null && last.isNotEmpty) last,
+    ].join(' ');
+    if (fullName.isNotEmpty) {
+      rd['userName'] = fullName;
+    }
+  }
+  final additionalInfo = m['additionalInfo']?.toString().trim();
+  if (additionalInfo != null && additionalInfo.isNotEmpty) {
+    rd['note'] = additionalInfo;
+  }
+  final occasion = m['type']?.toString().trim();
+  if (occasion != null && occasion.isNotEmpty) {
+    rd['occasion'] = occasion;
+  }
+
   void mergeRegion() {
     for (final k in [
       'region',
