@@ -34,7 +34,9 @@ import 'package:gastrobotmanager/features/ready_items/data/ready_items_remote.da
 import 'package:gastrobotmanager/features/ready_items/domain/repositories/ready_items_api.dart';
 import 'package:gastrobotmanager/features/ready_items/providers/ready_items_provider.dart';
 import 'package:gastrobotmanager/features/reservations/data/reservations_remote.dart';
+import 'package:gastrobotmanager/features/reservations/data/reservation_actions_remote.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
+import 'package:gastrobotmanager/features/reservations/domain/repositories/reservation_actions_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/features/tables/data/tables_remote.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
@@ -214,10 +216,14 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         Provider<ReservationsApi>(
           create: (_) => ReservationsRemote(_authenticatedDio),
         ),
+        Provider<ReservationActionsApi>(
+          create: (_) => ReservationActionsRemote(_authenticatedDio),
+        ),
         ChangeNotifierProvider<ReservationsProvider>(
           create: (c) => ReservationsProvider(
             c.read<AuthProvider>(),
             c.read<ReservationsApi>(),
+            reservationActionsApi: c.read<ReservationActionsApi>(),
           ),
         ),
 

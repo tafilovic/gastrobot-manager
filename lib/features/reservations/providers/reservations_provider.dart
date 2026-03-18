@@ -2,23 +2,31 @@ import 'package:flutter/foundation.dart';
 
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/repositories/reservation_actions_api.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 
 /// Holds reservation requests for current role and refreshes periodically.
 class ReservationsProvider extends ChangeNotifier {
-  ReservationsProvider(this._authProvider, this._api);
+  ReservationsProvider(
+    this._authProvider,
+    this._api, {
+    ReservationActionsApi? reservationActionsApi,
+  }) : _reservationActionsApi = reservationActionsApi;
 
   final AuthProvider _authProvider;
   final ReservationsApi _api;
+  final ReservationActionsApi? _reservationActionsApi;
 
   List<PendingOrder> _requests = [];
   bool _isLoading = false;
   String? _error;
+  String? _rejectError;
   String? _currentVenueId;
 
   List<PendingOrder> get requests => List.unmodifiable(_requests);
   bool get isLoading => _isLoading;
   String? get error => _error;
+  String? get rejectError => _rejectError;
 
   static int _orderByTargetTime(PendingOrder a, PendingOrder b) {
     return a.targetTime.compareTo(b.targetTime);
@@ -33,6 +41,37 @@ class ReservationsProvider extends ChangeNotifier {
     final venueId = _currentVenueId;
     if (venueId == null) return;
     await _load(venueId);
+  }
+
+  /// Waiter: reject reservation with reason and remove it from pending list on success.
+  Future<bool> rejectWaiterReservation({
+    required String venueId,
+    required PendingOrder reservation,
+    required String reason,
+  }) async {
+    _rejectError = null;
+    final api = _reservationActionsApi;
+    if (api == null) {
+      _rejectError = 'Reject not available';
+      notifyListeners();
+      return false;
+    }
+    try {
+      await api.rejectReservation(
+        venueId: venueId,
+        reservationId: reservation.orderId,
+        reason: reason,
+      );
+      _requests = _requests
+          .where((r) => r.orderId != reservation.orderId)
+          .toList();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _rejectError = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
+      notifyListeners();
+      return false;
+    }
   }
 
   Future<void> _load(String venueId) async {

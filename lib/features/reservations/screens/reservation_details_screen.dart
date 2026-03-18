@@ -10,6 +10,7 @@ import 'package:gastrobotmanager/features/orders/domain/repositories/order_items
 import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_item_tile.dart';
+import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reservation details: "Rezervacije" + # in app bar, date/time row, items with checkboxes, ODBIJ SVE / PRIHVATI.
@@ -572,10 +573,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: () {
-                      // TODO: hook up rejection endpoint for waiter reservations
-                      Navigator.of(context).pop(false);
-                    },
+                    onPressed: () => _openRejectReservationSheet(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.destructive,
                       foregroundColor: AppColors.onDestructive,
@@ -602,6 +600,120 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _openRejectReservationSheet(BuildContext context) async {
+    final controller = TextEditingController();
+    bool submitting = false;
+    String? fieldError;
+
+    Future<void> submit(StateSetter setSheetState) async {
+      final reason = controller.text.trim();
+      if (reason.isEmpty) {
+        setSheetState(() => fieldError = 'Upiši objašnjenje (obavezno polje)');
+        return;
+      }
+      setSheetState(() {
+        fieldError = null;
+        submitting = true;
+      });
+
+      final venueId = context.read<AuthProvider>().currentVenueId;
+      if (venueId == null) {
+        setSheetState(() => submitting = false);
+        return;
+      }
+
+      final provider = context.read<ReservationsProvider>();
+      final ok = await provider.rejectWaiterReservation(
+        venueId: venueId,
+        reservation: widget.order,
+        reason: reason,
+      );
+
+      if (!context.mounted) return;
+      if (ok) {
+        Navigator.of(context).pop(); // close sheet
+        Navigator.of(context).pop(true); // close details
+      } else {
+        setSheetState(() {
+          submitting = false;
+          fieldError = provider.rejectError ??
+              'Nije moguće odbiti rezervaciju. Pokušaj ponovo.';
+        });
+      }
+    }
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            final bottomInset = MediaQuery.viewInsetsOf(ctx).bottom;
+            return Padding(
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 16 + bottomInset),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Finalna potvrda',
+                          style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: submitting ? null : () => Navigator.of(ctx).pop(),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: controller,
+                    enabled: !submitting,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      hintText: 'Upiši objašnjenje (obavezno polje)',
+                      errorText: fieldError,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: submitting ? null : () => submit(setSheetState),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.destructive,
+                      foregroundColor: AppColors.onDestructive,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: submitting
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('ODBIJ REZERVACIJU'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
