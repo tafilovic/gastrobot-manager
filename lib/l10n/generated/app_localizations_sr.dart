@@ -562,4 +562,14 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get confirmedResCancelButton => 'OTKAŽI REZERVACIJU';
+
+  @override
+  String get editResDialogTitle => 'Izmena';
+
+  @override
+  String get editResNoteHint =>
+      'Upiši razloge i detalje izmene za gosta... (obavezno polje)';
+
+  @override
+  String get editResConfirm => 'POTVRDI IZMENE';
 }

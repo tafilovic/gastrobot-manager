@@ -562,4 +562,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get confirmedResCancelButton => 'RESERVIERUNG STORNIEREN';
+
+  @override
+  String get editResDialogTitle => 'Bearbeitung';
+
+  @override
+  String get editResNoteHint =>
+      'Gründe und Details der Änderung für den Gast eingeben... (Pflichtfeld)';
+
+  @override
+  String get editResConfirm => 'ÄNDERUNGEN BESTÄTIGEN';
 }

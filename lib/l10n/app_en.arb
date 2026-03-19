@@ -176,5 +176,8 @@
   "confirmedResOccasionClassic": "Classic",
   "confirmedResNote": "Note:",
   "confirmedResEditButton": "EDIT RESERVATION",
-  "confirmedResCancelButton": "CANCEL RESERVATION"
+  "confirmedResCancelButton": "CANCEL RESERVATION",
+  "editResDialogTitle": "Edit",
+  "editResNoteHint": "Enter reasons and details of the change for the guest... (required field)",
+  "editResConfirm": "CONFIRM CHANGES"
 }

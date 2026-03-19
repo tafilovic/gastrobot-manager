@@ -181,5 +181,8 @@
   "confirmedResOccasionClassic": "Clásica",
   "confirmedResNote": "Nota:",
   "confirmedResEditButton": "EDITAR RESERVA",
-  "confirmedResCancelButton": "CANCELAR RESERVA"
+  "confirmedResCancelButton": "CANCELAR RESERVA",
+  "editResDialogTitle": "Edición",
+  "editResNoteHint": "Introduce motivos y detalles del cambio para el huésped... (campo obligatorio)",
+  "editResConfirm": "CONFIRMAR CAMBIOS"
 }

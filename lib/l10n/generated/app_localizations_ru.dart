@@ -560,4 +560,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get confirmedResCancelButton => 'ОТМЕНИТЬ БРОНИРОВАНИЕ';
+
+  @override
+  String get editResDialogTitle => 'Изменение';
+
+  @override
+  String get editResNoteHint =>
+      'Введите причины и детали изменения для гостя... (обязательное поле)';
+
+  @override
+  String get editResConfirm => 'ПОДТВЕРДИТЬ ИЗМЕНЕНИЯ';
 }

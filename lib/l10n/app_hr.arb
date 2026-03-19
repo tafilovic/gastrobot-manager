@@ -181,5 +181,8 @@
   "confirmedResOccasionClassic": "Klasična",
   "confirmedResNote": "Napomena:",
   "confirmedResEditButton": "UREDI REZERVACIJU",
-  "confirmedResCancelButton": "OTKAŽI REZERVACIJU"
+  "confirmedResCancelButton": "OTKAŽI REZERVACIJU",
+  "editResDialogTitle": "Izmjena",
+  "editResNoteHint": "Upiši razloge i detalje izmjene za gosta... (obavezno polje)",
+  "editResConfirm": "POTVRDI IZMJENE"
 }

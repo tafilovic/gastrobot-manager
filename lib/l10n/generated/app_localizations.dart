@@ -1115,6 +1115,24 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'OTKAŽI REZERVACIJU'**
   String get confirmedResCancelButton;
+
+  /// No description provided for @editResDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izmena'**
+  String get editResDialogTitle;
+
+  /// No description provided for @editResNoteHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Upiši razloge i detalje izmene za gosta... (obavezno polje)'**
+  String get editResNoteHint;
+
+  /// No description provided for @editResConfirm.
+  ///
+  /// In sr, this message translates to:
+  /// **'POTVRDI IZMENE'**
+  String get editResConfirm;
 }
 
 class _AppLocalizationsDelegate

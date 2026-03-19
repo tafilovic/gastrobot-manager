@@ -181,5 +181,8 @@
   "confirmedResOccasionClassic": "Classica",
   "confirmedResNote": "Nota:",
   "confirmedResEditButton": "MODIFICA PRENOTAZIONE",
-  "confirmedResCancelButton": "ANNULLA PRENOTAZIONE"
+  "confirmedResCancelButton": "ANNULLA PRENOTAZIONE",
+  "editResDialogTitle": "Modifica",
+  "editResNoteHint": "Inserisci motivi e dettagli della modifica per l'ospite... (campo obbligatorio)",
+  "editResConfirm": "CONFERMA MODIFICHE"
 }

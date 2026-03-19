@@ -560,4 +560,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmedResCancelButton => 'CANCEL RESERVATION';
+
+  @override
+  String get editResDialogTitle => 'Edit';
+
+  @override
+  String get editResNoteHint =>
+      'Enter reasons and details of the change for the guest... (required field)';
+
+  @override
+  String get editResConfirm => 'CONFIRM CHANGES';
 }

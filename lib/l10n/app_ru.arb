@@ -181,5 +181,8 @@
   "confirmedResOccasionClassic": "Классическая",
   "confirmedResNote": "Заметка:",
   "confirmedResEditButton": "ИЗМЕНИТЬ БРОНИРОВАНИЕ",
-  "confirmedResCancelButton": "ОТМЕНИТЬ БРОНИРОВАНИЕ"
+  "confirmedResCancelButton": "ОТМЕНИТЬ БРОНИРОВАНИЕ",
+  "editResDialogTitle": "Изменение",
+  "editResNoteHint": "Введите причины и детали изменения для гостя... (обязательное поле)",
+  "editResConfirm": "ПОДТВЕРДИТЬ ИЗМЕНЕНИЯ"
 }

@@ -176,5 +176,8 @@
   "confirmedResOccasionClassic": "Klassisch",
   "confirmedResNote": "Notiz:",
   "confirmedResEditButton": "RESERVIERUNG BEARBEITEN",
-  "confirmedResCancelButton": "RESERVIERUNG STORNIEREN"
+  "confirmedResCancelButton": "RESERVIERUNG STORNIEREN",
+  "editResDialogTitle": "Bearbeitung",
+  "editResNoteHint": "Gründe und Details der Änderung für den Gast eingeben... (Pflichtfeld)",
+  "editResConfirm": "ÄNDERUNGEN BESTÄTIGEN"
 }

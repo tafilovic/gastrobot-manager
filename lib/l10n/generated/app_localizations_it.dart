@@ -562,4 +562,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get confirmedResCancelButton => 'ANNULLA PRENOTAZIONE';
+
+  @override
+  String get editResDialogTitle => 'Modifica';
+
+  @override
+  String get editResNoteHint =>
+      'Inserisci motivi e dettagli della modifica per l\'ospite... (campo obbligatorio)';
+
+  @override
+  String get editResConfirm => 'CONFERMA MODIFICHE';
 }

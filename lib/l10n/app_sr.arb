@@ -278,5 +278,8 @@
   "confirmedResOccasionClassic": "Klasična",
   "confirmedResNote": "Napomena:",
   "confirmedResEditButton": "IZMENI REZERVACIJU",
-  "confirmedResCancelButton": "OTKAŽI REZERVACIJU"
+  "confirmedResCancelButton": "OTKAŽI REZERVACIJU",
+  "editResDialogTitle": "Izmena",
+  "editResNoteHint": "Upiši razloge i detalje izmene za gosta... (obavezno polje)",
+  "editResConfirm": "POTVRDI IZMENE"
 }
