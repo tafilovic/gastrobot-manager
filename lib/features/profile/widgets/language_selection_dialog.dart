@@ -56,7 +56,10 @@ class LanguageSelectionDialog extends StatelessWidget {
                 ),
               ),
             ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 320),
+              constraints: BoxConstraints(
+                maxHeight: (MediaQuery.of(context).size.height * 0.8)
+                    .clamp(200, double.infinity),
+              ),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

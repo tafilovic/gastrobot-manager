@@ -364,6 +364,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get reservationsFilters => 'FILTRI';
+
+  @override
   String get reservationLabelTime => 'Ora:';
 
   @override
@@ -498,6 +501,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get filterDateToday => 'Oggi';
 
   @override
+  String get filterDateYesterday => 'Ieri';
+
+  @override
+  String get filterDateTomorrow => 'Domani';
+
+  @override
   String get filterOrderContent => 'Contenuto ordine:';
 
   @override
@@ -505,6 +514,21 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Cibo';
+
+  @override
+  String get filterPeopleCount => 'Numero di persone:';
+
+  @override
+  String get filterRegion => 'Regione:';
+
+  @override
+  String get filterRegionIndoors => 'Interno';
+
+  @override
+  String get filterRegionGarden => 'Giardino';
+
+  @override
+  String get filterReservationContent => 'Contenuto prenotazione:';
 
   @override
   String get acceptSheetTitle => 'Completa la conferma';

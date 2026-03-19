@@ -362,6 +362,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get reservationsFilters => 'ФИЛЬТРЫ';
+
+  @override
   String get reservationLabelTime => 'Время:';
 
   @override
@@ -496,6 +499,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get filterDateToday => 'Сегодня';
 
   @override
+  String get filterDateYesterday => 'Вчера';
+
+  @override
+  String get filterDateTomorrow => 'Завтра';
+
+  @override
   String get filterOrderContent => 'Содержимое заказа:';
 
   @override
@@ -503,6 +512,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Еда';
+
+  @override
+  String get filterPeopleCount => 'Количество человек:';
+
+  @override
+  String get filterRegion => 'Регион:';
+
+  @override
+  String get filterRegionIndoors => 'В помещении';
+
+  @override
+  String get filterRegionGarden => 'Сад';
+
+  @override
+  String get filterReservationContent => 'Содержимое брони:';
 
   @override
   String get acceptSheetTitle => 'Завершить подтверждение';

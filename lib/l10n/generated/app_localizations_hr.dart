@@ -364,6 +364,9 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get reservationsFilters => 'FILTRI';
+
+  @override
   String get reservationLabelTime => 'Vrijeme:';
 
   @override
@@ -498,6 +501,12 @@ class AppLocalizationsHr extends AppLocalizations {
   String get filterDateToday => 'Danas';
 
   @override
+  String get filterDateYesterday => 'Jučer';
+
+  @override
+  String get filterDateTomorrow => 'Sutra';
+
+  @override
   String get filterOrderContent => 'Sadržaj narudžbe:';
 
   @override
@@ -505,6 +514,21 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Hrana';
+
+  @override
+  String get filterPeopleCount => 'Broj ljudi:';
+
+  @override
+  String get filterRegion => 'Region:';
+
+  @override
+  String get filterRegionIndoors => 'Unutrašnjost';
+
+  @override
+  String get filterRegionGarden => 'Bašta';
+
+  @override
+  String get filterReservationContent => 'Sadržaj rezervacije:';
 
   @override
   String get acceptSheetTitle => 'Dovrši potvrdu';

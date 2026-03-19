@@ -744,6 +744,12 @@ abstract class AppLocalizations {
   /// **'{count} rezervacije'**
   String reservationCountList(int count);
 
+  /// No description provided for @reservationsFilters.
+  ///
+  /// In sr, this message translates to:
+  /// **'FILTERI'**
+  String get reservationsFilters;
+
   /// No description provided for @reservationLabelTime.
   ///
   /// In sr, this message translates to:
@@ -996,6 +1002,18 @@ abstract class AppLocalizations {
   /// **'Danas'**
   String get filterDateToday;
 
+  /// No description provided for @filterDateYesterday.
+  ///
+  /// In sr, this message translates to:
+  /// **'Juče'**
+  String get filterDateYesterday;
+
+  /// No description provided for @filterDateTomorrow.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sutra'**
+  String get filterDateTomorrow;
+
   /// No description provided for @filterOrderContent.
   ///
   /// In sr, this message translates to:
@@ -1013,6 +1031,36 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Hrana'**
   String get filterOrderContentFood;
+
+  /// No description provided for @filterPeopleCount.
+  ///
+  /// In sr, this message translates to:
+  /// **'Broj ljudi:'**
+  String get filterPeopleCount;
+
+  /// No description provided for @filterRegion.
+  ///
+  /// In sr, this message translates to:
+  /// **'Region:'**
+  String get filterRegion;
+
+  /// No description provided for @filterRegionIndoors.
+  ///
+  /// In sr, this message translates to:
+  /// **'Unutrašnjost'**
+  String get filterRegionIndoors;
+
+  /// No description provided for @filterRegionGarden.
+  ///
+  /// In sr, this message translates to:
+  /// **'Bašta'**
+  String get filterRegionGarden;
+
+  /// No description provided for @filterReservationContent.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sadržaj rezervacije:'**
+  String get filterReservationContent;
 
   /// No description provided for @acceptSheetTitle.
   ///

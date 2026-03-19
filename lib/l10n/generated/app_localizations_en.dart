@@ -363,6 +363,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get reservationsFilters => 'FILTERS';
+
+  @override
   String get reservationLabelTime => 'Time:';
 
   @override
@@ -497,6 +500,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterDateToday => 'Today';
 
   @override
+  String get filterDateYesterday => 'Yesterday';
+
+  @override
+  String get filterDateTomorrow => 'Tomorrow';
+
+  @override
   String get filterOrderContent => 'Order content:';
 
   @override
@@ -504,6 +513,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Food';
+
+  @override
+  String get filterPeopleCount => 'Number of people:';
+
+  @override
+  String get filterRegion => 'Region:';
+
+  @override
+  String get filterRegionIndoors => 'Indoors';
+
+  @override
+  String get filterRegionGarden => 'Garden';
+
+  @override
+  String get filterReservationContent => 'Reservation content:';
 
   @override
   String get acceptSheetTitle => 'Complete confirmation';

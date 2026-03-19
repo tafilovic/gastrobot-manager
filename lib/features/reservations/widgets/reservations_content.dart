@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
@@ -9,6 +11,7 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -41,6 +44,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
   int _selectedTabIndex = 0;
   PendingOrder? _selectedRequest;
   ConfirmedReservation? _selectedConfirmed;
+  ActiveReservationsFilters? _activeReservationsFilters;
 
   @override
   void initState() {
@@ -56,6 +60,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
       _selectedTabIndex = idx;
       _selectedRequest = null;
       _selectedConfirmed = null;
+      if (idx != 1) _activeReservationsFilters = null;
     });
     if (context.mounted) {
       final venueId = context.read<AuthProvider>().currentVenueId;
@@ -79,12 +84,16 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final totalItems = requests.fold<int>(0, (sum, o) => sum + o.itemCount);
 
     final confirmedProvider = context.watch<ConfirmedReservationsProvider>();
+    final filteredConfirmed = _applyReservationFilters(
+      confirmedProvider.items,
+      _activeReservationsFilters,
+    );
 
     final isBar =
         profileType == ProfileType.bar || profileType == ProfileType.waiter;
     final countLabel = profileType == ProfileType.waiter
         ? (_selectedTabIndex == 1
-              ? l10n.reservationCountList(confirmedProvider.items.length)
+              ? l10n.reservationCountList(filteredConfirmed.length)
               : l10n.reservationCountList(requests.length))
         : (isBar
               ? l10n.reservationCountDrinks(totalItems)
@@ -143,6 +152,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                   l10n,
                   provider,
                   confirmedProvider,
+                  filteredConfirmed,
                   profileType,
                   countLabel,
                   itemCountForCard,
@@ -239,12 +249,40 @@ class _ReservationsContentState extends State<ReservationsContent> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              child: Text(
-                countLabel,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
+              child: _selectedTabIndex == 1 &&
+                      profileType == ProfileType.waiter
+                  ? Row(
+                      children: [
+                        Text(
+                          countLabel,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const Spacer(),
+                        TextButton.icon(
+                          onPressed: _openReservationFilters,
+                          icon: Icon(
+                            Icons.filter_list,
+                            size: 18,
+                            color: widget.accentColor,
+                          ),
+                          label: Text(
+                            l10n.reservationsFilters,
+                            style: TextStyle(
+                              color: widget.accentColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text(
+                      countLabel,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
             ),
             Expanded(
               child: LayoutBuilder(
@@ -270,6 +308,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                             context,
                             l10n,
                             confirmedProvider,
+                            filteredConfirmed,
                             crossAxisCount,
                             onSeeConfirmedDetails,
                           )
@@ -338,6 +377,101 @@ class _ReservationsContentState extends State<ReservationsContent> {
     );
   }
 
+  Future<void> _openReservationFilters() async {
+    final result = await context.push<ActiveReservationsFilters>(
+      AppRouteNames.pathReservationsFilterActive,
+      extra: _activeReservationsFilters,
+    );
+    if (result != null && mounted) {
+      setState(() => _activeReservationsFilters = result);
+    }
+  }
+
+  List<ConfirmedReservation> _applyReservationFilters(
+    List<ConfirmedReservation> items,
+    ActiveReservationsFilters? filters,
+  ) {
+    if (filters == null || filters.isEmpty) return items;
+    return items.where((r) {
+      if (filters.dateFrom != null) {
+        final day = DateTime(
+          r.reservationStart.year,
+          r.reservationStart.month,
+          r.reservationStart.day,
+        );
+        final from = DateTime(
+          filters.dateFrom!.year,
+          filters.dateFrom!.month,
+          filters.dateFrom!.day,
+        );
+        if (day.isBefore(from)) return false;
+      }
+      if (filters.dateTo != null) {
+        final day = DateTime(
+          r.reservationStart.year,
+          r.reservationStart.month,
+          r.reservationStart.day,
+        );
+        final to = DateTime(
+          filters.dateTo!.year,
+          filters.dateTo!.month,
+          filters.dateTo!.day,
+        );
+        if (day.isAfter(to)) return false;
+      }
+      if (filters.peopleCounts.isNotEmpty) {
+        if (!filters.peopleCounts.contains(r.peopleCount)) return false;
+      }
+      if (filters.regions.isNotEmpty) {
+        final regionLower = r.regionTitle?.toLowerCase() ?? '';
+        final matches = filters.regions.any((reg) {
+          if (reg == ActiveReservationsFilters.regionIndoors) {
+            return _regionIndoorsKeywords.any((k) => regionLower.contains(k));
+          }
+          if (reg == ActiveReservationsFilters.regionGarden) {
+            return _regionGardenKeywords.any((k) => regionLower.contains(k));
+          }
+          return false;
+        });
+        if (!matches) return false;
+      }
+      if (filters.reservationContents.isNotEmpty) {
+        final hasFood = r.foodItems.isNotEmpty;
+        final hasDrink = r.drinkItems.isNotEmpty;
+        final matches = filters.reservationContents.every((c) {
+          if (c == ActiveReservationsFilters.contentFood) return hasFood;
+          if (c == ActiveReservationsFilters.contentDrink) return hasDrink;
+          return false;
+        });
+        if (!matches) return false;
+      }
+      if (filters.tableNumbers.isNotEmpty) {
+        final tableNames = r.tables.map((t) => t.name).toSet();
+        final hasMatch =
+            filters.tableNumbers.any((t) => tableNames.contains(t));
+        if (!hasMatch) return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  static const _regionIndoorsKeywords = [
+    'unutrašnjost',
+    'indoors',
+    'innen',
+    'interior',
+    'interno',
+    'в помещении',
+  ];
+  static const _regionGardenKeywords = [
+    'bašta',
+    'garden',
+    'garten',
+    'jardín',
+    'giardino',
+    'сад',
+  ];
+
   Future<void> _openRequestDetails(
     BuildContext context,
     PendingOrder order,
@@ -359,6 +493,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
     AppLocalizations l10n,
     ReservationsProvider provider,
     ConfirmedReservationsProvider confirmedProvider,
+    List<ConfirmedReservation> filteredConfirmed,
     ProfileType? profileType,
     String countLabel,
     String Function(PendingOrder) itemCountForCard,
@@ -417,12 +552,39 @@ class _ReservationsContentState extends State<ReservationsContent> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-          child: Text(
-            countLabel,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
+          child: _selectedTabIndex == 1 && profileType == ProfileType.waiter
+              ? Row(
+                  children: [
+                    Text(
+                      countLabel,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton.icon(
+                      onPressed: _openReservationFilters,
+                      icon: Icon(
+                        Icons.filter_list,
+                        size: 18,
+                        color: widget.accentColor,
+                      ),
+                      label: Text(
+                        l10n.reservationsFilters,
+                        style: TextStyle(
+                          color: widget.accentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  countLabel,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
         ),
         Expanded(
           child: _selectedTabIndex == 1
@@ -430,6 +592,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                   context,
                   l10n,
                   confirmedProvider,
+                  filteredConfirmed,
                   1,
                   onSeeConfirmedDetails,
                 )
@@ -575,6 +738,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
     BuildContext context,
     AppLocalizations l10n,
     ConfirmedReservationsProvider confirmedProvider,
+    List<ConfirmedReservation> items,
     int crossAxisCount,
     void Function(ConfirmedReservation) onSeeDetails,
   ) {
@@ -610,8 +774,6 @@ class _ReservationsContentState extends State<ReservationsContent> {
         ],
       );
     }
-
-    final items = confirmedProvider.items;
 
     if (items.isEmpty) {
       return ListView(

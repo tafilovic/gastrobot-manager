@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -17,6 +18,8 @@ import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.
 import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dart';
 import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
 import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/screens/active_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
 
@@ -43,8 +46,9 @@ abstract class AppRouteNames {
   static const filterActiveOrders = 'filter-active-orders';
   static const filterHistoryOrders = 'filter-history-orders';
 
-  // Reservations details (placeholder for future expansion)
+  // Reservations details / filters
   static const reservationDetails = 'reservation-details';
+  static const filterActiveReservations = 'filter-active-reservations';
 
   // Path constants
   static const pathLogin = '/login';
@@ -63,6 +67,7 @@ abstract class AppRouteNames {
   static const pathOrdersDetails = '/orders/details';
   static const pathOrdersFilterActive = '/orders/filter/active';
   static const pathOrdersFilterHistory = '/orders/filter/history';
+  static const pathReservationsFilterActive = '/reservations/filter/active';
 }
 
 /// Centralized app router factory.
@@ -82,6 +87,16 @@ class AppRouter {
       refreshListenable: auth,
       debugLogDiagnostics: false,
       routes: [
+        GoRoute(
+          path: '/',
+          redirect: (context, state) {
+            final auth = context.read<AuthProvider>();
+            if (!auth.isLoggedIn) return AppRouteNames.pathLogin;
+            return auth.profileType == ProfileType.waiter
+                ? AppRouteNames.pathReady
+                : AppRouteNames.pathOrders;
+          },
+        ),
         GoRoute(
           path: AppRouteNames.pathLogin,
           name: AppRouteNames.login,
@@ -203,6 +218,21 @@ class AppRouter {
                   path: AppRouteNames.pathReservations,
                   name: AppRouteNames.reservations,
                   builder: (context, state) => const ReservationsScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'filter/active',
+                      name: AppRouteNames.filterActiveReservations,
+                      builder: (context, state) {
+                        final initialFilters = state.extra;
+                        return ActiveReservationsFilterScreen(
+                          initialFilters: initialFilters
+                              is ActiveReservationsFilters
+                              ? initialFilters
+                              : null,
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
