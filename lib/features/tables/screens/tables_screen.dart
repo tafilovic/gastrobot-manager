@@ -8,6 +8,7 @@ import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
+import 'package:gastrobotmanager/features/tables/widgets/table_reservations_dialog.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Tables overview screen — lists all venue tables with their status.
@@ -68,7 +69,7 @@ class _TablesScreenState extends State<TablesScreen> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // TODO: implement reservation flow
+                            showTableReservationsDialog(context);
                           },
                           style: OutlinedButton.styleFrom(
                             foregroundColor: accentColor,
@@ -216,7 +217,8 @@ class _TablesList extends StatelessWidget {
                       vertical: 8,
                     ),
                     itemCount: tables.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    separatorBuilder: (context, _) =>
+                        const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final table = tables[index];
                       return ListItemEntrance(

@@ -1241,6 +1241,78 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'{count} mesta'**
   String tableSeatCount(int count);
+
+  /// No description provided for @tableReservationDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Rezervacija'**
+  String get tableReservationDialogTitle;
+
+  /// No description provided for @tableReservationNameHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Na ime...'**
+  String get tableReservationNameHint;
+
+  /// No description provided for @tableReservationNameRequired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Unesite ime'**
+  String get tableReservationNameRequired;
+
+  /// No description provided for @tableReservationPartySizeHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Broj ljudi'**
+  String get tableReservationPartySizeHint;
+
+  /// No description provided for @tableReservationPartySizeRequired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izaberite broj ljudi'**
+  String get tableReservationPartySizeRequired;
+
+  /// No description provided for @tableReservationDateHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Datum'**
+  String get tableReservationDateHint;
+
+  /// No description provided for @tableReservationDateRequired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izaberite datum'**
+  String get tableReservationDateRequired;
+
+  /// No description provided for @tableReservationTimeHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Vreme'**
+  String get tableReservationTimeHint;
+
+  /// No description provided for @tableReservationTimeRequired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izaberite vreme'**
+  String get tableReservationTimeRequired;
+
+  /// No description provided for @tableReservationTableRequired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izaberite sto'**
+  String get tableReservationTableRequired;
+
+  /// No description provided for @tableReservationInternalNoteHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Upiši internu napomenu...'**
+  String get tableReservationInternalNoteHint;
+
+  /// No description provided for @tableReservationCreateButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'KREIRAJ REZERVACIJU'**
+  String get tableReservationCreateButton;
 }
 
 class _AppLocalizationsDelegate

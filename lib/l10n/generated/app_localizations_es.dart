@@ -629,4 +629,41 @@ class AppLocalizationsEs extends AppLocalizations {
   String tableSeatCount(int count) {
     return '$count asientos';
   }
+
+  @override
+  String get tableReservationDialogTitle => 'Reserva';
+
+  @override
+  String get tableReservationNameHint => 'A nombre de...';
+
+  @override
+  String get tableReservationNameRequired => 'Introduce el nombre';
+
+  @override
+  String get tableReservationPartySizeHint => 'Número de personas';
+
+  @override
+  String get tableReservationPartySizeRequired =>
+      'Selecciona número de personas';
+
+  @override
+  String get tableReservationDateHint => 'Fecha';
+
+  @override
+  String get tableReservationDateRequired => 'Selecciona fecha';
+
+  @override
+  String get tableReservationTimeHint => 'Hora';
+
+  @override
+  String get tableReservationTimeRequired => 'Selecciona hora';
+
+  @override
+  String get tableReservationTableRequired => 'Selecciona mesa';
+
+  @override
+  String get tableReservationInternalNoteHint => 'Introduce nota interna...';
+
+  @override
+  String get tableReservationCreateButton => 'CREAR RESERVA';
 }

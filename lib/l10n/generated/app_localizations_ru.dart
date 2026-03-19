@@ -627,4 +627,41 @@ class AppLocalizationsRu extends AppLocalizations {
   String tableSeatCount(int count) {
     return '$count мест';
   }
+
+  @override
+  String get tableReservationDialogTitle => 'Бронирование';
+
+  @override
+  String get tableReservationNameHint => 'На имя...';
+
+  @override
+  String get tableReservationNameRequired => 'Введите имя';
+
+  @override
+  String get tableReservationPartySizeHint => 'Количество гостей';
+
+  @override
+  String get tableReservationPartySizeRequired => 'Выберите количество гостей';
+
+  @override
+  String get tableReservationDateHint => 'Дата';
+
+  @override
+  String get tableReservationDateRequired => 'Выберите дату';
+
+  @override
+  String get tableReservationTimeHint => 'Время';
+
+  @override
+  String get tableReservationTimeRequired => 'Выберите время';
+
+  @override
+  String get tableReservationTableRequired => 'Выберите стол';
+
+  @override
+  String get tableReservationInternalNoteHint =>
+      'Введите внутреннюю заметку...';
+
+  @override
+  String get tableReservationCreateButton => 'СОЗДАТЬ БРОНИРОВАНИЕ';
 }

@@ -628,4 +628,40 @@ class AppLocalizationsHr extends AppLocalizations {
   String tableSeatCount(int count) {
     return '$count mjesta';
   }
+
+  @override
+  String get tableReservationDialogTitle => 'Rezervacija';
+
+  @override
+  String get tableReservationNameHint => 'Na ime...';
+
+  @override
+  String get tableReservationNameRequired => 'Unesite ime';
+
+  @override
+  String get tableReservationPartySizeHint => 'Broj ljudi';
+
+  @override
+  String get tableReservationPartySizeRequired => 'Odaberite broj ljudi';
+
+  @override
+  String get tableReservationDateHint => 'Datum';
+
+  @override
+  String get tableReservationDateRequired => 'Odaberite datum';
+
+  @override
+  String get tableReservationTimeHint => 'Vrijeme';
+
+  @override
+  String get tableReservationTimeRequired => 'Odaberite vrijeme';
+
+  @override
+  String get tableReservationTableRequired => 'Odaberite stol';
+
+  @override
+  String get tableReservationInternalNoteHint => 'Upiši internu napomenu...';
+
+  @override
+  String get tableReservationCreateButton => 'KREIRAJ REZERVACIJU';
 }

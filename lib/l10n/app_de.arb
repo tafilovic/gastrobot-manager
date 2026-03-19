@@ -198,5 +198,17 @@
   "buttonAccept": "ANNEHMEN",
   "labelFoodDrink": "Essen/Trinken:",
   "tableSeatCount": "{count} Plätze",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableReservationDialogTitle": "Reservierung",
+  "tableReservationNameHint": "Auf den Namen...",
+  "tableReservationNameRequired": "Name eingeben",
+  "tableReservationPartySizeHint": "Anzahl Personen",
+  "tableReservationPartySizeRequired": "Anzahl Personen auswählen",
+  "tableReservationDateHint": "Datum",
+  "tableReservationDateRequired": "Datum auswählen",
+  "tableReservationTimeHint": "Uhrzeit",
+  "tableReservationTimeRequired": "Uhrzeit auswählen",
+  "tableReservationTableRequired": "Tisch auswählen",
+  "tableReservationInternalNoteHint": "Interne Notiz eingeben...",
+  "tableReservationCreateButton": "RESERVIERUNG ERSTELLEN"
 }

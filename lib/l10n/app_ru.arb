@@ -203,5 +203,17 @@
   "buttonAccept": "ПРИНЯТЬ",
   "labelFoodDrink": "Еда/Напитки:",
   "tableSeatCount": "{count} мест",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableReservationDialogTitle": "Бронирование",
+  "tableReservationNameHint": "На имя...",
+  "tableReservationNameRequired": "Введите имя",
+  "tableReservationPartySizeHint": "Количество гостей",
+  "tableReservationPartySizeRequired": "Выберите количество гостей",
+  "tableReservationDateHint": "Дата",
+  "tableReservationDateRequired": "Выберите дату",
+  "tableReservationTimeHint": "Время",
+  "tableReservationTimeRequired": "Выберите время",
+  "tableReservationTableRequired": "Выберите стол",
+  "tableReservationInternalNoteHint": "Введите внутреннюю заметку...",
+  "tableReservationCreateButton": "СОЗДАТЬ БРОНИРОВАНИЕ"
 }

@@ -203,5 +203,17 @@
   "buttonAccept": "PRIHVATI",
   "labelFoodDrink": "Hrana/Piće:",
   "tableSeatCount": "{count} mjesta",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableReservationDialogTitle": "Rezervacija",
+  "tableReservationNameHint": "Na ime...",
+  "tableReservationNameRequired": "Unesite ime",
+  "tableReservationPartySizeHint": "Broj ljudi",
+  "tableReservationPartySizeRequired": "Odaberite broj ljudi",
+  "tableReservationDateHint": "Datum",
+  "tableReservationDateRequired": "Odaberite datum",
+  "tableReservationTimeHint": "Vrijeme",
+  "tableReservationTimeRequired": "Odaberite vrijeme",
+  "tableReservationTableRequired": "Odaberite stol",
+  "tableReservationInternalNoteHint": "Upiši internu napomenu...",
+  "tableReservationCreateButton": "KREIRAJ REZERVACIJU"
 }

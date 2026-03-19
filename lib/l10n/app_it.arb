@@ -203,5 +203,17 @@
   "buttonAccept": "ACCETTA",
   "labelFoodDrink": "Cibo/Bevande:",
   "tableSeatCount": "{count} posti",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableReservationDialogTitle": "Prenotazione",
+  "tableReservationNameHint": "A nome di...",
+  "tableReservationNameRequired": "Inserisci il nome",
+  "tableReservationPartySizeHint": "Numero di persone",
+  "tableReservationPartySizeRequired": "Seleziona numero di persone",
+  "tableReservationDateHint": "Data",
+  "tableReservationDateRequired": "Seleziona data",
+  "tableReservationTimeHint": "Ora",
+  "tableReservationTimeRequired": "Seleziona ora",
+  "tableReservationTableRequired": "Seleziona tavolo",
+  "tableReservationInternalNoteHint": "Inserisci nota interna...",
+  "tableReservationCreateButton": "CREA PRENOTAZIONE"
 }
