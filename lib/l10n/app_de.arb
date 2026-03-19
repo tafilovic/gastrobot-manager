@@ -168,5 +168,13 @@
   "acceptSheetRegionLabel": "Bereich {number}",
   "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
   "acceptSheetReservationAt": "Reservierung um {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Gast:",
+  "confirmedResTableNumber": "Tisch:",
+  "confirmedResOccasion": "Anlass:",
+  "confirmedResOccasionBirthday": "Geburtstag",
+  "confirmedResOccasionClassic": "Klassisch",
+  "confirmedResNote": "Notiz:",
+  "confirmedResEditButton": "RESERVIERUNG BEARBEITEN",
+  "confirmedResCancelButton": "RESERVIERUNG STORNIEREN"
 }

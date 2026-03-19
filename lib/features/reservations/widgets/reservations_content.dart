@@ -8,8 +8,11 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
+import 'package:gastrobotmanager/features/reservations/screens/confirmed_reservation_details_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservation_details_screen.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_request_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -46,9 +49,13 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final requests = provider.requests;
     final totalItems = requests.fold<int>(0, (sum, o) => sum + o.itemCount);
 
+    final confirmedProvider = context.watch<ConfirmedReservationsProvider>();
+
     final isBar = profileType == ProfileType.bar || profileType == ProfileType.waiter;
     final countLabel = profileType == ProfileType.waiter
-        ? l10n.reservationCountList(requests.length)
+        ? (_selectedTabIndex == 1
+            ? l10n.reservationCountList(confirmedProvider.items.length)
+            : l10n.reservationCountList(requests.length))
         : (isBar
             ? l10n.reservationCountDrinks(totalItems)
             : l10n.reservationCountDishes(totalItems));
@@ -95,10 +102,18 @@ class _ReservationsContentState extends State<ReservationsContent> {
                       onSelectionChanged: (Set<int> selected) {
                         final idx = selected.first;
                         setState(() => _selectedTabIndex = idx);
-                        if (idx == 0 &&
-                            profileType == ProfileType.waiter &&
-                            context.mounted) {
-                          context.read<ReservationsProvider>().pullRefresh();
+                        if (context.mounted) {
+                          final venueId =
+                              context.read<AuthProvider>().currentVenueId;
+                          if (idx == 0 && profileType == ProfileType.waiter) {
+                            context.read<ReservationsProvider>().pullRefresh();
+                          } else if (idx == 1 &&
+                              profileType == ProfileType.waiter &&
+                              venueId != null) {
+                            context
+                                .read<ConfirmedReservationsProvider>()
+                                .load(venueId);
+                          }
                         }
                       },
                       style: ButtonStyle(
@@ -133,7 +148,11 @@ class _ReservationsContentState extends State<ReservationsContent> {
               child: ConstrainedContent(
                 padding: EdgeInsets.zero,
                 child: _selectedTabIndex == 1
-                    ? _buildAcceptedPlaceholder(l10n, provider)
+                    ? _buildConfirmedList(
+                        context,
+                        l10n,
+                        confirmedProvider,
+                      )
                     : RefreshIndicator(
                       onRefresh: () => provider.pullRefresh(),
                       child: provider.isLoading && requests.isEmpty
@@ -215,23 +234,91 @@ class _ReservationsContentState extends State<ReservationsContent> {
     );
   }
 
-  Widget _buildAcceptedPlaceholder(
+  Widget _buildConfirmedList(
+    BuildContext context,
     AppLocalizations l10n,
-    ReservationsProvider provider,
+    ConfirmedReservationsProvider confirmedProvider,
   ) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Center(
-            child: Text(
-              l10n.reservationsTabAccepted,
-              style: const TextStyle(color: AppColors.textMuted),
+    if (confirmedProvider.isLoading && confirmedProvider.items.isEmpty) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+        ],
+      );
+    }
+
+    if (confirmedProvider.error != null && confirmedProvider.items.isEmpty) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  confirmedProvider.error!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.error),
+                ),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      );
+    }
+
+    final items = confirmedProvider.items;
+
+    if (items.isEmpty) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Center(
+              child: Text(
+                l10n.reservationsTabAccepted,
+                style: const TextStyle(color: AppColors.textMuted),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: () => confirmedProvider.pullRefresh(),
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final reservation = items[index];
+          return ListItemEntrance(
+            index: index,
+              child: ConfirmedReservationCard(
+              reservation: reservation,
+              l10n: l10n,
+              accentColor: widget.accentColor,
+              onSeeDetails: () {
+                Navigator.of(context).push<void>(
+                  FadeSlidePageRoute<void>(
+                    builder: (_) => ConfirmedReservationDetailsScreen(
+                      reservation: reservation,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

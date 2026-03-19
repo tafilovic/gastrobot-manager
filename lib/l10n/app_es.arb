@@ -173,5 +173,13 @@
   "acceptSheetRegionLabel": "Zona {number}",
   "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
   "acceptSheetReservationAt": "Reserva a las {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Cliente:",
+  "confirmedResTableNumber": "Mesa:",
+  "confirmedResOccasion": "Ocasión:",
+  "confirmedResOccasionBirthday": "Cumpleaños",
+  "confirmedResOccasionClassic": "Clásica",
+  "confirmedResNote": "Nota:",
+  "confirmedResEditButton": "EDITAR RESERVA",
+  "confirmedResCancelButton": "CANCELAR RESERVA"
 }

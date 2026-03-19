@@ -168,5 +168,13 @@
   "acceptSheetRegionLabel": "Region {number}",
   "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
   "acceptSheetReservationAt": "Reservation at {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "User:",
+  "confirmedResTableNumber": "Table:",
+  "confirmedResOccasion": "Occasion:",
+  "confirmedResOccasionBirthday": "Birthday",
+  "confirmedResOccasionClassic": "Classic",
+  "confirmedResNote": "Note:",
+  "confirmedResEditButton": "EDIT RESERVATION",
+  "confirmedResCancelButton": "CANCEL RESERVATION"
 }

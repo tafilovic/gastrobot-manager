@@ -536,4 +536,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String acceptSheetReservationAt(String time) {
     return 'Reservation at $time';
   }
+
+  @override
+  String get confirmedResUser => 'User:';
+
+  @override
+  String get confirmedResTableNumber => 'Table:';
+
+  @override
+  String get confirmedResOccasion => 'Occasion:';
+
+  @override
+  String get confirmedResOccasionBirthday => 'Birthday';
+
+  @override
+  String get confirmedResOccasionClassic => 'Classic';
+
+  @override
+  String get confirmedResNote => 'Note:';
+
+  @override
+  String get confirmedResEditButton => 'EDIT RESERVATION';
+
+  @override
+  String get confirmedResCancelButton => 'CANCEL RESERVATION';
 }

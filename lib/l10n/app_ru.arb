@@ -173,5 +173,13 @@
   "acceptSheetRegionLabel": "Зона {number}",
   "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
   "acceptSheetReservationAt": "Бронирование в {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Гость:",
+  "confirmedResTableNumber": "Стол:",
+  "confirmedResOccasion": "Повод:",
+  "confirmedResOccasionBirthday": "День рождения",
+  "confirmedResOccasionClassic": "Классическая",
+  "confirmedResNote": "Заметка:",
+  "confirmedResEditButton": "ИЗМЕНИТЬ БРОНИРОВАНИЕ",
+  "confirmedResCancelButton": "ОТМЕНИТЬ БРОНИРОВАНИЕ"
 }

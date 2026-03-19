@@ -537,4 +537,28 @@ class AppLocalizationsHr extends AppLocalizations {
   String acceptSheetReservationAt(String time) {
     return 'Rezervacija u $time';
   }
+
+  @override
+  String get confirmedResUser => 'Korisnik:';
+
+  @override
+  String get confirmedResTableNumber => 'Broj stola:';
+
+  @override
+  String get confirmedResOccasion => 'Prigoda:';
+
+  @override
+  String get confirmedResOccasionBirthday => 'Rođendan';
+
+  @override
+  String get confirmedResOccasionClassic => 'Klasična';
+
+  @override
+  String get confirmedResNote => 'Napomena:';
+
+  @override
+  String get confirmedResEditButton => 'UREDI REZERVACIJU';
+
+  @override
+  String get confirmedResCancelButton => 'OTKAŽI REZERVACIJU';
 }

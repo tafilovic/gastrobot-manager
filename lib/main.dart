@@ -41,6 +41,9 @@ import 'package:gastrobotmanager/features/reservations/providers/reservations_pr
 import 'package:gastrobotmanager/features/regions/data/regions_remote.dart';
 import 'package:gastrobotmanager/features/regions/domain/repositories/regions_api.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
+import 'package:gastrobotmanager/features/reservations/data/confirmed_reservations_remote.dart';
+import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
+import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/tables/data/tables_remote.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
@@ -244,6 +247,15 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
         ChangeNotifierProvider<RegionsProvider>(
           create: (c) => RegionsProvider(c.read<RegionsApi>()),
+        ),
+
+        // Confirmed reservations (waiter: "Prihvaćeno" tab)
+        Provider<ConfirmedReservationsApi>(
+          create: (_) => ConfirmedReservationsRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<ConfirmedReservationsProvider>(
+          create: (c) =>
+              ConfirmedReservationsProvider(c.read<ConfirmedReservationsApi>()),
         ),
       ],
       child: const GastroBotApp(),

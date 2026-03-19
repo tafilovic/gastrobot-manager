@@ -270,5 +270,13 @@
   "acceptSheetRegionLabel": "Region {number}",
   "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
   "acceptSheetReservationAt": "Rezervacija u {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Korisnik:",
+  "confirmedResTableNumber": "Sto broj:",
+  "confirmedResOccasion": "Povod:",
+  "confirmedResOccasionBirthday": "Rođendan",
+  "confirmedResOccasionClassic": "Klasična",
+  "confirmedResNote": "Napomena:",
+  "confirmedResEditButton": "IZMENI REZERVACIJU",
+  "confirmedResCancelButton": "OTKAŽI REZERVACIJU"
 }

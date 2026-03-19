@@ -538,4 +538,28 @@ class AppLocalizationsIt extends AppLocalizations {
   String acceptSheetReservationAt(String time) {
     return 'Prenotazione alle $time';
   }
+
+  @override
+  String get confirmedResUser => 'Cliente:';
+
+  @override
+  String get confirmedResTableNumber => 'Tavolo:';
+
+  @override
+  String get confirmedResOccasion => 'Occasione:';
+
+  @override
+  String get confirmedResOccasionBirthday => 'Compleanno';
+
+  @override
+  String get confirmedResOccasionClassic => 'Classica';
+
+  @override
+  String get confirmedResNote => 'Nota:';
+
+  @override
+  String get confirmedResEditButton => 'MODIFICA PRENOTAZIONE';
+
+  @override
+  String get confirmedResCancelButton => 'ANNULLA PRENOTAZIONE';
 }

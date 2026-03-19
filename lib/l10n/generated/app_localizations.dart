@@ -1067,6 +1067,54 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Rezervacija u {time}'**
   String acceptSheetReservationAt(String time);
+
+  /// No description provided for @confirmedResUser.
+  ///
+  /// In sr, this message translates to:
+  /// **'Korisnik:'**
+  String get confirmedResUser;
+
+  /// No description provided for @confirmedResTableNumber.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sto broj:'**
+  String get confirmedResTableNumber;
+
+  /// No description provided for @confirmedResOccasion.
+  ///
+  /// In sr, this message translates to:
+  /// **'Povod:'**
+  String get confirmedResOccasion;
+
+  /// No description provided for @confirmedResOccasionBirthday.
+  ///
+  /// In sr, this message translates to:
+  /// **'Rođendan'**
+  String get confirmedResOccasionBirthday;
+
+  /// No description provided for @confirmedResOccasionClassic.
+  ///
+  /// In sr, this message translates to:
+  /// **'Klasična'**
+  String get confirmedResOccasionClassic;
+
+  /// No description provided for @confirmedResNote.
+  ///
+  /// In sr, this message translates to:
+  /// **'Napomena:'**
+  String get confirmedResNote;
+
+  /// No description provided for @confirmedResEditButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'IZMENI REZERVACIJU'**
+  String get confirmedResEditButton;
+
+  /// No description provided for @confirmedResCancelButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'OTKAŽI REZERVACIJU'**
+  String get confirmedResCancelButton;
 }
 
 class _AppLocalizationsDelegate

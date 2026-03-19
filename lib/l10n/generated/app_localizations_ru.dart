@@ -536,4 +536,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String acceptSheetReservationAt(String time) {
     return 'Бронирование в $time';
   }
+
+  @override
+  String get confirmedResUser => 'Гость:';
+
+  @override
+  String get confirmedResTableNumber => 'Стол:';
+
+  @override
+  String get confirmedResOccasion => 'Повод:';
+
+  @override
+  String get confirmedResOccasionBirthday => 'День рождения';
+
+  @override
+  String get confirmedResOccasionClassic => 'Классическая';
+
+  @override
+  String get confirmedResNote => 'Заметка:';
+
+  @override
+  String get confirmedResEditButton => 'ИЗМЕНИТЬ БРОНИРОВАНИЕ';
+
+  @override
+  String get confirmedResCancelButton => 'ОТМЕНИТЬ БРОНИРОВАНИЕ';
 }

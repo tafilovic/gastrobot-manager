@@ -173,5 +173,13 @@
   "acceptSheetRegionLabel": "Zona {number}",
   "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
   "acceptSheetReservationAt": "Rezervacija u {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Korisnik:",
+  "confirmedResTableNumber": "Broj stola:",
+  "confirmedResOccasion": "Prigoda:",
+  "confirmedResOccasionBirthday": "Rođendan",
+  "confirmedResOccasionClassic": "Klasična",
+  "confirmedResNote": "Napomena:",
+  "confirmedResEditButton": "UREDI REZERVACIJU",
+  "confirmedResCancelButton": "OTKAŽI REZERVACIJU"
 }
