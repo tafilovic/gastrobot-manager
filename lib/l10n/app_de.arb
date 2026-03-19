@@ -179,5 +179,16 @@
   "confirmedResCancelButton": "RESERVIERUNG STORNIEREN",
   "editResDialogTitle": "Bearbeitung",
   "editResNoteHint": "Gründe und Details der Änderung für den Gast eingeben... (Pflichtfeld)",
-  "editResConfirm": "ÄNDERUNGEN BESTÄTIGEN"
+  "editResConfirm": "ÄNDERUNGEN BESTÄTIGEN",
+  "cancelDialogTitle": "Stornierung",
+  "cancelReasonHint": "Stornierungsgrund eingeben (Pflichtfeld)",
+  "rejectDialogTitle": "Endbestätigung",
+  "rejectReasonHint": "Erklärung eingeben (Pflichtfeld)",
+  "rejectErrorFallback": "Reservierung kann nicht abgelehnt werden. Bitte versuchen Sie es erneut.",
+  "buttonRejectReservation": "RESERVIERUNG ABLEHNEN",
+  "buttonReject": "ABLEHNEN",
+  "buttonAccept": "ANNEHMEN",
+  "labelFoodDrink": "Essen/Trinken:",
+  "tableSeatCount": "{count} Plätze",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
 }

@@ -571,4 +571,38 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get editResConfirm => 'CONFIRMAR CAMBIOS';
+
+  @override
+  String get cancelDialogTitle => 'Cancelación';
+
+  @override
+  String get cancelReasonHint =>
+      'Introduce el motivo de la cancelación (obligatorio)';
+
+  @override
+  String get rejectDialogTitle => 'Confirmación final';
+
+  @override
+  String get rejectReasonHint => 'Introduce una explicación (obligatorio)';
+
+  @override
+  String get rejectErrorFallback =>
+      'No se puede rechazar la reserva. Inténtalo de nuevo.';
+
+  @override
+  String get buttonRejectReservation => 'RECHAZAR RESERVA';
+
+  @override
+  String get buttonReject => 'RECHAZAR';
+
+  @override
+  String get buttonAccept => 'ACEPTAR';
+
+  @override
+  String get labelFoodDrink => 'Comida/Bebida:';
+
+  @override
+  String tableSeatCount(int count) {
+    return '$count asientos';
+  }
 }

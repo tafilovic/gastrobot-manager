@@ -184,5 +184,16 @@
   "confirmedResCancelButton": "ANNULLA PRENOTAZIONE",
   "editResDialogTitle": "Modifica",
   "editResNoteHint": "Inserisci motivi e dettagli della modifica per l'ospite... (campo obbligatorio)",
-  "editResConfirm": "CONFERMA MODIFICHE"
+  "editResConfirm": "CONFERMA MODIFICHE",
+  "cancelDialogTitle": "Cancellazione",
+  "cancelReasonHint": "Inserisci il motivo della cancellazione (obbligatorio)",
+  "rejectDialogTitle": "Conferma finale",
+  "rejectReasonHint": "Inserisci una spiegazione (obbligatorio)",
+  "rejectErrorFallback": "Impossibile rifiutare la prenotazione. Riprova.",
+  "buttonRejectReservation": "RIFIUTA PRENOTAZIONE",
+  "buttonReject": "RIFIUTA",
+  "buttonAccept": "ACCETTA",
+  "labelFoodDrink": "Cibo/Bevande:",
+  "tableSeatCount": "{count} posti",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
 }

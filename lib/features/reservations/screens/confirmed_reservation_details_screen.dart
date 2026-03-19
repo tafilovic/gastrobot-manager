@@ -8,6 +8,8 @@ import 'package:gastrobotmanager/features/regions/providers/regions_provider.dar
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/edit_reservation_dialog.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/reservation_date_time_header.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/reservation_detail_row.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Detail view for a confirmed reservation.
@@ -52,12 +54,11 @@ class _ConfirmedReservationDetailsScreenState
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Title row
                     Row(
                       children: [
                         Expanded(
                           child: Text(
-                            'Otkazivanje',
+                            l10n.cancelDialogTitle,
                             style:
                                 Theme.of(ctx).textTheme.titleMedium?.copyWith(
                                       fontWeight: FontWeight.w700,
@@ -66,8 +67,9 @@ class _ConfirmedReservationDetailsScreenState
                           ),
                         ),
                         IconButton(
-                          onPressed:
-                              submitting ? null : () => Navigator.of(ctx).pop(),
+                          onPressed: submitting
+                              ? null
+                              : () => Navigator.of(ctx).pop(),
                           icon: const Icon(Icons.close),
                           color: AppColors.textSecondary,
                           padding: EdgeInsets.zero,
@@ -77,13 +79,12 @@ class _ConfirmedReservationDetailsScreenState
                     ),
                     const SizedBox(height: 16),
 
-                    // Reason field
                     TextField(
                       controller: controller,
                       enabled: !submitting,
                       maxLines: 5,
                       decoration: InputDecoration(
-                        hintText: 'Upiši razlog otkazivanja (obavezno polje)',
+                        hintText: l10n.cancelReasonHint,
                         errorText: fieldError,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -98,15 +99,15 @@ class _ConfirmedReservationDetailsScreenState
                     ),
                     const SizedBox(height: 16),
 
-                    // Cancel button
                     FilledButton(
                       onPressed: submitting
                           ? null
                           : () async {
                               final reason = controller.text.trim();
                               if (reason.isEmpty) {
-                                setDialogState(() => fieldError =
-                                    'Upiši razlog otkazivanja (obavezno polje)');
+                                setDialogState(
+                                  () => fieldError = l10n.cancelReasonHint,
+                                );
                                 return;
                               }
                               setDialogState(() {
@@ -115,9 +116,10 @@ class _ConfirmedReservationDetailsScreenState
                               });
 
                               // TODO: call cancel reservation API
-                              // On success:
                               if (ctx.mounted) Navigator.of(ctx).pop();
-                              if (context.mounted) Navigator.of(context).pop();
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                             },
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.destructive,
@@ -200,98 +202,72 @@ class _ConfirmedReservationDetailsScreenState
       ),
       body: Column(
         children: [
-          // Date / time header
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-            child: Row(
-              children: [
-                Icon(Icons.calendar_today, size: 20, color: accentColor),
-                const SizedBox(width: 8),
-                Text(
-                  dateStr,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: accentColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  timeStr,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: accentColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Icon(Icons.access_time, size: 20, color: accentColor),
-              ],
-            ),
+          ReservationDateTimeHeader(
+            dateStr: dateStr,
+            timeStr: timeStr,
+            accentColor: accentColor,
           ),
 
-          // Scrollable details
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
               children: [
-                _detailRow(
-                  context,
-                  Icons.person,
-                  l10n.confirmedResUser,
-                  reservation.user?.fullName.isNotEmpty == true
+                ReservationDetailRow(
+                  icon: Icons.person,
+                  label: l10n.confirmedResUser,
+                  value: reservation.user?.fullName.isNotEmpty == true
                       ? reservation.user!.fullName
                       : '—',
                 ),
-                _detailRow(
-                  context,
-                  Icons.table_restaurant,
-                  l10n.confirmedResTableNumber,
-                  reservation.tableNamesLabel,
+                ReservationDetailRow(
+                  icon: Icons.table_restaurant,
+                  label: l10n.confirmedResTableNumber,
+                  value: reservation.tableNamesLabel,
                 ),
                 if (reservation.regionTitle != null &&
                     reservation.regionTitle!.isNotEmpty)
-                  _detailRow(
-                    context,
-                    Icons.map,
-                    l10n.reservationLabelRegion,
-                    reservation.regionTitle!,
+                  ReservationDetailRow(
+                    icon: Icons.map,
+                    label: l10n.reservationLabelRegion,
+                    value: reservation.regionTitle!,
                   ),
-                _detailRow(
-                  context,
-                  Icons.groups,
-                  l10n.reservationLabelPartySize,
-                  '${reservation.peopleCount}',
+                ReservationDetailRow(
+                  icon: Icons.groups,
+                  label: l10n.reservationLabelPartySize,
+                  value: '${reservation.peopleCount}',
                 ),
-                _detailRow(
-                  context,
-                  Icons.celebration,
-                  l10n.confirmedResOccasion,
-                  occasionLabel,
+                ReservationDetailRow(
+                  icon: Icons.celebration,
+                  label: l10n.confirmedResOccasion,
+                  value: occasionLabel,
                 ),
                 if (reservation.additionalInfo != null &&
                     reservation.additionalInfo!.isNotEmpty)
-                  _detailRow(
-                    context,
-                    Icons.note,
-                    l10n.confirmedResNote,
-                    reservation.additionalInfo!,
+                  ReservationDetailRow(
+                    icon: Icons.note,
+                    label: l10n.confirmedResNote,
+                    value: reservation.additionalInfo!,
                   ),
 
-                // Food section
                 if (food.isNotEmpty) ...[
-                  _sectionHeader(context, l10n.readySectionFood),
-                  ...food.map((i) => _itemLine(context, i)),
+                  _SectionHeader(
+                    title: l10n.readySectionFood,
+                    icon: Icons.restaurant,
+                  ),
+                  ...food.map((i) => _ItemLine(item: i)),
                 ],
 
-                // Drink section
                 if (drinks.isNotEmpty) ...[
-                  _sectionHeader(context, l10n.readySectionDrinks),
-                  ...drinks.map((i) => _itemLine(context, i)),
+                  _SectionHeader(
+                    title: l10n.readySectionDrinks,
+                    icon: Icons.local_bar,
+                  ),
+                  ...drinks.map((i) => _ItemLine(item: i)),
                 ],
               ],
             ),
           ),
 
-          // Action buttons
           Container(
             padding: const EdgeInsets.all(20),
             color: AppColors.surface,
@@ -302,7 +278,6 @@ class _ConfirmedReservationDetailsScreenState
                   width: double.infinity,
                   child: OutlinedButton(
                     onPressed: () {
-                      // Pre-load regions before opening the dialog
                       final venueId =
                           context.read<AuthProvider>().currentVenueId;
                       if (venueId != null) {
@@ -344,56 +319,24 @@ class _ConfirmedReservationDetailsScreenState
       ),
     );
   }
+}
 
-  static Widget _detailRow(
-    BuildContext context,
-    IconData icon,
-    String label,
-    String value,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 18, color: AppColors.textMuted),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text.rich(
-              TextSpan(
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                children: [
-                  TextSpan(text: '$label '),
-                  TextSpan(
-                    text: value,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+// ---------------------------------------------------------------------------
+// Private helpers
 
-  static Widget _sectionHeader(BuildContext context, String title) {
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, required this.icon});
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 8),
       child: Row(
         children: [
-          Icon(
-            title.contains('rana') || title.contains('ood')
-                ? Icons.restaurant
-                : Icons.local_bar,
-            size: 18,
-            color: AppColors.textMuted,
-          ),
+          Icon(icon, size: 18, color: AppColors.textMuted),
           const SizedBox(width: 8),
           Text(
             title,
@@ -406,8 +349,15 @@ class _ConfirmedReservationDetailsScreenState
       ),
     );
   }
+}
 
-  static Widget _itemLine(BuildContext context, PendingOrderItem item) {
+class _ItemLine extends StatelessWidget {
+  const _ItemLine({required this.item});
+
+  final PendingOrderItem item;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 26),
       child: Row(

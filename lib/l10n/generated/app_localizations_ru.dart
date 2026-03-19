@@ -570,4 +570,37 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get editResConfirm => 'ПОДТВЕРДИТЬ ИЗМЕНЕНИЯ';
+
+  @override
+  String get cancelDialogTitle => 'Отмена';
+
+  @override
+  String get cancelReasonHint => 'Введите причину отмены (обязательно)';
+
+  @override
+  String get rejectDialogTitle => 'Финальное подтверждение';
+
+  @override
+  String get rejectReasonHint => 'Введите объяснение (обязательно)';
+
+  @override
+  String get rejectErrorFallback =>
+      'Невозможно отклонить бронирование. Попробуйте снова.';
+
+  @override
+  String get buttonRejectReservation => 'ОТКЛОНИТЬ БРОНИРОВАНИЕ';
+
+  @override
+  String get buttonReject => 'ОТКЛОНИТЬ';
+
+  @override
+  String get buttonAccept => 'ПРИНЯТЬ';
+
+  @override
+  String get labelFoodDrink => 'Еда/Напитки:';
+
+  @override
+  String tableSeatCount(int count) {
+    return '$count мест';
+  }
 }

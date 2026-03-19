@@ -572,4 +572,37 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get editResConfirm => 'POTVRDI IZMENE';
+
+  @override
+  String get cancelDialogTitle => 'Otkazivanje';
+
+  @override
+  String get cancelReasonHint => 'Upiši razlog otkazivanja (obavezno polje)';
+
+  @override
+  String get rejectDialogTitle => 'Finalna potvrda';
+
+  @override
+  String get rejectReasonHint => 'Upiši objašnjenje (obavezno polje)';
+
+  @override
+  String get rejectErrorFallback =>
+      'Nije moguće odbiti rezervaciju. Pokušaj ponovo.';
+
+  @override
+  String get buttonRejectReservation => 'ODBIJ REZERVACIJU';
+
+  @override
+  String get buttonReject => 'ODBIJ';
+
+  @override
+  String get buttonAccept => 'PRIHVATI';
+
+  @override
+  String get labelFoodDrink => 'Hrana/Piće:';
+
+  @override
+  String tableSeatCount(int count) {
+    return '$count mesta';
+  }
 }

@@ -179,5 +179,16 @@
   "confirmedResCancelButton": "CANCEL RESERVATION",
   "editResDialogTitle": "Edit",
   "editResNoteHint": "Enter reasons and details of the change for the guest... (required field)",
-  "editResConfirm": "CONFIRM CHANGES"
+  "editResConfirm": "CONFIRM CHANGES",
+  "cancelDialogTitle": "Cancellation",
+  "cancelReasonHint": "Enter cancellation reason (required)",
+  "rejectDialogTitle": "Final confirmation",
+  "rejectReasonHint": "Enter explanation (required)",
+  "rejectErrorFallback": "Unable to reject reservation. Please try again.",
+  "buttonRejectReservation": "REJECT RESERVATION",
+  "buttonReject": "REJECT",
+  "buttonAccept": "ACCEPT",
+  "labelFoodDrink": "Food/Drink:",
+  "tableSeatCount": "{count} seats",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
 }

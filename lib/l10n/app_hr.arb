@@ -184,5 +184,16 @@
   "confirmedResCancelButton": "OTKAŽI REZERVACIJU",
   "editResDialogTitle": "Izmjena",
   "editResNoteHint": "Upiši razloge i detalje izmjene za gosta... (obavezno polje)",
-  "editResConfirm": "POTVRDI IZMJENE"
+  "editResConfirm": "POTVRDI IZMJENE",
+  "cancelDialogTitle": "Otkazivanje",
+  "cancelReasonHint": "Upiši razlog otkazivanja (obavezno polje)",
+  "rejectDialogTitle": "Finalna potvrda",
+  "rejectReasonHint": "Upiši objašnjenje (obavezno polje)",
+  "rejectErrorFallback": "Nije moguće odbiti rezervaciju. Pokušaj ponovo.",
+  "buttonRejectReservation": "ODBIJ REZERVACIJU",
+  "buttonReject": "ODBIJ",
+  "buttonAccept": "PRIHVATI",
+  "labelFoodDrink": "Hrana/Piće:",
+  "tableSeatCount": "{count} mjesta",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
 }

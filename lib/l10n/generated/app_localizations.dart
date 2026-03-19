@@ -1133,6 +1133,66 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'POTVRDI IZMENE'**
   String get editResConfirm;
+
+  /// No description provided for @cancelDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Otkazivanje'**
+  String get cancelDialogTitle;
+
+  /// No description provided for @cancelReasonHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Upiši razlog otkazivanja (obavezno polje)'**
+  String get cancelReasonHint;
+
+  /// No description provided for @rejectDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Finalna potvrda'**
+  String get rejectDialogTitle;
+
+  /// No description provided for @rejectReasonHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Upiši objašnjenje (obavezno polje)'**
+  String get rejectReasonHint;
+
+  /// No description provided for @rejectErrorFallback.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nije moguće odbiti rezervaciju. Pokušaj ponovo.'**
+  String get rejectErrorFallback;
+
+  /// No description provided for @buttonRejectReservation.
+  ///
+  /// In sr, this message translates to:
+  /// **'ODBIJ REZERVACIJU'**
+  String get buttonRejectReservation;
+
+  /// No description provided for @buttonReject.
+  ///
+  /// In sr, this message translates to:
+  /// **'ODBIJ'**
+  String get buttonReject;
+
+  /// No description provided for @buttonAccept.
+  ///
+  /// In sr, this message translates to:
+  /// **'PRIHVATI'**
+  String get buttonAccept;
+
+  /// No description provided for @labelFoodDrink.
+  ///
+  /// In sr, this message translates to:
+  /// **'Hrana/Piće:'**
+  String get labelFoodDrink;
+
+  /// No description provided for @tableSeatCount.
+  ///
+  /// In sr, this message translates to:
+  /// **'{count} mesta'**
+  String tableSeatCount(int count);
 }
 
 class _AppLocalizationsDelegate

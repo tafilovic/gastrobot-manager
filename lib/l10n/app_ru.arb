@@ -184,5 +184,16 @@
   "confirmedResCancelButton": "ОТМЕНИТЬ БРОНИРОВАНИЕ",
   "editResDialogTitle": "Изменение",
   "editResNoteHint": "Введите причины и детали изменения для гостя... (обязательное поле)",
-  "editResConfirm": "ПОДТВЕРДИТЬ ИЗМЕНЕНИЯ"
+  "editResConfirm": "ПОДТВЕРДИТЬ ИЗМЕНЕНИЯ",
+  "cancelDialogTitle": "Отмена",
+  "cancelReasonHint": "Введите причину отмены (обязательно)",
+  "rejectDialogTitle": "Финальное подтверждение",
+  "rejectReasonHint": "Введите объяснение (обязательно)",
+  "rejectErrorFallback": "Невозможно отклонить бронирование. Попробуйте снова.",
+  "buttonRejectReservation": "ОТКЛОНИТЬ БРОНИРОВАНИЕ",
+  "buttonReject": "ОТКЛОНИТЬ",
+  "buttonAccept": "ПРИНЯТЬ",
+  "labelFoodDrink": "Еда/Напитки:",
+  "tableSeatCount": "{count} мест",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}}
 }

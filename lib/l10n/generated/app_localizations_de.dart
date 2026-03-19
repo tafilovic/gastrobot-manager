@@ -572,4 +572,37 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get editResConfirm => 'ÄNDERUNGEN BESTÄTIGEN';
+
+  @override
+  String get cancelDialogTitle => 'Stornierung';
+
+  @override
+  String get cancelReasonHint => 'Stornierungsgrund eingeben (Pflichtfeld)';
+
+  @override
+  String get rejectDialogTitle => 'Endbestätigung';
+
+  @override
+  String get rejectReasonHint => 'Erklärung eingeben (Pflichtfeld)';
+
+  @override
+  String get rejectErrorFallback =>
+      'Reservierung kann nicht abgelehnt werden. Bitte versuchen Sie es erneut.';
+
+  @override
+  String get buttonRejectReservation => 'RESERVIERUNG ABLEHNEN';
+
+  @override
+  String get buttonReject => 'ABLEHNEN';
+
+  @override
+  String get buttonAccept => 'ANNEHMEN';
+
+  @override
+  String get labelFoodDrink => 'Essen/Trinken:';
+
+  @override
+  String tableSeatCount(int count) {
+    return '$count Plätze';
+  }
 }
