@@ -40,7 +40,7 @@
   "navDrinks": "DRINKS",
   "navTables": "TABLES",
   "tablesReserve": "RESERVE",
-  "tablesOrder": "+ ORDER",
+  "tablesOrder": "ORDER",
   "tablesCount": "{count} tables",
   "@tablesCount": {"placeholders": {"count": {"type": "int"}}},
   "tableNumber": "Table no. {number}",

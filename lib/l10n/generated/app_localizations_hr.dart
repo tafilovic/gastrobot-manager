@@ -131,7 +131,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get tablesReserve => 'REZERVIRAJ';
 
   @override
-  String get tablesOrder => '+ NARUČI';
+  String get tablesOrder => 'NARUČI';
 
   @override
   String tablesCount(int count) {

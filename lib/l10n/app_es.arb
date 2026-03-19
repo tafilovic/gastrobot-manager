@@ -40,7 +40,7 @@
   "navDrinks": "BEBIDAS",
   "navTables": "MESAS",
   "tablesReserve": "RESERVAR",
-  "tablesOrder": "+ PEDIR",
+  "tablesOrder": "PEDIR",
   "tablesCount": "{count} mesas",
   "@tablesCount": {"placeholders": {"count": {"type": "int"}}},
   "tableNumber": "Mesa n.º {number}",

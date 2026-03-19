@@ -40,7 +40,7 @@
   "navDrinks": "PIĆA",
   "navTables": "STOLOVI",
   "tablesReserve": "REZERVIŠI",
-  "tablesOrder": "+ PORUČI",
+  "tablesOrder": "PORUČI",
   "tablesCount": "{count} stolova",
   "@tablesCount": {"placeholders": {"count": {"type": "int"}}},
   "tableNumber": "Sto br. {number}",

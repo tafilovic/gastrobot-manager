@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
-import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/active_order_filters.dart';
@@ -184,12 +184,15 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       return Scaffold(
         backgroundColor: AppColors.backgroundMuted,
         body: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: _buildListPane(theme, provider, orders, onSeeDetails),
-              ),
+          child: ConstrainedContent(
+            maxWidth: AppBreakpoints.contentMaxWidthMasterDetail,
+            padding: EdgeInsets.zero,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: _buildListPane(theme, provider, orders, onSeeDetails),
+                ),
               Expanded(
                 flex: 1,
                 child: _selectedOrder == null
@@ -216,8 +219,9 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                         : HistoryOrderDetailsContent(
                             order: _selectedOrder!,
                           ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -226,13 +230,16 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-              child: Text(
-                widget.l10n.ordersTitle,
+        child: ConstrainedContent(
+          maxWidth: AppBreakpoints.contentMaxWidthWide,
+          padding: EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                child: Text(
+                  widget.l10n.ordersTitle,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -327,6 +334,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

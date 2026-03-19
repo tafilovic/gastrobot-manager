@@ -40,7 +40,7 @@
   "navDrinks": "GETRÄNKE",
   "navTables": "TISCHE",
   "tablesReserve": "RESERVIEREN",
-  "tablesOrder": "+ BESTELLEN",
+  "tablesOrder": "BESTELLEN",
   "tablesCount": "{count} Tische",
   "@tablesCount": {"placeholders": {"count": {"type": "int"}}},
   "tableNumber": "Tisch Nr. {number}",

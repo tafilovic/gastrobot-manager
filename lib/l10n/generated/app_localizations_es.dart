@@ -131,7 +131,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tablesReserve => 'RESERVAR';
 
   @override
-  String get tablesOrder => '+ PEDIR';
+  String get tablesOrder => 'PEDIR';
 
   @override
   String tablesCount(int count) {

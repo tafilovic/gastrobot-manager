@@ -15,9 +15,14 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 /// The waiter selects a region to filter tables, then picks a specific table.
 /// Selecting a table enables the POTVRDI REZERVACIJU button.
 class AcceptReservationSheet extends StatefulWidget {
-  const AcceptReservationSheet({super.key, required this.order});
+  const AcceptReservationSheet({
+    super.key,
+    required this.order,
+    this.onCompleted,
+  });
 
   final PendingOrder order;
+  final VoidCallback? onCompleted;
 
   @override
   State<AcceptReservationSheet> createState() => _AcceptReservationSheetState();
@@ -64,7 +69,11 @@ class _AcceptReservationSheetState extends State<AcceptReservationSheet> {
     if (!mounted) return;
     if (ok) {
       Navigator.of(context).pop();
-      Navigator.of(context).pop(true);
+      if (widget.onCompleted != null) {
+        widget.onCompleted!();
+      } else {
+        Navigator.of(context).pop(true);
+      }
     } else {
       setState(() {
         _submitting = false;

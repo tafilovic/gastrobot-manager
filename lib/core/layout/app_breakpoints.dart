@@ -14,4 +14,7 @@ abstract final class AppBreakpoints {
 
   /// Max width when content uses 2 columns (menu grid, food/drinks side-by-side).
   static const double contentMaxWidthWide = 1100;
+
+  /// Max width for master-detail layout (list + detail panes).
+  static const double contentMaxWidthMasterDetail = 1600;
 }

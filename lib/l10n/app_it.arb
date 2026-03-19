@@ -40,7 +40,7 @@
   "navDrinks": "BEVANDE",
   "navTables": "TAVOLI",
   "tablesReserve": "PRENOTA",
-  "tablesOrder": "+ ORDINA",
+  "tablesOrder": "ORDINA",
   "tablesCount": "{count} tavoli",
   "@tablesCount": {"placeholders": {"count": {"type": "int"}}},
   "tableNumber": "Tavolo n. {number}",

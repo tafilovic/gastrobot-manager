@@ -132,7 +132,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get tablesReserve => 'REZERVIŠI';
 
   @override
-  String get tablesOrder => '+ PORUČI';
+  String get tablesOrder => 'PORUČI';
 
   @override
   String tablesCount(int count) {

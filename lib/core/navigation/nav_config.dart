@@ -56,7 +56,7 @@ class NavConfig {
     label: 'STOLOVI',
     icon: Icons.table_restaurant,
     route: 'tables',
-    svgAssetPath: 'assets/icons/tables.svg',
+    svgAssetPath: 'assets/icons/table.svg',
   );
 
   static const profile = NavItem(

@@ -351,7 +351,7 @@ abstract class AppLocalizations {
   /// No description provided for @tablesOrder.
   ///
   /// In sr, this message translates to:
-  /// **'+ PORUČI'**
+  /// **'PORUČI'**
   String get tablesOrder;
 
   /// No description provided for @tablesCount.

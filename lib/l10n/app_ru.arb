@@ -40,7 +40,7 @@
   "navDrinks": "НАПИТКИ",
   "navTables": "СТОЛЫ",
   "tablesReserve": "ЗАБРОНИРОВАТЬ",
-  "tablesOrder": "+ ЗАКАЗАТЬ",
+  "tablesOrder": "ЗАКАЗАТЬ",
   "tablesCount": "{count} столов",
   "@tablesCount": {"placeholders": {"count": {"type": "int"}}},
   "tableNumber": "Стол №{number}",

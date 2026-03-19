@@ -131,7 +131,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tablesReserve => 'ЗАБРОНИРОВАТЬ';
 
   @override
-  String get tablesOrder => '+ ЗАКАЗАТЬ';
+  String get tablesOrder => 'ЗАКАЗАТЬ';
 
   @override
   String tablesCount(int count) {

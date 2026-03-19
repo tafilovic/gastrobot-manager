@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:gastrobotmanager/core/navigation/nav_item.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
@@ -24,6 +25,19 @@ class AppNavigationRail extends StatelessWidget {
     return items[index].label;
   }
 
+  Widget _buildIcon(NavItem item, bool isSelected) {
+    final color = isSelected ? AppColors.accent : AppColors.textMuted;
+    if (item.svgAssetPath != null) {
+      return SvgPicture.asset(
+        item.svgAssetPath!,
+        width: 24,
+        height: 24,
+        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+      );
+    }
+    return Icon(item.icon!, size: 24, color: color);
+  }
+
   static const double _compactHeightThreshold = 500;
 
   @override
@@ -46,8 +60,8 @@ class AppNavigationRail extends StatelessWidget {
         destinations: [
           for (int i = 0; i < items.length; i++)
             NavigationRailDestination(
-              icon: Icon(items[i].icon, color: AppColors.textMuted),
-              selectedIcon: Icon(items[i].icon, color: AppColors.accent),
+              icon: _buildIcon(items[i], false),
+              selectedIcon: _buildIcon(items[i], true),
               label: Text(_label(i)),
             ),
         ],

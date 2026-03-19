@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
@@ -34,70 +36,97 @@ class _TablesScreenState extends State<TablesScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final provider = context.watch<TablesProvider>();
+    final accentColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
-      appBar: AppBar(
-        title: Text(l10n.navTables),
-        centerTitle: true,
-        backgroundColor: AppColors.appBarBackground,
-        foregroundColor: AppColors.appBarForeground,
-        elevation: 0,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _HeaderActions(l10n: l10n),
-          Expanded(
-            child: _TablesList(provider: provider, l10n: l10n),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeaderActions extends StatelessWidget {
-  const _HeaderActions({required this.l10n});
-
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.surface,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: ConstrainedContent(
-        padding: EdgeInsets.zero,
-        child: Row(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  // TODO: implement reservation flow
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.accent,
-                  side: const BorderSide(color: AppColors.accent),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+              child: Text(
+                l10n.navTables,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
-                child: Text(l10n.tablesReserve),
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: FilledButton(
-                onPressed: () {
-                  // TODO: implement order flow
-                },
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.accent,
-                  foregroundColor: AppColors.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: AppBreakpoints.contentMaxWidth,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            // TODO: implement reservation flow
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: accentColor,
+                            side: BorderSide(color: accentColor),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Text(l10n.tablesReserve),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton.icon(
+                          onPressed: () {
+                            // TODO: implement order flow
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: accentColor,
+                            foregroundColor: AppColors.onPrimary,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          icon: const Icon(Icons.add, size: 20),
+                          label: Text(l10n.tablesOrder),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: Text(l10n.tablesOrder),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Builder(
+                builder: (context) {
+                  final count = provider.tables.length;
+                  final full = l10n.tablesCount(count);
+                  final suffix = full.replaceFirst(RegExp(r'^\d+'), '');
+                  return Text.rich(
+                    TextSpan(
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '$count',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: accentColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextSpan(text: suffix),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: _TablesList(provider: provider, l10n: l10n),
             ),
           ],
         ),
@@ -114,11 +143,11 @@ class _TablesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (provider.isLoading) {
+    if (provider.isLoading && provider.tables.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (provider.error != null) {
+    if (provider.error != null && provider.tables.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -140,43 +169,86 @@ class _TablesList extends StatelessWidget {
 
     final tables = provider.tables;
 
-    return RefreshIndicator(
-      onRefresh: provider.pullRefresh,
-      color: AppColors.accent,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Text(
-                l10n.tablesCount(tables.length),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.accent,
+    if (tables.isEmpty) {
+      return RefreshIndicator(
+        onRefresh: provider.pullRefresh,
+        color: AppColors.accent,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.3,
+              child: Center(
+                child: Text(
+                  l10n.tablesCount(0),
+                  style: const TextStyle(color: AppColors.textMuted),
                 ),
               ),
             ),
+          ],
+        ),
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = MediaQuery.sizeOf(context).width;
+        final crossAxisCount = width >= AppBreakpoints.contentMaxWidthWide
+            ? 3
+            : width >= AppBreakpoints.expanded
+            ? 2
+            : 1;
+        final maxWidth = crossAxisCount > 1
+            ? AppBreakpoints.contentMaxWidthWide
+            : AppBreakpoints.contentMaxWidth;
+
+        return ConstrainedContent(
+          maxWidth: maxWidth,
+          padding: EdgeInsets.zero,
+          child: RefreshIndicator(
+            onRefresh: provider.pullRefresh,
+            color: AppColors.accent,
+            child: crossAxisCount == 1
+                ? ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+                    itemCount: tables.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final table = tables[index];
+                      return ListItemEntrance(
+                        index: index,
+                        child: TableListItem(table: table),
+                      );
+                    },
+                  )
+                : GridView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      mainAxisExtent: 80,
+                    ),
+                    itemCount: tables.length,
+                    itemBuilder: (context, index) {
+                      final table = tables[index];
+                      return ListItemEntrance(
+                        index: index,
+                        child: TableListItem(table: table),
+                      );
+                    },
+                  ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final table = tables[index];
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TableListItem(table: table),
-                    const Divider(height: 1, indent: 50),
-                  ],
-                );
-              },
-              childCount: tables.length,
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
-        ],
-      ),
+        );
+      },
     );
   }
 }

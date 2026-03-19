@@ -91,11 +91,14 @@ class _OrdersContentState extends State<OrdersContent> {
       return Scaffold(
         backgroundColor: AppColors.backgroundMuted,
         body: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: _buildListPane(
+          child: ConstrainedContent(
+            maxWidth: AppBreakpoints.contentMaxWidthMasterDetail,
+            padding: EdgeInsets.zero,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: _buildListPane(
                   theme,
                   provider,
                   orders,
@@ -114,8 +117,9 @@ class _OrdersContentState extends State<OrdersContent> {
                           widget.onStartRefresh();
                         },
                       ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -124,13 +128,16 @@ class _OrdersContentState extends State<OrdersContent> {
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-              child: Text(
-                widget.l10n.ordersTitle,
+        child: ConstrainedContent(
+          maxWidth: AppBreakpoints.contentMaxWidthWide,
+          padding: EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                child: Text(
+                  widget.l10n.ordersTitle,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -172,6 +179,7 @@ class _OrdersContentState extends State<OrdersContent> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
