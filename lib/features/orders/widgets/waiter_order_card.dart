@@ -44,13 +44,13 @@ class WaiterOrderCard extends StatelessWidget {
   ) {
     switch (status) {
       case OrderGroupStatus.pending:
-        return (l10n.orderStatusPending, const Color(0xFFFF9800), Icons.help_outline);
+        return (l10n.orderStatusPending, const Color(0xFFF59E0B), Icons.help_outline);
       case OrderGroupStatus.inPreparation:
         return (l10n.orderStatusInPreparation, accentColor, Icons.settings);
       case OrderGroupStatus.served:
-        return (l10n.orderStatusServed, AppColors.success, Icons.check_circle);
+        return (l10n.orderStatusServed, const Color(0xFF16A34A), Icons.check_circle);
       case OrderGroupStatus.rejected:
-        return (l10n.orderStatusRejected, AppColors.error, Icons.cancel);
+        return (l10n.orderStatusRejected, const Color(0xFFEF4444), Icons.cancel);
     }
   }
 

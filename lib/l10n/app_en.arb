@@ -157,5 +157,16 @@
   "filterDateToday": "Today",
   "filterOrderContent": "Order content:",
   "filterOrderContentDrinks": "Drinks",
-  "filterOrderContentFood": "Food"
+  "filterOrderContentFood": "Food",
+  "acceptSheetTitle": "Complete confirmation",
+  "acceptSheetSelectRegion": "Select restaurant region",
+  "acceptSheetSelectTable": "Select table number",
+  "acceptSheetNoteHint": "Add guest note... (optional)",
+  "acceptSheetConfirm": "CONFIRM RESERVATION",
+  "acceptSheetNoTables": "No tables available.",
+  "acceptSheetErrorGeneric": "Cannot accept reservation. Please try again.",
+  "acceptSheetRegionLabel": "Region {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Reservation at {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
 }

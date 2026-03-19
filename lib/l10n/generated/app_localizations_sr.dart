@@ -506,4 +506,36 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Hrana';
+
+  @override
+  String get acceptSheetTitle => 'Dovrši potvrdu';
+
+  @override
+  String get acceptSheetSelectRegion => 'Izaberi region restorana';
+
+  @override
+  String get acceptSheetSelectTable => 'Izaberi broj stola';
+
+  @override
+  String get acceptSheetNoteHint => 'Upiši napomenu za gosta... (opciono)';
+
+  @override
+  String get acceptSheetConfirm => 'POTVRDI REZERVACIJU';
+
+  @override
+  String get acceptSheetNoTables => 'Nema dostupnih stolova.';
+
+  @override
+  String get acceptSheetErrorGeneric =>
+      'Nije moguće prihvatiti rezervaciju. Pokušaj ponovo.';
+
+  @override
+  String acceptSheetRegionLabel(int number) {
+    return 'Region $number';
+  }
+
+  @override
+  String acceptSheetReservationAt(String time) {
+    return 'Rezervacija u $time';
+  }
 }

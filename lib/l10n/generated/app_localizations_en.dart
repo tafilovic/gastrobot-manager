@@ -504,4 +504,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Food';
+
+  @override
+  String get acceptSheetTitle => 'Complete confirmation';
+
+  @override
+  String get acceptSheetSelectRegion => 'Select restaurant region';
+
+  @override
+  String get acceptSheetSelectTable => 'Select table number';
+
+  @override
+  String get acceptSheetNoteHint => 'Add guest note... (optional)';
+
+  @override
+  String get acceptSheetConfirm => 'CONFIRM RESERVATION';
+
+  @override
+  String get acceptSheetNoTables => 'No tables available.';
+
+  @override
+  String get acceptSheetErrorGeneric =>
+      'Cannot accept reservation. Please try again.';
+
+  @override
+  String acceptSheetRegionLabel(int number) {
+    return 'Region $number';
+  }
+
+  @override
+  String acceptSheetReservationAt(String time) {
+    return 'Reservation at $time';
+  }
 }

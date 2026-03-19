@@ -21,12 +21,14 @@ class ReservationsProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   String? _rejectError;
+  String? _acceptError;
   String? _currentVenueId;
 
   List<PendingOrder> get requests => List.unmodifiable(_requests);
   bool get isLoading => _isLoading;
   String? get error => _error;
   String? get rejectError => _rejectError;
+  String? get acceptError => _acceptError;
 
   static int _orderByTargetTime(PendingOrder a, PendingOrder b) {
     return a.targetTime.compareTo(b.targetTime);
@@ -69,6 +71,39 @@ class ReservationsProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       _rejectError = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Waiter: confirm reservation with selected tableIds and remove it from pending list on success.
+  Future<bool> acceptWaiterReservation({
+    required String venueId,
+    required PendingOrder reservation,
+    required List<String> tableIds,
+    String? note,
+  }) async {
+    _acceptError = null;
+    final api = _reservationActionsApi;
+    if (api == null) {
+      _acceptError = 'Accept not available';
+      notifyListeners();
+      return false;
+    }
+    try {
+      await api.acceptReservation(
+        venueId: venueId,
+        reservationId: reservation.orderId,
+        tableIds: tableIds,
+        note: note,
+      );
+      _requests = _requests
+          .where((r) => r.orderId != reservation.orderId)
+          .toList();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _acceptError = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
       notifyListeners();
       return false;
     }

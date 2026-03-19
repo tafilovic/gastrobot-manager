@@ -11,6 +11,8 @@ import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_item_tile.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
+import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/accept_reservation_sheet.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reservation details: "Rezervacije" + # in app bar, date/time row, items with checkboxes, ODBIJ SVE / PRIHVATI.
@@ -350,7 +352,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
 
     final d = widget.order.reservationDetails;
     final Map<String, dynamic> rd =
-        d is Map ? Map<String, dynamic>.from(d as Map) : <String, dynamic>{};
+        d is Map ? Map<String, dynamic>.from(d) : <String, dynamic>{};
 
     final userName = rd['userName']?.toString().trim();
     final regionRaw = rd['region']?.toString().trim();
@@ -585,14 +587,12 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: () {
-                      // TODO: hook up availability check/confirmation flow
-                    },
+                    onPressed: () => _openAcceptReservationSheet(context),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.success,
                       foregroundColor: AppColors.onSuccess,
                     ),
-                    child: const Text('PROVERI DOSTUPNOST'),
+                    child: const Text('PRIHVATI'),
                   ),
                 ),
               ],
@@ -600,6 +600,28 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _openAcceptReservationSheet(BuildContext context) async {
+    // Ensure regions (with tables) are loaded before opening the sheet.
+    final venueId = context.read<AuthProvider>().currentVenueId;
+    if (venueId != null) {
+      final regionsProvider = context.read<RegionsProvider>();
+      if (regionsProvider.regions.isEmpty && !regionsProvider.isLoading) {
+        regionsProvider.load(venueId);
+      }
+    }
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => AcceptReservationSheet(order: widget.order),
     );
   }
 

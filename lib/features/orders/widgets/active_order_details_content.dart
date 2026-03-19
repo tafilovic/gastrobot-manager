@@ -369,11 +369,15 @@ class _OrderDetailItemRow extends StatelessWidget {
   (Color color, IconData icon) _statusIcon() {
     switch (item.status) {
       case 'pending':
-        return (const Color(0xFFFF9800), Icons.help_outline);
+        return (const Color(0xFFF59E0B), Icons.help_outline);
+      case 'accepted':
+        return (accentColor, Icons.settings);
       case 'ready':
-        return (AppColors.success, Icons.check_circle);
+        return (const Color(0xFF22C55E), Icons.check_circle);
+      case 'delivered':
+        return (const Color(0xFF16A34A), Icons.check_circle);
       case 'rejected':
-        return (AppColors.error, Icons.cancel);
+        return (const Color(0xFFEF4444), Icons.cancel);
       default:
         return (accentColor, Icons.settings);
     }

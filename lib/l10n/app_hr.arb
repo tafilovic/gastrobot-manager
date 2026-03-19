@@ -162,5 +162,16 @@
   "filterDateToday": "Danas",
   "filterOrderContent": "Sadržaj narudžbe:",
   "filterOrderContentDrinks": "Pića",
-  "filterOrderContentFood": "Hrana"
+  "filterOrderContentFood": "Hrana",
+  "acceptSheetTitle": "Dovrši potvrdu",
+  "acceptSheetSelectRegion": "Odaberi regiju restorana",
+  "acceptSheetSelectTable": "Odaberi broj stola",
+  "acceptSheetNoteHint": "Upiši napomenu za gosta... (opciono)",
+  "acceptSheetConfirm": "POTVRDI REZERVACIJU",
+  "acceptSheetNoTables": "Nema dostupnih stolova.",
+  "acceptSheetErrorGeneric": "Nije moguće prihvatiti rezervaciju. Pokušaj ponovo.",
+  "acceptSheetRegionLabel": "Zona {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Rezervacija u {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
 }

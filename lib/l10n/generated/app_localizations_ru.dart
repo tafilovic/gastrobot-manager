@@ -503,4 +503,37 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Еда';
+
+  @override
+  String get acceptSheetTitle => 'Завершить подтверждение';
+
+  @override
+  String get acceptSheetSelectRegion => 'Выберите зону ресторана';
+
+  @override
+  String get acceptSheetSelectTable => 'Выберите номер стола';
+
+  @override
+  String get acceptSheetNoteHint =>
+      'Добавить заметку для гостя... (необязательно)';
+
+  @override
+  String get acceptSheetConfirm => 'ПОДТВЕРДИТЬ БРОНИРОВАНИЕ';
+
+  @override
+  String get acceptSheetNoTables => 'Нет доступных столов.';
+
+  @override
+  String get acceptSheetErrorGeneric =>
+      'Невозможно принять бронирование. Попробуйте ещё раз.';
+
+  @override
+  String acceptSheetRegionLabel(int number) {
+    return 'Зона $number';
+  }
+
+  @override
+  String acceptSheetReservationAt(String time) {
+    return 'Бронирование в $time';
+  }
 }

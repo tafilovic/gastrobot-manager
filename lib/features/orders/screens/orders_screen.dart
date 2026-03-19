@@ -9,7 +9,7 @@ import 'package:gastrobotmanager/features/orders/widgets/waiter_orders_content.d
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Orders list. Kitchen/bar: [OrdersContent]. Waiter: [WaiterOrdersContent] (Active/History tabs).
-/// All use [OrdersProvider]; waiter fetches from venues/:venueId/waiter/pending-orders.
+/// All use [OrdersProvider]; waiter fetches from venues/:venueId/waiter/confirmed-orders.
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 

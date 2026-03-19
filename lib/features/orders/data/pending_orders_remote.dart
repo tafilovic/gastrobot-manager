@@ -11,7 +11,7 @@ import '../../../core/api/api_config.dart';
 /// Waiter has no endpoint and returns empty list.
 class PendingOrdersRemote implements PendingOrdersApi {
   PendingOrdersRemote([Dio? dio])
-      : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+    : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   final Dio _dio;
 
@@ -23,7 +23,7 @@ class PendingOrdersRemote implements PendingOrdersApi {
     final String path;
     final Map<String, dynamic>? queryParams;
     if (profileType == ProfileType.waiter) {
-      path = '/venues/$venueId/waiter/pending-orders';
+      path = '/venues/$venueId/waiter/confirmed-orders';
       queryParams = null;
     } else if (profileType == ProfileType.bar) {
       path = '/venues/$venueId/bar/pending';
@@ -54,12 +54,15 @@ class PendingOrdersRemote implements PendingOrdersApi {
       }
 
       final raw = response.data as dynamic;
-      final list = raw is List<dynamic>
-          ? raw
-          : <dynamic>[];
+      final list = raw is List<dynamic> ? raw : <dynamic>[];
       return list
-          .map((e) => PendingOrder.fromJson(
-              e is Map ? Map<String, dynamic>.from(e as Map) : <String, dynamic>{}))
+          .map(
+            (e) => PendingOrder.fromJson(
+              e is Map
+                  ? Map<String, dynamic>.from(e as Map)
+                  : <String, dynamic>{},
+            ),
+          )
           .where((o) => o.orderId.isNotEmpty)
           .toList();
     } on DioException catch (e) {

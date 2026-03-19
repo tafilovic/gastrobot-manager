@@ -157,5 +157,16 @@
   "filterDateToday": "Heute",
   "filterOrderContent": "Bestellinhalt:",
   "filterOrderContentDrinks": "Getränke",
-  "filterOrderContentFood": "Essen"
+  "filterOrderContentFood": "Essen",
+  "acceptSheetTitle": "Bestätigung abschließen",
+  "acceptSheetSelectRegion": "Restaurantbereich wählen",
+  "acceptSheetSelectTable": "Tischnummer wählen",
+  "acceptSheetNoteHint": "Notiz für Gast hinzufügen... (optional)",
+  "acceptSheetConfirm": "RESERVIERUNG BESTÄTIGEN",
+  "acceptSheetNoTables": "Keine Tische verfügbar.",
+  "acceptSheetErrorGeneric": "Reservierung kann nicht angenommen werden. Bitte erneut versuchen.",
+  "acceptSheetRegionLabel": "Bereich {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Reservierung um {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
 }

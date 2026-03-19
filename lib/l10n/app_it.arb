@@ -162,5 +162,16 @@
   "filterDateToday": "Oggi",
   "filterOrderContent": "Contenuto ordine:",
   "filterOrderContentDrinks": "Bevande",
-  "filterOrderContentFood": "Cibo"
+  "filterOrderContentFood": "Cibo",
+  "acceptSheetTitle": "Completa la conferma",
+  "acceptSheetSelectRegion": "Seleziona zona ristorante",
+  "acceptSheetSelectTable": "Seleziona numero tavolo",
+  "acceptSheetNoteHint": "Aggiungi nota per l'ospite... (opzionale)",
+  "acceptSheetConfirm": "CONFERMA PRENOTAZIONE",
+  "acceptSheetNoTables": "Nessun tavolo disponibile.",
+  "acceptSheetErrorGeneric": "Impossibile accettare la prenotazione. Riprova.",
+  "acceptSheetRegionLabel": "Zona {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Prenotazione alle {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
 }

@@ -162,5 +162,16 @@
   "filterDateToday": "Сегодня",
   "filterOrderContent": "Содержимое заказа:",
   "filterOrderContentDrinks": "Напитки",
-  "filterOrderContentFood": "Еда"
+  "filterOrderContentFood": "Еда",
+  "acceptSheetTitle": "Завершить подтверждение",
+  "acceptSheetSelectRegion": "Выберите зону ресторана",
+  "acceptSheetSelectTable": "Выберите номер стола",
+  "acceptSheetNoteHint": "Добавить заметку для гостя... (необязательно)",
+  "acceptSheetConfirm": "ПОДТВЕРДИТЬ БРОНИРОВАНИЕ",
+  "acceptSheetNoTables": "Нет доступных столов.",
+  "acceptSheetErrorGeneric": "Невозможно принять бронирование. Попробуйте ещё раз.",
+  "acceptSheetRegionLabel": "Зона {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Бронирование в {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
 }

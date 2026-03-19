@@ -505,4 +505,37 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get filterOrderContentFood => 'Cibo';
+
+  @override
+  String get acceptSheetTitle => 'Completa la conferma';
+
+  @override
+  String get acceptSheetSelectRegion => 'Seleziona zona ristorante';
+
+  @override
+  String get acceptSheetSelectTable => 'Seleziona numero tavolo';
+
+  @override
+  String get acceptSheetNoteHint =>
+      'Aggiungi nota per l\'ospite... (opzionale)';
+
+  @override
+  String get acceptSheetConfirm => 'CONFERMA PRENOTAZIONE';
+
+  @override
+  String get acceptSheetNoTables => 'Nessun tavolo disponibile.';
+
+  @override
+  String get acceptSheetErrorGeneric =>
+      'Impossibile accettare la prenotazione. Riprova.';
+
+  @override
+  String acceptSheetRegionLabel(int number) {
+    return 'Zona $number';
+  }
+
+  @override
+  String acceptSheetReservationAt(String time) {
+    return 'Prenotazione alle $time';
+  }
 }

@@ -1013,6 +1013,60 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Hrana'**
   String get filterOrderContentFood;
+
+  /// No description provided for @acceptSheetTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Dovrši potvrdu'**
+  String get acceptSheetTitle;
+
+  /// No description provided for @acceptSheetSelectRegion.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izaberi region restorana'**
+  String get acceptSheetSelectRegion;
+
+  /// No description provided for @acceptSheetSelectTable.
+  ///
+  /// In sr, this message translates to:
+  /// **'Izaberi broj stola'**
+  String get acceptSheetSelectTable;
+
+  /// No description provided for @acceptSheetNoteHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Upiši napomenu za gosta... (opciono)'**
+  String get acceptSheetNoteHint;
+
+  /// No description provided for @acceptSheetConfirm.
+  ///
+  /// In sr, this message translates to:
+  /// **'POTVRDI REZERVACIJU'**
+  String get acceptSheetConfirm;
+
+  /// No description provided for @acceptSheetNoTables.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nema dostupnih stolova.'**
+  String get acceptSheetNoTables;
+
+  /// No description provided for @acceptSheetErrorGeneric.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nije moguće prihvatiti rezervaciju. Pokušaj ponovo.'**
+  String get acceptSheetErrorGeneric;
+
+  /// No description provided for @acceptSheetRegionLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Region {number}'**
+  String acceptSheetRegionLabel(int number);
+
+  /// No description provided for @acceptSheetReservationAt.
+  ///
+  /// In sr, this message translates to:
+  /// **'Rezervacija u {time}'**
+  String acceptSheetReservationAt(String time);
 }
 
 class _AppLocalizationsDelegate

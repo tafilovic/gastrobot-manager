@@ -162,5 +162,16 @@
   "filterDateToday": "Hoy",
   "filterOrderContent": "Contenido del pedido:",
   "filterOrderContentDrinks": "Bebidas",
-  "filterOrderContentFood": "Comida"
+  "filterOrderContentFood": "Comida",
+  "acceptSheetTitle": "Completar confirmación",
+  "acceptSheetSelectRegion": "Seleccionar zona del restaurante",
+  "acceptSheetSelectTable": "Seleccionar número de mesa",
+  "acceptSheetNoteHint": "Agregar nota para el huésped... (opcional)",
+  "acceptSheetConfirm": "CONFIRMAR RESERVA",
+  "acceptSheetNoTables": "No hay mesas disponibles.",
+  "acceptSheetErrorGeneric": "No se puede aceptar la reserva. Inténtalo de nuevo.",
+  "acceptSheetRegionLabel": "Zona {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Reserva a las {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}}
 }

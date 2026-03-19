@@ -37,5 +37,37 @@ class ReservationActionsRemote implements ReservationActionsApi {
       throw ReservationsException(message ?? e.message ?? 'Network error');
     }
   }
+
+  @override
+  Future<void> acceptReservation({
+    required String venueId,
+    required String reservationId,
+    required List<String> tableIds,
+    String? note,
+  }) async {
+    final body = <String, dynamic>{'tableIds': tableIds};
+    if (note != null && note.isNotEmpty) body['note'] = note;
+
+    try {
+      final response = await _dio.put<dynamic>(
+        '/reservation/$reservationId/confirm',
+        data: body,
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+          validateStatus: (status) => status != null && status < 400,
+        ),
+      );
+      if (response.statusCode != 200) {
+        final data = response.data;
+        final msg = data is Map ? data['message']?.toString() : null;
+        throw ReservationsException(msg ?? 'Failed to confirm reservation');
+      }
+    } on DioException catch (e) {
+      final message = e.response?.data is Map
+          ? (e.response!.data as Map)['message']?.toString()
+          : null;
+      throw ReservationsException(message ?? e.message ?? 'Network error');
+    }
+  }
 }
 

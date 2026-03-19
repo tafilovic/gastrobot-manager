@@ -6,5 +6,14 @@ abstract class ReservationActionsApi {
     required String reservationId,
     required String reason,
   });
+
+  /// PUT /reservation/:reservationId/confirm
+  /// Body: { tableIds: [String], note? }
+  Future<void> acceptReservation({
+    required String venueId,
+    required String reservationId,
+    required List<String> tableIds,
+    String? note,
+  });
 }
 

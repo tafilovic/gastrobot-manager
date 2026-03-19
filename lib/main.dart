@@ -38,6 +38,9 @@ import 'package:gastrobotmanager/features/reservations/data/reservation_actions_
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservation_actions_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
+import 'package:gastrobotmanager/features/regions/data/regions_remote.dart';
+import 'package:gastrobotmanager/features/regions/domain/repositories/regions_api.dart';
+import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/features/tables/data/tables_remote.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
@@ -233,6 +236,14 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
         ChangeNotifierProvider<TablesProvider>(
           create: (c) => TablesProvider(c.read<TablesApi>()),
+        ),
+
+        // Regions (waiter: region list with embedded tables for reservation confirmation)
+        Provider<RegionsApi>(
+          create: (_) => RegionsRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<RegionsProvider>(
+          create: (c) => RegionsProvider(c.read<RegionsApi>()),
         ),
       ],
       child: const GastroBotApp(),
