@@ -1313,6 +1313,42 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'KREIRAJ REZERVACIJU'**
   String get tableReservationCreateButton;
+
+  /// No description provided for @tableOrderScreenTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nova porudžbina'**
+  String get tableOrderScreenTitle;
+
+  /// No description provided for @tableOrderAiBanner.
+  ///
+  /// In sr, this message translates to:
+  /// **'Meli • Pitaj našeg AI bota za preporuke...'**
+  String get tableOrderAiBanner;
+
+  /// No description provided for @billSheetTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Račun'**
+  String get billSheetTitle;
+
+  /// No description provided for @billSheetTotal.
+  ///
+  /// In sr, this message translates to:
+  /// **'UKUPNO:'**
+  String get billSheetTotal;
+
+  /// No description provided for @billSheetEmpty.
+  ///
+  /// In sr, this message translates to:
+  /// **'Korpa je prazna'**
+  String get billSheetEmpty;
+
+  /// No description provided for @billSheetOrderButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'NARUČI'**
+  String get billSheetOrderButton;
 }
 
 class _AppLocalizationsDelegate

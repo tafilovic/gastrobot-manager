@@ -664,4 +664,23 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tableReservationCreateButton => 'СОЗДАТЬ БРОНИРОВАНИЕ';
+
+  @override
+  String get tableOrderScreenTitle => 'Новый заказ';
+
+  @override
+  String get tableOrderAiBanner =>
+      'Мели • Спросите нашего ИИ-бота о рекомендациях...';
+
+  @override
+  String get billSheetTitle => 'Счёт';
+
+  @override
+  String get billSheetTotal => 'ИТОГО:';
+
+  @override
+  String get billSheetEmpty => 'Корзина пуста';
+
+  @override
+  String get billSheetOrderButton => 'ЗАКАЗАТЬ';
 }

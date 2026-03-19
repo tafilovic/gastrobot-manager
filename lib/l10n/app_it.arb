@@ -215,5 +215,11 @@
   "tableReservationTimeRequired": "Seleziona ora",
   "tableReservationTableRequired": "Seleziona tavolo",
   "tableReservationInternalNoteHint": "Inserisci nota interna...",
-  "tableReservationCreateButton": "CREA PRENOTAZIONE"
+  "tableReservationCreateButton": "CREA PRENOTAZIONE",
+  "tableOrderScreenTitle": "Nuovo ordine",
+  "tableOrderAiBanner": "Meli • Chiedi al nostro bot AI per raccomandazioni...",
+  "billSheetTitle": "Conto",
+  "billSheetTotal": "TOTALE:",
+  "billSheetEmpty": "Il carrello è vuoto",
+  "billSheetOrderButton": "ORDINA"
 }

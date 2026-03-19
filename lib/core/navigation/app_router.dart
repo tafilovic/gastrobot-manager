@@ -21,6 +21,7 @@ import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/screens/active_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
+import 'package:gastrobotmanager/features/tables/screens/table_order_screen.dart';
 import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
 
 /// Centralized route names and path constants.
@@ -49,6 +50,9 @@ abstract class AppRouteNames {
   // Reservations details / filters
   static const reservationDetails = 'reservation-details';
   static const filterActiveReservations = 'filter-active-reservations';
+
+  // Tables sub-routes
+  static const tableOrder = 'table-order';
 
   // Path constants
   static const pathLogin = '/login';
@@ -242,6 +246,14 @@ class AppRouter {
                   path: AppRouteNames.pathTables,
                   name: AppRouteNames.tables,
                   builder: (context, state) => const TablesScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'order',
+                      name: AppRouteNames.tableOrder,
+                      builder: (context, state) =>
+                          const TableOrderScreen(),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
@@ -8,6 +9,7 @@ import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_reservations_dialog.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -83,7 +85,7 @@ class _TablesScreenState extends State<TablesScreen> {
                       Expanded(
                         child: FilledButton.icon(
                           onPressed: () {
-                            // TODO: implement order flow
+                            context.pushNamed(AppRouteNames.tableOrder);
                           },
                           style: FilledButton.styleFrom(
                             backgroundColor: accentColor,

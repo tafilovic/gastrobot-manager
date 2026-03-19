@@ -11,115 +11,63 @@ alwaysApply: true
 
 # Flutter Multi-Platform Rules
 
+Mandatory constraints. For detailed guidance, apply the relevant skill when working in that domain.
+
 ## 1. Shared-First Policy
 
-- Always implement features in shared Dart code (`lib/`) first.
-- Modify platform folders (`android/`, `ios/`, `windows/`, `web/`) ONLY if:
-  - No Dart/plugin solution exists.
-  - Native SDK or system API is strictly required.
-- Platform code must be minimal, thin, and contain no business logic.
-
----
+- Implement in shared Dart (`lib/`) first.
+- Modify platform folders only when Dart/plugin cannot solve it.
+- Platform code: minimal, no business logic.
 
 ## 2. Architecture
 
-- Follow clean architecture:
-  - `presentation`
-  - `domain`
-  - `data`
-- No business logic inside widgets.
-- Keep UI, state, and data layers separated.
-- One class per file (unless trivial).
-- Keep widgets < 200 lines.
-
----
+- Clean architecture: presentation, domain, data.
+- No business logic in widgets. One class per file.
+- **See `flutter-architecture` skill** when designing features.
+- **See `flutter-ui-components` skill** when building or refactoring UI.
 
 ## 3. State Management
 
-- Use a single state management solution.
-- Prefer `riverpod`.
-- Do not introduce new state libraries unless explicitly required.
+- Single solution. Prefer riverpod.
+- No new state libraries unless required.
 - Avoid complex logic in `setState`.
-
----
 
 ## 4. Approved Libraries
 
-Use well-known, maintained packages only.
-
-- Networking: `dio`
-- Models: `freezed` + `json_serializable`
-- Storage: `shared_preferences`, `hive`, or `isar`
-- Images: `cached_network_image`
-- Routing: `go_router`
-
-Do not reimplement solved problems.
-Do not add obscure dependencies.
-
----
+- dio, freezed + json_serializable, shared_preferences/hive/isar
+- cached_network_image, go_router
+- No obscure dependencies.
 
 ## 5. Platform Adaptation
 
-- UI must adapt across Android, iOS, Web, Windows using Dart-first solutions.
-- Use adaptive widgets and responsive layouts.
-- If Dart-only adaptation is possible → DO NOT modify native code.
-- If adaptation is impossible → keep consistent UI across platforms.
+- Dart-first. Adaptive widgets. No native changes if Dart can do it.
 
----
+## 6. Testing
 
-## 6. Testing (Mandatory)
-
-- All business logic must have unit tests.
-- Test use cases, repositories, and state logic.
-- Add widget tests for complex UI states.
-- Use `flutter_test` + `mocktail` or `mockito`.
-- No feature is complete without tests.
-
----
+- Business logic: unit tests. Complex UI: widget tests.
+- **See `flutter-testing` skill** when writing tests.
 
 ## 7. Imports
 
-- **Always use package imports**: `import 'package:gastrobotmanager/...'`
-- **Never use relative imports** (`../`, `../../`) for project code.
-- Ensures consistent type resolution across machines (avoids path casing issues on Windows).
-
----
+- **Always** `import 'package:gastrobotmanager/...'`
+- **Never** relative imports (`../`, `../../`)
 
 ## 8. Code Quality
 
-- Follow `flutter_lints`.
-- Prefer `const`.
-- Avoid magic numbers.
-- Avoid deep widget nesting (extract widgets).
-- Enforce strict null safety.
-- Avoid `!` unless guaranteed safe.
-
----
+- flutter_lints. Prefer const. No magic numbers.
+- Strict null safety. Avoid `!` unless safe.
 
 ## 9. Performance
 
-- Avoid unnecessary rebuilds.
-- No heavy work in `build()`.
-- Use builders for large lists.
-- Use isolates for CPU-heavy tasks.
-
----
+- No unnecessary rebuilds. No heavy work in `build()`.
+- Use builders for lists. Isolates for CPU-heavy work.
 
 ## 10. Error Handling
 
-- Never silently swallow errors.
-- Use structured error types.
-- Prefer sealed results or typed failures.
-- Log errors in debug mode.
-
----
+- Never swallow errors. Structured error types.
+- Log in debug mode.
 
 ## 11. Code Generation
 
-- Use `build_runner` for `freezed` and `json_serializable`.
-- Never edit generated files.
-- Regenerate after model changes.
-
----
-
-These rules are mandatory for all code changes.
+- build_runner for freezed, json_serializable.
+- Never edit generated files. Regenerate after model changes.

@@ -312,5 +312,11 @@
   "tableReservationTimeRequired": "Izaberite vreme",
   "tableReservationTableRequired": "Izaberite sto",
   "tableReservationInternalNoteHint": "Upiši internu napomenu...",
-  "tableReservationCreateButton": "KREIRAJ REZERVACIJU"
+  "tableReservationCreateButton": "KREIRAJ REZERVACIJU",
+  "tableOrderScreenTitle": "Nova porudžbina",
+  "tableOrderAiBanner": "Meli • Pitaj našeg AI bota za preporuke...",
+  "billSheetTitle": "Račun",
+  "billSheetTotal": "UKUPNO:",
+  "billSheetEmpty": "Korpa je prazna",
+  "billSheetOrderButton": "NARUČI"
 }

@@ -215,5 +215,11 @@
   "tableReservationTimeRequired": "Selecciona hora",
   "tableReservationTableRequired": "Selecciona mesa",
   "tableReservationInternalNoteHint": "Introduce nota interna...",
-  "tableReservationCreateButton": "CREAR RESERVA"
+  "tableReservationCreateButton": "CREAR RESERVA",
+  "tableOrderScreenTitle": "Nuevo pedido",
+  "tableOrderAiBanner": "Meli • Pregunta a nuestro bot de IA por recomendaciones...",
+  "billSheetTitle": "Cuenta",
+  "billSheetTotal": "TOTAL:",
+  "billSheetEmpty": "El carrito está vacío",
+  "billSheetOrderButton": "PEDIR"
 }

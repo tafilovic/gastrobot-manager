@@ -210,5 +210,11 @@
   "tableReservationTimeRequired": "Uhrzeit auswählen",
   "tableReservationTableRequired": "Tisch auswählen",
   "tableReservationInternalNoteHint": "Interne Notiz eingeben...",
-  "tableReservationCreateButton": "RESERVIERUNG ERSTELLEN"
+  "tableReservationCreateButton": "RESERVIERUNG ERSTELLEN",
+  "tableOrderScreenTitle": "Neue Bestellung",
+  "tableOrderAiBanner": "Meli • Fragen Sie unseren KI-Bot nach Empfehlungen...",
+  "billSheetTitle": "Rechnung",
+  "billSheetTotal": "GESAMT:",
+  "billSheetEmpty": "Warenkorb ist leer",
+  "billSheetOrderButton": "BESTELLEN"
 }

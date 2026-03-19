@@ -46,6 +46,7 @@ import 'package:gastrobotmanager/features/reservations/domain/repositories/confi
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/tables/data/tables_remote.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
+import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 
 void main() {
@@ -239,6 +240,9 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
         ChangeNotifierProvider<TablesProvider>(
           create: (c) => TablesProvider(c.read<TablesApi>()),
+        ),
+        ChangeNotifierProvider<TableOrderMenuProvider>(
+          create: (c) => TableOrderMenuProvider(c.read<MenusApi>()),
         ),
 
         // Regions (waiter: region list with embedded tables for reservation confirmation)

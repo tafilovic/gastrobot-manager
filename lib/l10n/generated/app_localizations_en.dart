@@ -663,4 +663,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tableReservationCreateButton => 'CREATE RESERVATION';
+
+  @override
+  String get tableOrderScreenTitle => 'New Order';
+
+  @override
+  String get tableOrderAiBanner =>
+      'Meli • Ask our AI bot for recommendations...';
+
+  @override
+  String get billSheetTitle => 'Bill';
+
+  @override
+  String get billSheetTotal => 'TOTAL:';
+
+  @override
+  String get billSheetEmpty => 'Cart is empty';
+
+  @override
+  String get billSheetOrderButton => 'ORDER';
 }

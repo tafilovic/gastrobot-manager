@@ -215,5 +215,11 @@
   "tableReservationTimeRequired": "Выберите время",
   "tableReservationTableRequired": "Выберите стол",
   "tableReservationInternalNoteHint": "Введите внутреннюю заметку...",
-  "tableReservationCreateButton": "СОЗДАТЬ БРОНИРОВАНИЕ"
+  "tableReservationCreateButton": "СОЗДАТЬ БРОНИРОВАНИЕ",
+  "tableOrderScreenTitle": "Новый заказ",
+  "tableOrderAiBanner": "Мели • Спросите нашего ИИ-бота о рекомендациях...",
+  "billSheetTitle": "Счёт",
+  "billSheetTotal": "ИТОГО:",
+  "billSheetEmpty": "Корзина пуста",
+  "billSheetOrderButton": "ЗАКАЗАТЬ"
 }

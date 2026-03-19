@@ -210,5 +210,11 @@
   "tableReservationTimeRequired": "Select time",
   "tableReservationTableRequired": "Select table",
   "tableReservationInternalNoteHint": "Enter internal note...",
-  "tableReservationCreateButton": "CREATE RESERVATION"
+  "tableReservationCreateButton": "CREATE RESERVATION",
+  "tableOrderScreenTitle": "New Order",
+  "tableOrderAiBanner": "Meli • Ask our AI bot for recommendations...",
+  "billSheetTitle": "Bill",
+  "billSheetTotal": "TOTAL:",
+  "billSheetEmpty": "Cart is empty",
+  "billSheetOrderButton": "ORDER"
 }

@@ -664,4 +664,22 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get tableReservationCreateButton => 'KREIRAJ REZERVACIJU';
+
+  @override
+  String get tableOrderScreenTitle => 'Nova narudžba';
+
+  @override
+  String get tableOrderAiBanner => 'Meli • Pitaj našeg AI bota za preporuke...';
+
+  @override
+  String get billSheetTitle => 'Račun';
+
+  @override
+  String get billSheetTotal => 'UKUPNO:';
+
+  @override
+  String get billSheetEmpty => 'Košarica je prazna';
+
+  @override
+  String get billSheetOrderButton => 'NARUČI';
 }
