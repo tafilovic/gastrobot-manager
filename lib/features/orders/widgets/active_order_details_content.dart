@@ -9,7 +9,9 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dar
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reusable active order details body: table, time, food/drinks with status, bill, Mark as paid.
@@ -97,7 +99,6 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
     final l10n = AppLocalizations.of(context)!;
     final order = widget.order;
     final accentColor = Theme.of(context).colorScheme.primary;
-    final tableNum = int.tryParse(order.tableNumber) ?? 0;
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
     final canMarkAsPaid = order.items.isNotEmpty &&
         order.items.every(
@@ -129,15 +130,20 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.table_restaurant,
-                          size: 20, color: accentColor),
+                      Icon(
+                        tableDisplayCategoryIcon(
+                          tableDisplayCategoryFromApiType(order.tableType),
+                        ),
+                        size: 20,
+                        color: accentColor,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              l10n.orderTableNumber(tableNum),
+                              orderSeatingDisplayTitle(l10n, order),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

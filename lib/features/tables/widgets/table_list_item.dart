@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Card in the tables list: table id row, then (when present) next reservation
@@ -87,18 +88,12 @@ class TableListItem extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.table_restaurant,
-                size: 22,
-                color: AppColors.textSecondary,
-              ),
-              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.tableNumber(table.name),
+                      seatingQualifiedTitle(l10n, table),
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,

@@ -10,6 +10,8 @@ import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/tables/utils/group_tables_by_display_category.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -120,7 +122,7 @@ class _TablesScreenState extends State<TablesScreen> {
               ),
             ),
             Expanded(
-              child: _TablesList(
+              child: _TablesGroupedList(
                 provider: provider,
                 l10n: l10n,
                 onTableTap: _onTableCardTapped,
@@ -133,8 +135,9 @@ class _TablesScreenState extends State<TablesScreen> {
   }
 }
 
-class _TablesList extends StatelessWidget {
-  const _TablesList({
+/// Tables list with collapsible category sections (room / sunbed / table).
+class _TablesGroupedList extends StatefulWidget {
+  const _TablesGroupedList({
     required this.provider,
     required this.l10n,
     required this.onTableTap,
@@ -145,7 +148,28 @@ class _TablesList extends StatelessWidget {
   final void Function(TableModel table) onTableTap;
 
   @override
+  State<_TablesGroupedList> createState() => _TablesGroupedListState();
+}
+
+class _TablesGroupedListState extends State<_TablesGroupedList> {
+  /// Categories the user has collapsed; absent entries are expanded.
+  final Set<TableDisplayCategory> _collapsed = {};
+
+  void _toggleCategory(TableDisplayCategory category) {
+    setState(() {
+      if (_collapsed.contains(category)) {
+        _collapsed.remove(category);
+      } else {
+        _collapsed.add(category);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = widget.provider;
+    final l10n = widget.l10n;
+
     if (provider.isLoading && provider.tables.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -171,6 +195,7 @@ class _TablesList extends StatelessWidget {
     }
 
     final tables = provider.tables;
+    final grouped = groupTablesByDisplayCategory(tables);
 
     if (tables.isEmpty) {
       return RefreshIndicator(
@@ -211,57 +236,17 @@ class _TablesList extends StatelessWidget {
           child: RefreshIndicator(
             onRefresh: provider.pullRefresh,
             color: AppColors.accent,
-            child: crossAxisCount == 1
-                ? ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
-                    ),
-                    itemCount: tables.length,
-                    separatorBuilder: (context, _) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final table = tables[index];
-                      return ListItemEntrance(
-                        index: index,
-                        child: TableListItem(
-                          table: table,
-                          onTap: () => onTableTap(table),
-                        ),
-                      );
-                    },
-                  )
-                : ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
-                    ),
-                    itemCount: (tables.length + crossAxisCount - 1) ~/
-                        crossAxisCount,
-                    separatorBuilder: (context, _) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, rowIndex) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (var col = 0; col < crossAxisCount; col++) ...[
-                            if (col > 0) const SizedBox(width: 12),
-                            Expanded(
-                              child: _TableGridCell(
-                                rowIndex: rowIndex,
-                                col: col,
-                                crossAxisCount: crossAxisCount,
-                                tables: tables,
-                                onTableTap: onTableTap,
-                              ),
-                            ),
-                          ],
-                        ],
-                      );
-                    },
-                  ),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: _buildGroupedTableSlivers(
+                grouped: grouped,
+                l10n: l10n,
+                crossAxisCount: crossAxisCount,
+                onTableTap: widget.onTableTap,
+                collapsed: _collapsed,
+                onToggleCategory: _toggleCategory,
+              ),
+            ),
           ),
         );
       },
@@ -269,12 +254,185 @@ class _TablesList extends StatelessWidget {
   }
 }
 
-class _TableGridCell extends StatelessWidget {
-  const _TableGridCell({
+String _tableCategorySectionLabel(
+  TableDisplayCategory category,
+  AppLocalizations l10n,
+) {
+  return switch (category) {
+    TableDisplayCategory.room => l10n.tableTypeRoom,
+    TableDisplayCategory.sunbed => l10n.tableTypeSunbed,
+    TableDisplayCategory.table => l10n.tableTypeTable,
+  };
+}
+
+List<Widget> _buildGroupedTableSlivers({
+  required List<({TableDisplayCategory category, List<TableModel> tables})>
+      grouped,
+  required AppLocalizations l10n,
+  required int crossAxisCount,
+  required void Function(TableModel table) onTableTap,
+  required Set<TableDisplayCategory> collapsed,
+  required void Function(TableDisplayCategory category) onToggleCategory,
+}) {
+  final slivers = <Widget>[];
+  var entranceIndex = 0;
+
+  for (var s = 0; s < grouped.length; s++) {
+    final section = grouped[s];
+    final isFirst = s == 0;
+    final label = _tableCategorySectionLabel(section.category, l10n);
+    final expanded = !collapsed.contains(section.category);
+    final count = section.tables.length;
+
+    slivers.add(
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(12, isFirst ? 4 : 16, 12, expanded ? 8 : 4),
+          child: Material(
+            color: Colors.transparent,
+            child: Semantics(
+              button: true,
+              expanded: expanded,
+              label: '$label ($count)',
+              child: InkWell(
+                onTap: () => onToggleCategory(section.category),
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        expanded ? Icons.expand_more : Icons.chevron_right,
+                        size: 22,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        tableDisplayCategoryIcon(section.category),
+                        size: 22,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '$count',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    if (!expanded) {
+      continue;
+    }
+
+    if (crossAxisCount == 1) {
+      final n = section.tables.length;
+      final childCount = n == 0 ? 0 : (n * 2 - 1);
+      final start = entranceIndex;
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index.isOdd) {
+                  return const SizedBox(height: 12);
+                }
+                final tableIndex = index ~/ 2;
+                final table = section.tables[tableIndex];
+                return ListItemEntrance(
+                  index: start + tableIndex,
+                  child: TableListItem(
+                    table: table,
+                    onTap: () => onTableTap(table),
+                  ),
+                );
+              },
+              childCount: childCount,
+            ),
+          ),
+        ),
+      );
+    } else {
+      final tables = section.tables;
+      final rowCount =
+          (tables.length + crossAxisCount - 1) ~/ crossAxisCount;
+      final gridChildCount = rowCount == 0 ? 0 : (rowCount * 2 - 1);
+      final start = entranceIndex;
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index.isOdd) {
+                  return const SizedBox(height: 12);
+                }
+                final rowIndex = index ~/ 2;
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (var col = 0; col < crossAxisCount; col++) ...[
+                      if (col > 0) const SizedBox(width: 12),
+                      Expanded(
+                        child: _TableSectionGridCell(
+                          rowIndex: rowIndex,
+                          col: col,
+                          crossAxisCount: crossAxisCount,
+                          tables: tables,
+                          entranceBase: start,
+                          onTableTap: onTableTap,
+                        ),
+                      ),
+                    ],
+                  ],
+                );
+              },
+              childCount: gridChildCount,
+            ),
+          ),
+        ),
+      );
+    }
+
+    entranceIndex += section.tables.length;
+  }
+
+  slivers.add(
+    const SliverPadding(padding: EdgeInsets.only(bottom: 8)),
+  );
+
+  return slivers;
+}
+
+class _TableSectionGridCell extends StatelessWidget {
+  const _TableSectionGridCell({
     required this.rowIndex,
     required this.col,
     required this.crossAxisCount,
     required this.tables,
+    required this.entranceBase,
     required this.onTableTap,
   });
 
@@ -282,6 +440,7 @@ class _TableGridCell extends StatelessWidget {
   final int col;
   final int crossAxisCount;
   final List<TableModel> tables;
+  final int entranceBase;
   final void Function(TableModel table) onTableTap;
 
   @override
@@ -292,7 +451,7 @@ class _TableGridCell extends StatelessWidget {
     }
     final table = tables[index];
     return ListItemEntrance(
-      index: index,
+      index: entranceBase + index,
       child: TableListItem(
         table: table,
         onTap: () => onTableTap(table),

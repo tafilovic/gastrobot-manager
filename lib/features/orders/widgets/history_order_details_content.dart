@@ -9,6 +9,8 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reusable history order details body: order date, food/drinks (name + quantity), bill, paid status.
@@ -38,7 +40,6 @@ class HistoryOrderDetailsContent extends StatelessWidget {
     final currency = context.watch<CurrencyProvider>();
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
-    final tableNum = int.tryParse(order.tableNumber) ?? 0;
     final orderDateTime = _formatOrderDateTime(order.targetTime);
     final foodItems = order.items
         .where((i) => i.type == null || i.type == 'food')
@@ -68,14 +69,20 @@ class HistoryOrderDetailsContent extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.table_restaurant, size: 20, color: accentColor),
+                Icon(
+                  tableDisplayCategoryIcon(
+                    tableDisplayCategoryFromApiType(order.tableType),
+                  ),
+                  size: 20,
+                  color: accentColor,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        l10n.orderTableNumber(tableNum),
+                        orderSeatingDisplayTitle(l10n, order),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

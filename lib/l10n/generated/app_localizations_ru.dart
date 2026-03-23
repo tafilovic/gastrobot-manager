@@ -146,7 +146,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String tableNumber(String number) {
-    return 'Стол №$number';
+    return 'Стол $number';
   }
 
   @override
@@ -156,10 +156,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tableTypeTable => 'Стол';
 
   @override
-  String get tableTypeRoom => 'В помещении';
+  String get tableTypeRoom => 'Комната';
 
   @override
   String get tableTypeSunbed => 'Шезлонг';
+
+  @override
+  String seatingNumberTable(String number) {
+    return 'Стол $number';
+  }
+
+  @override
+  String seatingNumberRoom(String number) {
+    return 'Комната $number';
+  }
+
+  @override
+  String seatingNumberSunbed(String number) {
+    return 'Шезлонг $number';
+  }
 
   @override
   String get navProfile => 'ПРОФИЛЬ';
@@ -237,7 +252,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String orderTableNumber(int number) {
-    return 'Стол № $number';
+    return 'Стол $number';
   }
 
   @override

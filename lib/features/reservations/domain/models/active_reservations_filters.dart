@@ -2,7 +2,7 @@ import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 
 /// Filter state for active (accepted) reservations.
 /// Used by [ActiveReservationsFilterScreen].
-/// Matches UI design: date, people count, region, reservation content, table numbers.
+/// Matches UI design: date, people count, region, reservation content, table ids.
 class ActiveReservationsFilters {
   ActiveReservationsFilters({
     DateTime? dateFrom,
@@ -10,7 +10,7 @@ class ActiveReservationsFilters {
     this.peopleCounts = const {},
     this.regions = const {},
     this.reservationContents = const {},
-    this.tableNumbers = const {},
+    this.tableIds = const {},
   }) : dateFrom = dateFrom != null
            ? CalendarDayBounds.startOfDay(dateFrom)
            : null,
@@ -21,7 +21,7 @@ class ActiveReservationsFilters {
   final Set<int> peopleCounts;
   final Set<String> regions;
   final Set<String> reservationContents;
-  final Set<String> tableNumbers;
+  final Set<String> tableIds;
 
   /// Region: indoors (Unutrašnjost).
   static const String regionIndoors = 'indoors';
@@ -41,7 +41,7 @@ class ActiveReservationsFilters {
     Set<int>? peopleCounts,
     Set<String>? regions,
     Set<String>? reservationContents,
-    Set<String>? tableNumbers,
+    Set<String>? tableIds,
   }) {
     return ActiveReservationsFilters(
       dateFrom: dateFrom ?? this.dateFrom,
@@ -49,7 +49,7 @@ class ActiveReservationsFilters {
       peopleCounts: peopleCounts ?? this.peopleCounts,
       regions: regions ?? this.regions,
       reservationContents: reservationContents ?? this.reservationContents,
-      tableNumbers: tableNumbers ?? this.tableNumbers,
+      tableIds: tableIds ?? this.tableIds,
     );
   }
 
@@ -59,5 +59,5 @@ class ActiveReservationsFilters {
       peopleCounts.isEmpty &&
       regions.isEmpty &&
       reservationContents.isEmpty &&
-      tableNumbers.isEmpty;
+      tableIds.isEmpty;
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Card for a single pending order in the list.
@@ -26,7 +28,6 @@ class KitchenOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final tableNum = int.tryParse(order.tableNumber) ?? 0;
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
 
     final decoration = BoxDecoration(
@@ -67,13 +68,19 @@ class KitchenOrderCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      l10n.orderTableNumber(tableNum),
+                      orderSeatingDisplayTitle(l10n, order),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(width: 6),
-                    Icon(Icons.table_bar, size: 18, color: AppColors.textMuted),
+                    Icon(
+                      tableDisplayCategoryIcon(
+                        tableDisplayCategoryFromApiType(order.tableType),
+                      ),
+                      size: 18,
+                      color: AppColors.textMuted,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 6),

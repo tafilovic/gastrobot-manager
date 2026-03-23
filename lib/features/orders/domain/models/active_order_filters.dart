@@ -1,14 +1,17 @@
 /// Filter state for active orders (waiter). Used by [FilterActiveOrdersScreen].
 class ActiveOrderFilters {
   const ActiveOrderFilters({
-    this.tableNumbers = const {},
+    this.tableIds = const {},
     this.foodStatuses = const {},
     this.drinkStatuses = const {},
     this.billMin = 0,
     this.billMax = 200000,
   });
 
-  final Set<String> tableNumbers;
+  /// Selected venue table ids from GET /venues/:venueId/tables (each row’s `id` field).
+  /// Order filtering compares to each order’s parsed table id (trim + case-insensitive);
+  /// if the order payload has no table id, a name fallback applies only when unambiguous.
+  final Set<String> tableIds;
   final Set<String> foodStatuses;
   final Set<String> drinkStatuses;
   final double billMin;
@@ -20,14 +23,14 @@ class ActiveOrderFilters {
   static const String statusRejected = 'rejected';
 
   ActiveOrderFilters copyWith({
-    Set<String>? tableNumbers,
+    Set<String>? tableIds,
     Set<String>? foodStatuses,
     Set<String>? drinkStatuses,
     double? billMin,
     double? billMax,
   }) {
     return ActiveOrderFilters(
-      tableNumbers: tableNumbers ?? this.tableNumbers,
+      tableIds: tableIds ?? this.tableIds,
       foodStatuses: foodStatuses ?? this.foodStatuses,
       drinkStatuses: drinkStatuses ?? this.drinkStatuses,
       billMin: billMin ?? this.billMin,
@@ -36,7 +39,7 @@ class ActiveOrderFilters {
   }
 
   bool get isEmpty =>
-      tableNumbers.isEmpty &&
+      tableIds.isEmpty &&
       foodStatuses.isEmpty &&
       drinkStatuses.isEmpty &&
       billMin <= 0 &&

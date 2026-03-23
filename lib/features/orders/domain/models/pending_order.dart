@@ -6,6 +6,8 @@ class PendingOrder {
     required this.orderId,
     required this.orderNumber,
     required this.tableNumber,
+    this.tableId,
+    this.tableType,
     this.note,
     required this.orderType,
     required this.targetTime,
@@ -16,6 +18,12 @@ class PendingOrder {
   final String orderId;
   final String orderNumber;
   final String tableNumber;
+
+  /// Venue table id when the API sends it; used for filters (distinct from [tableNumber]).
+  final String? tableId;
+
+  /// Venue table kind: `table` | `room` | `sunbed` (from nested `table` or order fields).
+  final String? tableType;
   final String? note;
   final String orderType;
   final String targetTime;
@@ -41,6 +49,36 @@ class PendingOrder {
             ? '0'
             : tableNum;
 
+    String? tableId;
+    final rawTableId = json['tableId'] ??
+        json['table_id'] ??
+        json['venueTableId'] ??
+        json['venue_table_id'];
+    if (rawTableId != null && rawTableId.toString().trim().isNotEmpty) {
+      tableId = rawTableId.toString().trim();
+    }
+    String? tableType;
+    final tableObj = json['table'];
+    if (tableObj is Map) {
+      final m = Map<String, dynamic>.from(tableObj);
+      if (tableId == null) {
+        final nested = m['id'] ?? m['_id'];
+        if (nested != null && nested.toString().trim().isNotEmpty) {
+          tableId = nested.toString().trim();
+        }
+      }
+      final rawType = m['type']?.toString().trim();
+      if (rawType != null && rawType.isNotEmpty) {
+        tableType = rawType;
+      }
+    }
+    tableType ??= () {
+      final t = json['tableType'] ?? json['table_type'];
+      if (t == null) return null;
+      final s = t.toString().trim();
+      return s.isEmpty ? null : s;
+    }();
+
     final orderId =
         json['orderId']?.toString() ?? json['id']?.toString() ?? '';
 
@@ -61,6 +99,8 @@ class PendingOrder {
       orderId: orderId,
       orderNumber: orderNumber,
       tableNumber: tableNumber,
+      tableId: tableId,
+      tableType: tableType,
       note: json['note'] as String?,
       orderType: orderType,
       targetTime: targetTime,

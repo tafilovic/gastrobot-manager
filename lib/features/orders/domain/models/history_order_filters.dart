@@ -6,7 +6,7 @@ class HistoryOrderFilters {
     DateTime? dateFrom,
     DateTime? dateTo,
     this.orderContentTypes = const {},
-    this.tableNumbers = const {},
+    this.tableIds = const {},
     this.billMin = 0,
     this.billMax = 200000,
   }) : dateFrom = dateFrom != null
@@ -19,7 +19,8 @@ class HistoryOrderFilters {
 
   /// 'food' and/or 'drink': empty = no filter; otherwise order must match selected types.
   final Set<String> orderContentTypes;
-  final Set<String> tableNumbers;
+  /// Selected venue table ids from GET /venues/:venueId/tables (same matching rules as active order filters).
+  final Set<String> tableIds;
   final double billMin;
   final double billMax;
 
@@ -30,7 +31,7 @@ class HistoryOrderFilters {
     DateTime? dateFrom,
     DateTime? dateTo,
     Set<String>? orderContentTypes,
-    Set<String>? tableNumbers,
+    Set<String>? tableIds,
     double? billMin,
     double? billMax,
   }) {
@@ -38,7 +39,7 @@ class HistoryOrderFilters {
       dateFrom: dateFrom ?? this.dateFrom,
       dateTo: dateTo ?? this.dateTo,
       orderContentTypes: orderContentTypes ?? this.orderContentTypes,
-      tableNumbers: tableNumbers ?? this.tableNumbers,
+      tableIds: tableIds ?? this.tableIds,
       billMin: billMin ?? this.billMin,
       billMax: billMax ?? this.billMax,
     );
@@ -48,7 +49,7 @@ class HistoryOrderFilters {
       dateFrom == null &&
       dateTo == null &&
       orderContentTypes.isEmpty &&
-      tableNumbers.isEmpty &&
+      tableIds.isEmpty &&
       billMin <= 0 &&
       billMax >= 200000;
 }

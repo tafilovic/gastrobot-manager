@@ -25,7 +25,6 @@ import 'package:gastrobotmanager/features/tables/widgets/table_overview_header.d
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_reservation_card.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_orders_header_row.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_reservation_count_row.dart';
-import 'package:gastrobotmanager/features/tables/widgets/table_overview_segmented_tabs.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Detail view for one table: status, optional active order, reservations vs orders tabs.
@@ -228,7 +227,7 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
                     l10n: l10n,
                     typeLabel: _typeLabel(l10n),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   if (!widget.table.isFree)
                     Consumer<OrdersProvider>(
                       builder: (context, orders, _) {
@@ -260,27 +259,57 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
                               ),
                               child: Text(l10n.orderMarkAsPaid),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 12),
                           ],
                         );
                       },
                     ),
-                  const SizedBox(height: 20),
-                  TableOverviewSegmentedTabs(
-                    accentColor: accentColor,
-                    selectedIndex: _segmentIndex,
-                    reservationsLabel: l10n.navReservations,
-                    ordersLabel: l10n.navOrders,
-                    onChanged: (i) {
-                      setState(() {
-                        _segmentIndex = i;
-                        _selectedReservation = null;
-                        _selectedOrder = null;
-                        if (i == 1) {
-                          _loadTableOrders();
-                        }
-                      });
-                    },
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SegmentedButton<int>(
+                          segments: [
+                            ButtonSegment<int>(
+                              value: 0,
+                              label: Text(l10n.navReservations),
+                            ),
+                            ButtonSegment<int>(
+                              value: 1,
+                              label: Text(l10n.navOrders),
+                            ),
+                          ],
+                          selected: {_segmentIndex},
+                          onSelectionChanged: (s) {
+                            final i = s.first;
+                            setState(() {
+                              _segmentIndex = i;
+                              _selectedReservation = null;
+                              _selectedOrder = null;
+                              if (i == 1) {
+                                _loadTableOrders();
+                              }
+                            });
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStateProperty.resolveWith((states) {
+                              if (states.contains(WidgetState.selected)) {
+                                return accentColor;
+                              }
+                              return AppColors.surface;
+                            }),
+                            foregroundColor:
+                                WidgetStateProperty.resolveWith((states) {
+                              if (states.contains(WidgetState.selected)) {
+                                return AppColors.onPrimary;
+                              }
+                              return AppColors.textPrimary;
+                            }),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   if (_segmentIndex == 0) ...[

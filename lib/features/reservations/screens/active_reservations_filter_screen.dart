@@ -8,6 +8,7 @@ import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/tables/widgets/tables_filter_table_chips_grouped.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Screen for filtering active (accepted) reservations.
@@ -30,7 +31,7 @@ class _ActiveReservationsFilterScreenState
   late Set<int> _peopleCounts;
   late Set<String> _regions;
   late Set<String> _reservationContents;
-  late Set<String> _tableNumbers;
+  late Set<String> _tableIds;
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _ActiveReservationsFilterScreenState
     _peopleCounts = f?.peopleCounts.toSet() ?? {};
     _regions = f?.regions.toSet() ?? {};
     _reservationContents = f?.reservationContents.toSet() ?? {};
-    _tableNumbers = f?.tableNumbers.toSet() ?? {};
+    _tableIds = f?.tableIds.toSet() ?? {};
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadTables());
   }
 
@@ -59,7 +60,7 @@ class _ActiveReservationsFilterScreenState
     peopleCounts: _peopleCounts,
     regions: _regions,
     reservationContents: _reservationContents,
-    tableNumbers: _tableNumbers,
+    tableIds: _tableIds,
   );
 
   void _reset() {
@@ -69,7 +70,7 @@ class _ActiveReservationsFilterScreenState
       _peopleCounts = {};
       _regions = {};
       _reservationContents = {};
-      _tableNumbers = {};
+      _tableIds = {};
     });
   }
 
@@ -148,7 +149,7 @@ class _ActiveReservationsFilterScreenState
                     _buildDivider(),
                     _buildSectionLabel(l10n.filterTableNumber),
                     const SizedBox(height: 12),
-                    _buildTableNumberGrid(context),
+                    _buildTableNumberGrid(),
                   ],
                 ),
               ),
@@ -346,63 +347,18 @@ class _ActiveReservationsFilterScreenState
     );
   }
 
-  Widget _buildTableNumberGrid(BuildContext context) {
-    final provider = context.watch<TablesProvider>();
-
-    if (provider.isLoading && provider.tables.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (provider.error != null && provider.tables.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Text(
-          provider.error!,
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-        ),
-      );
-    }
-
-    final tableNames = provider.tables.map((t) => t.name).toList()
-      ..sort((a, b) {
-        final na = int.tryParse(a);
-        final nb = int.tryParse(b);
-        if (na != null && nb != null) return na.compareTo(nb);
-        return a.compareTo(b);
-      });
-
-    if (tableNames.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Text(
-          AppLocalizations.of(context)!.acceptSheetNoTables,
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-        ),
-      );
-    }
-
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: tableNames.map((t) {
-        final selected = _tableNumbers.contains(t);
-        return _FilterChip(
-          label: t,
-          selected: selected,
-          onTap: () {
-            setState(() {
-              if (selected) {
-                _tableNumbers = {..._tableNumbers}..remove(t);
-              } else {
-                _tableNumbers = {..._tableNumbers, t};
-              }
-            });
-          },
-        );
-      }).toList(),
+  Widget _buildTableNumberGrid() {
+    return TablesFilterTableChipsGrouped(
+      selectedTableIds: _tableIds,
+      onToggleTableId: (id) {
+        setState(() {
+          if (_tableIds.contains(id)) {
+            _tableIds = {..._tableIds}..remove(id);
+          } else {
+            _tableIds = {..._tableIds, id};
+          }
+        });
+      },
     );
   }
 }

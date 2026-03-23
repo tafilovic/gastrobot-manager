@@ -9,7 +9,9 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dar
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_group_status.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Layout for [PendingOrderItemsExpansionCard].
@@ -221,18 +223,23 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
       );
     }
 
-    // list + listCompact: table header
-    final tableNum = int.tryParse(order.tableNumber) ?? 0;
+    // list + listCompact: seating title (Room 1 / Sunbed 2 / Table …)
+    final category = tableDisplayCategoryFromApiType(order.tableType);
+    final seatingTitle = orderSeatingDisplayTitle(l10n, order);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(Icons.table_restaurant, size: 18, color: accentColor),
+            Icon(
+              tableDisplayCategoryIcon(category),
+              size: 18,
+              color: accentColor,
+            ),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                l10n.orderTableNumber(tableNum),
+                seatingTitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: accentColor,
                   fontWeight: FontWeight.bold,

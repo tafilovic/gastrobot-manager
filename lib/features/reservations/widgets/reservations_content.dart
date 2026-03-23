@@ -23,6 +23,7 @@ import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reserva
 import 'package:gastrobotmanager/features/reservations/widgets/kitchen_bar_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_request_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
+import 'package:gastrobotmanager/features/tables/utils/venue_table_id_match.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reservations screen content: title, tabs (Zahtevi / Prihvaćeno), count, list of request cards.
@@ -435,10 +436,9 @@ class _ReservationsContentState extends State<ReservationsContent> {
         });
         if (!matches) return false;
       }
-      if (filters.tableNumbers.isNotEmpty) {
-        final tableNames = r.tables.map((t) => t.name).toSet();
-        final hasMatch = filters.tableNumbers.any(
-          (t) => tableNames.contains(t),
+      if (filters.tableIds.isNotEmpty) {
+        final hasMatch = filters.tableIds.any(
+          (fid) => r.tables.any((t) => sameVenueTableId(fid, t.id)),
         );
         if (!hasMatch) return false;
       }

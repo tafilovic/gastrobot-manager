@@ -65,6 +65,7 @@ class ReadyItemsRemote implements ReadyItemsApi {
       orderId: json['orderId']?.toString() ?? '',
       orderNumber: json['orderNumber'] as String? ?? '',
       tableNumber: tableNumber,
+      tableType: QueueOrder.parseTableTypeFromOrderJson(json),
       note: json['note'] as String?,
       type: 'immediate',
       targetTime: latestMarkedReady.isNotEmpty

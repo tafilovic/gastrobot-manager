@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Table icon, number, region/type, and availability dot.
+/// Title, type line, and availability dot.
 class TableOverviewHeader extends StatelessWidget {
   const TableOverviewHeader({
     super.key,
@@ -26,22 +26,12 @@ class TableOverviewHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SvgPicture.asset(
-          'assets/icons/table.svg',
-          width: 28,
-          height: 28,
-          colorFilter: ColorFilter.mode(
-            AppColors.textSecondary,
-            BlendMode.srcIn,
-          ),
-        ),
-        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.tableNumber(table.name),
+                seatingQualifiedTitle(l10n, table),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,

@@ -4,6 +4,7 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/preparing/domain/models/queue_item.dart';
 import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
 import 'package:gastrobotmanager/features/preparing/utils/format_queue_time_ago.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// One ready-to-serve order card: table + order # chip, time ago, flat list of
@@ -21,10 +22,6 @@ class ReadyOrderCard extends StatelessWidget {
   final AppLocalizations l10n;
   final Color accentColor;
   final VoidCallback onMarkServed;
-
-  static int _tableNumber(QueueOrder order) {
-    return int.tryParse(order.tableNumber) ?? 0;
-  }
 
   static IconData _iconForItem(QueueItem item) {
     return item.type == 'drink' ? Icons.local_bar : Icons.restaurant;
@@ -55,13 +52,19 @@ class ReadyOrderCard extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.table_restaurant,
+                  tableDisplayCategoryIcon(
+                    tableDisplayCategoryFromApiType(order.tableType),
+                  ),
                   size: 18,
                   color: accentColor,
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  l10n.orderTableNumber(_tableNumber(order)),
+                  seatingQualifiedTitleForSeating(
+                    l10n,
+                    displayName: order.tableNumber,
+                    seatingType: order.tableType,
+                  ),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: accentColor,
                     fontWeight: FontWeight.bold,

@@ -381,7 +381,7 @@ abstract class AppLocalizations {
   /// No description provided for @tableNumber.
   ///
   /// In sr, this message translates to:
-  /// **'Sto br. {number}'**
+  /// **'Sto {number}'**
   String tableNumber(String number);
 
   /// No description provided for @tableReservationAt.
@@ -399,7 +399,7 @@ abstract class AppLocalizations {
   /// No description provided for @tableTypeRoom.
   ///
   /// In sr, this message translates to:
-  /// **'Unutrašnjost'**
+  /// **'Soba'**
   String get tableTypeRoom;
 
   /// No description provided for @tableTypeSunbed.
@@ -407,6 +407,24 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Ležaljka'**
   String get tableTypeSunbed;
+
+  /// No description provided for @seatingNumberTable.
+  ///
+  /// In sr, this message translates to:
+  /// **'Sto {number}'**
+  String seatingNumberTable(String number);
+
+  /// No description provided for @seatingNumberRoom.
+  ///
+  /// In sr, this message translates to:
+  /// **'Soba {number}'**
+  String seatingNumberRoom(String number);
+
+  /// No description provided for @seatingNumberSunbed.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ležaljka {number}'**
+  String seatingNumberSunbed(String number);
 
   /// No description provided for @navProfile.
   ///
@@ -555,7 +573,7 @@ abstract class AppLocalizations {
   /// No description provided for @orderTableNumber.
   ///
   /// In sr, this message translates to:
-  /// **'Sto broj {number}'**
+  /// **'Sto {number}'**
   String orderTableNumber(int number);
 
   /// No description provided for @orderDishCount.

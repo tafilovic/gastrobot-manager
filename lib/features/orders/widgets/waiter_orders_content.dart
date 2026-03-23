@@ -13,6 +13,9 @@ import 'package:gastrobotmanager/features/orders/domain/models/active_order_filt
 import 'package:gastrobotmanager/features/orders/domain/models/history_order_filters.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_matches_selected_table_ids.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/history_order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
@@ -53,12 +56,14 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
     );
   }
 
-  List<PendingOrder> _applyFilters(List<PendingOrder> orders) {
+  List<PendingOrder> _applyFilters(
+    List<PendingOrder> orders,
+    List<TableModel> venueTables,
+  ) {
     if (_activeFilters == null || _activeFilters!.isEmpty) return orders;
     final f = _activeFilters!;
     return orders.where((order) {
-      if (f.tableNumbers.isNotEmpty &&
-          !f.tableNumbers.contains(order.tableNumber)) {
+      if (!orderMatchesSelectedTableIds(order, f.tableIds, venueTables)) {
         return false;
       }
       if (f.foodStatuses.isNotEmpty) {
@@ -81,7 +86,10 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
     }).toList();
   }
 
-  List<PendingOrder> _applyHistoryFilters(List<PendingOrder> orders) {
+  List<PendingOrder> _applyHistoryFilters(
+    List<PendingOrder> orders,
+    List<TableModel> venueTables,
+  ) {
     if (_historyFilters == null || _historyFilters!.isEmpty) return orders;
     final f = _historyFilters!;
     return orders.where((order) {
@@ -106,8 +114,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
           }
         }
       }
-      if (f.tableNumbers.isNotEmpty &&
-          !f.tableNumbers.contains(order.tableNumber)) {
+      if (!orderMatchesSelectedTableIds(order, f.tableIds, venueTables)) {
         return false;
       }
       if (f.orderContentTypes.isNotEmpty) {
@@ -178,8 +185,10 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final provider = context.watch<OrdersProvider>();
-    final activeOrders = _applyFilters(provider.orders);
-    final historyOrders = _applyHistoryFilters(provider.waiterHistoryOrders);
+    final venueTables = context.watch<TablesProvider>().tables;
+    final activeOrders = _applyFilters(provider.orders, venueTables);
+    final historyOrders =
+        _applyHistoryFilters(provider.waiterHistoryOrders, venueTables);
     final orders = _selectedTabIndex == 0 ? activeOrders : historyOrders;
     final width = MediaQuery.sizeOf(context).width;
     final useMasterDetail = width >= AppBreakpoints.expanded;

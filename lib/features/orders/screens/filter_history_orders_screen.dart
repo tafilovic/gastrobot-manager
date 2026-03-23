@@ -5,7 +5,10 @@ import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/history_order_filters.dart';
+import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/tables/widgets/tables_filter_table_chips_grouped.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Screen for filtering history orders: date range, order content (food/drinks), table numbers, bill range.
@@ -27,7 +30,7 @@ class _FilterHistoryOrdersScreenState extends State<FilterHistoryOrdersScreen> {
   DateTime? _dateFrom;
   DateTime? _dateTo;
   late Set<String> _orderContentTypes;
-  late Set<String> _tableNumbers;
+  late Set<String> _tableIds;
   late double _billMin;
   late double _billMax;
 
@@ -40,16 +43,25 @@ class _FilterHistoryOrdersScreenState extends State<FilterHistoryOrdersScreen> {
     _dateFrom = f?.dateFrom;
     _dateTo = f?.dateTo ?? CalendarDayBounds.endOfDay(DateTime.now());
     _orderContentTypes = f?.orderContentTypes.toSet() ?? {};
-    _tableNumbers = f?.tableNumbers.toSet() ?? {};
+    _tableIds = f?.tableIds.toSet() ?? {};
     _billMin = f?.billMin ?? 0;
     _billMax = f?.billMax ?? _billMaxValue;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadTables());
+  }
+
+  void _loadTables() {
+    if (!mounted) return;
+    final venueId = context.read<AuthProvider>().currentVenueId;
+    if (venueId != null) {
+      context.read<TablesProvider>().load(venueId);
+    }
   }
 
   HistoryOrderFilters get _currentFilters => HistoryOrderFilters(
         dateFrom: _dateFrom,
         dateTo: _dateTo,
         orderContentTypes: _orderContentTypes,
-        tableNumbers: _tableNumbers,
+        tableIds: _tableIds,
         billMin: _billMin,
         billMax: _billMax,
       );
@@ -59,7 +71,7 @@ class _FilterHistoryOrdersScreenState extends State<FilterHistoryOrdersScreen> {
       _dateFrom = null;
       _dateTo = CalendarDayBounds.endOfDay(DateTime.now());
       _orderContentTypes = {};
-      _tableNumbers = {};
+      _tableIds = {};
       _billMin = 0;
       _billMax = _billMaxValue;
     });
@@ -290,29 +302,17 @@ class _FilterHistoryOrdersScreenState extends State<FilterHistoryOrdersScreen> {
   }
 
   Widget _buildTableNumberGrid() {
-    const tables = [
-      '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-      '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22',
-    ];
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: tables.map((t) {
-        final selected = _tableNumbers.contains(t);
-        return _HistoryFilterChip(
-          label: t,
-          selected: selected,
-          onTap: () {
-            setState(() {
-              if (selected) {
-                _tableNumbers = {..._tableNumbers}..remove(t);
-              } else {
-                _tableNumbers = {..._tableNumbers, t};
-              }
-            });
-          },
-        );
-      }).toList(),
+    return TablesFilterTableChipsGrouped(
+      selectedTableIds: _tableIds,
+      onToggleTableId: (id) {
+        setState(() {
+          if (_tableIds.contains(id)) {
+            _tableIds = {..._tableIds}..remove(id);
+          } else {
+            _tableIds = {..._tableIds, id};
+          }
+        });
+      },
     );
   }
 
