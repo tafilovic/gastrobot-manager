@@ -689,6 +689,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get billSheetOrderButton => 'ऑर्डर करें';
 
   @override
+  String get tableOrderSubmitSuccess => 'ऑर्डर भेज दिया गया';
+
+  @override
+  String get tableOrderSubmitError => 'ऑर्डर नहीं भेजा जा सका';
+
+  @override
   String get tableOverviewNoReservations =>
       'इस टेबल के लिए कोई सक्रिय आरक्षण नहीं';
 

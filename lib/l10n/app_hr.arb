@@ -224,6 +224,8 @@
   "billSheetTotal": "UKUPNO:",
   "billSheetEmpty": "Košarica je prazna",
   "billSheetOrderButton": "NARUČI",
+  "tableOrderSubmitSuccess": "Narudžba poslana",
+  "tableOrderSubmitError": "Slanje narudžbe nije uspjelo",
   "tableOverviewNoReservations": "Nema aktivnih rezervacija za ovaj stol",
   "tableOverviewNoOrders": "Nema aktivnih narudžbi za ovaj stol"
 }

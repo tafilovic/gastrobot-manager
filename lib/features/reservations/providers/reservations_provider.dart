@@ -30,8 +30,8 @@ class ReservationsProvider extends ChangeNotifier {
   String? get rejectError => _rejectError;
   String? get acceptError => _acceptError;
 
-  static int _orderByTargetTime(PendingOrder a, PendingOrder b) {
-    return a.targetTime.compareTo(b.targetTime);
+  static int _orderByTargetTimeDesc(PendingOrder a, PendingOrder b) {
+    return b.targetTime.compareTo(a.targetTime);
   }
 
   Future<void> loadOnce(String venueId) async {
@@ -119,7 +119,7 @@ class ReservationsProvider extends ChangeNotifier {
 
     try {
       final list = await _api.getRequests(venueId, profileType);
-      _requests = list..sort(_orderByTargetTime);
+      _requests = list..sort(_orderByTargetTimeDesc);
       _error = null;
     } catch (e) {
       _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');

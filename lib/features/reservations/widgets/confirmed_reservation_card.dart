@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/selectable_ink_card.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Card showing a single confirmed reservation in the waiter "Prihvaćeno" tab.
 ///
-/// Layout (matches pending reservation card):
-///   [calendar icon]  date label          [reservation number chip]
-///   Vreme:           HH:mm
-///   Korisnik:        Firstname Lastname
-///   Sto broj:        1, 2
-///   [VIDI DETALJE button]
+/// Layout (matches pending reservation card): tap opens details.
 class ConfirmedReservationCard extends StatelessWidget {
   const ConfirmedReservationCard({
     super.key,
@@ -20,12 +16,14 @@ class ConfirmedReservationCard extends StatelessWidget {
     required this.l10n,
     required this.accentColor,
     required this.onSeeDetails,
+    this.isSelected = false,
   });
 
   final ConfirmedReservation reservation;
   final AppLocalizations l10n;
   final Color accentColor;
   final VoidCallback onSeeDetails;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +38,15 @@ class ConfirmedReservationCard extends StatelessWidget {
       reservation.reservationStart.toIso8601String(),
     );
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return SelectableInkCard(
+      accentColor: accentColor,
+      isSelected: isSelected,
+      onTap: onSeeDetails,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Date row + reservation number chip
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,8 +81,6 @@ class ConfirmedReservationCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 14),
-
-            // Detail rows
             _detailRow(theme, l10n.reservationLabelTime, timeStr),
             _detailRow(
               theme,
@@ -107,20 +93,6 @@ class ConfirmedReservationCard extends StatelessWidget {
               theme,
               l10n.confirmedResTableNumber,
               reservation.tableNamesLabel,
-            ),
-            const SizedBox(height: 12),
-
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: onSeeDetails,
-                style: FilledButton.styleFrom(
-                  backgroundColor: accentColor,
-                  foregroundColor: AppColors.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: Text(l10n.orderSeeDetails),
-              ),
             ),
           ],
         ),

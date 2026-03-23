@@ -1368,6 +1368,18 @@ abstract class AppLocalizations {
   /// **'NARUČI'**
   String get billSheetOrderButton;
 
+  /// No description provided for @tableOrderSubmitSuccess.
+  ///
+  /// In sr, this message translates to:
+  /// **'Porudžbina poslata'**
+  String get tableOrderSubmitSuccess;
+
+  /// No description provided for @tableOrderSubmitError.
+  ///
+  /// In sr, this message translates to:
+  /// **'Slanje porudžbine nije uspelo'**
+  String get tableOrderSubmitError;
+
   /// No description provided for @tableOverviewNoReservations.
   ///
   /// In sr, this message translates to:

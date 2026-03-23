@@ -21,6 +21,9 @@ class TablesProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  /// Venue id from the last [load] / [pullRefresh] call, if any.
+  String? get loadedVenueId => _currentVenueId;
+
   Future<void> load(String venueId) async {
     _currentVenueId = venueId;
     await _fetch(venueId);

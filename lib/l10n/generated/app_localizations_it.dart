@@ -693,6 +693,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get billSheetOrderButton => 'ORDINA';
 
   @override
+  String get tableOrderSubmitSuccess => 'Ordine inviato';
+
+  @override
+  String get tableOrderSubmitError => 'Impossibile inviare l\'ordine';
+
+  @override
   String get tableOverviewNoReservations =>
       'Nessuna prenotazione attiva per questo tavolo';
 

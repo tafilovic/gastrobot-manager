@@ -9,6 +9,9 @@ import 'package:gastrobotmanager/core/widgets/image_loader.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/menu/domain/models/menu_category.dart';
 import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
+import 'package:gastrobotmanager/features/tables/domain/errors/tables_exception.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/create_venue_order_request.dart';
+import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_order_bill_sheet.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -79,11 +82,71 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
           context.read<CurrencyProvider>().formatInt(price),
       onUpdateQuantity: _updateCartQuantity,
       onRemove: _removeFromCart,
-      onOrder: (_) {
-        // TODO: submit order API
-        _cartNotifier.value = {};
-      },
+      onOrder: _submitOrder,
     );
+  }
+
+  Future<void> _submitOrder(String tableId) async {
+    final l10n = AppLocalizations.of(context)!;
+    final cart = Map<String, int>.from(_cartNotifier.value);
+    if (cart.isEmpty) return;
+
+    final auth = context.read<AuthProvider>();
+    final venueId = auth.currentVenueId;
+    final userId = auth.user?.id;
+    if (venueId == null || userId == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.tableOrderSubmitError)),
+      );
+      return;
+    }
+
+    final menuProvider = context.read<TableOrderMenuProvider>();
+    final lines = <CreateVenueOrderLine>[];
+    for (final entry in cart.entries) {
+      if (entry.value <= 0) continue;
+      if (menuProvider.getItemById(entry.key) == null) continue;
+      lines.add(
+        CreateVenueOrderLine(
+          menuItemId: entry.key,
+          quantity: entry.value,
+        ),
+      );
+    }
+    if (lines.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.tableOrderSubmitError)),
+      );
+      return;
+    }
+
+    try {
+      await context.read<TablesApi>().createVenueOrder(
+        venueId,
+        CreateVenueOrderRequest(
+          tableId: tableId,
+          userId: userId,
+          orderItems: lines,
+        ),
+      );
+      if (!mounted) return;
+      _cartNotifier.value = {};
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.tableOrderSubmitSuccess)),
+      );
+    } on TablesException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message)),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.tableOrderSubmitError)),
+      );
+    }
   }
 
   String _formatMenuPrice(int price) =>

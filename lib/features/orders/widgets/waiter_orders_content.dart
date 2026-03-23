@@ -22,7 +22,7 @@ import 'package:gastrobotmanager/features/orders/widgets/waiter_order_history_ca
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Waiter orders: title, Order button (plus icon), segmented Active/History, count + FILTERI, list of cards.
-/// Active tab uses [WaiterOrderCard] (food/drinks status); History uses [WaiterOrderHistoryCard].
+/// Active / history use expandable food & drink rows like table overview ([PendingOrderItemsExpansionCard]).
 class WaiterOrdersContent extends StatefulWidget {
   const WaiterOrdersContent({
     super.key,
@@ -348,6 +348,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                       provider,
                       onSeeDetails,
                       isHistoryTab: _selectedTabIndex == 1,
+                      useMasterDetail: useMasterDetail,
                     ),
                   ),
                 ),
@@ -463,6 +464,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
               provider,
               onSeeDetails,
               isHistoryTab: _selectedTabIndex == 1,
+              useMasterDetail: true,
             ),
           ),
         ),
@@ -479,11 +481,21 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
     );
   }
 
+  bool _isSameSelectedOrder(PendingOrder? selected, PendingOrder order) {
+    if (selected == null) return false;
+    if (selected.orderId.isNotEmpty && order.orderId.isNotEmpty) {
+      return selected.orderId == order.orderId;
+    }
+    return selected.orderNumber == order.orderNumber &&
+        selected.targetTime == order.targetTime;
+  }
+
   Widget _buildList(
     List<PendingOrder> orders,
     OrdersProvider provider,
     void Function(PendingOrder) onSeeDetails, {
     required bool isHistoryTab,
+    required bool useMasterDetail,
   }) {
     if (orders.isEmpty) {
       if (isHistoryTab) {
@@ -566,18 +578,21 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final order = orders[index];
+        final selected = useMasterDetail ? _selectedOrder : null;
         final card = _selectedTabIndex == 0
             ? WaiterOrderCard(
                 order: order,
                 accentColor: widget.accentColor,
                 l10n: widget.l10n,
                 onTap: () => onSeeDetails(order),
+                isSelected: _isSameSelectedOrder(selected, order),
               )
             : WaiterOrderHistoryCard(
                 order: order,
                 accentColor: widget.accentColor,
                 l10n: widget.l10n,
                 onSeeDetails: () => onSeeDetails(order),
+                isSelected: _isSameSelectedOrder(selected, order),
               );
         return ListItemEntrance(index: index, child: card);
       },

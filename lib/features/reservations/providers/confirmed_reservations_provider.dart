@@ -18,6 +18,13 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  static int _byReservationStartDesc(
+    ConfirmedReservation a,
+    ConfirmedReservation b,
+  ) {
+    return b.reservationStart.compareTo(a.reservationStart);
+  }
+
   Future<void> load(String venueId) async {
     _currentVenueId = venueId;
     await _fetch(venueId);
@@ -35,7 +42,8 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _items = await _api.getConfirmed(venueId);
+      final list = await _api.getConfirmed(venueId);
+      _items = list..sort(_byReservationStartDesc);
       _error = null;
     } catch (e) {
       _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');

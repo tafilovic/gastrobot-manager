@@ -688,6 +688,12 @@ class AppLocalizationsNe extends AppLocalizations {
   String get billSheetOrderButton => 'अर्डर गर्नुहोस्';
 
   @override
+  String get tableOrderSubmitSuccess => 'अर्डर पठाइयो';
+
+  @override
+  String get tableOrderSubmitError => 'अर्डर पठाउन सकिएन';
+
+  @override
   String get tableOverviewNoReservations =>
       'यो टेबलका लागि कुनै सक्रिय आरक्षण छैन';
 

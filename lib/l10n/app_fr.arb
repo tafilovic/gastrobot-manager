@@ -219,6 +219,8 @@
   "billSheetTotal": "TOTAL :",
   "billSheetEmpty": "Le panier est vide",
   "billSheetOrderButton": "COMMANDER",
+  "tableOrderSubmitSuccess": "Commande envoyée",
+  "tableOrderSubmitError": "Impossible d'envoyer la commande",
   "tableOverviewNoReservations": "Aucune réservation active pour cette table",
   "tableOverviewNoOrders": "Aucune commande active pour cette table"
 }

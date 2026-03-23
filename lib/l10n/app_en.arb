@@ -219,6 +219,8 @@
   "billSheetTotal": "TOTAL:",
   "billSheetEmpty": "Cart is empty",
   "billSheetOrderButton": "ORDER",
+  "tableOrderSubmitSuccess": "Order sent",
+  "tableOrderSubmitError": "Could not send order",
   "tableOverviewNoReservations": "No active reservations for this table",
   "tableOverviewNoOrders": "No active orders for this table",
   "tableOrdersFilterTypeAny": "Any",

@@ -219,6 +219,8 @@
   "billSheetTotal": "GESAMT:",
   "billSheetEmpty": "Warenkorb ist leer",
   "billSheetOrderButton": "BESTELLEN",
+  "tableOrderSubmitSuccess": "Bestellung gesendet",
+  "tableOrderSubmitError": "Bestellung konnte nicht gesendet werden",
   "tableOverviewNoReservations": "Keine aktiven Reservierungen für diesen Tisch",
   "tableOverviewNoOrders": "Keine aktiven Bestellungen für diesen Tisch"
 }

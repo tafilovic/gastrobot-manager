@@ -5,10 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
-import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
-import 'package:gastrobotmanager/features/regions/domain/models/region_model.dart';
-import 'package:gastrobotmanager/features/reservations/widgets/region_table_picker.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
+import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Bottom sheet showing the bill/cart with items grouped by food/drinks.
@@ -20,7 +19,7 @@ void showTableOrderBillSheet({
   required String Function(int) formatPrice,
   required void Function(String itemId, int quantity) onUpdateQuantity,
   required void Function(String itemId) onRemove,
-  required void Function(String? tableId) onOrder,
+  required Future<void> Function(String tableId) onOrder,
   Map<String, int>? initialCart,
 }) {
   showModalBottomSheet<void>(
@@ -61,7 +60,7 @@ class _TableOrderBillSheet extends StatefulWidget {
   final String Function(int) formatPrice;
   final void Function(String itemId, int quantity) onUpdateQuantity;
   final void Function(String itemId) onRemove;
-  final void Function(String? tableId) onOrder;
+  final Future<void> Function(String tableId) onOrder;
 
   @override
   State<_TableOrderBillSheet> createState() => _TableOrderBillSheetState();
@@ -73,16 +72,18 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _ensureRegionsLoaded());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _ensureTablesLoaded());
   }
 
-  void _ensureRegionsLoaded() {
+  /// Same source as [TablesScreen]: `/venues/:venueId/tables` (not region-embedded tables).
+  void _ensureTablesLoaded() {
     final venueId = context.read<AuthProvider>().currentVenueId;
-    if (venueId != null) {
-      final rp = context.read<RegionsProvider>();
-      if (rp.regions.isEmpty && !rp.isLoading) {
-        rp.load(venueId);
-      }
+    if (venueId == null) return;
+    final tp = context.read<TablesProvider>();
+    final wrongVenue =
+        tp.loadedVenueId != null && tp.loadedVenueId != venueId;
+    if (!tp.isLoading && (tp.tables.isEmpty || wrongVenue)) {
+      tp.load(venueId);
     }
   }
 
@@ -126,9 +127,8 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
     final theme = Theme.of(context);
     final accentColor = theme.colorScheme.primary;
     final entries = _buildEntries(cart);
-    final regionsProvider = context.watch<RegionsProvider>();
-    final regions = regionsProvider.regions;
-    final allTables = filterTablesByRegion(regions, null);
+    final tablesProvider = context.watch<TablesProvider>();
+    final allTables = tablesProvider.tables;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
@@ -164,7 +164,7 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
                 l10n,
                 entries,
                 accentColor,
-                regionsProvider,
+                tablesProvider,
                 allTables,
               ),
             ],
@@ -231,8 +231,8 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
     AppLocalizations l10n,
     List<_CartEntry> entries,
     Color accentColor,
-    RegionsProvider regionsProvider,
-    List<RegionTableModel> allTables,
+    TablesProvider tablesProvider,
+    List<TableModel> allTables,
   ) {
     final total = _totalPrice(entries);
     final canOrder = entries.isNotEmpty && _selectedTableId != null;
@@ -276,7 +276,7 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
             ],
           ),
           const SizedBox(height: 16),
-          if (regionsProvider.isLoading)
+          if (tablesProvider.isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
               child: LinearProgressIndicator(),
@@ -292,9 +292,10 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
           const SizedBox(height: 16),
           FilledButton(
             onPressed: canOrder
-                ? () {
+                ? () async {
+                    final tableId = _selectedTableId!;
                     Navigator.of(context).pop();
-                    widget.onOrder(_selectedTableId);
+                    await widget.onOrder(tableId);
                   }
                 : null,
             style: FilledButton.styleFrom(
@@ -509,7 +510,7 @@ class _TableSelectorDropdown extends StatelessWidget {
   });
 
   final String hint;
-  final List<RegionTableModel> tables;
+  final List<TableModel> tables;
   final String? selectedTableId;
   final String Function(String) tableNumberLabel;
   final void Function(String) onSelect;

@@ -41,10 +41,6 @@ class OrdersProvider extends ChangeNotifier {
   String? get paidOrdersError => _paidOrdersError;
   String? get markPaidError => _markPaidError;
 
-  static int _orderByTargetTime(PendingOrder a, PendingOrder b) {
-    return a.targetTime.compareTo(b.targetTime);
-  }
-
   static int _orderByTargetTimeDesc(PendingOrder a, PendingOrder b) {
     return b.targetTime.compareTo(a.targetTime);
   }
@@ -104,7 +100,7 @@ class OrdersProvider extends ChangeNotifier {
 
     try {
       final list = await _api.getPendingOrders(venueId, profileType);
-      _orders = list..sort(_orderByTargetTime);
+      _orders = list..sort(_orderByTargetTimeDesc);
       _error = null;
     } catch (e) {
       _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');

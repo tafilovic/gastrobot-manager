@@ -313,6 +313,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                               filteredConfirmed,
                               crossAxisCount,
                               onSeeConfirmedDetails,
+                              highlightSelection: useMasterDetail,
                             )
                           : RefreshIndicator(
                               onRefresh: () => provider.pullRefresh(),
@@ -368,6 +369,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                       profileType,
                                       provider,
                                       onSeeRequestDetails,
+                                      highlightSelection: useMasterDetail,
                                     ),
                             ),
                     );
@@ -584,6 +586,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                   filteredConfirmed,
                   1,
                   onSeeConfirmedDetails,
+                  highlightSelection: true,
                 )
               : RefreshIndicator(
                   onRefresh: () => provider.pullRefresh(),
@@ -629,6 +632,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                           profileType,
                           provider,
                           onSeeRequestDetails,
+                          highlightSelection: true,
                         ),
                 ),
         ),
@@ -643,6 +647,23 @@ class _ReservationsContentState extends State<ReservationsContent> {
         style: theme.textTheme.bodyLarge?.copyWith(color: AppColors.textMuted),
       ),
     );
+  }
+
+  bool _isSameSelectedRequest(PendingOrder? selected, PendingOrder order) {
+    if (selected == null) return false;
+    if (selected.orderId.isNotEmpty && order.orderId.isNotEmpty) {
+      return selected.orderId == order.orderId;
+    }
+    return selected.orderNumber == order.orderNumber &&
+        selected.targetTime == order.targetTime;
+  }
+
+  bool _isSameSelectedConfirmed(
+    ConfirmedReservation? selected,
+    ConfirmedReservation reservation,
+  ) {
+    if (selected == null) return false;
+    return selected.id == reservation.id;
   }
 
   Widget _buildRequestDetailPane(
@@ -676,8 +697,9 @@ class _ReservationsContentState extends State<ReservationsContent> {
     String Function(PendingOrder) itemCountForCard,
     ProfileType? profileType,
     ReservationsProvider provider,
-    void Function(PendingOrder) onSeeDetails,
-  ) {
+    void Function(PendingOrder) onSeeDetails, {
+    required bool highlightSelection,
+  }) {
     const padding = EdgeInsets.symmetric(horizontal: 20, vertical: 8);
 
     Widget buildCard(int index) {
@@ -690,6 +712,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
           accentColor: widget.accentColor,
           itemCountLabel: itemCountForCard(order),
           showWaiterPendingLayout: profileType == ProfileType.waiter,
+          isSelected: highlightSelection &&
+              _isSameSelectedRequest(_selectedRequest, order),
           onSeeDetails: () => onSeeDetails(order),
         ),
       );
@@ -712,7 +736,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
         crossAxisCount: crossAxisCount,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        mainAxisExtent: 230,
+        mainAxisExtent: 200,
       ),
       itemCount: requests.length,
       itemBuilder: (context, index) => buildCard(index),
@@ -725,8 +749,9 @@ class _ReservationsContentState extends State<ReservationsContent> {
     ConfirmedReservationsProvider confirmedProvider,
     List<ConfirmedReservation> items,
     int crossAxisCount,
-    void Function(ConfirmedReservation) onSeeDetails,
-  ) {
+    void Function(ConfirmedReservation) onSeeDetails, {
+    required bool highlightSelection,
+  }) {
     if (confirmedProvider.isLoading && confirmedProvider.items.isEmpty) {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -787,6 +812,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
           reservation: reservation,
           l10n: l10n,
           accentColor: widget.accentColor,
+          isSelected: highlightSelection &&
+              _isSameSelectedConfirmed(_selectedConfirmed, reservation),
           onSeeDetails: () => onSeeDetails(reservation),
         ),
       );
@@ -809,7 +836,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                 crossAxisCount: crossAxisCount,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                mainAxisExtent: 230,
+                mainAxisExtent: 200,
               ),
               itemCount: items.length,
               itemBuilder: (context, index) => buildCard(index),

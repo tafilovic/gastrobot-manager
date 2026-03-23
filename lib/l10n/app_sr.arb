@@ -321,6 +321,8 @@
   "billSheetTotal": "UKUPNO:",
   "billSheetEmpty": "Korpa je prazna",
   "billSheetOrderButton": "NARUČI",
+  "tableOrderSubmitSuccess": "Porudžbina poslata",
+  "tableOrderSubmitError": "Slanje porudžbine nije uspelo",
   "tableOverviewNoReservations": "Nema aktivnih rezervacija za ovaj sto",
   "tableOverviewNoOrders": "Nema aktivnih porudžbina za ovaj sto",
   "tableOrdersFilterTypeAny": "Bilo koji",

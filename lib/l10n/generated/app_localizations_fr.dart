@@ -693,6 +693,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get billSheetOrderButton => 'COMMANDER';
 
   @override
+  String get tableOrderSubmitSuccess => 'Commande envoyée';
+
+  @override
+  String get tableOrderSubmitError => 'Impossible d\'envoyer la commande';
+
+  @override
   String get tableOverviewNoReservations =>
       'Aucune réservation active pour cette table';
 

@@ -224,6 +224,8 @@
   "billSheetTotal": "TOTAL:",
   "billSheetEmpty": "El carrito está vacío",
   "billSheetOrderButton": "PEDIR",
+  "tableOrderSubmitSuccess": "Pedido enviado",
+  "tableOrderSubmitError": "No se pudo enviar el pedido",
   "tableOverviewNoReservations": "No hay reservas activas para esta mesa",
   "tableOverviewNoOrders": "No hay pedidos activos para esta mesa"
 }

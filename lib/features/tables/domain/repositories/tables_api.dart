@@ -1,5 +1,6 @@
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/create_venue_order_request.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 
@@ -16,5 +17,11 @@ abstract class TablesApi {
   Future<List<PendingOrder>> getOrdersForTable(
     String tableId,
     TableOrdersFilters filters,
+  );
+
+  /// POST /v1/venues/:venueId/orders — create a table order (waiter).
+  Future<void> createVenueOrder(
+    String venueId,
+    CreateVenueOrderRequest request,
   );
 }

@@ -691,6 +691,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get billSheetOrderButton => 'ЗАКАЗАТЬ';
 
   @override
+  String get tableOrderSubmitSuccess => 'Заказ отправлен';
+
+  @override
+  String get tableOrderSubmitError => 'Не удалось отправить заказ';
+
+  @override
   String get tableOverviewNoReservations =>
       'Нет активных бронирований для этого столика';
 

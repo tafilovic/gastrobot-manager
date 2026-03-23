@@ -11,7 +11,7 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dar
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
-import 'package:gastrobotmanager/features/orders/widgets/waiter_order_card.dart';
+import 'package:gastrobotmanager/features/orders/widgets/pending_order_items_expansion_card.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/screens/confirmed_reservation_details_screen.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_details_content.dart';
@@ -385,11 +385,13 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
                               ...list.map(
                                 (o) => Padding(
                                   padding: const EdgeInsets.only(bottom: 12),
-                                  child: WaiterOrderCard(
+                                  child: PendingOrderItemsExpansionCard(
                                     order: o,
                                     accentColor: accentColor,
                                     l10n: l10n,
+                                    layout: PendingOrderItemsCardLayout.listCompact,
                                     showSeeDetailsButton: false,
+                                    showCategoryRows: false,
                                     isSelected: useMasterDetail &&
                                         _isSameTableOrder(_selectedOrder, o),
                                     onTap: () => _onOrderSeeDetails(

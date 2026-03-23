@@ -691,6 +691,12 @@ class AppLocalizationsSr extends AppLocalizations {
   String get billSheetOrderButton => 'NARUČI';
 
   @override
+  String get tableOrderSubmitSuccess => 'Porudžbina poslata';
+
+  @override
+  String get tableOrderSubmitError => 'Slanje porudžbine nije uspelo';
+
+  @override
   String get tableOverviewNoReservations =>
       'Nema aktivnih rezervacija za ovaj sto';
 

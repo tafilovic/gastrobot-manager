@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/selectable_ink_card.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -16,6 +17,7 @@ class ReservationRequestCard extends StatelessWidget {
     required this.itemCountLabel,
     required this.onSeeDetails,
     this.showWaiterPendingLayout = false,
+    this.isSelected = false,
   });
 
   final PendingOrder order;
@@ -24,6 +26,7 @@ class ReservationRequestCard extends StatelessWidget {
   final String itemCountLabel;
   final VoidCallback onSeeDetails;
   final bool showWaiterPendingLayout;
+  final bool isSelected;
 
   static (String? region, int? party) _regionAndParty(PendingOrder order) {
     final d = order.reservationDetails;
@@ -51,19 +54,10 @@ class ReservationRequestCard extends StatelessWidget {
 
     if (showWaiterPendingLayout) {
       final (region, party) = _regionAndParty(order);
-      return Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadow,
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+      return SelectableInkCard(
+        accentColor: accentColor,
+        isSelected: isSelected,
+        onTap: onSeeDetails,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -118,38 +112,16 @@ class ReservationRequestCard extends StatelessWidget {
                 l10n.reservationLabelPartySize,
                 party != null ? '$party' : 'N/A',
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: onSeeDetails,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: accentColor,
-                    foregroundColor: AppColors.onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  child: Text(l10n.orderSeeDetails),
-                ),
-              ),
             ],
           ),
         ),
       );
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return SelectableInkCard(
+      accentColor: accentColor,
+      isSelected: isSelected,
+      onTap: onSeeDetails,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -211,19 +183,6 @@ class ReservationRequestCard extends StatelessWidget {
                   ],
                 ),
               ],
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: onSeeDetails,
-                style: FilledButton.styleFrom(
-                  backgroundColor: accentColor,
-                  foregroundColor: AppColors.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: Text(l10n.orderSeeDetails),
-              ),
             ),
           ],
         ),

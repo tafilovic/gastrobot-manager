@@ -224,6 +224,8 @@
   "billSheetTotal": "TOTALE:",
   "billSheetEmpty": "Il carrello è vuoto",
   "billSheetOrderButton": "ORDINA",
+  "tableOrderSubmitSuccess": "Ordine inviato",
+  "tableOrderSubmitError": "Impossibile inviare l'ordine",
   "tableOverviewNoReservations": "Nessuna prenotazione attiva per questo tavolo",
   "tableOverviewNoOrders": "Nessun ordine attivo per questo tavolo"
 }

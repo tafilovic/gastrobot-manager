@@ -4,6 +4,7 @@ import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/tables/domain/errors/tables_exception.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/create_venue_order_request.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
@@ -116,6 +117,34 @@ class TablesRemote implements TablesApi {
           )
           .where((o) => o.orderId.isNotEmpty)
           .toList();
+    } on DioException catch (e) {
+      final message = e.response?.data is Map
+          ? (e.response!.data as Map)['message']?.toString()
+          : null;
+      throw TablesException(message ?? e.message ?? 'Network error');
+    }
+  }
+
+  @override
+  Future<void> createVenueOrder(
+    String venueId,
+    CreateVenueOrderRequest request,
+  ) async {
+    final url = '${ApiConfig.baseUrl}/v1/venues/$venueId/orders';
+
+    try {
+      final response = await _dio.post<dynamic>(
+        url,
+        data: request.toJson(),
+        options: Options(
+          validateStatus: (status) => status != null && status < 400,
+        ),
+      );
+
+      final code = response.statusCode ?? 0;
+      if (code < 200 || code >= 300) {
+        throw TablesException('Unexpected response ($code)');
+      }
     } on DioException catch (e) {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()

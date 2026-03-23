@@ -224,6 +224,8 @@
   "billSheetTotal": "ИТОГО:",
   "billSheetEmpty": "Корзина пуста",
   "billSheetOrderButton": "ЗАКАЗАТЬ",
+  "tableOrderSubmitSuccess": "Заказ отправлен",
+  "tableOrderSubmitError": "Не удалось отправить заказ",
   "tableOverviewNoReservations": "Нет активных бронирований для этого столика",
   "tableOverviewNoOrders": "Нет активных заказов для этого столика"
 }
