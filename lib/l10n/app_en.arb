@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*How early you receive notifications for preparing pre-ordered food",
   "profileReservationReminderValue": "1h in advance",
   "profileLabelLanguage": "LANGUAGE",
+  "profileLabelCurrency": "CURRENCY",
+  "profileCurrencyDialogTitle": "Display currency",
   "profileLanguageValue": "English",
   "profileDrinksList": "DRINKS LIST",
   "profileLogout": "LOG OUT",

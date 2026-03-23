@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*Con cuánta antelación recibes avisos para preparar comida preordenada",
   "profileReservationReminderValue": "1 hora antes",
   "profileLabelLanguage": "IDIOMA",
+  "profileLabelCurrency": "MONEDA",
+  "profileCurrencyDialogTitle": "Moneda de visualización",
   "profileLanguageValue": "Español",
   "profileDrinksList": "LISTA DE BEBIDAS",
   "profileLogout": "CERRAR SESIÓN",

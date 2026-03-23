@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
@@ -13,6 +14,7 @@ import 'package:gastrobotmanager/features/profile/widgets/profile_row.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_row_with_subtitle.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 import 'package:gastrobotmanager/features/profile/screens/profile_image_dialog.dart';
+import 'package:gastrobotmanager/features/profile/widgets/currency_selection_dialog.dart';
 import 'package:gastrobotmanager/features/profile/widgets/language_selection_dialog.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 
@@ -39,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     final profile = context.watch<ProfileProvider>();
     final localeProvider = context.watch<LocaleProvider>();
+    final currencyProvider = context.watch<CurrencyProvider>();
     final auth = context.watch<AuthProvider>();
     final user = profile.user!;
     final isWaiter = auth.profileType == ProfileType.waiter;
@@ -106,6 +109,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               value: localeProvider.currentLocaleName,
               valueColor: AppColors.accent,
               onTap: () => LanguageSelectionDialog.show(context),
+            ),
+            const Divider(height: 1, indent: 56),
+            ProfileRow(
+              icon: Icons.payments_outlined,
+              label: l10n.profileLabelCurrency,
+              value: currencyProvider.selected.code,
+              valueColor: AppColors.accent,
+              onTap: () => CurrencySelectionDialog.show(context),
             ),
             const SizedBox(height: 32),
             if (isWaiter)

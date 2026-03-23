@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*Koliko ranije primate obavijesti za pripremu prethodno naručene hrane",
   "profileReservationReminderValue": "1 sat unaprijed",
   "profileLabelLanguage": "JEZIK",
+  "profileLabelCurrency": "VALUTA",
+  "profileCurrencyDialogTitle": "Valuta prikaza",
   "profileLanguageValue": "Hrvatski",
   "profileDrinksList": "LISTA PIĆA",
   "profileLogout": "ODJAVA",

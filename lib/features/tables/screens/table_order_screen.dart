@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/image_loader.dart';
@@ -74,7 +75,8 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
       cartListenable: _cartNotifier,
       initialCart: Map.from(_cart),
       menuProvider: context.read<TableOrderMenuProvider>(),
-      formatPrice: _formatPrice,
+      formatPrice: (price) =>
+          context.read<CurrencyProvider>().formatInt(price),
       onUpdateQuantity: _updateCartQuantity,
       onRemove: _removeFromCart,
       onOrder: (_) {
@@ -84,16 +86,8 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
     );
   }
 
-  static String _formatPrice(int price) {
-    if (price < 1000) return '$price RSD';
-    final s = price.toString();
-    final buf = StringBuffer();
-    for (var i = 0; i < s.length; i++) {
-      if (i > 0 && (s.length - i) % 3 == 0) buf.write('.');
-      buf.write(s[i]);
-    }
-    return '${buf.toString()} RSD';
-  }
+  String _formatMenuPrice(int price) =>
+      context.read<CurrencyProvider>().formatInt(price);
 
   static String? _resolveImageUrl(String? url) {
     if (url == null || url.isEmpty) return null;
@@ -105,6 +99,7 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    context.watch<CurrencyProvider>();
     final provider = context.watch<TableOrderMenuProvider>();
     final accentColor = theme.colorScheme.primary;
 
@@ -227,7 +222,7 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
                                         return _OrderMenuItemCard(
                                           item: item,
                                           accentColor: accentColor,
-                                          formatPrice: _formatPrice,
+                                          formatPrice: _formatMenuPrice,
                                           resolveImageUrl: _resolveImageUrl,
                                           onAdd: () => _addToCart(item),
                                         );
@@ -251,7 +246,7 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
                                           child: _OrderMenuItemCard(
                                             item: item,
                                             accentColor: accentColor,
-                                            formatPrice: _formatPrice,
+                                            formatPrice: _formatMenuPrice,
                                             resolveImageUrl: _resolveImageUrl,
                                             onAdd: () => _addToCart(item),
                                           ),

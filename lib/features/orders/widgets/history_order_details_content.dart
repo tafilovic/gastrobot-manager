@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reusable history order details body: order date, food/drinks (name + quantity), bill, paid status.
@@ -14,38 +17,15 @@ class HistoryOrderDetailsContent extends StatelessWidget {
   const HistoryOrderDetailsContent({
     super.key,
     required this.order,
-    this.billAmount,
     this.paidAt,
   });
 
   final PendingOrder order;
-  final String? billAmount;
   /// Payment date/time (ISO or parseable). When null, only "PAID" is shown without date.
   final String? paidAt;
 
   static final DateFormat _orderDateFormat =
       DateFormat('dd.MM.yyyy | HH:mm');
-
-  static String? _computedBillTotal(PendingOrder order) {
-    double sum = 0;
-    for (final item in order.items) {
-      if (item.totalPrice != null) sum += item.totalPrice!;
-    }
-    if (sum == 0) return null;
-    return _formatRsd(sum);
-  }
-
-  static String _formatRsd(double value) {
-    final intPart = value.floor();
-    final frac = ((value - intPart) * 100).round().clamp(0, 99);
-    final intStr = intPart.toString();
-    final buf = StringBuffer();
-    for (var i = 0; i < intStr.length; i++) {
-      if (i > 0 && (intStr.length - i) % 3 == 0) buf.write('.');
-      buf.write(intStr[i]);
-    }
-    return '${buf.toString()},${frac.toString().padLeft(2, '0')} RSD';
-  }
 
   static String _formatOrderDateTime(String targetTime) {
     final dt = DateTime.tryParse(targetTime);
@@ -55,6 +35,7 @@ class HistoryOrderDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>();
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
     final tableNum = int.tryParse(order.tableNumber) ?? 0;
@@ -63,7 +44,9 @@ class HistoryOrderDetailsContent extends StatelessWidget {
         .where((i) => i.type == null || i.type == 'food')
         .toList();
     final drinkItems = order.items.where((i) => i.type == 'drink').toList();
-    final billTotal = billAmount ?? _computedBillTotal(order);
+    final billSum = orderItemsTotalPriceSum(order.items);
+    final billTotal =
+        billSum != null ? currency.formatAmount(billSum) : null;
     String? paidAtFormatted;
     if (paidAt != null && paidAt!.isNotEmpty) {
       final dt = DateTime.tryParse(paidAt!);

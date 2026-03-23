@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*Wie früh Sie Benachrichtigungen für die Vorbereitung vorbestellter Speisen erhalten",
   "profileReservationReminderValue": "1h im Voraus",
   "profileLabelLanguage": "SPRACHE",
+  "profileLabelCurrency": "WÄHRUNG",
+  "profileCurrencyDialogTitle": "Anzeigewährung",
   "profileLanguageValue": "Deutsch",
   "profileDrinksList": "GETRÄNKELISTE",
   "profileLogout": "ABMELDEN",

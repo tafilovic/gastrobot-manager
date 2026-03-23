@@ -75,6 +75,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profileLabelLanguage => 'SPRACHE';
 
   @override
+  String get profileLabelCurrency => 'WÄHRUNG';
+
+  @override
+  String get profileCurrencyDialogTitle => 'Anzeigewährung';
+
+  @override
   String get profileLanguageValue => 'Deutsch';
 
   @override

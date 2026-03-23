@@ -14,12 +14,9 @@ class ActiveOrderDetailsScreen extends StatelessWidget {
   const ActiveOrderDetailsScreen({
     super.key,
     required this.order,
-    this.billAmount,
   });
 
   final PendingOrder order;
-  /// Optional total bill (e.g. "7.130,50 RSD"). If null, computed from items or "—".
-  final String? billAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +35,6 @@ class ActiveOrderDetailsScreen extends StatelessWidget {
       ),
       body: ActiveOrderDetailsContent(
         order: order,
-        billAmount: billAmount,
         markOrderAsPaid: () async {
           final venueId = context.read<AuthProvider>().currentVenueId;
           if (venueId == null) return false;

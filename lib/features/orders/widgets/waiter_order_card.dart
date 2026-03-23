@@ -1,177 +1,175 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
-import 'package:gastrobotmanager/features/orders/utils/order_group_status.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
+import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Card for a single pending order in waiter's list (Active tab).
-/// Shows table #, order # chip, time ago, Food: status, Drinks: status, VIDI DETALJE.
+/// Card for a single pending order: date + order chip, time ago, bill total.
+/// Optional full-card tap without the details button (e.g. table overview).
 class WaiterOrderCard extends StatelessWidget {
   const WaiterOrderCard({
     super.key,
     required this.order,
     required this.accentColor,
     required this.l10n,
-    required this.onSeeDetails,
+    required this.onTap,
+    this.showSeeDetailsButton = true,
+    this.isSelected = false,
   });
 
   final PendingOrder order;
   final Color accentColor;
   final AppLocalizations l10n;
-  final VoidCallback onSeeDetails;
+  final VoidCallback onTap;
+  final bool showSeeDetailsButton;
+  final bool isSelected;
 
-  static int _tableNumber(PendingOrder order) {
-    return int.tryParse(order.tableNumber) ?? 0;
-  }
+  static const double _headerIconSize = 22;
+  static const double _billIconSize = 22;
 
-  static List<PendingOrderItem> _foodItems(PendingOrder order) {
-    return order.items
-        .where((i) => i.type == null || i.type == 'food')
-        .toList();
-  }
-
-  static List<PendingOrderItem> _drinkItems(PendingOrder order) {
-    return order.items.where((i) => i.type == 'drink').toList();
-  }
-
-  static (String label, Color color, IconData icon) _statusStyle(
-    OrderGroupStatus status,
-    AppLocalizations l10n,
-    Color accentColor,
-  ) {
-    switch (status) {
-      case OrderGroupStatus.pending:
-        return (l10n.orderStatusPending, const Color(0xFFF59E0B), Icons.help_outline);
-      case OrderGroupStatus.inPreparation:
-        return (l10n.orderStatusInPreparation, accentColor, Icons.settings);
-      case OrderGroupStatus.served:
-        return (l10n.orderStatusServed, const Color(0xFF16A34A), Icons.check_circle);
-      case OrderGroupStatus.rejected:
-        return (l10n.orderStatusRejected, const Color(0xFFEF4444), Icons.cancel);
-    }
+  static String _orderChipRef(PendingOrder order) {
+    if (order.orderNumber.isNotEmpty) return order.orderNumber;
+    if (order.orderId.isNotEmpty) return order.orderId;
+    return '—';
   }
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>();
     final theme = Theme.of(context);
-    final tableNum = _tableNumber(order);
+    final locale = Localizations.localeOf(context).languageCode;
+    final dateStr = formatReservationDate(
+      order.targetTime,
+      l10n,
+      locale: locale,
+    );
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
-    final foodItems = _foodItems(order);
-    final drinkItems = _drinkItems(order);
-    final foodStatus = orderGroupStatusFromItems(foodItems);
-    final drinkStatus = orderGroupStatusFromItems(drinkItems);
-    final foodStyle = _statusStyle(foodStatus, l10n, accentColor);
-    final drinkStyle = _statusStyle(drinkStatus, l10n, accentColor);
+    final chipRef = _orderChipRef(order);
+    final billSum = orderItemsTotalPriceSum(order.items);
+    final bill =
+        billSum != null ? currency.formatAmount(billSum) : null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
+    final decoration = BoxDecoration(
+      color: isSelected
+          ? Color.alphaBlend(
+              accentColor.withValues(alpha: 0.12),
+              AppColors.surface,
+            )
+          : AppColors.surface,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(
+        color: isSelected ? accentColor : AppColors.border,
+        width: isSelected ? 2 : 1,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: isSelected
+              ? accentColor.withValues(alpha: 0.28)
+              : AppColors.shadow,
+          blurRadius: isSelected ? 16 : 4,
+          offset: Offset(0, isSelected ? 8 : 2),
+        ),
+        if (isSelected)
           BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 4,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.table_restaurant, size: 18, color: accentColor),
-                const SizedBox(width: 6),
-                Text(
-                  l10n.orderTableNumber(tableNum),
-                  style: theme.textTheme.bodyMedium?.copyWith(
+      ],
+    );
+
+    final content = Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.calendar_today,
+                size: _headerIconSize,
+                color: AppColors.textMuted,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  dateStr,
+                  style: theme.textTheme.titleMedium?.copyWith(
                     color: accentColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundMuted,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    order.orderNumber,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w500,
-                    ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundMuted,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  chipRef,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: _headerIconSize + 10, top: 6),
+            child: Text(
               timeAgo,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: AppColors.textMuted,
+                fontWeight: FontWeight.w400,
               ),
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.restaurant, size: 18, color: AppColors.textPrimary),
-                const SizedBox(width: 6),
-                Text(
-                  l10n.ordersFoodLabel,
+          ),
+          const Divider(height: 24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.receipt_long,
+                size: _billIconSize,
+                color: AppColors.textMuted,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  l10n.orderBill,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-                const Spacer(),
-                Icon(foodStyle.$3, size: 16, color: foodStyle.$2),
-                const SizedBox(width: 4),
-                Text(
-                  foodStyle.$1,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: foodStyle.$2,
-                    fontWeight: FontWeight.w600,
-                  ),
+              ),
+              Text(
+                bill ?? '—',
+                textAlign: TextAlign.end,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
                 ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Icon(Icons.local_bar, size: 18, color: AppColors.textPrimary),
-                const SizedBox(width: 6),
-                Text(
-                  l10n.ordersDrinksLabel,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const Spacer(),
-                Icon(drinkStyle.$3, size: 16, color: drinkStyle.$2),
-                const SizedBox(width: 4),
-                Text(
-                  drinkStyle.$1,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: drinkStyle.$2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          if (showSeeDetailsButton) ...[
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: onSeeDetails,
+                onPressed: onTap,
                 style: FilledButton.styleFrom(
                   backgroundColor: accentColor,
                   foregroundColor: AppColors.onPrimary,
@@ -181,7 +179,20 @@ class WaiterOrderCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        ],
+      ),
+    );
+
+    if (showSeeDetailsButton) {
+      return Container(decoration: decoration, child: content);
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Ink(decoration: decoration, child: content),
       ),
     );
   }

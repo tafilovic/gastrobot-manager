@@ -74,6 +74,12 @@ class AppLocalizationsHr extends AppLocalizations {
   String get profileLabelLanguage => 'JEZIK';
 
   @override
+  String get profileLabelCurrency => 'VALUTA';
+
+  @override
+  String get profileCurrencyDialogTitle => 'Valuta prikaza';
+
+  @override
   String get profileLanguageValue => 'Hrvatski';
 
   @override

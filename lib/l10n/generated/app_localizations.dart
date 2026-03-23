@@ -240,6 +240,18 @@ abstract class AppLocalizations {
   /// **'JEZIK'**
   String get profileLabelLanguage;
 
+  /// No description provided for @profileLabelCurrency.
+  ///
+  /// In sr, this message translates to:
+  /// **'VALUTA'**
+  String get profileLabelCurrency;
+
+  /// No description provided for @profileCurrencyDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Valuta za prikaz'**
+  String get profileCurrencyDialogTitle;
+
   /// No description provided for @profileLanguageValue.
   ///
   /// In sr, this message translates to:

@@ -109,16 +109,6 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
     );
   }
 
-  String _formatTotal(int price) {
-    final s = price.toString();
-    final buf = StringBuffer();
-    for (var i = 0; i < s.length; i++) {
-      if (i > 0 && (s.length - i) % 3 == 0) buf.write('.');
-      buf.write(s[i]);
-    }
-    return '${buf.toString()},00 RSD';
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Map<String, int>>(
@@ -276,7 +266,7 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
                 ],
               ),
               Text(
-                _formatTotal(total),
+                widget.formatPrice(total),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: accentColor,

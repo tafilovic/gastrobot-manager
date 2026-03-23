@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*À quel moment vous recevez les notifications pour préparer les plats commandés à l'avance",
   "profileReservationReminderValue": "1 h à l'avance",
   "profileLabelLanguage": "LANGUE",
+  "profileLabelCurrency": "DEVISE",
+  "profileCurrencyDialogTitle": "Devise d’affichage",
   "profileLanguageValue": "Français",
   "profileDrinksList": "LISTE DES BOISSONS",
   "profileLogout": "DÉCONNEXION",

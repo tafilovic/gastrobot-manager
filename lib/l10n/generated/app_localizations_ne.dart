@@ -74,6 +74,12 @@ class AppLocalizationsNe extends AppLocalizations {
   String get profileLabelLanguage => 'भाषा';
 
   @override
+  String get profileLabelCurrency => 'मुद्रा';
+
+  @override
+  String get profileCurrencyDialogTitle => 'प्रदर्शन मुद्रा';
+
+  @override
   String get profileLanguageValue => 'नेपाली';
 
   @override

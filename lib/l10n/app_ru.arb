@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*За сколько вы получаете уведомления о подготовке предзаказа",
   "profileReservationReminderValue": "За 1 час",
   "profileLabelLanguage": "ЯЗЫК",
+  "profileLabelCurrency": "ВАЛЮТА",
+  "profileCurrencyDialogTitle": "Валюта отображения",
   "profileLanguageValue": "Русский",
   "profileDrinksList": "СПИСОК НАПИТКОВ",
   "profileLogout": "ВЫЙТИ",

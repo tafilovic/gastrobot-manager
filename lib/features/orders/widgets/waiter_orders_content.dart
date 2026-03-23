@@ -571,7 +571,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                 order: order,
                 accentColor: widget.accentColor,
                 l10n: widget.l10n,
-                onSeeDetails: () => onSeeDetails(order),
+                onTap: () => onSeeDetails(order),
               )
             : WaiterOrderHistoryCard(
                 order: order,

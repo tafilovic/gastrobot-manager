@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -17,36 +19,13 @@ class ActiveOrderDetailsContent extends StatefulWidget {
   const ActiveOrderDetailsContent({
     super.key,
     required this.order,
-    this.billAmount,
     this.onCompleted,
     this.markOrderAsPaid,
   });
 
   final PendingOrder order;
-  final String? billAmount;
   final VoidCallback? onCompleted;
   final Future<bool> Function()? markOrderAsPaid;
-
-  static String? _computedBillTotal(PendingOrder order) {
-    double sum = 0;
-    for (final item in order.items) {
-      if (item.totalPrice != null) sum += item.totalPrice!;
-    }
-    if (sum == 0) return null;
-    return _formatRsd(sum);
-  }
-
-  static String _formatRsd(double value) {
-    final intPart = value.floor();
-    final frac = ((value - intPart) * 100).round().clamp(0, 99);
-    final intStr = intPart.toString();
-    final buf = StringBuffer();
-    for (var i = 0; i < intStr.length; i++) {
-      if (i > 0 && (intStr.length - i) % 3 == 0) buf.write('.');
-      buf.write(intStr[i]);
-    }
-    return '${buf.toString()},${frac.toString().padLeft(2, '0')} RSD';
-  }
 
   @override
   State<ActiveOrderDetailsContent> createState() =>
@@ -114,6 +93,7 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>();
     final l10n = AppLocalizations.of(context)!;
     final order = widget.order;
     final accentColor = Theme.of(context).colorScheme.primary;
@@ -127,8 +107,9 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
         .where((i) => i.type == null || i.type == 'food')
         .toList();
     final drinkItems = order.items.where((i) => i.type == 'drink').toList();
-    final billTotal = widget.billAmount ??
-        ActiveOrderDetailsContent._computedBillTotal(order);
+    final billSum = orderItemsTotalPriceSum(order.items);
+    final billTotal =
+        billSum != null ? currency.formatAmount(billSum) : null;
     final width = MediaQuery.sizeOf(context).width;
     final maxWidth = width >= AppBreakpoints.expanded
         ? AppBreakpoints.contentMaxWidthWide

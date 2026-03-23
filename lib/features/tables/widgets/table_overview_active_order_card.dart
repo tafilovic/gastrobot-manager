@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_group_status.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -30,23 +33,6 @@ class TableOverviewActiveOrderCard extends StatelessWidget {
 
   static List<PendingOrderItem> _drinkItems(PendingOrder order) {
     return order.items.where((i) => i.type == 'drink').toList();
-  }
-
-  static String? _billTotal(PendingOrder order) {
-    var sum = 0.0;
-    for (final item in order.items) {
-      if (item.totalPrice != null) sum += item.totalPrice!;
-    }
-    if (sum == 0) return null;
-    final intPart = sum.floor();
-    final frac = ((sum - intPart) * 100).round().clamp(0, 99);
-    final intStr = intPart.toString();
-    final buf = StringBuffer();
-    for (var i = 0; i < intStr.length; i++) {
-      if (i > 0 && (intStr.length - i) % 3 == 0) buf.write('.');
-      buf.write(intStr[i]);
-    }
-    return '${buf.toString()},${frac.toString().padLeft(2, '0')} RSD';
   }
 
   static (String label, Color color, IconData icon) _statusStyle(
@@ -84,6 +70,7 @@ class TableOverviewActiveOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>();
     final theme = Theme.of(context);
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
     final foodItems = _foodItems(order);
@@ -92,7 +79,9 @@ class TableOverviewActiveOrderCard extends StatelessWidget {
     final drinkStatus = orderGroupStatusFromItems(drinkItems);
     final foodStyle = _statusStyle(foodStatus, l10n, accentColor);
     final drinkStyle = _statusStyle(drinkStatus, l10n, accentColor);
-    final bill = _billTotal(order);
+    final billSum = orderItemsTotalPriceSum(order.items);
+    final bill =
+        billSum != null ? currency.formatAmount(billSum) : null;
 
     return Container(
       decoration: BoxDecoration(

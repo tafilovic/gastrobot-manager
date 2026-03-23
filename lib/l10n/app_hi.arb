@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*पूर्व-ऑर्डर भोजन तैयार करने की सूचना आप कितनी जल्दी पाते हैं",
   "profileReservationReminderValue": "1 घंटे पहले",
   "profileLabelLanguage": "भाषा",
+  "profileLabelCurrency": "मुद्रा",
+  "profileCurrencyDialogTitle": "प्रदर्शन मुद्रा",
   "profileLanguageValue": "हिन्दी",
   "profileDrinksList": "पेय सूची",
   "profileLogout": "लॉग आउट",

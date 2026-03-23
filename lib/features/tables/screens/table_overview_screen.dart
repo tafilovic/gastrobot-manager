@@ -126,6 +126,15 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
     return list.first;
   }
 
+  bool _isSameTableOrder(PendingOrder? selected, PendingOrder o) {
+    if (selected == null) return false;
+    if (selected.orderId.isNotEmpty && o.orderId.isNotEmpty) {
+      return selected.orderId == o.orderId;
+    }
+    return selected.orderNumber == o.orderNumber &&
+        selected.targetTime == o.targetTime;
+  }
+
   Future<void> _confirmMarkPaid(
     BuildContext context,
     AppLocalizations l10n,
@@ -312,8 +321,13 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
                             reservation: r,
                             l10n: l10n,
                             accentColor: accentColor,
-                            onSeeDetails: () =>
-                                _onReservationSeeDetails(context, r, useMasterDetail),
+                            isSelected: useMasterDetail &&
+                                _selectedReservation?.id == r.id,
+                            onTap: () => _onReservationSeeDetails(
+                              context,
+                              r,
+                              useMasterDetail,
+                            ),
                           ),
                         ),
                       ),
@@ -375,8 +389,14 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
                                     order: o,
                                     accentColor: accentColor,
                                     l10n: l10n,
-                                    onSeeDetails: () =>
-                                        _onOrderSeeDetails(context, o, useMasterDetail),
+                                    showSeeDetailsButton: false,
+                                    isSelected: useMasterDetail &&
+                                        _isSameTableOrder(_selectedOrder, o),
+                                    onTap: () => _onOrderSeeDetails(
+                                      context,
+                                      o,
+                                      useMasterDetail,
+                                    ),
                                   ),
                                 ),
                               ),

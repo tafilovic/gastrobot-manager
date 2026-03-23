@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/active_order_filters.dart';
@@ -238,15 +240,7 @@ class _FilterActiveOrdersScreenState extends State<FilterActiveOrdersScreen> {
   }
 
   Widget _buildBillRangeSlider(AppLocalizations l10n) {
-    String formatRsd(double v) {
-      final n = v.toInt();
-      if (n >= 1000) {
-        final k = n ~/ 1000;
-        final r = n % 1000;
-        return r == 0 ? '$k.000' : '$k.${r.toString().padLeft(3, '0')}';
-      }
-      return n.toString();
-    }
+    final currency = context.watch<CurrencyProvider>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,14 +262,14 @@ class _FilterActiveOrdersScreenState extends State<FilterActiveOrdersScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${formatRsd(_billMin)} RSD',
+              currency.formatInt(_billMin.round()),
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.textSecondary,
               ),
             ),
             Text(
-              '${formatRsd(_billMax)} RSD',
+              currency.formatInt(_billMax.round()),
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.textSecondary,

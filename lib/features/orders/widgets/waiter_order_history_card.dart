@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -13,15 +16,12 @@ class WaiterOrderHistoryCard extends StatelessWidget {
     required this.accentColor,
     required this.l10n,
     required this.onSeeDetails,
-    this.billAmount,
   });
 
   final PendingOrder order;
   final Color accentColor;
   final AppLocalizations l10n;
   final VoidCallback onSeeDetails;
-  /// Optional bill total (e.g. "3.490,00 RSD"). If null, shows "—".
-  final String? billAmount;
 
   static int _tableNumber(PendingOrder order) {
     return int.tryParse(order.tableNumber) ?? 0;
@@ -29,9 +29,13 @@ class WaiterOrderHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>();
     final theme = Theme.of(context);
     final tableNum = _tableNumber(order);
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
+    final billSum = orderItemsTotalPriceSum(order.items);
+    final billAmount =
+        billSum != null ? currency.formatAmount(billSum) : null;
 
     return Container(
       decoration: BoxDecoration(

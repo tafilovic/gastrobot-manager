@@ -21,6 +21,8 @@
   "profileReservationReminderHint": "*Quanto in anticipo ricevi le notifiche per preparare cibo preordinato",
   "profileReservationReminderValue": "1 ora prima",
   "profileLabelLanguage": "LINGUA",
+  "profileLabelCurrency": "VALUTA",
+  "profileCurrencyDialogTitle": "Valuta di visualizzazione",
   "profileLanguageValue": "Italiano",
   "profileDrinksList": "LISTA BEVANDE",
   "profileLogout": "ESCI",

@@ -74,6 +74,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileLabelLanguage => 'IDIOMA';
 
   @override
+  String get profileLabelCurrency => 'MONEDA';
+
+  @override
+  String get profileCurrencyDialogTitle => 'Moneda de visualización';
+
+  @override
   String get profileLanguageValue => 'Español';
 
   @override

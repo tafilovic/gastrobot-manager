@@ -11,12 +11,10 @@ class HistoryOrderDetailsScreen extends StatelessWidget {
   const HistoryOrderDetailsScreen({
     super.key,
     required this.order,
-    this.billAmount,
     this.paidAt,
   });
 
   final PendingOrder order;
-  final String? billAmount;
   final String? paidAt;
 
   @override
@@ -36,7 +34,6 @@ class HistoryOrderDetailsScreen extends StatelessWidget {
       ),
       body: HistoryOrderDetailsContent(
         order: order,
-        billAmount: billAmount,
         paidAt: paidAt,
       ),
     );

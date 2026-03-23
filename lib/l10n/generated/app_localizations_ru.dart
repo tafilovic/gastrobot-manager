@@ -74,6 +74,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileLabelLanguage => 'ЯЗЫК';
 
   @override
+  String get profileLabelCurrency => 'ВАЛЮТА';
+
+  @override
+  String get profileCurrencyDialogTitle => 'Валюта отображения';
+
+  @override
   String get profileLanguageValue => 'Русский';
 
   @override
