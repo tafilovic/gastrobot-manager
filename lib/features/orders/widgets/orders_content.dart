@@ -57,10 +57,7 @@ class _OrdersContentState extends State<OrdersContent> {
     return null;
   }
 
-  Future<void> _openDetails(
-    PendingOrder order,
-    OrdersProvider provider,
-  ) async {
+  Future<void> _openDetails(PendingOrder order, OrdersProvider provider) async {
     final completed = await context.push<bool>(
       AppRouteNames.pathOrdersDetails,
       extra: OrderDetailsScreen(order: order),
@@ -99,24 +96,24 @@ class _OrdersContentState extends State<OrdersContent> {
                 Expanded(
                   flex: 1,
                   child: _buildListPane(
-                  theme,
-                  provider,
-                  orders,
-                  profileType,
-                  onSeeDetails,
+                    theme,
+                    provider,
+                    orders,
+                    profileType,
+                    onSeeDetails,
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: _selectedOrder == null
-                    ? _buildDetailPlaceholder(theme)
-                    : OrderDetailsContent(
-                        order: _selectedOrder!,
-                        onCompleted: () {
-                          setState(() => _selectedOrder = null);
-                          widget.onStartRefresh();
-                        },
-                      ),
+                Expanded(
+                  flex: 1,
+                  child: _selectedOrder == null
+                      ? _buildDetailPlaceholder(theme)
+                      : OrderDetailsContent(
+                          order: _selectedOrder!,
+                          onCompleted: () {
+                            setState(() => _selectedOrder = null);
+                            widget.onStartRefresh();
+                          },
+                        ),
                 ),
               ],
             ),
@@ -138,48 +135,48 @@ class _OrdersContentState extends State<OrdersContent> {
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
                 child: Text(
                   widget.l10n.ordersTitle,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Text.rich(
-                TextSpan(
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '${orders.length}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: widget.accentColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                child: Text.rich(
+                  TextSpan(
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
                     ),
-                    TextSpan(text: widget.l10n.ordersCountSuffix),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: ConstrainedContent(
-                padding: EdgeInsets.zero,
-                child: RefreshIndicator(
-                  onRefresh: () => provider.pullRefresh(),
-                  child: _buildList(
-                    orders,
-                    provider,
-                    profileType,
-                    onSeeDetails,
+                    children: [
+                      TextSpan(
+                        text: '${orders.length}',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: widget.accentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextSpan(text: widget.l10n.ordersCountSuffix),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+              Expanded(
+                child: ConstrainedContent(
+                  padding: EdgeInsets.zero,
+                  child: RefreshIndicator(
+                    onRefresh: () => provider.pullRefresh(),
+                    child: _buildList(
+                      orders,
+                      provider,
+                      profileType,
+                      onSeeDetails,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -228,12 +225,7 @@ class _OrdersContentState extends State<OrdersContent> {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => provider.pullRefresh(),
-            child: _buildList(
-              orders,
-              provider,
-              profileType,
-              onSeeDetails,
-            ),
+            child: _buildList(orders, provider, profileType, onSeeDetails),
           ),
         ),
       ],
@@ -244,9 +236,7 @@ class _OrdersContentState extends State<OrdersContent> {
     return Center(
       child: Text(
         widget.l10n.orderSeeDetails,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: AppColors.textMuted,
-        ),
+        style: theme.textTheme.bodyLarge?.copyWith(color: AppColors.textMuted),
       ),
     );
   }
@@ -264,18 +254,14 @@ class _OrdersContentState extends State<OrdersContent> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5,
             child: provider.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                ? const Center(child: CircularProgressIndicator())
                 : Center(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
                       child: Text(
                         provider.error ?? '',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppColors.error,
-                        ),
+                        style: const TextStyle(color: AppColors.error),
                       ),
                     ),
                   ),
@@ -285,12 +271,9 @@ class _OrdersContentState extends State<OrdersContent> {
     }
     return ListView.separated(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       itemCount: orders.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final order = orders[index];
         return ListItemEntrance(
@@ -299,11 +282,7 @@ class _OrdersContentState extends State<OrdersContent> {
             order: order,
             accentColor: widget.accentColor,
             l10n: widget.l10n,
-            itemCountLabel: _itemCountLabel(
-              widget.l10n,
-              profileType,
-              order,
-            ),
+            itemCountLabel: _itemCountLabel(widget.l10n, profileType, order),
             onSeeDetails: () => onSeeDetails(order),
           ),
         );

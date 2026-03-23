@@ -68,7 +68,7 @@ class WaiterOrderActionsRemote implements WaiterOrderActionsApi {
       return raw
           .map((e) => PendingOrder.fromJson(
                 e is Map
-                    ? Map<String, dynamic>.from(e as Map)
+                    ? Map<String, dynamic>.from(e)
                     : <String, dynamic>{},
               ))
           .where((o) => o.orderId.isNotEmpty)

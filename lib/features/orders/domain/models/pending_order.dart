@@ -42,7 +42,7 @@ class PendingOrder {
       items: itemsList != null
           ? itemsList
               .map((e) => PendingOrderItem.fromJson(
-                  e is Map ? Map<String, dynamic>.from(e as Map) : <String, dynamic>{}))
+                  e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{}))
               .toList()
           : const [],
     );

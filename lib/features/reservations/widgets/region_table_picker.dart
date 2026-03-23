@@ -45,8 +45,10 @@ class StyledDropdown extends StatelessWidget {
       child: DropdownButton<String>(
         isExpanded: true,
         underline: const SizedBox.shrink(),
-        hint: Text(hint,
-            style: const TextStyle(color: AppColors.textSecondary)),
+        hint: Text(
+          hint,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
         value: value,
         items: items,
         onChanged: onChanged,
@@ -96,10 +98,9 @@ class InlineTableSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedTable =
-        selectedTableId != null && tables.isNotEmpty
-            ? tables.where((t) => t.id == selectedTableId).firstOrNull
-            : null;
+    final selectedTable = selectedTableId != null && tables.isNotEmpty
+        ? tables.where((t) => t.id == selectedTableId).firstOrNull
+        : null;
 
     final headerLabel = selectedTable != null
         ? tableNumberLabel(selectedTable.name)
@@ -112,8 +113,7 @@ class InlineTableSelector extends StatelessWidget {
         GestureDetector(
           onTap: onToggle,
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.border),
               borderRadius: BorderRadius.only(
@@ -137,9 +137,7 @@ class InlineTableSelector extends StatelessWidget {
                   ),
                 ),
                 Icon(
-                  isOpen
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
+                  isOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                   color: AppColors.textSecondary,
                 ),
               ],
@@ -169,72 +167,71 @@ class InlineTableSelector extends StatelessWidget {
                     child: Center(child: CircularProgressIndicator()),
                   )
                 : tables.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          noTablesLabel,
-                          style: const TextStyle(
-                              color: AppColors.textSecondary),
-                        ),
-                      )
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: tables.length,
-                        separatorBuilder: (_, __) =>
-                            const Divider(height: 1, indent: 46),
-                        itemBuilder: (_, i) {
-                          final table = tables[i];
-                          final isSelected = table.id == selectedTableId;
-                          return InkWell(
-                            onTap: () => onSelectTable(table.id),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 10),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.table_restaurant,
-                                    size: 20,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          tableNumberLabel(table.name),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColors.textPrimary,
-                                          ),
-                                        ),
-                                        Text(
-                                          seatCountLabel(table.capacity),
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: AppColors.textSecondary,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Checkbox(
-                                    value: isSelected,
-                                    onChanged: (_) =>
-                                        onSelectTable(table.id),
-                                    activeColor: AppColors.accent,
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                ],
+                ? Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      noTablesLabel,
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: tables.length,
+                    separatorBuilder: (_, _) =>
+                        const Divider(height: 1, indent: 46),
+                    itemBuilder: (_, i) {
+                      final table = tables[i];
+                      final isSelected = table.id == selectedTableId;
+                      return InkWell(
+                        onTap: () => onSelectTable(table.id),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.table_restaurant,
+                                size: 20,
+                                color: AppColors.textSecondary,
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      tableNumberLabel(table.name),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    Text(
+                                      seatCountLabel(table.capacity),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Checkbox(
+                                value: isSelected,
+                                onChanged: (_) => onSelectTable(table.id),
+                                activeColor: AppColors.accent,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
           ),
       ],
     );

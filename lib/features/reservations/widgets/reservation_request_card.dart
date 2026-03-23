@@ -28,14 +28,11 @@ class ReservationRequestCard extends StatelessWidget {
   static (String? region, int? party) _regionAndParty(PendingOrder order) {
     final d = order.reservationDetails;
     if (d is! Map) return (null, null);
-    final m = Map<String, dynamic>.from(d as Map);
+    final m = Map<String, dynamic>.from(d);
     final r = m['region']?.toString().trim();
     final p = m['partySize'];
     final pi = p is int ? p : int.tryParse(p?.toString() ?? '');
-    return (
-      (r != null && r.isNotEmpty) ? r : null,
-      pi,
-    );
+    return ((r != null && r.isNotEmpty) ? r : null, pi);
   }
 
   @override
@@ -161,7 +158,11 @@ class ReservationRequestCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.calendar_today, size: 20, color: AppColors.textMuted),
+                Icon(
+                  Icons.calendar_today,
+                  size: 20,
+                  color: AppColors.textMuted,
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -202,7 +203,11 @@ class ReservationRequestCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Icon(Icons.info_outline, size: 20, color: AppColors.textMuted),
+                    Icon(
+                      Icons.info_outline,
+                      size: 20,
+                      color: AppColors.textMuted,
+                    ),
                   ],
                 ),
               ],

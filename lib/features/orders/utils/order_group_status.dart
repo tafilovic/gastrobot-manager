@@ -21,7 +21,9 @@ OrderGroupStatus orderGroupStatusFromItems(List<PendingOrderItem> items) {
   if (hasRejected && !hasPending && !hasActive) return OrderGroupStatus.rejected;
   if (items.every(
     (i) => i.status == 'delivered' || i.status == 'rejected',
-  )) return OrderGroupStatus.served;
+  )) {
+    return OrderGroupStatus.served;
+  }
   if (items.every((i) => i.status == 'pending')) return OrderGroupStatus.pending;
   return OrderGroupStatus.inPreparation;
 }

@@ -59,7 +59,7 @@ class PendingOrdersRemote implements PendingOrdersApi {
           .map(
             (e) => PendingOrder.fromJson(
               e is Map
-                  ? Map<String, dynamic>.from(e as Map)
+                  ? Map<String, dynamic>.from(e)
                   : <String, dynamic>{},
             ),
           )

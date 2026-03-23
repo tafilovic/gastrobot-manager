@@ -33,8 +33,8 @@ class ImageLoader extends StatelessWidget {
         height: height,
         fit: fit,
         placeholder: placeholder != null
-            ? (_, __) => placeholder!
-            : (_, __) => const Center(
+            ? (_, _) => placeholder!
+            : (_, _) => const Center(
                 child: SizedBox(
                   width: 24,
                   height: 24,
@@ -42,8 +42,8 @@ class ImageLoader extends StatelessWidget {
                 ),
               ),
         errorWidget: errorWidget != null
-            ? (_, __, ___) => errorWidget!
-            : (_, __, ___) => const Icon(Icons.broken_image_outlined),
+            ? (_, _, _) => errorWidget!
+            : (_, _, _) => const Icon(Icons.broken_image_outlined),
       );
     }
     return Image.network(
@@ -63,7 +63,7 @@ class ImageLoader extends StatelessWidget {
                 ),
               );
       },
-      errorBuilder: (_, __, ___) =>
+      errorBuilder: (_, _, _) =>
           errorWidget ?? const Icon(Icons.broken_image_outlined),
     );
   }

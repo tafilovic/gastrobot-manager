@@ -12,14 +12,15 @@ import 'package:gastrobotmanager/features/ready_items/domain/repositories/ready_
 /// productName, quantity, type, additionalInfo, addons, markedReadyAt.
 class ReadyItemsRemote implements ReadyItemsApi {
   ReadyItemsRemote([Dio? dio])
-      : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+    : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   final Dio _dio;
 
   static String _readyItemsUrl(String venueId) =>
       '/venues/$venueId/waiter/ready-items';
 
-  static String _deliverUrl(String venueId) => '/venues/$venueId/waiter/deliver';
+  static String _deliverUrl(String venueId) =>
+      '/venues/$venueId/waiter/deliver';
 
   /// Maps waiter ready-items API response to [QueueOrder].
   static QueueOrder _orderFromWaiterJson(Map<String, dynamic> json) {
@@ -29,27 +30,35 @@ class ReadyItemsRemote implements ReadyItemsApi {
     final items = <QueueItem>[];
     for (final e in itemsList) {
       if (e == null || e is! Map) continue;
-      final m = Map<String, dynamic>.from(e as Map);
+      final m = Map<String, dynamic>.from(e);
       final markedReady = m['markedReadyAt']?.toString();
       if (markedReady != null && markedReady.isNotEmpty) {
-        if (latestMarkedReady.isEmpty || markedReady.compareTo(latestMarkedReady) > 0) {
+        if (latestMarkedReady.isEmpty ||
+            markedReady.compareTo(latestMarkedReady) > 0) {
           latestMarkedReady = markedReady;
         }
       }
       final qty = m['quantity'];
-      final quantity = qty is int ? qty : (int.tryParse(qty?.toString() ?? '1') ?? 1);
-      items.add(QueueItem(
-        id: m['orderItemId']?.toString() ?? '',
-        name: m['productName']?.toString() ?? '',
-        quantity: quantity,
-        notes: m['additionalInfo']?.toString() ?? '',
-        status: 'ready',
-        addons: m['addons'] is List<dynamic> ? m['addons'] as List<dynamic> : const [],
-        type: m['type']?.toString(),
-      ));
+      final quantity = qty is int
+          ? qty
+          : (int.tryParse(qty?.toString() ?? '1') ?? 1);
+      items.add(
+        QueueItem(
+          id: m['orderItemId']?.toString() ?? '',
+          name: m['productName']?.toString() ?? '',
+          quantity: quantity,
+          notes: m['additionalInfo']?.toString() ?? '',
+          status: 'ready',
+          addons: m['addons'] is List<dynamic>
+              ? m['addons'] as List<dynamic>
+              : const [],
+          type: m['type']?.toString(),
+        ),
+      );
     }
     final tableName = json['tableName']?.toString();
-    final tableNumber = (tableName == null || tableName.isEmpty || tableName == 'N/A')
+    final tableNumber =
+        (tableName == null || tableName.isEmpty || tableName == 'N/A')
         ? '0'
         : tableName;
     return QueueOrder(
@@ -58,7 +67,9 @@ class ReadyItemsRemote implements ReadyItemsApi {
       tableNumber: tableNumber,
       note: json['note'] as String?,
       type: 'immediate',
-      targetTime: latestMarkedReady.isNotEmpty ? latestMarkedReady : DateTime.now().toUtc().toIso8601String(),
+      targetTime: latestMarkedReady.isNotEmpty
+          ? latestMarkedReady
+          : DateTime.now().toUtc().toIso8601String(),
       isFuture: false,
       items: items,
     );
@@ -89,13 +100,13 @@ class ReadyItemsRemote implements ReadyItemsApi {
       final List<dynamic> list = raw is List<dynamic>
           ? raw
           : (raw is Map<String, dynamic> && raw['data'] is List<dynamic>)
-              ? raw['data'] as List<dynamic>
-              : <dynamic>[];
+          ? raw['data'] as List<dynamic>
+          : <dynamic>[];
       final orders = <QueueOrder>[];
       for (final e in list) {
         if (e == null || e is! Map) continue;
         try {
-          final order = _orderFromWaiterJson(Map<String, dynamic>.from(e as Map));
+          final order = _orderFromWaiterJson(Map<String, dynamic>.from(e));
           if (order.orderId.isNotEmpty && order.items.isNotEmpty) {
             orders.add(order);
           }
@@ -108,17 +119,12 @@ class ReadyItemsRemote implements ReadyItemsApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw ReadyItemsException(
-        message ?? e.message ?? 'Network error',
-      );
+      throw ReadyItemsException(message ?? e.message ?? 'Network error');
     }
   }
 
   @override
-  Future<bool> markAsServed(
-    String venueId,
-    List<String> orderItemIds,
-  ) async {
+  Future<bool> markAsServed(String venueId, List<String> orderItemIds) async {
     try {
       final response = await _dio.patch<Map<String, dynamic>>(
         _deliverUrl(venueId),
@@ -134,9 +140,7 @@ class ReadyItemsRemote implements ReadyItemsApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw ReadyItemsException(
-        message ?? e.message ?? 'Network error',
-      );
+      throw ReadyItemsException(message ?? e.message ?? 'Network error');
     }
   }
 }

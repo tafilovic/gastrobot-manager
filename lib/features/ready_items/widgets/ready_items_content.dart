@@ -27,7 +27,9 @@ class _ReadyItemsContentState extends State<ReadyItemsContent> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => widget.onStartRefresh());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => widget.onStartRefresh(),
+    );
   }
 
   @override
@@ -80,59 +82,59 @@ class _ReadyItemsContentState extends State<ReadyItemsContent> {
                 child: RefreshIndicator(
                   onRefresh: () => provider.pullRefresh(),
                   child: provider.isLoading && orders.isEmpty
-                    ? ListView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.5,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
+                      ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    : provider.error != null && orders.isEmpty
-                        ? ListView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.5,
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(24),
-                                    child: Text(
-                                      provider.error!,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: AppColors.error,
-                                      ),
+                          ],
+                        )
+                      : provider.error != null && orders.isEmpty
+                      ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: Text(
+                                    provider.error!,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: AppColors.error,
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          )
-                        : ListView.separated(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 8,
                             ),
-                            itemCount: orders.length,
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              final order = orders[index];
-                              return ListItemEntrance(
-                                index: index,
-                                child: ReadyOrderCard(
-                                  order: order,
-                                  l10n: l10n,
-                                  accentColor: widget.accentColor,
-                                  onMarkServed: () async {
-                                  final ok =
-                                      await provider.markOrderAsServed(order);
+                          ],
+                        )
+                      : ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 8,
+                          ),
+                          itemCount: orders.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final order = orders[index];
+                            return ListItemEntrance(
+                              index: index,
+                              child: ReadyOrderCard(
+                                order: order,
+                                l10n: l10n,
+                                accentColor: widget.accentColor,
+                                onMarkServed: () async {
+                                  final ok = await provider.markOrderAsServed(
+                                    order,
+                                  );
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -140,7 +142,7 @@ class _ReadyItemsContentState extends State<ReadyItemsContent> {
                                         ok
                                             ? l10n.readyMarkAsServedSuccess
                                             : (provider.error ??
-                                                l10n.readyMarkAsServedError),
+                                                  l10n.readyMarkAsServedError),
                                       ),
                                       backgroundColor: ok
                                           ? AppColors.success
@@ -150,8 +152,8 @@ class _ReadyItemsContentState extends State<ReadyItemsContent> {
                                 },
                               ),
                             );
-                            },
-                          ),
+                          },
+                        ),
                 ),
               ),
             ),

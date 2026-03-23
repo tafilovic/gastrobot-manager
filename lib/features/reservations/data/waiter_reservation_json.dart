@@ -7,7 +7,8 @@ Map<String, dynamic> mapWaiterReservationToPendingOrderJson(
 ) {
   final m = Map<String, dynamic>.from(raw);
 
-  final id = m['orderId'] ??
+  final id =
+      m['orderId'] ??
       m['order_id'] ??
       m['reservationId'] ??
       m['reservation_id'] ??
@@ -17,7 +18,8 @@ Map<String, dynamic> mapWaiterReservationToPendingOrderJson(
   m['orderId'] = id?.toString() ?? '';
 
   if ((m['orderNumber']?.toString() ?? '').isEmpty) {
-    m['orderNumber'] = m['referenceCode']?.toString() ??
+    m['orderNumber'] =
+        m['referenceCode']?.toString() ??
         m['reference_code']?.toString() ??
         m['code']?.toString() ??
         m['displayReference']?.toString() ??
@@ -62,9 +64,7 @@ Map<String, dynamic> mapWaiterReservationToPendingOrderJson(
 
   final rd = <String, dynamic>{};
   if (m['reservationDetails'] is Map) {
-    rd.addAll(
-      Map<String, dynamic>.from(m['reservationDetails'] as Map),
-    );
+    rd.addAll(Map<String, dynamic>.from(m['reservationDetails'] as Map));
   }
 
   // Waiter pending response often includes nested user and extra reservation fields.
@@ -149,7 +149,7 @@ PendingOrder pendingOrderFromWaiterReservationJson(dynamic e) {
     return PendingOrder.fromJson(<String, dynamic>{});
   }
   final mapped = mapWaiterReservationToPendingOrderJson(
-    Map<String, dynamic>.from(e as Map),
+    Map<String, dynamic>.from(e),
   );
   return PendingOrder.fromJson(mapped);
 }

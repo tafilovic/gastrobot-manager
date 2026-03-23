@@ -10,7 +10,6 @@ import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
-import 'package:gastrobotmanager/features/tables/widgets/table_reservations_dialog.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Tables overview screen — lists all venue tables with their status.
@@ -61,42 +60,26 @@ class _TablesScreenState extends State<TablesScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: AppBreakpoints.contentMaxWidth,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            showTableReservationsDialog(context);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: accentColor,
-                            side: BorderSide(color: accentColor),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          child: Text(l10n.tablesReserve),
-                        ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: AppBreakpoints.contentMaxWidth,
+                ),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: FilledButton.icon(
+                    onPressed: () {
+                      context.pushNamed(AppRouteNames.tableOrder);
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: accentColor,
+                      foregroundColor: AppColors.onPrimary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 14,
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FilledButton.icon(
-                          onPressed: () {
-                            context.pushNamed(AppRouteNames.tableOrder);
-                          },
-                          style: FilledButton.styleFrom(
-                            backgroundColor: accentColor,
-                            foregroundColor: AppColors.onPrimary,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          icon: const Icon(Icons.add, size: 20),
-                          label: Text(l10n.tablesOrder),
-                        ),
-                      ),
-                    ],
+                    ),
+                    icon: const Icon(Icons.add, size: 20),
+                    label: Text(l10n.tablesOrder),
                   ),
                 ),
               ),

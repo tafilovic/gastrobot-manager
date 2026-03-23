@@ -38,9 +38,7 @@ class _KitchenBarReservationRequestDetailsContentState
   @override
   void initState() {
     super.initState();
-    _checkedIds = {
-      for (final item in widget.order.items) item.id,
-    };
+    _checkedIds = {for (final item in widget.order.items) item.id};
   }
 
   bool get _allProcessed =>
@@ -58,9 +56,7 @@ class _KitchenBarReservationRequestDetailsContentState
     if (messenger != null && l10n != null) {
       messenger.showSnackBar(
         SnackBar(
-          content: Text(
-            l10n.orderProcessingComplete(widget.order.orderNumber),
-          ),
+          content: Text(l10n.orderProcessingComplete(widget.order.orderNumber)),
           backgroundColor: AppColors.success,
         ),
       );
@@ -81,11 +77,7 @@ class _KitchenBarReservationRequestDetailsContentState
 
     for (final itemId in toProcess) {
       try {
-        await api.rejectOrderItem(
-          venueId,
-          widget.order.orderId,
-          itemId,
-        );
+        await api.rejectOrderItem(venueId, widget.order.orderId, itemId);
         if (!mounted) return;
         setState(() => _processedIds.add(itemId));
       } catch (_) {
@@ -117,10 +109,12 @@ class _KitchenBarReservationRequestDetailsContentState
     ];
     if (unprocessed.isEmpty) return;
 
-    final toReject =
-        unprocessed.where((id) => !_checkedIds.contains(id)).toList();
-    final toAccept =
-        unprocessed.where((id) => _checkedIds.contains(id)).toList();
+    final toReject = unprocessed
+        .where((id) => !_checkedIds.contains(id))
+        .toList();
+    final toAccept = unprocessed
+        .where((id) => _checkedIds.contains(id))
+        .toList();
 
     setState(() => _isSubmitting = true);
 
@@ -159,9 +153,9 @@ class _KitchenBarReservationRequestDetailsContentState
           ),
         )
         .then((result) {
-      if (!context.mounted || result != true) return;
-      _onComplete();
-    });
+          if (!context.mounted || result != true) return;
+          _onComplete();
+        });
   }
 
   void _onAcceptPressed(BuildContext context) {
@@ -205,17 +199,17 @@ class _KitchenBarReservationRequestDetailsContentState
                   Text(
                     dateStr,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: accentColor,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      color: accentColor,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const Spacer(),
                   Text(
                     timeStr,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: accentColor,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      color: accentColor,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(width: 6),
                   Icon(Icons.access_time, size: 20, color: accentColor),
@@ -226,7 +220,7 @@ class _KitchenBarReservationRequestDetailsContentState
               child: ListView.separated(
                 padding: const EdgeInsets.all(20),
                 itemCount: widget.order.items.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (_, _) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final item = widget.order.items[index];
                   final isChecked = _checkedIds.contains(item.id);
