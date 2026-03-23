@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 
 import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/tables/domain/errors/tables_exception.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 
 /// Fetches venue tables from /venues/:venueId/tables.
@@ -64,6 +66,56 @@ class TablesRemote implements TablesApi {
           .map(ConfirmedReservation.fromJson)
           .toList()
         ..sort((a, b) => a.reservationStart.compareTo(b.reservationStart));
+    } on DioException catch (e) {
+      final message = e.response?.data is Map
+          ? (e.response!.data as Map)['message']?.toString()
+          : null;
+      throw TablesException(message ?? e.message ?? 'Network error');
+    }
+  }
+
+  @override
+  Future<List<PendingOrder>> getOrdersForTable(
+    String tableId,
+    TableOrdersFilters filters,
+  ) async {
+    final url = '${ApiConfig.baseUrl}/v1/tables/$tableId/orders';
+    final queryParameters = <String, dynamic>{
+      'startDate': filters.dateFrom.toIso8601String(),
+      'endDate': filters.dateTo.toIso8601String(),
+      'minPrice': filters.apiMinPrice,
+      'maxPrice': filters.apiMaxPrice,
+    };
+    if (filters.orderStatus != null && filters.orderStatus!.isNotEmpty) {
+      queryParameters['status'] = filters.orderStatus;
+    }
+    if (filters.orderType != null && filters.orderType!.isNotEmpty) {
+      queryParameters['type'] = filters.orderType;
+    }
+
+    try {
+      final response = await _dio.get<List<dynamic>>(
+        url,
+        queryParameters: queryParameters,
+        options: Options(
+          validateStatus: (status) => status != null && status < 400,
+        ),
+      );
+
+      if (response.data == null || response.statusCode != 200) {
+        return [];
+      }
+
+      return response.data!
+          .map(
+            (e) => PendingOrder.fromJson(
+              e is Map
+                  ? Map<String, dynamic>.from(e)
+                  : <String, dynamic>{},
+            ),
+          )
+          .where((o) => o.orderId.isNotEmpty)
+          .toList();
     } on DioException catch (e) {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()

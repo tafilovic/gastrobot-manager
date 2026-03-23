@@ -320,5 +320,14 @@
   "billSheetEmpty": "Korpa je prazna",
   "billSheetOrderButton": "NARUČI",
   "tableOverviewNoReservations": "Nema aktivnih rezervacija za ovaj sto",
-  "tableOverviewNoOrders": "Nema aktivnih porudžbina za ovaj sto"
+  "tableOverviewNoOrders": "Nema aktivnih porudžbina za ovaj sto",
+  "tableOrdersFilterTypeAny": "Bilo koji",
+  "tableOrdersFilterStatusLabel": "Status porudžbine:",
+  "tableOrdersFilterStatusAny": "Bilo koji",
+  "tableOrdersFilterStatusAwaitingConfirmation": "Čeka potvrdu",
+  "tableOrdersFilterStatusPending": "Na čekanju",
+  "tableOrdersFilterStatusConfirmed": "Potvrđeno",
+  "tableOrdersFilterStatusRejected": "Odbijeno",
+  "tableOrdersFilterStatusExpired": "Isteklo",
+  "tableOrdersFilterStatusPaid": "Plaćeno"
 }

@@ -690,4 +690,31 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get tableOverviewNoOrders => 'Nema aktivnih porudžbina za ovaj sto';
+
+  @override
+  String get tableOrdersFilterTypeAny => 'Bilo koji';
+
+  @override
+  String get tableOrdersFilterStatusLabel => 'Status porudžbine:';
+
+  @override
+  String get tableOrdersFilterStatusAny => 'Bilo koji';
+
+  @override
+  String get tableOrdersFilterStatusAwaitingConfirmation => 'Čeka potvrdu';
+
+  @override
+  String get tableOrdersFilterStatusPending => 'Na čekanju';
+
+  @override
+  String get tableOrdersFilterStatusConfirmed => 'Potvrđeno';
+
+  @override
+  String get tableOrdersFilterStatusRejected => 'Odbijeno';
+
+  @override
+  String get tableOrdersFilterStatusExpired => 'Isteklo';
+
+  @override
+  String get tableOrdersFilterStatusPaid => 'Plaćeno';
 }

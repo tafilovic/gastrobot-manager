@@ -1367,6 +1367,60 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Nema aktivnih porudžbina za ovaj sto'**
   String get tableOverviewNoOrders;
+
+  /// No description provided for @tableOrdersFilterTypeAny.
+  ///
+  /// In sr, this message translates to:
+  /// **'Bilo koji'**
+  String get tableOrdersFilterTypeAny;
+
+  /// No description provided for @tableOrdersFilterStatusLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Status porudžbine:'**
+  String get tableOrdersFilterStatusLabel;
+
+  /// No description provided for @tableOrdersFilterStatusAny.
+  ///
+  /// In sr, this message translates to:
+  /// **'Bilo koji'**
+  String get tableOrdersFilterStatusAny;
+
+  /// No description provided for @tableOrdersFilterStatusAwaitingConfirmation.
+  ///
+  /// In sr, this message translates to:
+  /// **'Čeka potvrdu'**
+  String get tableOrdersFilterStatusAwaitingConfirmation;
+
+  /// No description provided for @tableOrdersFilterStatusPending.
+  ///
+  /// In sr, this message translates to:
+  /// **'Na čekanju'**
+  String get tableOrdersFilterStatusPending;
+
+  /// No description provided for @tableOrdersFilterStatusConfirmed.
+  ///
+  /// In sr, this message translates to:
+  /// **'Potvrđeno'**
+  String get tableOrdersFilterStatusConfirmed;
+
+  /// No description provided for @tableOrdersFilterStatusRejected.
+  ///
+  /// In sr, this message translates to:
+  /// **'Odbijeno'**
+  String get tableOrdersFilterStatusRejected;
+
+  /// No description provided for @tableOrdersFilterStatusExpired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Isteklo'**
+  String get tableOrdersFilterStatusExpired;
+
+  /// No description provided for @tableOrdersFilterStatusPaid.
+  ///
+  /// In sr, this message translates to:
+  /// **'Plaćeno'**
+  String get tableOrdersFilterStatusPaid;
 }
 
 class _AppLocalizationsDelegate

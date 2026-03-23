@@ -22,6 +22,8 @@ import 'package:gastrobotmanager/features/reservations/domain/models/active_rese
 import 'package:gastrobotmanager/features/reservations/screens/active_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
+import 'package:gastrobotmanager/features/tables/screens/filter_table_orders_screen.dart';
 import 'package:gastrobotmanager/features/tables/screens/table_order_screen.dart';
 import 'package:gastrobotmanager/features/tables/screens/table_overview_screen.dart';
 import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
@@ -56,6 +58,7 @@ abstract class AppRouteNames {
   // Tables sub-routes
   static const tableOrder = 'table-order';
   static const tableOverview = 'table-overview';
+  static const filterTableOrders = 'filter-table-orders';
 
   // Path constants
   static const pathLogin = '/login';
@@ -66,6 +69,7 @@ abstract class AppRouteNames {
   static const pathMenu = '/menu';
   static const pathDrinks = '/drinks';
   static const pathTables = '/tables';
+  static const pathTablesFilterTableOrders = '/tables/overview/filter-orders';
   static const pathProfile = '/profile';
 
   // Orders sub-routes (full paths for context.push)
@@ -269,6 +273,20 @@ class AppRouter {
                         }
                         return TableOverviewScreen(table: extra);
                       },
+                      routes: [
+                        GoRoute(
+                          path: 'filter-orders',
+                          name: AppRouteNames.filterTableOrders,
+                          builder: (context, state) {
+                            final extra = state.extra;
+                            return FilterTableOrdersScreen(
+                              initialFilters: extra is TableOrdersFilters
+                                  ? extra
+                                  : null,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),

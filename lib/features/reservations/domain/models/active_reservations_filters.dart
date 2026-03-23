@@ -1,15 +1,20 @@
+import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
+
 /// Filter state for active (accepted) reservations.
 /// Used by [ActiveReservationsFilterScreen].
 /// Matches UI design: date, people count, region, reservation content, table numbers.
 class ActiveReservationsFilters {
-  const ActiveReservationsFilters({
-    this.dateFrom,
-    this.dateTo,
+  ActiveReservationsFilters({
+    DateTime? dateFrom,
+    DateTime? dateTo,
     this.peopleCounts = const {},
     this.regions = const {},
     this.reservationContents = const {},
     this.tableNumbers = const {},
-  });
+  }) : dateFrom = dateFrom != null
+           ? CalendarDayBounds.startOfDay(dateFrom)
+           : null,
+       dateTo = dateTo != null ? CalendarDayBounds.endOfDay(dateTo) : null;
 
   final DateTime? dateFrom;
   final DateTime? dateTo;
@@ -20,11 +25,13 @@ class ActiveReservationsFilters {
 
   /// Region: indoors (Unutrašnjost).
   static const String regionIndoors = 'indoors';
+
   /// Region: garden (Bašta).
   static const String regionGarden = 'garden';
 
   /// Reservation content: drink (Piće).
   static const String contentDrink = 'drink';
+
   /// Reservation content: food (Hrana).
   static const String contentFood = 'food';
 

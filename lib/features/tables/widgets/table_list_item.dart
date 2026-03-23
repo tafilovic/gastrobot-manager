@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Card in the tables list showing status, number, type and next reservation.
+/// Card in the tables list: table id row, then (when present) next reservation
+/// with date header, chip, time / guest / party rows, and VIDI DETALJE.
 class TableListItem extends StatelessWidget {
   const TableListItem({super.key, required this.table, this.onTap});
 
@@ -23,47 +24,73 @@ class TableListItem extends StatelessWidget {
     }
   }
 
-  String _formatTime(DateTime dt) {
-    final h = dt.hour.toString().padLeft(2, '0');
-    final m = dt.minute.toString().padLeft(2, '0');
-    return '$h:$m';
+  static Widget _iconDetailRow(
+    ThemeData theme,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: AppColors.textMuted),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final accentColor = theme.colorScheme.primary;
     final reservation = table.nextReservation;
     final statusColor =
         table.isFree ? AppColors.success : AppColors.destructive;
+    final locale = Localizations.localeOf(context).languageCode;
 
-    final card = Container(
+    Widget card = Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 8,
+            color: AppColors.shadow,
+            blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                'assets/icons/table.svg',
-                width: 22,
-                height: 22,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
+              Icon(
+                Icons.table_restaurant,
+                size: 22,
+                color: AppColors.textSecondary,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -72,17 +99,15 @@ class TableListItem extends StatelessWidget {
                   children: [
                     Text(
                       l10n.tableNumber(table.name),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       _typeLabel(l10n),
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -100,33 +125,97 @@ class TableListItem extends StatelessWidget {
             ],
           ),
           if (reservation != null) ...[
-            const SizedBox(height: 12),
+            const Divider(height: 24),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.tableReservationAt,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
+                Icon(
+                  Icons.calendar_today,
+                  size: 20,
+                  color: AppColors.textSecondary,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    formatReservationDate(
+                      reservation.startsAt.toIso8601String(),
+                      l10n,
+                      locale: locale,
+                    ),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: accentColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(
-                  _formatTime(reservation.startsAt),
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                if (reservation.displayChip.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.backgroundMuted,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      reservation.displayChip,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
               ],
+            ),
+            const Divider(height: 24),
+            _iconDetailRow(
+              theme,
+              Icons.access_time,
+              l10n.reservationLabelTime,
+              formatReservationTime(reservation.startsAt.toIso8601String()),
+            ),
+            _iconDetailRow(
+              theme,
+              Icons.person_outline,
+              l10n.confirmedResUser,
+              (reservation.guestName != null &&
+                      reservation.guestName!.trim().isNotEmpty)
+                  ? reservation.guestName!.trim()
+                  : '—',
+            ),
+            _iconDetailRow(
+              theme,
+              Icons.groups_outlined,
+              l10n.reservationLabelPartySize,
+              reservation.peopleCount != null
+                  ? '${reservation.peopleCount}'
+                  : '—',
+            ),
+            const SizedBox(height: 4),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: onTap,
+                style: FilledButton.styleFrom(
+                  backgroundColor: accentColor,
+                  foregroundColor: AppColors.onPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(l10n.orderSeeDetails),
+              ),
             ),
           ],
         ],
       ),
     );
 
-    if (onTap == null) return card;
+    if (onTap == null) {
+      return card;
+    }
 
     return Material(
       color: Colors.transparent,

@@ -4,12 +4,19 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
+import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/tables/utils/apply_table_orders_content_filter.dart';
+import 'package:gastrobotmanager/features/tables/utils/pending_orders_for_table.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
-import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Tables overview screen — lists all venue tables with their status.
@@ -32,6 +39,51 @@ class _TablesScreenState extends State<TablesScreen> {
     final venueId = context.read<AuthProvider>().currentVenueId;
     if (venueId != null) {
       context.read<TablesProvider>().load(venueId);
+    }
+  }
+
+  /// Opens [ActiveOrderDetailsScreen] when an order with line items exists for
+  /// this table (from table orders API, then waiter list); otherwise table overview.
+  Future<void> _onTableCardTapped(TableModel table) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final tablesProvider = context.read<TablesProvider>();
+    final filters = TableOrdersFilters.defaults();
+
+    try {
+      final apiOrders = await tablesProvider.fetchOrdersForTable(table.id, filters);
+      var list = applyTableOrdersContentFilter(apiOrders, filters);
+      list.sort((a, b) => b.targetTime.compareTo(a.targetTime));
+      PendingOrder? primary = list.isNotEmpty ? list.first : null;
+
+      if (primary == null && mounted) {
+        final fromWaiter = pendingOrdersForTable(
+          context.read<OrdersProvider>().orders,
+          table,
+        )..sort((a, b) => b.targetTime.compareTo(a.targetTime));
+        primary = fromWaiter.isNotEmpty ? fromWaiter.first : null;
+      }
+
+      if (!mounted) return;
+      if (primary != null) {
+        await context.pushNamed(
+          AppRouteNames.activeOrderDetails,
+          extra: ActiveOrderDetailsScreen(order: primary),
+        );
+      } else {
+        await context.pushNamed(
+          AppRouteNames.tableOverview,
+          extra: table,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      messenger?.showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+      await context.pushNamed(
+        AppRouteNames.tableOverview,
+        extra: table,
+      );
     }
   }
 
@@ -112,7 +164,11 @@ class _TablesScreenState extends State<TablesScreen> {
               ),
             ),
             Expanded(
-              child: _TablesList(provider: provider, l10n: l10n),
+              child: _TablesList(
+                provider: provider,
+                l10n: l10n,
+                onTableTap: _onTableCardTapped,
+              ),
             ),
           ],
         ),
@@ -122,10 +178,15 @@ class _TablesScreenState extends State<TablesScreen> {
 }
 
 class _TablesList extends StatelessWidget {
-  const _TablesList({required this.provider, required this.l10n});
+  const _TablesList({
+    required this.provider,
+    required this.l10n,
+    required this.onTableTap,
+  });
 
   final TablesProvider provider;
   final AppLocalizations l10n;
+  final Future<void> Function(TableModel table) onTableTap;
 
   @override
   Widget build(BuildContext context) {
@@ -210,10 +271,7 @@ class _TablesList extends StatelessWidget {
                         index: index,
                         child: TableListItem(
                           table: table,
-                          onTap: () => context.pushNamed(
-                            AppRouteNames.tableOverview,
-                            extra: table,
-                          ),
+                          onTap: () => onTableTap(table),
                         ),
                       );
                     },
@@ -228,7 +286,7 @@ class _TablesList extends StatelessWidget {
                       crossAxisCount: crossAxisCount,
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
-                      mainAxisExtent: 80,
+                      mainAxisExtent: 380,
                     ),
                     itemCount: tables.length,
                     itemBuilder: (context, index) {
@@ -237,10 +295,7 @@ class _TablesList extends StatelessWidget {
                         index: index,
                         child: TableListItem(
                           table: table,
-                          onTap: () => context.pushNamed(
-                            AppRouteNames.tableOverview,
-                            extra: table,
-                          ),
+                          onTap: () => onTableTap(table),
                         ),
                       );
                     },

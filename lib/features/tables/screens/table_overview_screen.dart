@@ -3,21 +3,27 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
+import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/waiter_order_card.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/screens/confirmed_reservation_details_screen.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_details_content.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/tables/utils/apply_table_orders_content_filter.dart';
 import 'package:gastrobotmanager/features/tables/utils/pending_orders_for_table.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_active_order_card.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_header.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_reservation_card.dart';
+import 'package:gastrobotmanager/features/tables/widgets/table_overview_orders_header_row.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_reservation_count_row.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_segmented_tabs.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -35,6 +41,10 @@ class TableOverviewScreen extends StatefulWidget {
 class _TableOverviewScreenState extends State<TableOverviewScreen> {
   Future<List<ConfirmedReservation>>? _reservationsFuture;
   int _segmentIndex = 0;
+  TableOrdersFilters _tableOrderFilters = TableOrdersFilters.defaults();
+  Future<List<PendingOrder>>? _tableOrdersFuture;
+  ConfirmedReservation? _selectedReservation;
+  PendingOrder? _selectedOrder;
 
   @override
   void initState() {
@@ -63,8 +73,39 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
       _reservationsFuture = context
           .read<TablesProvider>()
           .fetchActiveReservationsForTable(widget.table.id);
+      if (_segmentIndex == 1) {
+        _tableOrdersFuture = context.read<TablesProvider>().fetchOrdersForTable(
+              widget.table.id,
+              _tableOrderFilters,
+            );
+      }
     });
     await _reservationsFuture;
+    if (_segmentIndex == 1 && _tableOrdersFuture != null) {
+      await _tableOrdersFuture;
+    }
+  }
+
+  void _loadTableOrders() {
+    setState(() {
+      _tableOrdersFuture = context.read<TablesProvider>().fetchOrdersForTable(
+            widget.table.id,
+            _tableOrderFilters,
+          );
+    });
+  }
+
+  Future<void> _openTableOrderFilters() async {
+    final result = await context.push<TableOrdersFilters>(
+      AppRouteNames.pathTablesFilterTableOrders,
+      extra: _tableOrderFilters,
+    );
+    if (result != null && mounted) {
+      setState(() => _tableOrderFilters = result);
+      if (_segmentIndex == 1) {
+        _loadTableOrders();
+      }
+    }
   }
 
   String _typeLabel(AppLocalizations l10n) {
@@ -146,6 +187,9 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
       );
     }
 
+    final width = MediaQuery.sizeOf(context).width;
+    final useMasterDetail = width >= AppBreakpoints.expanded;
+
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
       appBar: AppBar(
@@ -153,190 +197,343 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
       ),
-      body: FutureBuilder<List<ConfirmedReservation>>(
-        future: future,
-        builder: (context, snapshot) {
-          final reservations = snapshot.data ?? [];
-          final reservationsError = snapshot.error;
+      body: SafeArea(
+        child: FutureBuilder<List<ConfirmedReservation>>(
+          future: future,
+          builder: (context, snapshot) {
+            final reservations = snapshot.data ?? [];
+            final reservationsError = snapshot.error;
 
-          return RefreshIndicator(
-            onRefresh: _onRefresh,
-            color: AppColors.accent,
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxWidth: AppBreakpoints.contentMaxWidth,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                        child: Column(
+            final mainColumn = Padding(
+              padding: EdgeInsets.fromLTRB(
+                20,
+                16,
+                useMasterDetail ? 12 : 20,
+                8,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TableOverviewHeader(
+                    table: widget.table,
+                    l10n: l10n,
+                    typeLabel: _typeLabel(l10n),
+                  ),
+                  const SizedBox(height: 16),
+                  if (!widget.table.isFree)
+                    Consumer<OrdersProvider>(
+                      builder: (context, orders, _) {
+                        final primary = _primaryOrder(orders.orders);
+                        if (primary == null) {
+                          return const SizedBox.shrink();
+                        }
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            TableOverviewHeader(
-                              table: widget.table,
+                            TableOverviewActiveOrderCard(
+                              order: primary,
                               l10n: l10n,
-                              typeLabel: _typeLabel(l10n),
-                            ),
-                            const SizedBox(height: 16),
-                            if (!widget.table.isFree)
-                              Consumer<OrdersProvider>(
-                                builder: (context, orders, _) {
-                                  final primary = _primaryOrder(orders.orders);
-                                  if (primary == null) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      TableOverviewActiveOrderCard(
-                                        order: primary,
-                                        l10n: l10n,
-                                        accentColor: accentColor,
-                                      ),
-                                      const SizedBox(height: 12),
-                                      FilledButton(
-                                        onPressed: () => _confirmMarkPaid(
-                                          context,
-                                          l10n,
-                                          primary,
-                                        ),
-                                        style: FilledButton.styleFrom(
-                                          backgroundColor: accentColor,
-                                          foregroundColor: AppColors.onPrimary,
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 14,
-                                          ),
-                                        ),
-                                        child: Text(l10n.orderMarkAsPaid),
-                                      ),
-                                      const SizedBox(height: 16),
-                                    ],
-                                  );
-                                },
-                              ),
-                            const SizedBox(height: 20),
-                            TableOverviewSegmentedTabs(
                               accentColor: accentColor,
-                              selectedIndex: _segmentIndex,
-                              reservationsLabel: l10n.navReservations,
-                              ordersLabel: l10n.navOrders,
-                              onChanged: (i) =>
-                                  setState(() => _segmentIndex = i),
+                            ),
+                            const SizedBox(height: 12),
+                            FilledButton(
+                              onPressed: () => _confirmMarkPaid(
+                                context,
+                                l10n,
+                                primary,
+                              ),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: accentColor,
+                                foregroundColor: AppColors.onPrimary,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                              ),
+                              child: Text(l10n.orderMarkAsPaid),
                             ),
                             const SizedBox(height: 16),
-                            if (_segmentIndex == 0) ...[
-                              if (reservationsError != null)
-                                Text(
-                                  reservationsError.toString(),
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.error,
-                                  ),
-                                )
-                              else if (snapshot.connectionState ==
-                                  ConnectionState.waiting)
-                                const Padding(
-                                  padding: EdgeInsets.all(24),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              else if (reservations.isEmpty)
-                                Text(
-                                  l10n.tableOverviewNoReservations,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textSecondary,
-                                  ),
-                                )
-                              else ...[
-                                TableOverviewReservationCountRow(
-                                  count: reservations.length,
-                                  l10n: l10n,
-                                  accentColor: accentColor,
-                                  theme: theme,
+                          ],
+                        );
+                      },
+                    ),
+                  const SizedBox(height: 20),
+                  TableOverviewSegmentedTabs(
+                    accentColor: accentColor,
+                    selectedIndex: _segmentIndex,
+                    reservationsLabel: l10n.navReservations,
+                    ordersLabel: l10n.navOrders,
+                    onChanged: (i) {
+                      setState(() {
+                        _segmentIndex = i;
+                        _selectedReservation = null;
+                        _selectedOrder = null;
+                        if (i == 1) {
+                          _loadTableOrders();
+                        }
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  if (_segmentIndex == 0) ...[
+                    if (reservationsError != null)
+                      Text(
+                        reservationsError.toString(),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.error,
+                        ),
+                      )
+                    else if (snapshot.connectionState ==
+                        ConnectionState.waiting)
+                      const Padding(
+                        padding: EdgeInsets.all(24),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    else if (reservations.isEmpty)
+                      Text(
+                        l10n.tableOverviewNoReservations,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      )
+                    else ...[
+                      TableOverviewReservationCountRow(
+                        count: reservations.length,
+                        l10n: l10n,
+                        accentColor: accentColor,
+                        theme: theme,
+                      ),
+                      const SizedBox(height: 12),
+                      ...reservations.map(
+                        (r) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: TableOverviewReservationCard(
+                            reservation: r,
+                            l10n: l10n,
+                            accentColor: accentColor,
+                            onSeeDetails: () =>
+                                _onReservationSeeDetails(context, r, useMasterDetail),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ] else ...[
+                    FutureBuilder<List<PendingOrder>>(
+                      future: _tableOrdersFuture,
+                      builder: (context, ordersSnap) {
+                        final raw = ordersSnap.data ?? [];
+                        final list = applyTableOrdersContentFilter(
+                          raw,
+                          _tableOrderFilters,
+                        )..sort(
+                            (a, b) =>
+                                b.targetTime.compareTo(a.targetTime),
+                          );
+                        final countForHeader =
+                            ordersSnap.hasData ? list.length : 0;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TableOverviewOrdersHeaderRow(
+                              count: countForHeader,
+                              l10n: l10n,
+                              accentColor: accentColor,
+                              theme: theme,
+                              onFilterTap: _openTableOrderFilters,
+                            ),
+                            const SizedBox(height: 12),
+                            if (_tableOrdersFuture == null ||
+                                ordersSnap.connectionState ==
+                                    ConnectionState.waiting)
+                              const Padding(
+                                padding: EdgeInsets.all(24),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
                                 ),
-                                const SizedBox(height: 12),
-                                ...reservations.map(
-                                  (r) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: TableOverviewReservationCard(
-                                      reservation: r,
-                                      l10n: l10n,
-                                      accentColor: accentColor,
-                                      onSeeDetails: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute<void>(
-                                            builder: (_) =>
-                                                ConfirmedReservationDetailsScreen(
-                                              reservation: r,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                              )
+                            else if (ordersSnap.hasError)
+                              Text(
+                                ordersSnap.error.toString(),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.error,
+                                ),
+                              )
+                            else if (list.isEmpty)
+                              Text(
+                                l10n.tableOverviewNoOrders,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              )
+                            else
+                              ...list.map(
+                                (o) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: WaiterOrderCard(
+                                    order: o,
+                                    accentColor: accentColor,
+                                    l10n: l10n,
+                                    onSeeDetails: () =>
+                                        _onOrderSeeDetails(context, o, useMasterDetail),
                                   ),
                                 ),
-                              ],
-                            ] else ...[
-                              Consumer<OrdersProvider>(
-                                builder: (context, orders, _) {
-                                  final list = pendingOrdersForTable(
-                                    orders.orders,
-                                    widget.table,
-                                  );
-                                  if (list.isEmpty) {
-                                    return Text(
-                                      l10n.tableOverviewNoOrders,
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    );
-                                  }
-                                  return Column(
-                                    children: list
-                                        .map(
-                                          (o) => Padding(
-                                            padding: const EdgeInsets.only(
-                                              bottom: 12,
-                                            ),
-                                            child: WaiterOrderCard(
-                                              order: o,
-                                              accentColor: accentColor,
-                                              l10n: l10n,
-                                              onSeeDetails: () {
-                                                context.pushNamed(
-                                                  AppRouteNames
-                                                      .activeOrderDetails,
-                                                  extra:
-                                                      ActiveOrderDetailsScreen(
-                                                    order: o,
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  );
-                                },
                               ),
-                            ],
-                            const SizedBox(height: 32),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                  const SizedBox(height: 32),
+                ],
+              ),
+            );
+
+            if (useMasterDetail) {
+              return RefreshIndicator(
+                onRefresh: _onRefresh,
+                color: AppColors.accent,
+                child: ConstrainedContent(
+                  maxWidth: AppBreakpoints.contentMaxWidthMasterDetail,
+                  padding: EdgeInsets.zero,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: CustomScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverToBoxAdapter(child: mainColumn),
                           ],
                         ),
                       ),
-                    ),
+                      const VerticalDivider(
+                        width: 1,
+                        thickness: 1,
+                        color: AppColors.border,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ColoredBox(
+                          color: AppColors.backgroundMuted,
+                          child: _buildDetailPane(context, l10n, theme),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          );
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: AppColors.accent,
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: ConstrainedContent(
+                      maxWidth: AppBreakpoints.contentMaxWidthWide,
+                      padding: EdgeInsets.zero,
+                      child: mainColumn,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _onReservationSeeDetails(
+    BuildContext context,
+    ConfirmedReservation r,
+    bool useMasterDetail,
+  ) {
+    if (useMasterDetail) {
+      setState(() {
+        _selectedReservation = r;
+        _selectedOrder = null;
+      });
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => ConfirmedReservationDetailsScreen(reservation: r),
+        ),
+      );
+    }
+  }
+
+  void _onOrderSeeDetails(
+    BuildContext context,
+    PendingOrder o,
+    bool useMasterDetail,
+  ) {
+    if (useMasterDetail) {
+      setState(() {
+        _selectedOrder = o;
+        _selectedReservation = null;
+      });
+    } else {
+      context.pushNamed(
+        AppRouteNames.activeOrderDetails,
+        extra: ActiveOrderDetailsScreen(order: o),
+      );
+    }
+  }
+
+  Widget _buildDetailPane(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
+    if (_segmentIndex == 0) {
+      if (_selectedReservation == null) {
+        return _detailPanePlaceholder(theme, l10n);
+      }
+      return ConfirmedReservationDetailsContent(
+        reservation: _selectedReservation!,
+        onCompleted: () {
+          setState(() => _selectedReservation = null);
+          _onRefresh();
         },
+      );
+    }
+    if (_selectedOrder == null) {
+      return _detailPanePlaceholder(theme, l10n);
+    }
+    return ActiveOrderDetailsContent(
+      order: _selectedOrder!,
+      markOrderAsPaid: () async {
+        final venueId = context.read<AuthProvider>().currentVenueId;
+        if (venueId == null) return false;
+        return context.read<OrdersProvider>().markWaiterOrderAsPaid(
+              venueId,
+              _selectedOrder!,
+            );
+      },
+      onCompleted: () {
+        setState(() => _selectedOrder = null);
+        _onRefresh();
+      },
+    );
+  }
+
+  Widget _detailPanePlaceholder(ThemeData theme, AppLocalizations l10n) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Text(
+          l10n.orderSeeDetails,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: AppColors.textMuted,
+          ),
+        ),
       ),
     );
   }

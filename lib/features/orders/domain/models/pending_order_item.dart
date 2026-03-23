@@ -1,3 +1,8 @@
+Map<String, dynamic>? _stringKeyedMap(Object? value) {
+  if (value is! Map) return null;
+  return Map<String, dynamic>.from(value);
+}
+
 /// Single item in a pending order (kitchen, bar, waiter).
 /// [type] is 'food' | 'drink' for waiter; null otherwise.
 /// [totalPrice] when present (from API) is used to compute order bill total.
@@ -26,8 +31,32 @@ class PendingOrderItem {
   factory PendingOrderItem.fromJson(Map<String, dynamic> json) {
     final addonsList = json['addons'] as List<dynamic>?;
     final id = json['id']?.toString() ?? json['orderItemId']?.toString() ?? '';
-    final name = (json['name'] as String? ?? json['productName'] as String? ?? '').trim();
-    final notes = (json['notes'] as String? ?? json['additionalInfo'] as String? ?? '').trim();
+
+    final menuItem = _stringKeyedMap(json['menuItem']);
+    final product = _stringKeyedMap(menuItem?['product']);
+    final category = _stringKeyedMap(product?['category']);
+
+    final name = (json['name'] as String? ??
+            json['productName'] as String? ??
+            product?['name'] as String? ??
+            '')
+        .trim();
+
+    var notes =
+        (json['notes'] as String? ?? json['additionalInfo'] as String? ?? '')
+            .trim();
+    final rejectionReason = json['rejectionReason'] as String?;
+    if (rejectionReason != null && rejectionReason.trim().isNotEmpty) {
+      final rr = rejectionReason.trim();
+      notes = notes.isEmpty ? rr : '$notes · $rr';
+    }
+
+    final quantity = json['quantity'] is int
+        ? json['quantity'] as int
+        : (int.tryParse(json['quantity']?.toString() ?? '1') ?? 1);
+
+    final type = json['type'] as String? ?? category?['type'] as String?;
+
     double? totalPrice;
     if (json['totalPrice'] != null) {
       if (json['totalPrice'] is num) {
@@ -35,21 +64,32 @@ class PendingOrderItem {
       } else {
         totalPrice = double.tryParse(json['totalPrice'].toString());
       }
+    } else if (json['priceAtOrder'] != null) {
+      final unit = double.tryParse(json['priceAtOrder'].toString());
+      if (unit != null) {
+        totalPrice = unit * quantity;
+      }
     } else if (json['unitPrice'] != null) {
-      final qty = json['quantity'] is int
-          ? json['quantity'] as int
-          : (int.tryParse(json['quantity']?.toString() ?? '1') ?? 1);
       final unit = double.tryParse(json['unitPrice'].toString());
-      if (unit != null) totalPrice = unit * qty;
+      if (unit != null) {
+        totalPrice = unit * quantity;
+      }
+    } else if (menuItem != null && menuItem['price'] != null) {
+      final mp = menuItem['price'];
+      final unit = mp is num ? mp.toDouble() : double.tryParse(mp.toString());
+      if (unit != null) {
+        totalPrice = unit * quantity;
+      }
     }
+
     return PendingOrderItem(
       id: id,
       name: name,
-      quantity: json['quantity'] is int ? json['quantity'] as int : (int.tryParse(json['quantity']?.toString() ?? '1') ?? 1),
+      quantity: quantity,
       notes: notes,
       status: json['status'] as String? ?? 'pending',
       addons: addonsList ?? const [],
-      type: json['type'] as String?,
+      type: type,
       totalPrice: totalPrice,
     );
   }

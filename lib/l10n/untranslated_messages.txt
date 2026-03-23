@@ -1,1 +1,97 @@
-{}
+{
+  "de": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "es": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "fr": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "hi": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "hr": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "it": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "ne": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ],
+
+  "ru": [
+    "tableOrdersFilterTypeAny",
+    "tableOrdersFilterStatusLabel",
+    "tableOrdersFilterStatusAny",
+    "tableOrdersFilterStatusAwaitingConfirmation",
+    "tableOrdersFilterStatusPending",
+    "tableOrdersFilterStatusConfirmed",
+    "tableOrdersFilterStatusRejected",
+    "tableOrdersFilterStatusExpired",
+    "tableOrdersFilterStatusPaid"
+  ]
+}

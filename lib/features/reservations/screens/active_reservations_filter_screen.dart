@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
@@ -78,23 +79,24 @@ class _ActiveReservationsFilterScreenState
 
   Future<void> _pickDate(BuildContext context, bool isFrom) async {
     final initial = isFrom ? _dateFrom : _dateTo;
+    final base = initial ?? DateTime.now();
     final picked = await showDatePicker(
       context: context,
-      initialDate: initial ?? DateTime.now(),
+      initialDate: DateTime(base.year, base.month, base.day),
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
     if (picked != null && mounted) {
       setState(() {
         if (isFrom) {
-          _dateFrom = picked;
-          if (_dateTo != null && _dateTo!.isBefore(picked)) {
-            _dateTo = picked;
+          _dateFrom = CalendarDayBounds.startOfDay(picked);
+          if (_dateTo != null && _dateTo!.isBefore(_dateFrom!)) {
+            _dateTo = CalendarDayBounds.endOfDay(picked);
           }
         } else {
-          _dateTo = picked;
-          if (_dateFrom != null && _dateFrom!.isAfter(picked)) {
-            _dateFrom = picked;
+          _dateTo = CalendarDayBounds.endOfDay(picked);
+          if (_dateFrom != null && _dateFrom!.isAfter(_dateTo!)) {
+            _dateFrom = CalendarDayBounds.startOfDay(picked);
           }
         }
       });

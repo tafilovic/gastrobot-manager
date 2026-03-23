@@ -1,16 +1,22 @@
+import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
+
 /// Filter state for history orders (waiter). Used by [FilterHistoryOrdersScreen].
 class HistoryOrderFilters {
-  const HistoryOrderFilters({
-    this.dateFrom,
-    this.dateTo,
+  HistoryOrderFilters({
+    DateTime? dateFrom,
+    DateTime? dateTo,
     this.orderContentTypes = const {},
     this.tableNumbers = const {},
     this.billMin = 0,
     this.billMax = 200000,
-  });
+  }) : dateFrom = dateFrom != null
+           ? CalendarDayBounds.startOfDay(dateFrom)
+           : null,
+       dateTo = dateTo != null ? CalendarDayBounds.endOfDay(dateTo) : null;
 
   final DateTime? dateFrom;
   final DateTime? dateTo;
+
   /// 'food' and/or 'drink': empty = no filter; otherwise order must match selected types.
   final Set<String> orderContentTypes;
   final Set<String> tableNumbers;

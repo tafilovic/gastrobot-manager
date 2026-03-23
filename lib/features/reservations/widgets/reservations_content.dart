@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
@@ -144,43 +145,43 @@ class _ReservationsContentState extends State<ReservationsContent> {
             padding: EdgeInsets.zero,
             child: Row(
               children: [
-              Expanded(
-                flex: 1,
-                child: _buildListPane(
-                  context,
-                  theme,
-                  l10n,
-                  provider,
-                  confirmedProvider,
-                  filteredConfirmed,
-                  profileType,
-                  countLabel,
-                  itemCountForCard,
-                  onSeeRequestDetails,
-                  onSeeConfirmedDetails,
+                Expanded(
+                  flex: 1,
+                  child: _buildListPane(
+                    context,
+                    theme,
+                    l10n,
+                    provider,
+                    confirmedProvider,
+                    filteredConfirmed,
+                    profileType,
+                    countLabel,
+                    itemCountForCard,
+                    onSeeRequestDetails,
+                    onSeeConfirmedDetails,
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: _selectedTabIndex == 1
-                    ? (_selectedConfirmed == null
-                        ? _buildDetailPlaceholder(theme, l10n)
-                        : ConfirmedReservationDetailsContent(
-                            reservation: _selectedConfirmed!,
-                            onCompleted: () {
-                              setState(() => _selectedConfirmed = null);
-                              widget.onStartRefresh();
-                            },
-                          ))
-                    : (_selectedRequest == null
-                        ? _buildDetailPlaceholder(theme, l10n)
-                        : _buildRequestDetailPane(
-                            _selectedRequest!,
-                            profileType,
-                            provider,
-                          )),
-              ),
-            ],
+                Expanded(
+                  flex: 1,
+                  child: _selectedTabIndex == 1
+                      ? (_selectedConfirmed == null
+                            ? _buildDetailPlaceholder(theme, l10n)
+                            : ConfirmedReservationDetailsContent(
+                                reservation: _selectedConfirmed!,
+                                onCompleted: () {
+                                  setState(() => _selectedConfirmed = null);
+                                  widget.onStartRefresh();
+                                },
+                              ))
+                      : (_selectedRequest == null
+                            ? _buildDetailPlaceholder(theme, l10n)
+                            : _buildRequestDetailPane(
+                                _selectedRequest!,
+                                profileType,
+                                provider,
+                              )),
+                ),
+              ],
             ),
           ),
         ),
@@ -200,178 +201,181 @@ class _ReservationsContentState extends State<ReservationsContent> {
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
                 child: Text(
                   l10n.reservationsRequestsTitle,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SegmentedButton<int>(
-                      segments: [
-                        ButtonSegment<int>(
-                          value: 0,
-                          label: Text(l10n.reservationsTabRequests),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SegmentedButton<int>(
+                        segments: [
+                          ButtonSegment<int>(
+                            value: 0,
+                            label: Text(l10n.reservationsTabRequests),
+                          ),
+                          ButtonSegment<int>(
+                            value: 1,
+                            label: Text(l10n.reservationsTabAccepted),
+                          ),
+                        ],
+                        selected: {_selectedTabIndex},
+                        onSelectionChanged: (s) =>
+                            _onTabChanged(s, profileType),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.resolveWith((
+                            states,
+                          ) {
+                            if (states.contains(WidgetState.selected)) {
+                              return widget.accentColor;
+                            }
+                            return AppColors.surface;
+                          }),
+                          foregroundColor: WidgetStateProperty.resolveWith((
+                            states,
+                          ) {
+                            if (states.contains(WidgetState.selected)) {
+                              return AppColors.onPrimary;
+                            }
+                            return AppColors.textPrimary;
+                          }),
                         ),
-                        ButtonSegment<int>(
-                          value: 1,
-                          label: Text(l10n.reservationsTabAccepted),
-                        ),
-                      ],
-                      selected: {_selectedTabIndex},
-                      onSelectionChanged: (s) => _onTabChanged(s, profileType),
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.resolveWith((
-                          states,
-                        ) {
-                          if (states.contains(WidgetState.selected)) {
-                            return widget.accentColor;
-                          }
-                          return AppColors.surface;
-                        }),
-                        foregroundColor: WidgetStateProperty.resolveWith((
-                          states,
-                        ) {
-                          if (states.contains(WidgetState.selected)) {
-                            return AppColors.onPrimary;
-                          }
-                          return AppColors.textPrimary;
-                        }),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              child: _selectedTabIndex == 1 &&
-                      profileType == ProfileType.waiter
-                  ? Row(
-                      children: [
-                        Text(
-                          countLabel,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        const Spacer(),
-                        TextButton.icon(
-                          onPressed: _openReservationFilters,
-                          icon: Icon(
-                            Icons.filter_list,
-                            size: 18,
-                            color: widget.accentColor,
-                          ),
-                          label: Text(
-                            l10n.reservationsFilters,
-                            style: TextStyle(
-                              color: widget.accentColor,
-                              fontWeight: FontWeight.w600,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child:
+                    _selectedTabIndex == 1 && profileType == ProfileType.waiter
+                    ? Row(
+                        children: [
+                          Text(
+                            countLabel,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textSecondary,
                             ),
                           ),
+                          const Spacer(),
+                          TextButton.icon(
+                            onPressed: _openReservationFilters,
+                            icon: Icon(
+                              Icons.filter_list,
+                              size: 18,
+                              color: widget.accentColor,
+                            ),
+                            label: Text(
+                              l10n.reservationsFilters,
+                              style: TextStyle(
+                                color: widget.accentColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        countLabel,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
                         ),
-                      ],
-                    )
-                  : Text(
-                      countLabel,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
                       ),
-                    ),
-            ),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, _) {
-                  final crossAxisCount =
-                      width >= AppBreakpoints.contentMaxWidthWide
-                          ? 3
-                          : width >= AppBreakpoints.expanded
-                              ? 2
-                              : 1;
-                  final baseMaxWidth = crossAxisCount > 1
-                      ? AppBreakpoints.contentMaxWidthWide
-                      : AppBreakpoints.contentMaxWidth;
-                  final maxWidth = crossAxisCount > 1
-                      ? baseMaxWidth * 1.4
-                      : baseMaxWidth;
+              ),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, _) {
+                    final crossAxisCount =
+                        width >= AppBreakpoints.contentMaxWidthWide
+                        ? 3
+                        : width >= AppBreakpoints.expanded
+                        ? 2
+                        : 1;
+                    final baseMaxWidth = crossAxisCount > 1
+                        ? AppBreakpoints.contentMaxWidthWide
+                        : AppBreakpoints.contentMaxWidth;
+                    final maxWidth = crossAxisCount > 1
+                        ? baseMaxWidth * 1.4
+                        : baseMaxWidth;
 
-                  return ConstrainedContent(
-                    maxWidth: maxWidth,
-                    padding: EdgeInsets.zero,
-                    child: _selectedTabIndex == 1
-                        ? _buildConfirmedList(
-                            context,
-                            l10n,
-                            confirmedProvider,
-                            filteredConfirmed,
-                            crossAxisCount,
-                            onSeeConfirmedDetails,
-                          )
-                        : RefreshIndicator(
-                            onRefresh: () => provider.pullRefresh(),
-                            child: provider.isLoading && requests.isEmpty
-                                ? ListView(
-                                    physics:
-                                        const AlwaysScrollableScrollPhysics(),
-                                    children: [
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                            0.3,
-                                        child: const Center(
-                                          child: CircularProgressIndicator(),
+                    return ConstrainedContent(
+                      maxWidth: maxWidth,
+                      padding: EdgeInsets.zero,
+                      child: _selectedTabIndex == 1
+                          ? _buildConfirmedList(
+                              context,
+                              l10n,
+                              confirmedProvider,
+                              filteredConfirmed,
+                              crossAxisCount,
+                              onSeeConfirmedDetails,
+                            )
+                          : RefreshIndicator(
+                              onRefresh: () => provider.pullRefresh(),
+                              child: provider.isLoading && requests.isEmpty
+                                  ? ListView(
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(),
+                                      children: [
+                                        SizedBox(
+                                          height:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              0.3,
+                                          child: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                : provider.error != null && requests.isEmpty
-                                    ? ListView(
-                                        physics: const AlwaysScrollableScrollPhysics(),
-                                        children: [
-                                          SizedBox(
-                                            height:
-                                                MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                0.3,
-                                            child: Center(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(24),
-                                                child: Text(
-                                                  provider.error!,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    color: AppColors.error,
-                                                  ),
+                                      ],
+                                    )
+                                  : provider.error != null && requests.isEmpty
+                                  ? ListView(
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(),
+                                      children: [
+                                        SizedBox(
+                                          height:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              0.3,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(24),
+                                              child: Text(
+                                                provider.error!,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  color: AppColors.error,
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      )
-                                    : _buildRequestsList(
-                                        context,
-                                        l10n,
-                                        requests,
-                                        crossAxisCount,
-                                        itemCountForCard,
-                                        profileType,
-                                        provider,
-                                        onSeeRequestDetails,
-                                      ),
-                          ),
-                  );
-                },
+                                        ),
+                                      ],
+                                    )
+                                  : _buildRequestsList(
+                                      context,
+                                      l10n,
+                                      requests,
+                                      crossAxisCount,
+                                      itemCountForCard,
+                                      profileType,
+                                      provider,
+                                      onSeeRequestDetails,
+                                    ),
+                            ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
@@ -394,29 +398,13 @@ class _ReservationsContentState extends State<ReservationsContent> {
     if (filters == null || filters.isEmpty) return items;
     return items.where((r) {
       if (filters.dateFrom != null) {
-        final day = DateTime(
-          r.reservationStart.year,
-          r.reservationStart.month,
-          r.reservationStart.day,
-        );
-        final from = DateTime(
-          filters.dateFrom!.year,
-          filters.dateFrom!.month,
-          filters.dateFrom!.day,
-        );
+        final day = CalendarDayBounds.startOfDay(r.reservationStart);
+        final from = CalendarDayBounds.startOfDay(filters.dateFrom!);
         if (day.isBefore(from)) return false;
       }
       if (filters.dateTo != null) {
-        final day = DateTime(
-          r.reservationStart.year,
-          r.reservationStart.month,
-          r.reservationStart.day,
-        );
-        final to = DateTime(
-          filters.dateTo!.year,
-          filters.dateTo!.month,
-          filters.dateTo!.day,
-        );
+        final day = CalendarDayBounds.startOfDay(r.reservationStart);
+        final to = CalendarDayBounds.startOfDay(filters.dateTo!);
         if (day.isAfter(to)) return false;
       }
       if (filters.peopleCounts.isNotEmpty) {
@@ -447,8 +435,9 @@ class _ReservationsContentState extends State<ReservationsContent> {
       }
       if (filters.tableNumbers.isNotEmpty) {
         final tableNames = r.tables.map((t) => t.name).toSet();
-        final hasMatch =
-            filters.tableNumbers.any((t) => tableNames.contains(t));
+        final hasMatch = filters.tableNumbers.any(
+          (t) => tableNames.contains(t),
+        );
         if (!hasMatch) return false;
       }
       return true;
@@ -603,8 +592,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                           physics: const AlwaysScrollableScrollPhysics(),
                           children: [
                             SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.3,
+                              height: MediaQuery.of(context).size.height * 0.3,
                               child: const Center(
                                 child: CircularProgressIndicator(),
                               ),
@@ -612,37 +600,36 @@ class _ReservationsContentState extends State<ReservationsContent> {
                           ],
                         )
                       : provider.error != null && provider.requests.isEmpty
-                          ? ListView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.3,
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(24),
-                                      child: Text(
-                                        provider.error!,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: AppColors.error,
-                                        ),
-                                      ),
+                      ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: Text(
+                                    provider.error!,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: AppColors.error,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )
-                          : _buildRequestsList(
-                              context,
-                              l10n,
-                              provider.requests,
-                              1,
-                              itemCountForCard,
-                              profileType,
-                              provider,
-                              onSeeRequestDetails,
+                              ),
                             ),
+                          ],
+                        )
+                      : _buildRequestsList(
+                          context,
+                          l10n,
+                          provider.requests,
+                          1,
+                          itemCountForCard,
+                          profileType,
+                          provider,
+                          onSeeRequestDetails,
+                        ),
                 ),
         ),
       ],
@@ -653,9 +640,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
     return Center(
       child: Text(
         l10n.orderSeeDetails,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: AppColors.textMuted,
-        ),
+        style: theme.textTheme.bodyLarge?.copyWith(color: AppColors.textMuted),
       ),
     );
   }

@@ -689,4 +689,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tableOverviewNoOrders => 'No active orders for this table';
+
+  @override
+  String get tableOrdersFilterTypeAny => 'Any';
+
+  @override
+  String get tableOrdersFilterStatusLabel => 'Order status:';
+
+  @override
+  String get tableOrdersFilterStatusAny => 'Any';
+
+  @override
+  String get tableOrdersFilterStatusAwaitingConfirmation =>
+      'Awaiting confirmation';
+
+  @override
+  String get tableOrdersFilterStatusPending => 'Pending';
+
+  @override
+  String get tableOrdersFilterStatusConfirmed => 'Confirmed';
+
+  @override
+  String get tableOrdersFilterStatusRejected => 'Rejected';
+
+  @override
+  String get tableOrdersFilterStatusExpired => 'Expired';
+
+  @override
+  String get tableOrdersFilterStatusPaid => 'Paid';
 }

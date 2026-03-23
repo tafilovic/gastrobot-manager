@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 
 /// Holds the list of venue tables; loads on demand and supports pull-to-refresh.
@@ -51,5 +53,12 @@ class TablesProvider extends ChangeNotifier {
     String tableId,
   ) {
     return _api.getActiveReservationsForTable(tableId);
+  }
+
+  Future<List<PendingOrder>> fetchOrdersForTable(
+    String tableId,
+    TableOrdersFilters filters,
+  ) {
+    return _api.getOrdersForTable(tableId, filters);
   }
 }

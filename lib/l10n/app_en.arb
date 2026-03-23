@@ -218,5 +218,14 @@
   "billSheetEmpty": "Cart is empty",
   "billSheetOrderButton": "ORDER",
   "tableOverviewNoReservations": "No active reservations for this table",
-  "tableOverviewNoOrders": "No active orders for this table"
+  "tableOverviewNoOrders": "No active orders for this table",
+  "tableOrdersFilterTypeAny": "Any",
+  "tableOrdersFilterStatusLabel": "Order status:",
+  "tableOrdersFilterStatusAny": "Any",
+  "tableOrdersFilterStatusAwaitingConfirmation": "Awaiting confirmation",
+  "tableOrdersFilterStatusPending": "Pending",
+  "tableOrdersFilterStatusConfirmed": "Confirmed",
+  "tableOrdersFilterStatusRejected": "Rejected",
+  "tableOrdersFilterStatusExpired": "Expired",
+  "tableOrdersFilterStatusPaid": "Paid"
 }
