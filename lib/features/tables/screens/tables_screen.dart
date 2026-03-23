@@ -8,14 +8,8 @@ import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
-import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
-import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
-import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
-import 'package:gastrobotmanager/features/tables/utils/apply_table_orders_content_filter.dart';
-import 'package:gastrobotmanager/features/tables/utils/pending_orders_for_table.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_list_item.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -42,49 +36,11 @@ class _TablesScreenState extends State<TablesScreen> {
     }
   }
 
-  /// Opens [ActiveOrderDetailsScreen] when an order with line items exists for
-  /// this table (from table orders API, then waiter list); otherwise table overview.
-  Future<void> _onTableCardTapped(TableModel table) async {
-    final messenger = ScaffoldMessenger.maybeOf(context);
-    final tablesProvider = context.read<TablesProvider>();
-    final filters = TableOrdersFilters.defaults();
-
-    try {
-      final apiOrders = await tablesProvider.fetchOrdersForTable(table.id, filters);
-      var list = applyTableOrdersContentFilter(apiOrders, filters);
-      list.sort((a, b) => b.targetTime.compareTo(a.targetTime));
-      PendingOrder? primary = list.isNotEmpty ? list.first : null;
-
-      if (primary == null && mounted) {
-        final fromWaiter = pendingOrdersForTable(
-          context.read<OrdersProvider>().orders,
-          table,
-        )..sort((a, b) => b.targetTime.compareTo(a.targetTime));
-        primary = fromWaiter.isNotEmpty ? fromWaiter.first : null;
-      }
-
-      if (!mounted) return;
-      if (primary != null) {
-        await context.pushNamed(
-          AppRouteNames.activeOrderDetails,
-          extra: ActiveOrderDetailsScreen(order: primary),
-        );
-      } else {
-        await context.pushNamed(
-          AppRouteNames.tableOverview,
-          extra: table,
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-      messenger?.showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-      await context.pushNamed(
-        AppRouteNames.tableOverview,
-        extra: table,
-      );
-    }
+  void _onTableCardTapped(TableModel table) {
+    context.pushNamed(
+      AppRouteNames.tableOverview,
+      extra: table,
+    );
   }
 
   @override
@@ -186,7 +142,7 @@ class _TablesList extends StatelessWidget {
 
   final TablesProvider provider;
   final AppLocalizations l10n;
-  final Future<void> Function(TableModel table) onTableTap;
+  final void Function(TableModel table) onTableTap;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +194,7 @@ class _TablesList extends StatelessWidget {
     }
 
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (context, _) {
         final width = MediaQuery.sizeOf(context).width;
         final crossAxisCount = width >= AppBreakpoints.contentMaxWidthWide
             ? 3
@@ -276,33 +232,71 @@ class _TablesList extends StatelessWidget {
                       );
                     },
                   )
-                : GridView.builder(
+                : ListView.separated(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 8,
                     ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      mainAxisExtent: 380,
-                    ),
-                    itemCount: tables.length,
-                    itemBuilder: (context, index) {
-                      final table = tables[index];
-                      return ListItemEntrance(
-                        index: index,
-                        child: TableListItem(
-                          table: table,
-                          onTap: () => onTableTap(table),
-                        ),
+                    itemCount: (tables.length + crossAxisCount - 1) ~/
+                        crossAxisCount,
+                    separatorBuilder: (context, _) =>
+                        const SizedBox(height: 12),
+                    itemBuilder: (context, rowIndex) {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (var col = 0; col < crossAxisCount; col++) ...[
+                            if (col > 0) const SizedBox(width: 12),
+                            Expanded(
+                              child: _TableGridCell(
+                                rowIndex: rowIndex,
+                                col: col,
+                                crossAxisCount: crossAxisCount,
+                                tables: tables,
+                                onTableTap: onTableTap,
+                              ),
+                            ),
+                          ],
+                        ],
                       );
                     },
                   ),
           ),
         );
       },
+    );
+  }
+}
+
+class _TableGridCell extends StatelessWidget {
+  const _TableGridCell({
+    required this.rowIndex,
+    required this.col,
+    required this.crossAxisCount,
+    required this.tables,
+    required this.onTableTap,
+  });
+
+  final int rowIndex;
+  final int col;
+  final int crossAxisCount;
+  final List<TableModel> tables;
+  final void Function(TableModel table) onTableTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final index = rowIndex * crossAxisCount + col;
+    if (index >= tables.length) {
+      return const SizedBox.shrink();
+    }
+    final table = tables[index];
+    return ListItemEntrance(
+      index: index,
+      child: TableListItem(
+        table: table,
+        onTap: () => onTableTap(table),
+      ),
     );
   }
 }
