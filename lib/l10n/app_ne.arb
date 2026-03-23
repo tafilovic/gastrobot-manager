@@ -1,6 +1,6 @@
 {
   "@@locale": "ne",
-  "appTitle": "GastroBot Manager",
+  "appTitle": "GastroCrew",
   "loginSubtitle": "जारी राख्न साइन इन गर्नुहोस्",
   "loginEmailLabel": "इमेल",
   "loginEmailHint": "उदा. user@example.com",
@@ -216,5 +216,7 @@
   "billSheetTitle": "बिल",
   "billSheetTotal": "जम्मा:",
   "billSheetEmpty": "कार्ट खाली छ",
-  "billSheetOrderButton": "अर्डर गर्नुहोस्"
+  "billSheetOrderButton": "अर्डर गर्नुहोस्",
+  "tableOverviewNoReservations": "यो टेबलका लागि कुनै सक्रिय आरक्षण छैन",
+  "tableOverviewNoOrders": "यो टेबलका लागि कुनै सक्रिय अर्डर छैन"
 }

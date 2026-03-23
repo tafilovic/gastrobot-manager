@@ -7,9 +7,10 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Card in the tables list showing status, number, type and next reservation.
 class TableListItem extends StatelessWidget {
-  const TableListItem({super.key, required this.table});
+  const TableListItem({super.key, required this.table, this.onTap});
 
   final TableModel table;
+  final VoidCallback? onTap;
 
   String _typeLabel(AppLocalizations l10n) {
     switch (table.type) {
@@ -35,7 +36,7 @@ class TableListItem extends StatelessWidget {
     final statusColor =
         table.isFree ? AppColors.success : AppColors.destructive;
 
-    return Container(
+    final card = Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
@@ -122,6 +123,17 @@ class TableListItem extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+
+    if (onTap == null) return card;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: card,
       ),
     );
   }

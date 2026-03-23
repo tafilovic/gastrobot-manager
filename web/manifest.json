@@ -1,6 +1,6 @@
 {
-    "name": "gastrobotmanager",
-    "short_name": "gastrobotmanager",
+    "name": "GastroCrew",
+    "short_name": "GastroCrew",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

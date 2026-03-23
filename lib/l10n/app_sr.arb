@@ -1,6 +1,6 @@
 {
   "@@locale": "sr",
-  "appTitle": "GastroBot Manager",
+  "appTitle": "GastroCrew",
   "loginSubtitle": "Prijavite se da biste nastavili",
   "loginEmailLabel": "Email",
   "loginEmailHint": "npr. korisnik@example.com",
@@ -318,5 +318,7 @@
   "billSheetTitle": "Račun",
   "billSheetTotal": "UKUPNO:",
   "billSheetEmpty": "Korpa je prazna",
-  "billSheetOrderButton": "NARUČI"
+  "billSheetOrderButton": "NARUČI",
+  "tableOverviewNoReservations": "Nema aktivnih rezervacija za ovaj sto",
+  "tableOverviewNoOrders": "Nema aktivnih porudžbina za ovaj sto"
 }

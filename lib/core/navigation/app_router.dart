@@ -21,7 +21,9 @@ import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/screens/active_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/screens/table_order_screen.dart';
+import 'package:gastrobotmanager/features/tables/screens/table_overview_screen.dart';
 import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
 
 /// Centralized route names and path constants.
@@ -53,6 +55,7 @@ abstract class AppRouteNames {
 
   // Tables sub-routes
   static const tableOrder = 'table-order';
+  static const tableOverview = 'table-overview';
 
   // Path constants
   static const pathLogin = '/login';
@@ -252,6 +255,20 @@ class AppRouter {
                       name: AppRouteNames.tableOrder,
                       builder: (context, state) =>
                           const TableOrderScreen(),
+                    ),
+                    GoRoute(
+                      path: 'overview',
+                      name: AppRouteNames.tableOverview,
+                      builder: (context, state) {
+                        final extra = state.extra;
+                        if (extra is! TableModel) {
+                          throw ArgumentError(
+                            'TableOverviewScreen requires TableModel in '
+                            'GoRouterState.extra',
+                          );
+                        }
+                        return TableOverviewScreen(table: extra);
+                      },
                     ),
                   ],
                 ),

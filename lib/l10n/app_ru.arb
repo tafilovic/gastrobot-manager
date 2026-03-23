@@ -1,6 +1,6 @@
 {
   "@@locale": "ru",
-  "appTitle": "GastroBot Manager",
+  "appTitle": "GastroCrew",
   "loginSubtitle": "Войдите, чтобы продолжить",
   "loginEmailLabel": "Email",
   "loginEmailHint": "напр. user@example.com",
@@ -221,5 +221,7 @@
   "billSheetTitle": "Счёт",
   "billSheetTotal": "ИТОГО:",
   "billSheetEmpty": "Корзина пуста",
-  "billSheetOrderButton": "ЗАКАЗАТЬ"
+  "billSheetOrderButton": "ЗАКАЗАТЬ",
+  "tableOverviewNoReservations": "Нет активных бронирований для этого столика",
+  "tableOverviewNoOrders": "Нет активных заказов для этого столика"
 }

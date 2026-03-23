@@ -208,7 +208,13 @@ class _TablesList extends StatelessWidget {
                       final table = tables[index];
                       return ListItemEntrance(
                         index: index,
-                        child: TableListItem(table: table),
+                        child: TableListItem(
+                          table: table,
+                          onTap: () => context.pushNamed(
+                            AppRouteNames.tableOverview,
+                            extra: table,
+                          ),
+                        ),
                       );
                     },
                   )
@@ -229,7 +235,13 @@ class _TablesList extends StatelessWidget {
                       final table = tables[index];
                       return ListItemEntrance(
                         index: index,
-                        child: TableListItem(table: table),
+                        child: TableListItem(
+                          table: table,
+                          onTap: () => context.pushNamed(
+                            AppRouteNames.tableOverview,
+                            extra: table,
+                          ),
+                        ),
                       );
                     },
                   ),

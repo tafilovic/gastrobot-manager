@@ -117,7 +117,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In sr, this message translates to:
-  /// **'GastroBot Manager'**
+  /// **'GastroCrew'**
   String get appTitle;
 
   /// No description provided for @loginSubtitle.
@@ -1355,6 +1355,18 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'NARUČI'**
   String get billSheetOrderButton;
+
+  /// No description provided for @tableOverviewNoReservations.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nema aktivnih rezervacija za ovaj sto'**
+  String get tableOverviewNoReservations;
+
+  /// No description provided for @tableOverviewNoOrders.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nema aktivnih porudžbina za ovaj sto'**
+  String get tableOverviewNoOrders;
 }
 
 class _AppLocalizationsDelegate

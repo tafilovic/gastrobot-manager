@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 
@@ -44,5 +45,11 @@ class TablesProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<List<ConfirmedReservation>> fetchActiveReservationsForTable(
+    String tableId,
+  ) {
+    return _api.getActiveReservationsForTable(tableId);
   }
 }

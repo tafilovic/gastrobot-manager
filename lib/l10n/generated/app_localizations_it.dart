@@ -9,7 +9,7 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get appTitle => 'GastroBot Manager';
+  String get appTitle => 'GastroCrew';
 
   @override
   String get loginSubtitle => 'Accedi per continuare';
@@ -685,4 +685,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get billSheetOrderButton => 'ORDINA';
+
+  @override
+  String get tableOverviewNoReservations =>
+      'Nessuna prenotazione attiva per questo tavolo';
+
+  @override
+  String get tableOverviewNoOrders => 'Nessun ordine attivo per questo tavolo';
 }

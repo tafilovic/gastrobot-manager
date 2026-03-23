@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "GastroBot Manager",
+  "appTitle": "GastroCrew",
   "loginSubtitle": "Sign in to continue",
   "loginEmailLabel": "Email",
   "loginEmailHint": "e.g. user@example.com",
@@ -216,5 +216,7 @@
   "billSheetTitle": "Bill",
   "billSheetTotal": "TOTAL:",
   "billSheetEmpty": "Cart is empty",
-  "billSheetOrderButton": "ORDER"
+  "billSheetOrderButton": "ORDER",
+  "tableOverviewNoReservations": "No active reservations for this table",
+  "tableOverviewNoOrders": "No active orders for this table"
 }

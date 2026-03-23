@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/domain/errors/auth_exception.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -84,114 +85,143 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).padding.top -
-                  MediaQuery.of(context).padding.bottom -
-                  MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: IntrinsicHeight(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                Text(
-                  l10n.appTitle,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                  textAlign: TextAlign.center,
+        child: LayoutBuilder(
+          builder: (context, viewportConstraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.loginSubtitle,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: AppBreakpoints.contentMaxWidth,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              l10n.appTitle,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.loginSubtitle,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 48),
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                labelText: l10n.loginEmailLabel,
+                                hintText: l10n.loginEmailHint,
+                                border: const OutlineInputBorder(),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              enabled: !_isLoading,
+                              validator: (v) {
+                                if (v == null || v.trim().isEmpty) {
+                                  return l10n.loginEmailRequired;
+                                }
+                                if (!v.contains('@')) {
+                                  return l10n.loginEmailInvalid;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _passwordController,
+                              decoration: InputDecoration(
+                                labelText: l10n.loginPasswordLabel,
+                                border: const OutlineInputBorder(),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                  ),
+                                  onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword,
+                                  ),
+                                ),
+                              ),
+                              obscureText: _obscurePassword,
+                              enabled: !_isLoading,
+                              validator: (v) {
+                                if (v == null || v.isEmpty) {
+                                  return l10n.loginPasswordRequired;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            CheckboxListTile(
+                              value: _rememberEmail,
+                              onChanged: _isLoading
+                                  ? null
+                                  : (value) => setState(
+                                        () => _rememberEmail = value ?? true,
+                                      ),
+                              title: Text(l10n.loginRememberEmail),
+                              controlAffinity:
+                                  ListTileControlAffinity.leading,
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                            if (_error != null) ...[
+                              const SizedBox(height: 16),
+                              Text(
+                                _error!,
+                                style: const TextStyle(color: AppColors.error),
+                              ),
+                            ],
+                            const SizedBox(height: 32),
+                            FilledButton(
+                              onPressed: _isLoading ? null : _submit,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                child: _isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Text(l10n.loginButton),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 48),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: l10n.loginEmailLabel,
-                    hintText: l10n.loginEmailHint,
-                    border: const OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  enabled: !_isLoading,
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return l10n.loginEmailRequired;
-                    if (!v.contains('@')) return l10n.loginEmailInvalid;
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: l10n.loginPasswordLabel,
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
-                  obscureText: _obscurePassword,
-                  enabled: !_isLoading,
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return l10n.loginPasswordRequired;
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                CheckboxListTile(
-                  value: _rememberEmail,
-                  onChanged: _isLoading
-                      ? null
-                      : (value) => setState(() => _rememberEmail = value ?? true),
-                  title: Text(l10n.loginRememberEmail),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                if (_error != null) ...[
-                  const SizedBox(height: 16),
-                  Text(
-                    _error!,
-                    style: TextStyle(color: AppColors.error),
-                  ),
-                ],
-                const SizedBox(height: 32),
-                FilledButton(
-                  onPressed: _isLoading ? null : _submit,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(l10n.loginButton),
-                  ),
-                ),
-                  ],
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

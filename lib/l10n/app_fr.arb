@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appTitle": "GastroBot Manager",
+  "appTitle": "GastroCrew",
   "loginSubtitle": "Connectez-vous pour continuer",
   "loginEmailLabel": "E-mail",
   "loginEmailHint": "ex. utilisateur@exemple.com",
@@ -216,5 +216,7 @@
   "billSheetTitle": "Addition",
   "billSheetTotal": "TOTAL :",
   "billSheetEmpty": "Le panier est vide",
-  "billSheetOrderButton": "COMMANDER"
+  "billSheetOrderButton": "COMMANDER",
+  "tableOverviewNoReservations": "Aucune réservation active pour cette table",
+  "tableOverviewNoOrders": "Aucune commande active pour cette table"
 }

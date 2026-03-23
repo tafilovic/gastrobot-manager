@@ -1,4 +1,4 @@
-# GastroBot Manager – Build Instructions
+# GastroCrew – Build Instructions
 
 ## Prerequisites
 
@@ -98,6 +98,22 @@ flutter build windows --release
 ```
 
 Output: `build/windows/x64/runner/Release/` (includes the executable and DLLs).
+
+---
+
+## Launcher icons
+
+The app uses **`flutter_launcher_icons`**. The source image is **`assets/icons/launcher_gastrocrew.png`**, and options (Android adaptive background, iOS alpha removal, etc.) live under **`flutter_launcher_icons:`** in **`pubspec.yaml`**.
+
+**When you change or replace the launcher image**, regenerate icons for all configured platforms:
+
+```bash
+dart run flutter_launcher_icons
+```
+
+If you edited **`pubspec.yaml`** (paths, colors, or `flutter_launcher_icons` settings), run **`flutter pub get`** first, then **`dart run flutter_launcher_icons`**.
+
+After regenerating, do a clean build if an old icon still appears (e.g. **`flutter clean`** then **`flutter run`** or your release build command).
 
 ---
 

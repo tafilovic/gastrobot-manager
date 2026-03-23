@@ -31,7 +31,7 @@ class _GastroBotAppState extends State<GastroBotApp> {
     return Consumer<LocaleProvider>(
       builder: (context, localeProvider, _) {
         return MaterialApp.router(
-          title: 'GastroBot Manager',
+          title: 'GastroCrew',
           theme: AppTheme.light,
           debugShowCheckedModeBanner: false,
           scrollBehavior: const AppScrollBehavior(),

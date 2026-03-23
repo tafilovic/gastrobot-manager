@@ -9,7 +9,7 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
-  String get appTitle => 'GastroBot Manager';
+  String get appTitle => 'GastroCrew';
 
   @override
   String get loginSubtitle => 'Prijavite se da biste nastavili';
@@ -683,4 +683,11 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get billSheetOrderButton => 'NARUČI';
+
+  @override
+  String get tableOverviewNoReservations =>
+      'Nema aktivnih rezervacija za ovaj sto';
+
+  @override
+  String get tableOverviewNoOrders => 'Nema aktivnih porudžbina za ovaj sto';
 }
