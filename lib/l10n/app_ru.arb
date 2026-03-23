@@ -233,5 +233,6 @@
   "tableOrderSubmitSuccess": "Заказ отправлен",
   "tableOrderSubmitError": "Не удалось отправить заказ",
   "tableOverviewNoReservations": "Нет активных бронирований для этого столика",
-  "tableOverviewNoOrders": "Нет активных заказов для этого столика"
+  "tableOverviewNoOrders": "Нет активных заказов для этого столика",
+  "tableOverviewMakeOrder": "ОФОРМИТЬ ЗАКАЗ"
 }

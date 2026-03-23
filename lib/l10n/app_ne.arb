@@ -228,5 +228,6 @@
   "tableOrderSubmitSuccess": "अर्डर पठाइयो",
   "tableOrderSubmitError": "अर्डर पठाउन सकिएन",
   "tableOverviewNoReservations": "यो टेबलका लागि कुनै सक्रिय आरक्षण छैन",
-  "tableOverviewNoOrders": "यो टेबलका लागि कुनै सक्रिय अर्डर छैन"
+  "tableOverviewNoOrders": "यो टेबलका लागि कुनै सक्रिय अर्डर छैन",
+  "tableOverviewMakeOrder": "अर्डर गर्नुहोस्"
 }

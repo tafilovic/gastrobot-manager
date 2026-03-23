@@ -721,6 +721,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Keine aktiven Bestellungen für diesen Tisch';
 
   @override
+  String get tableOverviewMakeOrder => 'BESTELLEN';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

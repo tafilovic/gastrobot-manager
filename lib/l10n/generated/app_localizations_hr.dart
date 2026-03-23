@@ -718,6 +718,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get tableOverviewNoOrders => 'Nema aktivnih narudžbi za ovaj stol';
 
   @override
+  String get tableOverviewMakeOrder => 'NARUČI';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

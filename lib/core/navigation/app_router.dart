@@ -257,8 +257,16 @@ class AppRouter {
                     GoRoute(
                       path: 'order',
                       name: AppRouteNames.tableOrder,
-                      builder: (context, state) =>
-                          const TableOrderScreen(),
+                      builder: (context, state) {
+                        final extra = state.extra;
+                        if (extra is! TableModel) {
+                          throw ArgumentError(
+                            'TableOrderScreen requires TableModel in '
+                            'GoRouterState.extra',
+                          );
+                        }
+                        return TableOrderScreen(orderForTable: extra);
+                      },
                     ),
                     GoRoute(
                       path: 'overview',

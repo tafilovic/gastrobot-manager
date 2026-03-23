@@ -228,5 +228,6 @@
   "tableOrderSubmitSuccess": "Bestellung gesendet",
   "tableOrderSubmitError": "Bestellung konnte nicht gesendet werden",
   "tableOverviewNoReservations": "Keine aktiven Reservierungen für diesen Tisch",
-  "tableOverviewNoOrders": "Keine aktiven Bestellungen für diesen Tisch"
+  "tableOverviewNoOrders": "Keine aktiven Bestellungen für diesen Tisch",
+  "tableOverviewMakeOrder": "BESTELLEN"
 }

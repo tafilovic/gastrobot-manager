@@ -134,6 +134,38 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
         selected.targetTime == o.targetTime;
   }
 
+  Widget _makeOrderBottomBar(
+    BuildContext context,
+    AppLocalizations l10n,
+    Color accentColor,
+  ) {
+    return Material(
+      color: AppColors.surface,
+      elevation: 6,
+      shadowColor: Colors.black26,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: FilledButton(
+            onPressed: () {
+              context.pushNamed(
+                AppRouteNames.tableOrder,
+                extra: widget.table,
+              );
+            },
+            style: FilledButton.styleFrom(
+              backgroundColor: accentColor,
+              foregroundColor: AppColors.onPrimary,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            child: Text(l10n.tableOverviewMakeOrder),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _confirmMarkPaid(
     BuildContext context,
     AppLocalizations l10n,
@@ -192,6 +224,7 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
           foregroundColor: AppColors.textPrimary,
         ),
         body: const Center(child: CircularProgressIndicator()),
+        bottomNavigationBar: _makeOrderBottomBar(context, l10n, accentColor),
       );
     }
 
@@ -205,6 +238,7 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
       ),
+      bottomNavigationBar: _makeOrderBottomBar(context, l10n, accentColor),
       body: SafeArea(
         child: FutureBuilder<List<ConfirmedReservation>>(
           future: future,

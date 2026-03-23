@@ -721,6 +721,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tableOverviewNoOrders => 'Nessun ordine attivo per questo tavolo';
 
   @override
+  String get tableOverviewMakeOrder => 'ORDINA';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

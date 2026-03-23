@@ -69,32 +69,6 @@ class _TablesScreenState extends State<TablesScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: AppBreakpoints.contentMaxWidth,
-                ),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: FilledButton.icon(
-                    onPressed: () {
-                      context.pushNamed(AppRouteNames.tableOrder);
-                    },
-                    style: FilledButton.styleFrom(
-                      backgroundColor: accentColor,
-                      foregroundColor: AppColors.onPrimary,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 28,
-                        vertical: 14,
-                      ),
-                    ),
-                    icon: const Icon(Icons.add, size: 20),
-                    label: Text(l10n.tablesOrder),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
               child: Builder(
                 builder: (context) {

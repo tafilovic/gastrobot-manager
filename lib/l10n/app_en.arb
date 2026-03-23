@@ -229,6 +229,7 @@
   "tableOrderSubmitError": "Could not send order",
   "tableOverviewNoReservations": "No active reservations for this table",
   "tableOverviewNoOrders": "No active orders for this table",
+  "tableOverviewMakeOrder": "MAKE ORDER",
   "tableOrdersFilterTypeAny": "Any",
   "tableOrdersFilterStatusLabel": "Order status:",
   "tableOrdersFilterStatusAny": "Any",

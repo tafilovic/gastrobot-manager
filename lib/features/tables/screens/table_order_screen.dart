@@ -11,14 +11,18 @@ import 'package:gastrobotmanager/features/menu/domain/models/menu_category.dart'
 import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
 import 'package:gastrobotmanager/features/tables/domain/errors/tables_exception.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/create_venue_order_request.dart';
+import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
 import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_order_bill_sheet.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// New order screen for table ordering. Shows categories and menu items with add-to-cart.
+/// [orderForTable] is the venue table this order is for (bill and API use [TableModel.id]).
 class TableOrderScreen extends StatefulWidget {
-  const TableOrderScreen({super.key});
+  const TableOrderScreen({super.key, required this.orderForTable});
+
+  final TableModel orderForTable;
 
   @override
   State<TableOrderScreen> createState() => _TableOrderScreenState();
@@ -83,6 +87,7 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
       onUpdateQuantity: _updateCartQuantity,
       onRemove: _removeFromCart,
       onOrder: _submitOrder,
+      orderForTable: widget.orderForTable,
     );
   }
 

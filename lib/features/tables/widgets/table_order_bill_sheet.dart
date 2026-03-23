@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/menu/domain/models/menu_item.dart';
 import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
 import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
-import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Bottom sheet showing the bill/cart with items grouped by food/drinks.
-/// Supports quantity changes, remove, table selection, and order action.
+/// Bottom sheet showing the bill/cart for [orderForTable] (food/drinks, totals, submit).
 void showTableOrderBillSheet({
   required BuildContext context,
   required ValueListenable<Map<String, int>> cartListenable,
@@ -20,6 +17,7 @@ void showTableOrderBillSheet({
   required void Function(String itemId, int quantity) onUpdateQuantity,
   required void Function(String itemId) onRemove,
   required Future<void> Function(String tableId) onOrder,
+  required TableModel orderForTable,
   Map<String, int>? initialCart,
 }) {
   showModalBottomSheet<void>(
@@ -39,11 +37,12 @@ void showTableOrderBillSheet({
       onUpdateQuantity: onUpdateQuantity,
       onRemove: onRemove,
       onOrder: onOrder,
+      orderForTable: orderForTable,
     ),
   );
 }
 
-class _TableOrderBillSheet extends StatefulWidget {
+class _TableOrderBillSheet extends StatelessWidget {
   const _TableOrderBillSheet({
     required this.cartListenable,
     this.initialCart,
@@ -52,6 +51,7 @@ class _TableOrderBillSheet extends StatefulWidget {
     required this.onUpdateQuantity,
     required this.onRemove,
     required this.onOrder,
+    required this.orderForTable,
   });
 
   final ValueListenable<Map<String, int>> cartListenable;
@@ -61,39 +61,15 @@ class _TableOrderBillSheet extends StatefulWidget {
   final void Function(String itemId, int quantity) onUpdateQuantity;
   final void Function(String itemId) onRemove;
   final Future<void> Function(String tableId) onOrder;
-
-  @override
-  State<_TableOrderBillSheet> createState() => _TableOrderBillSheetState();
-}
-
-class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
-  String? _selectedTableId;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _ensureTablesLoaded());
-  }
-
-  /// Same source as [TablesScreen]: `/venues/:venueId/tables` (not region-embedded tables).
-  void _ensureTablesLoaded() {
-    final venueId = context.read<AuthProvider>().currentVenueId;
-    if (venueId == null) return;
-    final tp = context.read<TablesProvider>();
-    final wrongVenue =
-        tp.loadedVenueId != null && tp.loadedVenueId != venueId;
-    if (!tp.isLoading && (tp.tables.isEmpty || wrongVenue)) {
-      tp.load(venueId);
-    }
-  }
+  final TableModel orderForTable;
 
   List<_CartEntry> _buildEntries(Map<String, int> cart) {
     final entries = <_CartEntry>[];
     for (final e in cart.entries) {
       if (e.value <= 0) continue;
-      final item = widget.menuProvider.getItemById(e.key);
+      final item = menuProvider.getItemById(e.key);
       if (item == null) continue;
-      final isDrink = widget.menuProvider.getItemCategoryType(e.key) == 'drinks';
+      final isDrink = menuProvider.getItemCategoryType(e.key) == 'drinks';
       entries.add(_CartEntry(item: item, quantity: e.value, isDrink: isDrink));
     }
     entries.sort((a, b) {
@@ -113,10 +89,10 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Map<String, int>>(
-      valueListenable: widget.cartListenable,
+      valueListenable: cartListenable,
       builder: (context, cart, _) {
         final effectiveCart =
-            cart.isNotEmpty ? cart : (widget.initialCart ?? cart);
+            cart.isNotEmpty ? cart : (initialCart ?? cart);
         return _buildContent(context, effectiveCart);
       },
     );
@@ -127,8 +103,8 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
     final theme = Theme.of(context);
     final accentColor = theme.colorScheme.primary;
     final entries = _buildEntries(cart);
-    final tablesProvider = context.watch<TablesProvider>();
-    final allTables = tablesProvider.tables;
+    final tableId = orderForTable.id;
+    final canOrder = entries.isNotEmpty && tableId.isNotEmpty;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
@@ -143,7 +119,7 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildHeader(l10n, theme),
+              _buildHeader(context, l10n, theme),
               Expanded(
                 child: entries.isEmpty
                     ? Center(
@@ -161,11 +137,12 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
                       ),
               ),
               _buildFooter(
+                context,
                 l10n,
                 entries,
                 accentColor,
-                tablesProvider,
-                allTables,
+                tableId,
+                canOrder,
               ),
             ],
           ),
@@ -174,7 +151,11 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
     );
   }
 
-  Widget _buildHeader(AppLocalizations l10n, ThemeData theme) {
+  Widget _buildHeader(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
       child: Row(
@@ -217,10 +198,10 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
       }
       sections.add(_BillItemRow(
         entry: e,
-        formatPrice: widget.formatPrice,
+        formatPrice: formatPrice,
         accentColor: accentColor,
-        onUpdateQuantity: (qty) => widget.onUpdateQuantity(e.item.id, qty),
-        onRemove: () => widget.onRemove(e.item.id),
+        onUpdateQuantity: (qty) => onUpdateQuantity(e.item.id, qty),
+        onRemove: () => onRemove(e.item.id),
       ));
     }
 
@@ -228,14 +209,14 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
   }
 
   Widget _buildFooter(
+    BuildContext context,
     AppLocalizations l10n,
     List<_CartEntry> entries,
     Color accentColor,
-    TablesProvider tablesProvider,
-    List<TableModel> allTables,
+    String tableId,
+    bool canOrder,
   ) {
     final total = _totalPrice(entries);
-    final canOrder = entries.isNotEmpty && _selectedTableId != null;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -266,7 +247,7 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
                 ],
               ),
               Text(
-                widget.formatPrice(total),
+                formatPrice(total),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: accentColor,
@@ -276,26 +257,32 @@ class _TableOrderBillSheetState extends State<_TableOrderBillSheet> {
             ],
           ),
           const SizedBox(height: 16),
-          if (tablesProvider.isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: LinearProgressIndicator(),
-            )
-          else if (allTables.isNotEmpty)
-            _TableSelectorDropdown(
-              hint: l10n.acceptSheetSelectTable,
-              tables: allTables,
-              selectedTableId: _selectedTableId,
-              tableNumberLabel: (name) => l10n.tableNumber(name),
-              onSelect: (id) => setState(() => _selectedTableId = id),
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.place_outlined,
+                size: 20,
+                color: AppColors.textSecondary,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  seatingQualifiedTitle(l10n, orderForTable),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
           FilledButton(
             onPressed: canOrder
                 ? () async {
-                    final tableId = _selectedTableId!;
                     Navigator.of(context).pop();
-                    await widget.onOrder(tableId);
+                    await onOrder(tableId);
                   }
                 : null,
             style: FilledButton.styleFrom(
@@ -494,53 +481,6 @@ class _CircleButton extends StatelessWidget {
                 ? AppColors.textPrimary
                 : AppColors.textMuted,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TableSelectorDropdown extends StatelessWidget {
-  const _TableSelectorDropdown({
-    required this.hint,
-    required this.tables,
-    required this.selectedTableId,
-    required this.tableNumberLabel,
-    required this.onSelect,
-  });
-
-  final String hint;
-  final List<TableModel> tables;
-  final String? selectedTableId;
-  final String Function(String) tableNumberLabel;
-  final void Function(String) onSelect;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.surface,
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          isExpanded: true,
-          hint: Text(
-            hint,
-            style: const TextStyle(color: AppColors.textSecondary),
-          ),
-          value: selectedTableId,
-          items: tables
-              .map(
-                (t) => DropdownMenuItem<String>(
-                  value: t.id,
-                  child: Text(tableNumberLabel(t.name)),
-                ),
-              )
-              .toList(),
-          onChanged: (id) => id != null ? onSelect(id) : null,
         ),
       ),
     );

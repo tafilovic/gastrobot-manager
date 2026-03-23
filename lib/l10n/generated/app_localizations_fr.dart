@@ -721,6 +721,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tableOverviewNoOrders => 'Aucune commande active pour cette table';
 
   @override
+  String get tableOverviewMakeOrder => 'COMMANDER';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

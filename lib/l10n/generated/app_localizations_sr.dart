@@ -719,6 +719,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get tableOverviewNoOrders => 'Nema aktivnih porudžbina za ovaj sto';
 
   @override
+  String get tableOverviewMakeOrder => 'PORUČI';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

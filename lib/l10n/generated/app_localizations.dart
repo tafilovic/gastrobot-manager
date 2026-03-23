@@ -1410,6 +1410,12 @@ abstract class AppLocalizations {
   /// **'Nema aktivnih porudžbina za ovaj sto'**
   String get tableOverviewNoOrders;
 
+  /// No description provided for @tableOverviewMakeOrder.
+  ///
+  /// In sr, this message translates to:
+  /// **'PORUČI'**
+  String get tableOverviewMakeOrder;
+
   /// No description provided for @tableOrdersFilterTypeAny.
   ///
   /// In sr, this message translates to:

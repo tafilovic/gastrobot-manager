@@ -719,6 +719,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tableOverviewNoOrders => 'Нет активных заказов для этого столика';
 
   @override
+  String get tableOverviewMakeOrder => 'ОФОРМИТЬ ЗАКАЗ';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

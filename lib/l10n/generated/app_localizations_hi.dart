@@ -717,6 +717,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tableOverviewNoOrders => 'इस टेबल के लिए कोई सक्रिय ऑर्डर नहीं';
 
   @override
+  String get tableOverviewMakeOrder => 'ऑर्डर करें';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

@@ -331,6 +331,7 @@
   "tableOrderSubmitError": "Slanje porudžbine nije uspelo",
   "tableOverviewNoReservations": "Nema aktivnih rezervacija za ovaj sto",
   "tableOverviewNoOrders": "Nema aktivnih porudžbina za ovaj sto",
+  "tableOverviewMakeOrder": "PORUČI",
   "tableOrdersFilterTypeAny": "Bilo koji",
   "tableOrdersFilterStatusLabel": "Status porudžbine:",
   "tableOrdersFilterStatusAny": "Bilo koji",

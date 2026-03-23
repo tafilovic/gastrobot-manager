@@ -721,6 +721,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tableOverviewNoOrders => 'No hay pedidos activos para esta mesa';
 
   @override
+  String get tableOverviewMakeOrder => 'PEDIR';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Bilo koji';
 
   @override

@@ -233,5 +233,6 @@
   "tableOrderSubmitSuccess": "Narudžba poslana",
   "tableOrderSubmitError": "Slanje narudžbe nije uspjelo",
   "tableOverviewNoReservations": "Nema aktivnih rezervacija za ovaj stol",
-  "tableOverviewNoOrders": "Nema aktivnih narudžbi za ovaj stol"
+  "tableOverviewNoOrders": "Nema aktivnih narudžbi za ovaj stol",
+  "tableOverviewMakeOrder": "NARUČI"
 }

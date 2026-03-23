@@ -718,6 +718,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tableOverviewNoOrders => 'No active orders for this table';
 
   @override
+  String get tableOverviewMakeOrder => 'MAKE ORDER';
+
+  @override
   String get tableOrdersFilterTypeAny => 'Any';
 
   @override
