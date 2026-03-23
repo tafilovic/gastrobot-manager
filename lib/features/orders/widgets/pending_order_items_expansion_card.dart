@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/currency/currency_provider.dart';
@@ -58,6 +59,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
 
   static const Color _highlightTint = Color(0xFFE8EAF6);
   static const double _cardRadius = 12;
+  static const double _statusBadgeIconInsetRatio = 0.24;
 
   static String _orderChipRef(PendingOrder order) {
     if (order.orderNumber.isNotEmpty) return order.orderNumber;
@@ -75,7 +77,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
     return order.items.where((i) => i.type == 'drink').toList();
   }
 
-  static (String label, Color color, IconData icon) _statusStyle(
+  static (String label, Color color, String statusSvgAsset) _statusStyle(
     OrderGroupStatus status,
     AppLocalizations l10n,
     Color accentColor,
@@ -85,27 +87,51 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
         return (
           l10n.orderStatusPending,
           const Color(0xFFF59E0B),
-          Icons.help_outline,
+          'assets/icons/question.svg',
         );
       case OrderGroupStatus.inPreparation:
         return (
           l10n.orderStatusInPreparation,
           accentColor,
-          Icons.settings,
+          'assets/icons/loading.svg',
         );
       case OrderGroupStatus.served:
         return (
           l10n.orderStatusServed,
           const Color(0xFF16A34A),
-          Icons.check_circle,
+          'assets/icons/checkmark.svg',
         );
       case OrderGroupStatus.rejected:
         return (
           l10n.orderStatusRejected,
           const Color(0xFFEF4444),
-          Icons.cancel,
+          'assets/icons/rejected.svg',
         );
     }
+  }
+
+  /// White glyph on a solid circle filled with [stateColor].
+  static Widget _statusSvgBadge(
+    String assetPath,
+    Color stateColor,
+    double diameter,
+  ) {
+    const glyphColor = Colors.white;
+    final inset = diameter * _statusBadgeIconInsetRatio;
+    return Container(
+      width: diameter,
+      height: diameter,
+      decoration: BoxDecoration(
+        color: stateColor,
+        shape: BoxShape.circle,
+      ),
+      padding: EdgeInsets.all(inset),
+      child: SvgPicture.asset(
+        assetPath,
+        colorFilter: const ColorFilter.mode(glyphColor, BlendMode.srcIn),
+        fit: BoxFit.contain,
+      ),
+    );
   }
 
   BoxDecoration _decoration() {
@@ -233,7 +259,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
     required String title,
     required String statusLabel,
     required Color statusColor,
-    required IconData statusIcon,
+    required String statusSvgAsset,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -260,7 +286,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
-          Icon(statusIcon, size: 18, color: statusColor),
+          _statusSvgBadge(statusSvgAsset, statusColor, 18),
         ],
       ),
     );
@@ -273,7 +299,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
     required List<PendingOrderItem> items,
     required String statusLabel,
     required Color statusColor,
-    required IconData statusIcon,
+    required String statusSvgAsset,
   }) {
     return Theme(
       data: theme.copyWith(dividerColor: Colors.transparent),
@@ -293,7 +319,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(statusIcon, size: 16, color: statusColor),
+            _statusSvgBadge(statusSvgAsset, statusColor, 16),
             const SizedBox(width: 4),
             Text(
               statusLabel,
@@ -314,21 +340,21 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
                 ),
               ]
             : items
-                .map(
-                  (i) => Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        '${i.name} × ${i.quantity}',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
+                  .map(
+                    (i) => Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          '${i.name} × ${i.quantity}',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
       ),
     );
   }
@@ -347,7 +373,9 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
     final bill = billSum != null ? currency.formatAmount(billSum) : null;
 
     final headerSpacing =
-        layout == PendingOrderItemsCardLayout.tableOverviewHighlight ? 8.0 : 12.0;
+        layout == PendingOrderItemsCardLayout.tableOverviewHighlight
+        ? 8.0
+        : 12.0;
 
     final innerColumn = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,7 +391,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
               items: foodItems,
               statusLabel: foodStyle.$1,
               statusColor: foodStyle.$2,
-              statusIcon: foodStyle.$3,
+              statusSvgAsset: foodStyle.$3,
             ),
             if (drinkItems.isNotEmpty) const SizedBox(height: 4),
           ],
@@ -375,7 +403,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
               items: drinkItems,
               statusLabel: drinkStyle.$1,
               statusColor: drinkStyle.$2,
-              statusIcon: drinkStyle.$3,
+              statusSvgAsset: drinkStyle.$3,
             ),
         ],
         if (bill != null ||
@@ -454,7 +482,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
                           title: l10n.ordersFoodLabel,
                           statusLabel: foodStyle.$1,
                           statusColor: foodStyle.$2,
-                          statusIcon: foodStyle.$3,
+                          statusSvgAsset: foodStyle.$3,
                         ),
                       if (showDrinkCategory)
                         _compactStatusRow(
@@ -463,7 +491,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
                           title: l10n.ordersDrinksLabel,
                           statusLabel: drinkStyle.$1,
                           statusColor: drinkStyle.$2,
-                          statusIcon: drinkStyle.$3,
+                          statusSvgAsset: drinkStyle.$3,
                         ),
                       if (bill != null) ...[
                         const SizedBox(height: 8),
@@ -537,10 +565,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
               ],
             ],
           )
-        : Padding(
-            padding: const EdgeInsets.all(12),
-            child: innerColumn,
-          );
+        : Padding(padding: const EdgeInsets.all(12), child: innerColumn);
 
     if (layout == PendingOrderItemsCardLayout.tableOverviewHighlight) {
       return Container(decoration: _decoration(), child: body);
@@ -550,7 +575,8 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
       return Container(decoration: _decoration(), child: body);
     }
 
-    final wholeCardTappable = onTap != null &&
+    final wholeCardTappable =
+        onTap != null &&
         (layout == PendingOrderItemsCardLayout.listCompact ||
             layout == PendingOrderItemsCardLayout.list);
 
