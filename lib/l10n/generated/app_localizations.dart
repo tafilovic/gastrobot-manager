@@ -8,8 +8,11 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
 import 'app_localizations_hr.dart';
 import 'app_localizations_it.dart';
+import 'app_localizations_ne.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_sr.dart';
 
@@ -102,8 +105,11 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('en'),
     Locale('es'),
+    Locale('fr'),
+    Locale('hi'),
     Locale('hr'),
     Locale('it'),
+    Locale('ne'),
     Locale('ru'),
     Locale('sr'),
   ];
@@ -1365,8 +1371,11 @@ class _AppLocalizationsDelegate
     'de',
     'en',
     'es',
+    'fr',
+    'hi',
     'hr',
     'it',
+    'ne',
     'ru',
     'sr',
   ].contains(locale.languageCode);
@@ -1384,10 +1393,16 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'es':
       return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
     case 'hr':
       return AppLocalizationsHr();
     case 'it':
       return AppLocalizationsIt();
+    case 'ne':
+      return AppLocalizationsNe();
     case 'ru':
       return AppLocalizationsRu();
     case 'sr':
