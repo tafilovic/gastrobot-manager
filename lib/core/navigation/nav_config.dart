@@ -6,7 +6,7 @@ import 'package:gastrobotmanager/core/navigation/nav_item.dart';
 /// Localized labels are resolved in the presentation layer.
 /// - Waiter: all 5 items (orders, preparing, reservations, menu, profile)
 /// - Kitchen: 4 items (orders, preparing, menu, profile)
-/// - Bar: 4 items (orders, preparing, menu, profile)
+/// - Bar: 4 items (orders, preparing, drinks tab → menu route, profile).
 class NavConfig {
   const NavConfig._();
 
@@ -45,6 +45,14 @@ class NavConfig {
     svgAssetPath: 'assets/icons/menu.svg',
   );
 
+  /// Same route as [menu]; shell uses drink-card label and bar icon for bartender.
+  static const menuDrinks = NavItem(
+    label: 'KARTA PIĆA',
+    icon: Icons.local_bar,
+    route: 'menu',
+    svgAssetPath: 'assets/icons/wine_glasses.svg',
+  );
+
   static const drinks = NavItem(
     label: 'PIĆA',
     icon: Icons.local_bar,
@@ -71,8 +79,9 @@ class NavConfig {
       case ProfileType.waiter:
         return [ready, orders, reservations, tables, profile];
       case ProfileType.kitchen:
-      case ProfileType.bar:
         return [orders, preparing, reservations, menu, profile];
+      case ProfileType.bar:
+        return [orders, preparing, reservations, menuDrinks, profile];
     }
   }
 }

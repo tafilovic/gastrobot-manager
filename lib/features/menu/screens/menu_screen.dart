@@ -11,7 +11,8 @@ import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
 import 'package:gastrobotmanager/features/menu/widgets/menu_item_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Menu screen: kitchen/bar load food; waiter loads drinks. Same list UI with search and toggles.
+/// Menu screen: kitchen loads food; bar (bartender) and waiter load drinks.
+/// Same list UI with search and toggles.
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
 
@@ -78,8 +79,8 @@ class _MenuScreenState extends State<MenuScreen> {
       );
     }
 
-    // Bar loads food; waiter loads drinks; kitchen loads food.
-    final menuType = profileType == ProfileType.waiter ? 'drinks' : 'food';
+    final menuType =
+        profileType == ProfileType.kitchen ? 'food' : 'drinks';
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
       body: SafeArea(

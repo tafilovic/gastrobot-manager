@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/navigation/nav_config.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -33,7 +34,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   Timer? _refreshTimer;
   String? _activeRouteKey;
 
-  static String _navLabel(AppLocalizations l10n, String route) {
+  static String _navLabel(
+    AppLocalizations l10n,
+    String route,
+    ProfileType profileType,
+  ) {
     switch (route) {
       case 'orders':
         return l10n.navOrders;
@@ -44,7 +49,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       case 'reservations':
         return l10n.navReservations;
       case 'menu':
-        return l10n.navMenu;
+        return profileType == ProfileType.bar
+            ? l10n.navDrinks
+            : l10n.navMenu;
       case 'drinks':
         return l10n.navDrinks;
       case 'tables':
@@ -188,7 +195,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
     final width = MediaQuery.sizeOf(context).width;
     final useRail = width >= AppBreakpoints.compact;
-    final labels = items.map((i) => _navLabel(l10n, i.route)).toList();
+    final labels =
+        items.map((i) => _navLabel(l10n, i.route, profileType)).toList();
 
     if (useRail) {
       return Scaffold(
