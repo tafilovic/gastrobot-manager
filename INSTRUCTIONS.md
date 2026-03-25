@@ -5,6 +5,11 @@
 - **Flutter SDK** (3.11.1 or compatible). Install from [flutter.dev](https://flutter.dev).
 - Run `flutter doctor` and fix any reported issues for the platforms you want to build.
 
+## Privacy policy
+
+Published privacy policy for GastroCrew (app stores, support, and public links):  
+[https://cybertechglobal.github.io/privacy_policy/gastrocrew/privacy_policy.html](https://cybertechglobal.github.io/privacy_policy/gastrocrew/privacy_policy.html)
+
 ## Environment (API base URL)
 
 The app chooses the API base URL as follows:
