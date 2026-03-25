@@ -237,6 +237,9 @@ class _MenuContentState extends State<_MenuContent> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextField(
             controller: widget.searchController,
+            onTapOutside: (_) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
             decoration: InputDecoration(
               hintText: searchHint,
               hintStyle: const TextStyle(color: AppColors.textMuted),
