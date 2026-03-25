@@ -474,11 +474,11 @@ abstract class AppLocalizations {
   /// **'PIĆA'**
   String get navDrinks;
 
-  /// No description provided for @navTables.
+  /// No description provided for @navZones.
   ///
   /// In sr, this message translates to:
-  /// **'STOLOVI'**
-  String get navTables;
+  /// **'ZONE'**
+  String get navZones;
 
   /// No description provided for @tablesReserve.
   ///

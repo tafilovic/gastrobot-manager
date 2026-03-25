@@ -194,7 +194,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navDrinks => 'BOISSONS';
 
   @override
-  String get navTables => 'TABLES';
+  String get navZones => 'ZONES';
 
   @override
   String get tablesReserve => 'RÉSERVER';

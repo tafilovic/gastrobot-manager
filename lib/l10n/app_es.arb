@@ -67,7 +67,7 @@
   "navReservations": "RESERVAS",
   "navMenu": "MENÚ",
   "navDrinks": "BEBIDAS",
-  "navTables": "MESAS",
+  "navZones": "ZONAS",
   "tablesReserve": "RESERVAR",
   "tablesOrder": "PEDIR",
   "tablesCount": "{count} mesas",

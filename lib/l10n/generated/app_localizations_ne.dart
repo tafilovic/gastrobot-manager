@@ -193,7 +193,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String get navDrinks => 'पेय';
 
   @override
-  String get navTables => 'टेबलहरू';
+  String get navZones => 'जोनहरू';
 
   @override
   String get tablesReserve => 'आरक्षण गर्नुहोस्';

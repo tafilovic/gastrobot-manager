@@ -67,7 +67,7 @@
   "navReservations": "БРОНИРОВАНИЯ",
   "navMenu": "МЕНЮ",
   "navDrinks": "НАПИТКИ",
-  "navTables": "СТОЛЫ",
+  "navZones": "ЗОНЫ",
   "tablesReserve": "ЗАБРОНИРОВАТЬ",
   "tablesOrder": "ЗАКАЗАТЬ",
   "tablesCount": "{count} столов",

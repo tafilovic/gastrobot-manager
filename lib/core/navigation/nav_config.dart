@@ -61,7 +61,7 @@ class NavConfig {
   );
 
   static const tables = NavItem(
-    label: 'STOLOVI',
+    label: 'ZONE',
     icon: Icons.table_restaurant,
     route: 'tables',
     svgAssetPath: 'assets/icons/table.svg',

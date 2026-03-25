@@ -19,6 +19,7 @@ import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart'
 import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 import 'package:gastrobotmanager/features/tables/utils/apply_table_orders_content_filter.dart';
+import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
 import 'package:gastrobotmanager/features/tables/utils/pending_orders_for_table.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_active_order_card.dart';
 import 'package:gastrobotmanager/features/tables/widgets/table_overview_header.dart';
@@ -219,7 +220,7 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
       return Scaffold(
         backgroundColor: AppColors.backgroundMuted,
         appBar: AppBar(
-          title: Text(l10n.navTables),
+          title: Text(seatingQualifiedTitle(l10n, widget.table)),
           backgroundColor: AppColors.surface,
           foregroundColor: AppColors.textPrimary,
         ),
@@ -234,7 +235,7 @@ class _TableOverviewScreenState extends State<TableOverviewScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
       appBar: AppBar(
-        title: Text(l10n.navTables),
+        title: Text(seatingQualifiedTitle(l10n, widget.table)),
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
       ),

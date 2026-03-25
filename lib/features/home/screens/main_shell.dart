@@ -55,7 +55,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       case 'drinks':
         return l10n.navDrinks;
       case 'tables':
-        return l10n.navTables;
+        return l10n.navZones;
       case 'profile':
         return l10n.navProfile;
       default:

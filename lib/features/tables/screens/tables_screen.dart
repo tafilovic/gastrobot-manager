@@ -61,7 +61,7 @@ class _TablesScreenState extends State<TablesScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
               child: Text(
-                l10n.navTables,
+                l10n.navZones,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,

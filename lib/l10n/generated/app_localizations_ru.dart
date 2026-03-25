@@ -193,7 +193,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navDrinks => 'НАПИТКИ';
 
   @override
-  String get navTables => 'СТОЛЫ';
+  String get navZones => 'ЗОНЫ';
 
   @override
   String get tablesReserve => 'ЗАБРОНИРОВАТЬ';
