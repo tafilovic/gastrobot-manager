@@ -3,6 +3,7 @@ import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/auth_api.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
 import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/register_request.dart';
 import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
 import 'package:gastrobotmanager/features/auth/services/auth_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -18,6 +19,14 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(const SignInRequest(email: '', password: ''));
+    registerFallbackValue(
+      const RegisterRequest(
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+      ),
+    );
     registerFallbackValue(AuthSession(
       user: const User(id: '', firstname: '', lastname: '', email: '', role: 'waiter'),
       accessToken: '',
@@ -93,6 +102,22 @@ void main() {
       final result = await service.getRememberedEmail();
 
       expect(result, 'a@b.com');
+    });
+
+    test('register delegates to authApi only', () async {
+      when(() => authApi.register(any())).thenAnswer((_) async {});
+
+      await service.register(
+        const RegisterRequest(
+          firstname: 'A',
+          lastname: 'B',
+          email: 'a@b.com',
+          password: 'secret',
+        ),
+      );
+
+      verify(() => authApi.register(any())).called(1);
+      verifyNever(() => storage.saveSession(any()));
     });
   });
 }

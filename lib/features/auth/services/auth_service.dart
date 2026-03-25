@@ -2,6 +2,7 @@ import 'package:gastrobotmanager/features/auth/domain/errors/auth_exception.dart
 import 'package:gastrobotmanager/features/auth/domain/repositories/auth_api.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
 import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/register_request.dart';
 import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
 import 'package:gastrobotmanager/features/auth/utils/supported_roles.dart';
 
@@ -12,6 +13,9 @@ class AuthService {
 
   final SessionStorage _sessionStorage;
   final AuthApi _authApi;
+
+  /// Public sign-up; does not create a session.
+  Future<void> register(RegisterRequest request) => _authApi.register(request);
 
   /// Sign in with email and password. Returns session (user + tokens).
   /// Throws [AuthException] with message [AuthException.unsupportedRoleMessage] if user role is not supported.

@@ -12,6 +12,27 @@
   "loginButton": "Sign in",
   "loginFailed": "Sign in failed. Please try again.",
   "loginRoleNotSupported": "Your role is not supported. This app is for waiters, chefs and bartenders.",
+  "loginRegisterButton": "Register",
+  "registerTitle": "Create account",
+  "registerFirstnameLabel": "First name",
+  "registerLastnameLabel": "Last name",
+  "registerEmailLabel": "Email",
+  "registerPasswordConfirmLabel": "Confirm password",
+  "registerPasswordMismatch": "Passwords do not match",
+  "registerFieldRequired": "This field is required",
+  "registerSubmitButton": "Register",
+  "registerSuccessTitle": "Registration successful",
+  "registerSuccessMessage": "A verification link has been sent to {email}. Please open your email and click the link to verify and activate your account. You can then sign in to the app.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Something went wrong. Please try again.",
+  "registerBackToLogin": "Back to sign in",
   "profileTitle": "My profile",
   "profileLabelName": "NAME",
   "profileLabelEmail": "EMAIL",

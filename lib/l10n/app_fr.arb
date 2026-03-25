@@ -12,6 +12,27 @@
   "loginButton": "Connexion",
   "loginFailed": "Échec de la connexion. Veuillez réessayer.",
   "loginRoleNotSupported": "Votre rôle n'est pas pris en charge. Cette application est destinée aux serveurs, cuisiniers et barmans.",
+  "loginRegisterButton": "S'inscrire",
+  "registerTitle": "Créer un compte",
+  "registerFirstnameLabel": "Prénom",
+  "registerLastnameLabel": "Nom",
+  "registerEmailLabel": "E-mail",
+  "registerPasswordConfirmLabel": "Confirmer le mot de passe",
+  "registerPasswordMismatch": "Les mots de passe ne correspondent pas",
+  "registerFieldRequired": "Champ obligatoire",
+  "registerSubmitButton": "S'inscrire",
+  "registerSuccessTitle": "Inscription réussie",
+  "registerSuccessMessage": "Un lien de vérification a été envoyé à {email}. Ouvrez votre messagerie et cliquez sur le lien pour activer votre compte. Vous pourrez ensuite vous connecter à l'application.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Une erreur s'est produite. Réessayez.",
+  "registerBackToLogin": "Retour à la connexion",
   "profileTitle": "Mon profil",
   "profileLabelName": "NOM",
   "profileLabelEmail": "E-MAIL",

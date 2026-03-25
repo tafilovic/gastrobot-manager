@@ -12,6 +12,27 @@
   "loginButton": "Anmelden",
   "loginFailed": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
   "loginRoleNotSupported": "Ihre Rolle wird nicht unterstützt. Diese App ist für Kellner, Köche und Barkeeper.",
+  "loginRegisterButton": "Registrieren",
+  "registerTitle": "Konto erstellen",
+  "registerFirstnameLabel": "Vorname",
+  "registerLastnameLabel": "Nachname",
+  "registerEmailLabel": "E-Mail",
+  "registerPasswordConfirmLabel": "Passwort bestätigen",
+  "registerPasswordMismatch": "Passwörter stimmen nicht überein",
+  "registerFieldRequired": "Pflichtfeld",
+  "registerSubmitButton": "Registrieren",
+  "registerSuccessTitle": "Registrierung erfolgreich",
+  "registerSuccessMessage": "An {email} wurde ein Bestätigungslink gesendet. Bitte öffnen Sie Ihre E-Mails und klicken Sie auf den Link, um Ihr Konto zu aktivieren. Anschließend können Sie sich in der App anmelden.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+  "registerBackToLogin": "Zurück zur Anmeldung",
   "profileTitle": "Mein Profil",
   "profileLabelName": "NAME",
   "profileLabelEmail": "E-MAIL",

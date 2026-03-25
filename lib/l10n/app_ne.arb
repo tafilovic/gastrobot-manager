@@ -12,6 +12,27 @@
   "loginButton": "साइन इन",
   "loginFailed": "साइन इन असफल। फेरि प्रयास गर्नुहोस्।",
   "loginRoleNotSupported": "तपाईंको भूमिका समर्थित छैन। यो एप वेटर, रसोइया र बारटेन्डरका लागि हो।",
+  "loginRegisterButton": "दर्ता",
+  "registerTitle": "खाता बनाउनुहोस्",
+  "registerFirstnameLabel": "पहिलो नाम",
+  "registerLastnameLabel": "थर",
+  "registerEmailLabel": "इमेल",
+  "registerPasswordConfirmLabel": "पासवर्ड पुष्टि गर्नुहोस्",
+  "registerPasswordMismatch": "पासवर्ड मेल खाँदैनन्",
+  "registerFieldRequired": "यो फिल्ड आवश्यक छ",
+  "registerSubmitButton": "दर्ता गर्नुहोस्",
+  "registerSuccessTitle": "दर्ता सफल",
+  "registerSuccessMessage": "{email} मा प्रमाणीकरण लिङ्क पठाइएको छ। कृपया इमेल खोल्नुहोस् र आफ्नो खाता सक्रिय गर्न लिङ्कमा क्लिक गर्नुहोस्। त्यसपछि तपाईं एपमा साइन इन गर्न सक्नुहुन्छ।",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "ठीक छ",
+  "registerErrorGeneric": "केही गलत भयो। फेरि प्रयास गर्नुहोस्।",
+  "registerBackToLogin": "साइन इनमा फर्कनुहोस्",
   "profileTitle": "मेरो प्रोफाइल",
   "profileLabelName": "नाम",
   "profileLabelEmail": "इमेल",

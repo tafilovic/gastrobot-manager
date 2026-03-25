@@ -46,6 +46,50 @@ class AppLocalizationsHr extends AppLocalizations {
       'Vaša uloga nije podržana. Ova aplikacija je za konobare, kuhare i barmene.';
 
   @override
+  String get loginRegisterButton => 'Registracija';
+
+  @override
+  String get registerTitle => 'Registracija';
+
+  @override
+  String get registerFirstnameLabel => 'Ime';
+
+  @override
+  String get registerLastnameLabel => 'Prezime';
+
+  @override
+  String get registerEmailLabel => 'Email';
+
+  @override
+  String get registerPasswordConfirmLabel => 'Potvrdi lozinku';
+
+  @override
+  String get registerPasswordMismatch => 'Lozinke se ne podudaraju';
+
+  @override
+  String get registerFieldRequired => 'Polje je obavezno';
+
+  @override
+  String get registerSubmitButton => 'Registriraj se';
+
+  @override
+  String get registerSuccessTitle => 'Uspješna registracija';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return 'Na vašu e-adresu ($email) poslan je link za verifikaciju. Molimo otvorite poštu i kliknite na link za verifikaciju kako biste aktivirali račun. Nakon toga se možete prijaviti u aplikaciju.';
+  }
+
+  @override
+  String get registerSuccessOk => 'U redu';
+
+  @override
+  String get registerErrorGeneric => 'Došlo je do greške. Pokušajte ponovo.';
+
+  @override
+  String get registerBackToLogin => 'Natrag na prijavu';
+
+  @override
   String get profileTitle => 'Moj profil';
 
   @override

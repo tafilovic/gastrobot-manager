@@ -12,6 +12,13 @@ class ApiConfig {
   static const String _baseUrlDev = 'https://devapirestobot.brrm.eu';
   static const String _baseUrlProd = 'https://apirestobot.brrm.eu';
 
+  /// Optional `Authorization: Bearer …` for POST `/v1/users/register`.
+  /// Build: `--dart-define=REGISTER_BEARER=your_token`
+  static const String registerBearer = String.fromEnvironment(
+    'REGISTER_BEARER',
+    defaultValue: '',
+  );
+
   static String get baseUrl {
     return _baseUrlDev;
     if (_env == 'prod') return _baseUrlProd;

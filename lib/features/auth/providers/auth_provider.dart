@@ -5,6 +5,7 @@ import 'package:gastrobotmanager/core/api/token_store.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/register_request.dart';
 import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
 import 'package:gastrobotmanager/features/auth/services/auth_service.dart';
 import 'package:gastrobotmanager/features/auth/utils/supported_roles.dart';
@@ -82,6 +83,10 @@ class AuthProvider extends ChangeNotifier {
     _tokenStore.accessToken = _accessToken;
     _tokenStore.refreshToken = _refreshToken;
   }
+
+  /// Sign-up only; user must sign in afterward.
+  Future<void> register(RegisterRequest request) =>
+      _authService.register(request);
 
   // --- Auth lifecycle ---
   Future<void> login(

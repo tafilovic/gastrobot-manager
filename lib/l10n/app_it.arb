@@ -12,6 +12,27 @@
   "loginButton": "Accedi",
   "loginFailed": "Accesso fallito. Riprova.",
   "loginRoleNotSupported": "Il tuo ruolo non è supportato. Questa app è per camerieri, cuochi e baristi.",
+  "loginRegisterButton": "Registrati",
+  "registerTitle": "Crea account",
+  "registerFirstnameLabel": "Nome",
+  "registerLastnameLabel": "Cognome",
+  "registerEmailLabel": "Email",
+  "registerPasswordConfirmLabel": "Conferma password",
+  "registerPasswordMismatch": "Le password non coincidono",
+  "registerFieldRequired": "Campo obbligatorio",
+  "registerSubmitButton": "Registrati",
+  "registerSuccessTitle": "Registrazione completata",
+  "registerSuccessMessage": "È stato inviato un link di verifica a {email}. Apri l'email e tocca il link per attivare l'account. Poi potrai accedere all'app.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Qualcosa è andato storto. Riprova.",
+  "registerBackToLogin": "Torna al login",
   "profileTitle": "Il mio profilo",
   "profileLabelName": "NOME",
   "profileLabelEmail": "EMAIL",

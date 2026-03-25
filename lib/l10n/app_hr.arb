@@ -12,6 +12,27 @@
   "loginButton": "Prijava",
   "loginFailed": "Prijava nije uspjela. Pokušajte ponovno.",
   "loginRoleNotSupported": "Vaša uloga nije podržana. Ova aplikacija je za konobare, kuhare i barmene.",
+  "loginRegisterButton": "Registracija",
+  "registerTitle": "Registracija",
+  "registerFirstnameLabel": "Ime",
+  "registerLastnameLabel": "Prezime",
+  "registerEmailLabel": "Email",
+  "registerPasswordConfirmLabel": "Potvrdi lozinku",
+  "registerPasswordMismatch": "Lozinke se ne podudaraju",
+  "registerFieldRequired": "Polje je obavezno",
+  "registerSubmitButton": "Registriraj se",
+  "registerSuccessTitle": "Uspješna registracija",
+  "registerSuccessMessage": "Na vašu e-adresu ({email}) poslan je link za verifikaciju. Molimo otvorite poštu i kliknite na link za verifikaciju kako biste aktivirali račun. Nakon toga se možete prijaviti u aplikaciju.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "U redu",
+  "registerErrorGeneric": "Došlo je do greške. Pokušajte ponovo.",
+  "registerBackToLogin": "Natrag na prijavu",
   "profileTitle": "Moj profil",
   "profileLabelName": "IME",
   "profileLabelEmail": "EMAIL",

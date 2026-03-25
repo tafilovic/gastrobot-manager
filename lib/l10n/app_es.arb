@@ -12,6 +12,27 @@
   "loginButton": "Iniciar sesión",
   "loginFailed": "Error al iniciar sesión. Inténtalo de nuevo.",
   "loginRoleNotSupported": "Tu rol no está soportado. Esta app es para camareros, cocineros y bartenders.",
+  "loginRegisterButton": "Registrarse",
+  "registerTitle": "Crear cuenta",
+  "registerFirstnameLabel": "Nombre",
+  "registerLastnameLabel": "Apellido",
+  "registerEmailLabel": "Correo electrónico",
+  "registerPasswordConfirmLabel": "Confirmar contraseña",
+  "registerPasswordMismatch": "Las contraseñas no coinciden",
+  "registerFieldRequired": "Campo obligatorio",
+  "registerSubmitButton": "Registrarse",
+  "registerSuccessTitle": "Registro correcto",
+  "registerSuccessMessage": "Se ha enviado un enlace de verificación a {email}. Abre el correo y pulsa el enlace para activar tu cuenta. Luego podrás iniciar sesión en la app.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+  "registerBackToLogin": "Volver al inicio de sesión",
   "profileTitle": "Mi perfil",
   "profileLabelName": "NOMBRE",
   "profileLabelEmail": "EMAIL",

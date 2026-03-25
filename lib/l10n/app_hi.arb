@@ -12,6 +12,27 @@
   "loginButton": "साइन इन",
   "loginFailed": "साइन इन विफल। कृपया पुनः प्रयास करें।",
   "loginRoleNotSupported": "आपकी भूमिका समर्थित नहीं है। यह ऐप वेटर, रसोइये और बारटेंडर के लिए है।",
+  "loginRegisterButton": "पंजीकरण",
+  "registerTitle": "खाता बनाएं",
+  "registerFirstnameLabel": "पहला नाम",
+  "registerLastnameLabel": "अंतिम नाम",
+  "registerEmailLabel": "ईमेल",
+  "registerPasswordConfirmLabel": "पासवर्ड की पुष्टि करें",
+  "registerPasswordMismatch": "पासवर्ड मेल नहीं खाते",
+  "registerFieldRequired": "यह फ़ील्ड आवश्यक है",
+  "registerSubmitButton": "पंजीकरण करें",
+  "registerSuccessTitle": "पंजीकरण सफल",
+  "registerSuccessMessage": "{email} पर सत्यापन लिंक भेजा गया है। कृपया ईमेल खोलें और अपना खाता सक्रिय करने के लिए लिंक पर क्लिक करें। उसके बाद आप ऐप में साइन इन कर सकते हैं।",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "ठीक",
+  "registerErrorGeneric": "कुछ गलत हुआ। पुनः प्रयास करें।",
+  "registerBackToLogin": "साइन इन पर वापस जाएं",
   "profileTitle": "मेरी प्रोफ़ाइल",
   "profileLabelName": "नाम",
   "profileLabelEmail": "ईमेल",

@@ -12,6 +12,27 @@
   "loginButton": "Prijava",
   "loginFailed": "Prijava nije uspela. Pokušajte ponovo.",
   "loginRoleNotSupported": "Vaša uloga nije podržana. Aplikacija je namenjena konobarima, kuvarima i šankerima.",
+  "loginRegisterButton": "Registracija",
+  "registerTitle": "Registracija",
+  "registerFirstnameLabel": "Ime",
+  "registerLastnameLabel": "Prezime",
+  "registerEmailLabel": "Email",
+  "registerPasswordConfirmLabel": "Potvrdi lozinku",
+  "registerPasswordMismatch": "Lozinke se ne poklapaju",
+  "registerFieldRequired": "Polje je obavezno",
+  "registerSubmitButton": "Registruj se",
+  "registerSuccessTitle": "Uspešna registracija",
+  "registerSuccessMessage": "Na vašu e-adresu ({email}) poslat je link za verifikaciju. Molimo otvorite e-poštu i kliknite na link za verifikaciju kako biste aktivirali vaš nalog. Nakon toga se možete prijaviti u aplikaciju.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "U redu",
+  "registerErrorGeneric": "Došlo je do greške. Pokušajte ponovo.",
+  "registerBackToLogin": "Nazad na prijavu",
   "profileTitle": "Moj profil",
   "profileLabelName": "IME",
   "profileLabelEmail": "EMAIL",

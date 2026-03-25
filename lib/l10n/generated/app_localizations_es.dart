@@ -46,6 +46,50 @@ class AppLocalizationsEs extends AppLocalizations {
       'Tu rol no está soportado. Esta app es para camareros, cocineros y bartenders.';
 
   @override
+  String get loginRegisterButton => 'Registrarse';
+
+  @override
+  String get registerTitle => 'Crear cuenta';
+
+  @override
+  String get registerFirstnameLabel => 'Nombre';
+
+  @override
+  String get registerLastnameLabel => 'Apellido';
+
+  @override
+  String get registerEmailLabel => 'Correo electrónico';
+
+  @override
+  String get registerPasswordConfirmLabel => 'Confirmar contraseña';
+
+  @override
+  String get registerPasswordMismatch => 'Las contraseñas no coinciden';
+
+  @override
+  String get registerFieldRequired => 'Campo obligatorio';
+
+  @override
+  String get registerSubmitButton => 'Registrarse';
+
+  @override
+  String get registerSuccessTitle => 'Registro correcto';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return 'Se ha enviado un enlace de verificación a $email. Abre el correo y pulsa el enlace para activar tu cuenta. Luego podrás iniciar sesión en la app.';
+  }
+
+  @override
+  String get registerSuccessOk => 'OK';
+
+  @override
+  String get registerErrorGeneric => 'Algo salió mal. Inténtalo de nuevo.';
+
+  @override
+  String get registerBackToLogin => 'Volver al inicio de sesión';
+
+  @override
   String get profileTitle => 'Mi perfil';
 
   @override

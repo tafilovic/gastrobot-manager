@@ -46,6 +46,50 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il tuo ruolo non è supportato. Questa app è per camerieri, cuochi e baristi.';
 
   @override
+  String get loginRegisterButton => 'Registrati';
+
+  @override
+  String get registerTitle => 'Crea account';
+
+  @override
+  String get registerFirstnameLabel => 'Nome';
+
+  @override
+  String get registerLastnameLabel => 'Cognome';
+
+  @override
+  String get registerEmailLabel => 'Email';
+
+  @override
+  String get registerPasswordConfirmLabel => 'Conferma password';
+
+  @override
+  String get registerPasswordMismatch => 'Le password non coincidono';
+
+  @override
+  String get registerFieldRequired => 'Campo obbligatorio';
+
+  @override
+  String get registerSubmitButton => 'Registrati';
+
+  @override
+  String get registerSuccessTitle => 'Registrazione completata';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return 'È stato inviato un link di verifica a $email. Apri l\'email e tocca il link per attivare l\'account. Poi potrai accedere all\'app.';
+  }
+
+  @override
+  String get registerSuccessOk => 'OK';
+
+  @override
+  String get registerErrorGeneric => 'Qualcosa è andato storto. Riprova.';
+
+  @override
+  String get registerBackToLogin => 'Torna al login';
+
+  @override
   String get profileTitle => 'Il mio profilo';
 
   @override

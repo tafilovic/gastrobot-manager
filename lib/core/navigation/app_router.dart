@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/auth/screens/login_screen.dart';
+import 'package:gastrobotmanager/features/auth/screens/register_screen.dart';
 import 'package:gastrobotmanager/features/home/screens/main_shell.dart';
 import 'package:gastrobotmanager/features/menu/screens/menu_screen.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/active_order_filters.dart';
@@ -31,6 +32,7 @@ import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
 /// Centralized route names and path constants.
 abstract class AppRouteNames {
   static const login = 'login';
+  static const register = 'register';
 
   // Shell and top-level branches
   static const shell = 'shell';
@@ -62,6 +64,7 @@ abstract class AppRouteNames {
 
   // Path constants
   static const pathLogin = '/login';
+  static const pathRegister = '/register';
   static const pathReady = '/ready';
   static const pathOrders = '/orders';
   static const pathPreparing = '/preparing';
@@ -85,7 +88,7 @@ abstract class AppRouteNames {
 ///
 /// The router is auth-aware:
 /// - While [auth.isRestoring] is true, no redirects are performed.
-/// - When not logged in, any route except `/login` is redirected to `/login`.
+/// - When not logged in, any route except `/login` and `/register` redirects to `/login`.
 /// - After login, navigates to the initial page (orders or ready by role).
 class AppRouter {
   AppRouter._();
@@ -112,6 +115,11 @@ class AppRouter {
           path: AppRouteNames.pathLogin,
           name: AppRouteNames.login,
           builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: AppRouteNames.pathRegister,
+          name: AppRouteNames.register,
+          builder: (context, state) => const RegisterScreen(),
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
@@ -335,14 +343,15 @@ class AppRouter {
 
     final loggedIn = auth.isLoggedIn;
     final isOnLogin = state.matchedLocation == AppRouteNames.pathLogin;
+    final isOnRegister = state.matchedLocation == AppRouteNames.pathRegister;
 
     if (!loggedIn) {
       _didInitialWaiterRedirect = false;
-      if (isOnLogin) return null;
+      if (isOnLogin || isOnRegister) return null;
       return AppRouteNames.pathLogin;
     }
 
-    if (isOnLogin) {
+    if (isOnLogin || isOnRegister) {
       final defaultHome = auth.profileType == ProfileType.waiter
           ? AppRouteNames.pathReady
           : AppRouteNames.pathOrders;

@@ -46,6 +46,50 @@ class AppLocalizationsNe extends AppLocalizations {
       'तपाईंको भूमिका समर्थित छैन। यो एप वेटर, रसोइया र बारटेन्डरका लागि हो।';
 
   @override
+  String get loginRegisterButton => 'दर्ता';
+
+  @override
+  String get registerTitle => 'खाता बनाउनुहोस्';
+
+  @override
+  String get registerFirstnameLabel => 'पहिलो नाम';
+
+  @override
+  String get registerLastnameLabel => 'थर';
+
+  @override
+  String get registerEmailLabel => 'इमेल';
+
+  @override
+  String get registerPasswordConfirmLabel => 'पासवर्ड पुष्टि गर्नुहोस्';
+
+  @override
+  String get registerPasswordMismatch => 'पासवर्ड मेल खाँदैनन्';
+
+  @override
+  String get registerFieldRequired => 'यो फिल्ड आवश्यक छ';
+
+  @override
+  String get registerSubmitButton => 'दर्ता गर्नुहोस्';
+
+  @override
+  String get registerSuccessTitle => 'दर्ता सफल';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return '$email मा प्रमाणीकरण लिङ्क पठाइएको छ। कृपया इमेल खोल्नुहोस् र आफ्नो खाता सक्रिय गर्न लिङ्कमा क्लिक गर्नुहोस्। त्यसपछि तपाईं एपमा साइन इन गर्न सक्नुहुन्छ।';
+  }
+
+  @override
+  String get registerSuccessOk => 'ठीक छ';
+
+  @override
+  String get registerErrorGeneric => 'केही गलत भयो। फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get registerBackToLogin => 'साइन इनमा फर्कनुहोस्';
+
+  @override
   String get profileTitle => 'मेरो प्रोफाइल';
 
   @override

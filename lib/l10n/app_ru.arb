@@ -12,6 +12,27 @@
   "loginButton": "Войти",
   "loginFailed": "Ошибка входа. Попробуйте снова.",
   "loginRoleNotSupported": "Ваша роль не поддерживается. Это приложение для официантов, поваров и барменов.",
+  "loginRegisterButton": "Регистрация",
+  "registerTitle": "Создать аккаунт",
+  "registerFirstnameLabel": "Имя",
+  "registerLastnameLabel": "Фамилия",
+  "registerEmailLabel": "Эл. почта",
+  "registerPasswordConfirmLabel": "Подтвердите пароль",
+  "registerPasswordMismatch": "Пароли не совпадают",
+  "registerFieldRequired": "Обязательное поле",
+  "registerSubmitButton": "Зарегистрироваться",
+  "registerSuccessTitle": "Регистрация успешна",
+  "registerSuccessMessage": "На адрес {email} отправлена ссылка для подтверждения. Откройте письмо и перейдите по ссылке, чтобы активировать аккаунт. Затем вы сможете войти в приложение.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Что-то пошло не так. Попробуйте снова.",
+  "registerBackToLogin": "Назад ко входу",
   "profileTitle": "Мой профиль",
   "profileLabelName": "ИМЯ",
   "profileLabelEmail": "EMAIL",

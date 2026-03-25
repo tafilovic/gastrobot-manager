@@ -46,6 +46,50 @@ class AppLocalizationsHi extends AppLocalizations {
       'आपकी भूमिका समर्थित नहीं है। यह ऐप वेटर, रसोइये और बारटेंडर के लिए है।';
 
   @override
+  String get loginRegisterButton => 'पंजीकरण';
+
+  @override
+  String get registerTitle => 'खाता बनाएं';
+
+  @override
+  String get registerFirstnameLabel => 'पहला नाम';
+
+  @override
+  String get registerLastnameLabel => 'अंतिम नाम';
+
+  @override
+  String get registerEmailLabel => 'ईमेल';
+
+  @override
+  String get registerPasswordConfirmLabel => 'पासवर्ड की पुष्टि करें';
+
+  @override
+  String get registerPasswordMismatch => 'पासवर्ड मेल नहीं खाते';
+
+  @override
+  String get registerFieldRequired => 'यह फ़ील्ड आवश्यक है';
+
+  @override
+  String get registerSubmitButton => 'पंजीकरण करें';
+
+  @override
+  String get registerSuccessTitle => 'पंजीकरण सफल';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return '$email पर सत्यापन लिंक भेजा गया है। कृपया ईमेल खोलें और अपना खाता सक्रिय करने के लिए लिंक पर क्लिक करें। उसके बाद आप ऐप में साइन इन कर सकते हैं।';
+  }
+
+  @override
+  String get registerSuccessOk => 'ठीक';
+
+  @override
+  String get registerErrorGeneric => 'कुछ गलत हुआ। पुनः प्रयास करें।';
+
+  @override
+  String get registerBackToLogin => 'साइन इन पर वापस जाएं';
+
+  @override
   String get profileTitle => 'मेरी प्रोफ़ाइल';
 
   @override

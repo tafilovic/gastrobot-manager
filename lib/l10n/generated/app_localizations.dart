@@ -186,6 +186,90 @@ abstract class AppLocalizations {
   /// **'Vaša uloga nije podržana. Aplikacija je namenjena konobarima, kuvarima i šankerima.'**
   String get loginRoleNotSupported;
 
+  /// No description provided for @loginRegisterButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'Registracija'**
+  String get loginRegisterButton;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Registracija'**
+  String get registerTitle;
+
+  /// No description provided for @registerFirstnameLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ime'**
+  String get registerFirstnameLabel;
+
+  /// No description provided for @registerLastnameLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Prezime'**
+  String get registerLastnameLabel;
+
+  /// No description provided for @registerEmailLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Email'**
+  String get registerEmailLabel;
+
+  /// No description provided for @registerPasswordConfirmLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Potvrdi lozinku'**
+  String get registerPasswordConfirmLabel;
+
+  /// No description provided for @registerPasswordMismatch.
+  ///
+  /// In sr, this message translates to:
+  /// **'Lozinke se ne poklapaju'**
+  String get registerPasswordMismatch;
+
+  /// No description provided for @registerFieldRequired.
+  ///
+  /// In sr, this message translates to:
+  /// **'Polje je obavezno'**
+  String get registerFieldRequired;
+
+  /// No description provided for @registerSubmitButton.
+  ///
+  /// In sr, this message translates to:
+  /// **'Registruj se'**
+  String get registerSubmitButton;
+
+  /// No description provided for @registerSuccessTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Uspešna registracija'**
+  String get registerSuccessTitle;
+
+  /// No description provided for @registerSuccessMessage.
+  ///
+  /// In sr, this message translates to:
+  /// **'Na vašu e-adresu ({email}) poslat je link za verifikaciju. Molimo otvorite e-poštu i kliknite na link za verifikaciju kako biste aktivirali vaš nalog. Nakon toga se možete prijaviti u aplikaciju.'**
+  String registerSuccessMessage(String email);
+
+  /// No description provided for @registerSuccessOk.
+  ///
+  /// In sr, this message translates to:
+  /// **'U redu'**
+  String get registerSuccessOk;
+
+  /// No description provided for @registerErrorGeneric.
+  ///
+  /// In sr, this message translates to:
+  /// **'Došlo je do greške. Pokušajte ponovo.'**
+  String get registerErrorGeneric;
+
+  /// No description provided for @registerBackToLogin.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nazad na prijavu'**
+  String get registerBackToLogin;
+
   /// No description provided for @profileTitle.
   ///
   /// In sr, this message translates to:

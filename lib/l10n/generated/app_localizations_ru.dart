@@ -46,6 +46,50 @@ class AppLocalizationsRu extends AppLocalizations {
       'Ваша роль не поддерживается. Это приложение для официантов, поваров и барменов.';
 
   @override
+  String get loginRegisterButton => 'Регистрация';
+
+  @override
+  String get registerTitle => 'Создать аккаунт';
+
+  @override
+  String get registerFirstnameLabel => 'Имя';
+
+  @override
+  String get registerLastnameLabel => 'Фамилия';
+
+  @override
+  String get registerEmailLabel => 'Эл. почта';
+
+  @override
+  String get registerPasswordConfirmLabel => 'Подтвердите пароль';
+
+  @override
+  String get registerPasswordMismatch => 'Пароли не совпадают';
+
+  @override
+  String get registerFieldRequired => 'Обязательное поле';
+
+  @override
+  String get registerSubmitButton => 'Зарегистрироваться';
+
+  @override
+  String get registerSuccessTitle => 'Регистрация успешна';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return 'На адрес $email отправлена ссылка для подтверждения. Откройте письмо и перейдите по ссылке, чтобы активировать аккаунт. Затем вы сможете войти в приложение.';
+  }
+
+  @override
+  String get registerSuccessOk => 'OK';
+
+  @override
+  String get registerErrorGeneric => 'Что-то пошло не так. Попробуйте снова.';
+
+  @override
+  String get registerBackToLogin => 'Назад ко входу';
+
+  @override
   String get profileTitle => 'Мой профиль';
 
   @override

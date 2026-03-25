@@ -46,6 +46,51 @@ class AppLocalizationsFr extends AppLocalizations {
       'Votre rôle n\'est pas pris en charge. Cette application est destinée aux serveurs, cuisiniers et barmans.';
 
   @override
+  String get loginRegisterButton => 'S\'inscrire';
+
+  @override
+  String get registerTitle => 'Créer un compte';
+
+  @override
+  String get registerFirstnameLabel => 'Prénom';
+
+  @override
+  String get registerLastnameLabel => 'Nom';
+
+  @override
+  String get registerEmailLabel => 'E-mail';
+
+  @override
+  String get registerPasswordConfirmLabel => 'Confirmer le mot de passe';
+
+  @override
+  String get registerPasswordMismatch =>
+      'Les mots de passe ne correspondent pas';
+
+  @override
+  String get registerFieldRequired => 'Champ obligatoire';
+
+  @override
+  String get registerSubmitButton => 'S\'inscrire';
+
+  @override
+  String get registerSuccessTitle => 'Inscription réussie';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return 'Un lien de vérification a été envoyé à $email. Ouvrez votre messagerie et cliquez sur le lien pour activer votre compte. Vous pourrez ensuite vous connecter à l\'application.';
+  }
+
+  @override
+  String get registerSuccessOk => 'OK';
+
+  @override
+  String get registerErrorGeneric => 'Une erreur s\'est produite. Réessayez.';
+
+  @override
+  String get registerBackToLogin => 'Retour à la connexion';
+
+  @override
   String get profileTitle => 'Mon profil';
 
   @override

@@ -4,6 +4,7 @@ import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/auth/domain/errors/auth_exception.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/auth_api.dart';
 import 'package:gastrobotmanager/features/auth/models/auth_session.dart';
+import 'package:gastrobotmanager/features/auth/models/register_request.dart';
 import 'package:gastrobotmanager/features/auth/models/sign_in_request.dart';
 
 /// Auth API implementation using Dio. Throws [AuthException] on failure.
@@ -46,5 +47,37 @@ class AuthRemote implements AuthApi {
       accessToken: accessToken,
       refreshToken: refreshToken,
     );
+  }
+
+  @override
+  Future<void> register(RegisterRequest request) async {
+    final headers = <String, dynamic>{};
+    if (ApiConfig.registerBearer.isNotEmpty) {
+      headers['Authorization'] = 'Bearer ${ApiConfig.registerBearer}';
+    }
+
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/v1/users/register',
+      data: request.toJson(),
+      options: Options(
+        contentType: Headers.jsonContentType,
+        headers: headers.isEmpty ? null : headers,
+        validateStatus: (status) => status != null,
+      ),
+    );
+
+    if (response.statusCode == 201) {
+      return;
+    }
+
+    final data = response.data;
+    String message = 'Registration failed';
+    if (data != null) {
+      final m = data['message'];
+      if (m != null) {
+        message = m.toString();
+      }
+    }
+    throw AuthException(message);
   }
 }

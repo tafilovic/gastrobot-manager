@@ -46,6 +46,50 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your role is not supported. This app is for waiters, chefs and bartenders.';
 
   @override
+  String get loginRegisterButton => 'Register';
+
+  @override
+  String get registerTitle => 'Create account';
+
+  @override
+  String get registerFirstnameLabel => 'First name';
+
+  @override
+  String get registerLastnameLabel => 'Last name';
+
+  @override
+  String get registerEmailLabel => 'Email';
+
+  @override
+  String get registerPasswordConfirmLabel => 'Confirm password';
+
+  @override
+  String get registerPasswordMismatch => 'Passwords do not match';
+
+  @override
+  String get registerFieldRequired => 'This field is required';
+
+  @override
+  String get registerSubmitButton => 'Register';
+
+  @override
+  String get registerSuccessTitle => 'Registration successful';
+
+  @override
+  String registerSuccessMessage(String email) {
+    return 'A verification link has been sent to $email. Please open your email and click the link to verify and activate your account. You can then sign in to the app.';
+  }
+
+  @override
+  String get registerSuccessOk => 'OK';
+
+  @override
+  String get registerErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get registerBackToLogin => 'Back to sign in';
+
+  @override
   String get profileTitle => 'My profile';
 
   @override
