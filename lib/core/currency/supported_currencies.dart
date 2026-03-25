@@ -1,6 +1,7 @@
 import 'package:gastrobotmanager/core/currency/currency_option.dart';
 
-/// All currencies the user can pick. Add entries here to extend.
+/// Maps backend `venue.currency` (ISO 4217) to display symbol and ICU formatting.
+/// Add a row when you need a custom symbol or locale for a code from the API.
 const List<CurrencyOption> kSupportedCurrencies = [
   CurrencyOption(
     id: 'rsd',
@@ -60,9 +61,16 @@ const List<CurrencyOption> kSupportedCurrencies = [
   ),
 ];
 
-CurrencyOption? currencyById(String id) {
+/// ISO 4217 from API (e.g. `venue.currency`: `"RSD"`).
+CurrencyOption? currencyByCode(String? code) {
+  if (code == null || code.isEmpty) return null;
+  final upper = code.toUpperCase();
   for (final c in kSupportedCurrencies) {
-    if (c.id == id) return c;
+    if (c.code == upper) return c;
+  }
+  final lower = code.toLowerCase();
+  for (final c in kSupportedCurrencies) {
+    if (c.id == lower) return c;
   }
   return null;
 }

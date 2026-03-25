@@ -78,9 +78,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profileLabelCurrency => 'WÄHRUNG';
 
   @override
-  String get profileCurrencyDialogTitle => 'Anzeigewährung';
-
-  @override
   String get profileLanguageValue => 'Deutsch';
 
   @override
@@ -104,6 +101,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get shiftScheduleRetry => 'Erneut versuchen';
+
+  @override
+  String get shiftScheduleSelfLabel => 'Ich';
 
   @override
   String get profileLogout => 'ABMELDEN';

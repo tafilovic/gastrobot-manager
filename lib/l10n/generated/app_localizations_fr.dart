@@ -77,9 +77,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileLabelCurrency => 'DEVISE';
 
   @override
-  String get profileCurrencyDialogTitle => 'Devise d’affichage';
-
-  @override
   String get profileLanguageValue => 'Français';
 
   @override
@@ -102,6 +99,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get shiftScheduleRetry => 'Réessayer';
+
+  @override
+  String get shiftScheduleSelfLabel => 'Moi';
 
   @override
   String get profileLogout => 'DÉCONNEXION';

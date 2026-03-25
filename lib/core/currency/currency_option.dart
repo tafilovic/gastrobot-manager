@@ -1,4 +1,4 @@
-/// Display currency: amounts are **not** converted; [formatLocale] drives [NumberFormat.currency] (symbol position, separators).
+/// Maps a backend ISO code to [symbol] and ICU [formatLocale] for amount formatting (no conversion).
 class CurrencyOption {
   const CurrencyOption({
     required this.id,

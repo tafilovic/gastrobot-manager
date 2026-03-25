@@ -77,9 +77,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileLabelCurrency => 'मुद्रा';
 
   @override
-  String get profileCurrencyDialogTitle => 'प्रदर्शन मुद्रा';
-
-  @override
   String get profileLanguageValue => 'हिन्दी';
 
   @override
@@ -102,6 +99,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get shiftScheduleRetry => 'पुनः प्रयास करें';
+
+  @override
+  String get shiftScheduleSelfLabel => 'मैं';
 
   @override
   String get profileLogout => 'लॉग आउट';

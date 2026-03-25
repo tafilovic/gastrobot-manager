@@ -77,9 +77,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileLabelCurrency => 'ВАЛЮТА';
 
   @override
-  String get profileCurrencyDialogTitle => 'Валюта отображения';
-
-  @override
   String get profileLanguageValue => 'Русский';
 
   @override
@@ -102,6 +99,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get shiftScheduleRetry => 'Повторить';
+
+  @override
+  String get shiftScheduleSelfLabel => 'Я';
 
   @override
   String get profileLogout => 'ВЫЙТИ';

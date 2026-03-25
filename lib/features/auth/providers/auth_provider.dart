@@ -32,7 +32,20 @@ class AuthProvider extends ChangeNotifier {
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
   ProfileType? get profileType => _user?.type;
-  String? get currentVenueId => _user?.venueUsers.first.venueId;
+
+  String? get currentVenueId {
+    final list = _user?.venueUsers;
+    if (list == null || list.isEmpty) return null;
+    return list.first.venueId;
+  }
+
+  /// ISO 4217 from `venueUsers[].venue.currency` (e.g. `RSD`); persisted with session.
+  String? get currentVenueCurrency {
+    final list = _user?.venueUsers;
+    if (list == null || list.isEmpty) return null;
+    return list.first.venue?.currency;
+  }
+
   bool get isLoggedIn => _user != null;
   bool get isRestoring => _isRestoring;
 
@@ -115,7 +128,7 @@ class AuthProvider extends ChangeNotifier {
 
   // --- User state ---
   Future<void> updateUser(User user) async {
-    _user = user;
+    _user = User.mergePreservingVenueFromPrevious(user, _user);
     if (_accessToken != null && _refreshToken != null) {
       await _authService.updateSession(
         AuthSession(

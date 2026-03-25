@@ -77,9 +77,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get profileLabelCurrency => 'VALUTA';
 
   @override
-  String get profileCurrencyDialogTitle => 'Valuta prikaza';
-
-  @override
   String get profileLanguageValue => 'Hrvatski';
 
   @override
@@ -102,6 +99,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get shiftScheduleRetry => 'Pokušaj ponovo';
+
+  @override
+  String get shiftScheduleSelfLabel => 'Ja';
 
   @override
   String get profileLogout => 'ODJAVA';

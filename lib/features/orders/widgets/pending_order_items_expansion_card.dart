@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:gastrobotmanager/core/currency/currency_provider.dart';
+import 'package:gastrobotmanager/core/currency/venue_currency_format.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/selectable_ink_card.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
@@ -368,8 +369,9 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.watch<CurrencyProvider>();
+    context.watch<AuthProvider>();
     final theme = Theme.of(context);
+    final venueCurrency = context.read<AuthProvider>().currentVenueCurrency;
     final foodItems = _foodItems(order);
     final drinkItems = _drinkItems(order);
     final foodStatus = orderGroupStatusFromItems(foodItems);
@@ -377,7 +379,9 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
     final foodStyle = _statusStyle(foodStatus, l10n, accentColor);
     final drinkStyle = _statusStyle(drinkStatus, l10n, accentColor);
     final billSum = orderItemsTotalPriceSum(order.items);
-    final bill = billSum != null ? currency.formatAmount(billSum) : null;
+    final bill = billSum != null
+        ? formatVenueAmountForDisplay(context, billSum, venueCurrency)
+        : null;
 
     final headerSpacing =
         layout == PendingOrderItemsCardLayout.tableOverviewHighlight

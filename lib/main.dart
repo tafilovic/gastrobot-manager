@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +10,6 @@ import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/api/logging_interceptor.dart';
 import 'package:gastrobotmanager/core/api/auth_interceptor.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
-import 'package:gastrobotmanager/core/currency/currency_provider.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 import 'package:gastrobotmanager/features/auth/data/auth_remote.dart';
 import 'package:gastrobotmanager/features/auth/data/shared_preferences_session_storage.dart';
@@ -113,6 +114,9 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   void initState() {
     super.initState();
 
+    // Legacy installs: drop old manual currency pref so venue currency from auth wins.
+    unawaited(widget.prefs.remove('app_display_currency_id'));
+
     _tokenStore = TokenStore();
 
     final sessionStorage = SharedPreferencesSessionStorage(widget.prefs);
@@ -174,13 +178,6 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ChangeNotifierProvider<LocaleProvider>(
           create: (_) => LocaleProvider(widget.prefs),
         ),
-        ChangeNotifierProvider<CurrencyProvider>(
-          create: (c) => CurrencyProvider(
-            widget.prefs,
-            c.read<LocaleProvider>(),
-          ),
-        ),
-
         // Staff schedules (profile: shift calendar)
         Provider<StaffSchedulesApi>(
           create: (_) => StaffSchedulesRemote(_authenticatedDio),
@@ -249,9 +246,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
 
         // Tables (waiter: venue table list with status)
-        Provider<TablesApi>(
-          create: (_) => TablesRemote(_authenticatedDio),
-        ),
+        Provider<TablesApi>(create: (_) => TablesRemote(_authenticatedDio)),
         ChangeNotifierProvider<TablesProvider>(
           create: (c) => TablesProvider(c.read<TablesApi>()),
         ),
@@ -260,9 +255,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
 
         // Regions (waiter: region list with embedded tables for reservation confirmation)
-        Provider<RegionsApi>(
-          create: (_) => RegionsRemote(_authenticatedDio),
-        ),
+        Provider<RegionsApi>(create: (_) => RegionsRemote(_authenticatedDio)),
         ChangeNotifierProvider<RegionsProvider>(
           create: (c) => RegionsProvider(c.read<RegionsApi>()),
         ),

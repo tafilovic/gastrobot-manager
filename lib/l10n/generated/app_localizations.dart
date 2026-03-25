@@ -246,12 +246,6 @@ abstract class AppLocalizations {
   /// **'VALUTA'**
   String get profileLabelCurrency;
 
-  /// No description provided for @profileCurrencyDialogTitle.
-  ///
-  /// In sr, this message translates to:
-  /// **'Valuta za prikaz'**
-  String get profileCurrencyDialogTitle;
-
   /// No description provided for @profileLanguageValue.
   ///
   /// In sr, this message translates to:
@@ -299,6 +293,12 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Pokušaj ponovo'**
   String get shiftScheduleRetry;
+
+  /// No description provided for @shiftScheduleSelfLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ja'**
+  String get shiftScheduleSelfLabel;
 
   /// No description provided for @profileLogout.
   ///

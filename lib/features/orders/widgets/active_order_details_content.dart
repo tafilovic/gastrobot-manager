@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:gastrobotmanager/core/currency/currency_provider.dart';
+import 'package:gastrobotmanager/core/currency/venue_currency_format.dart';
+import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
@@ -95,8 +96,9 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.watch<CurrencyProvider>();
+    context.watch<AuthProvider>();
     final l10n = AppLocalizations.of(context)!;
+    final venueCurrency = context.read<AuthProvider>().currentVenueCurrency;
     final order = widget.order;
     final accentColor = Theme.of(context).colorScheme.primary;
     final timeAgo = formatOrderTimeAgo(order.targetTime, l10n);
@@ -109,8 +111,9 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
         .toList();
     final drinkItems = order.items.where((i) => i.type == 'drink').toList();
     final billSum = orderItemsTotalPriceSum(order.items);
-    final billTotal =
-        billSum != null ? currency.formatAmount(billSum) : null;
+    final billTotal = billSum != null
+        ? formatVenueAmountForDisplay(context, billSum, venueCurrency)
+        : null;
     final width = MediaQuery.sizeOf(context).width;
     final maxWidth = width >= AppBreakpoints.expanded
         ? AppBreakpoints.contentMaxWidthWide

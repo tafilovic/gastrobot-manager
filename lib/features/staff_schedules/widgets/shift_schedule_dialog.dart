@@ -55,6 +55,17 @@ String _formatShiftRange(String start, String end) {
   return '${_formatShiftTimePart(start)} - ${_formatShiftTimePart(end)}';
 }
 
+String _schedulePickerLabel(
+  StaffMemberSchedule entry,
+  String? loggedInUserId,
+  AppLocalizations l10n,
+) {
+  if (loggedInUserId != null && entry.user.id == loggedInUserId) {
+    return l10n.shiftScheduleSelfLabel;
+  }
+  return entry.user.displayName;
+}
+
 class _ShiftScheduleDialog extends StatefulWidget {
   const _ShiftScheduleDialog();
 
@@ -97,11 +108,16 @@ class _ShiftScheduleDialogState extends State<_ShiftScheduleDialog> {
 
     try {
       final list = await api.getVenueCalendar(venueId);
-      list.sort(
-        (a, b) => a.user.displayName.toLowerCase().compareTo(
+      list.sort((a, b) {
+        final aSelf = authUserId != null && a.user.id == authUserId;
+        final bSelf = authUserId != null && b.user.id == authUserId;
+        if (aSelf != bSelf) {
+          return aSelf ? -1 : 1;
+        }
+        return a.user.displayName.toLowerCase().compareTo(
               b.user.displayName.toLowerCase(),
-            ),
-      );
+            );
+      });
       String? selected;
       if (list.isNotEmpty) {
         final idx = list.indexWhere((e) => e.user.id == authUserId);
@@ -159,6 +175,7 @@ class _ShiftScheduleDialogState extends State<_ShiftScheduleDialog> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final authUserId = context.watch<AuthProvider>().user?.id;
 
     final maxW = MediaQuery.sizeOf(context).width - 48;
     final dialogWidth = math.min(400.0, math.max(280.0, maxW));
@@ -194,9 +211,7 @@ class _ShiftScheduleDialogState extends State<_ShiftScheduleDialog> {
               ),
               if (_loading)
                 Expanded(
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 )
               else if (_errorMessage != null)
                 Expanded(
@@ -257,7 +272,9 @@ class _ShiftScheduleDialogState extends State<_ShiftScheduleDialog> {
                           .map(
                             (e) => DropdownMenuItem<String>(
                               value: e.user.id,
-                              child: Text(e.user.displayName),
+                              child: Text(
+                                _schedulePickerLabel(e, authUserId, l10n),
+                              ),
                             ),
                           )
                           .toList(),
@@ -280,10 +297,7 @@ class _ShiftScheduleDialogState extends State<_ShiftScheduleDialog> {
                       final sel = _selected;
                       final shift = sel?.shiftsByWeekday[weekday];
                       final timeStr = shift != null
-                          ? _formatShiftRange(
-                              shift.startTime,
-                              shift.endTime,
-                            )
+                          ? _formatShiftRange(shift.startTime, shift.endTime)
                           : '—';
 
                       return Padding(

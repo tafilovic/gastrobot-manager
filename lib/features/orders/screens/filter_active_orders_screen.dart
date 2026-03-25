@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:gastrobotmanager/core/currency/currency_provider.dart';
+import 'package:gastrobotmanager/core/currency/venue_currency_format.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -240,7 +240,8 @@ class _FilterActiveOrdersScreenState extends State<FilterActiveOrdersScreen> {
   }
 
   Widget _buildBillRangeSlider(AppLocalizations l10n) {
-    final currency = context.watch<CurrencyProvider>();
+    context.watch<AuthProvider>();
+    final venueCurrency = context.read<AuthProvider>().currentVenueCurrency;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,14 +263,22 @@ class _FilterActiveOrdersScreenState extends State<FilterActiveOrdersScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              currency.formatInt(_billMin.round()),
+              formatVenueIntForDisplay(
+                context,
+                _billMin.round(),
+                venueCurrency,
+              ),
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.textSecondary,
               ),
             ),
             Text(
-              currency.formatInt(_billMax.round()),
+              formatVenueIntForDisplay(
+                context,
+                _billMax.round(),
+                venueCurrency,
+              ),
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.textSecondary,

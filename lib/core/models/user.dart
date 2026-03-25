@@ -98,6 +98,47 @@ class User {
     brandOwnerId: brandOwnerId,
   );
 
+  User copyWithVenueUsers(List<VenueUser> venueUsers) => User(
+        id: id,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        role: role,
+        venueUsers: venueUsers,
+        profileImageUrl: profileImageUrl,
+        phoneNumber: phoneNumber,
+        organizationId: organizationId,
+        isVerified: isVerified,
+        isSmsVerified: isSmsVerified,
+        lastTableId: lastTableId,
+        brandOwnerId: brandOwnerId,
+      );
+
+  /// Fills missing `venue` / `venue.currency` on [incoming] from [previous]
+  /// (e.g. after GET /users/me), so login currency is not lost.
+  static User mergePreservingVenueFromPrevious(User incoming, User? previous) {
+    if (previous == null ||
+        previous.venueUsers.isEmpty ||
+        incoming.venueUsers.isEmpty) {
+      return incoming;
+    }
+    final merged = incoming.venueUsers.map((vu) {
+      VenueUser? match;
+      for (final p in previous.venueUsers) {
+        if (vu.id.isNotEmpty && vu.id == p.id) {
+          match = p;
+          break;
+        }
+        if (vu.venueId.isNotEmpty && vu.venueId == p.venueId) {
+          match = p;
+          break;
+        }
+      }
+      return vu.withVenueMetadataFromPrevious(match);
+    }).toList();
+    return incoming.copyWithVenueUsers(merged);
+  }
+
   static const _omit = Object();
 
   static ProfileType _roleToProfileType(String value) {
