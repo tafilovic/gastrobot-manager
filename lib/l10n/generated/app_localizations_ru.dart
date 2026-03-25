@@ -86,6 +86,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileDrinksList => 'СПИСОК НАПИТКОВ';
 
   @override
+  String get profileShiftScheduleLabel => 'ГРАФИК СМЕН';
+
+  @override
+  String get profileShiftScheduleView => 'Смотреть';
+
+  @override
+  String get shiftScheduleDialogTitle => 'График смен';
+
+  @override
+  String get shiftScheduleLoadError => 'Не удалось загрузить расписание.';
+
+  @override
+  String get shiftScheduleEmpty => 'Нет данных расписания.';
+
+  @override
+  String get shiftScheduleRetry => 'Повторить';
+
+  @override
   String get profileLogout => 'ВЫЙТИ';
 
   @override

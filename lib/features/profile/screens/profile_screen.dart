@@ -17,6 +17,7 @@ import 'package:gastrobotmanager/features/profile/screens/profile_image_dialog.d
 import 'package:gastrobotmanager/features/profile/widgets/currency_selection_dialog.dart';
 import 'package:gastrobotmanager/features/profile/widgets/language_selection_dialog.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
+import 'package:gastrobotmanager/features/staff_schedules/widgets/shift_schedule_dialog.dart';
 
 /// Profile screen: header with avatar, user details, settings rows, logout with confirmation.
 /// Loads fresh user data when the screen is opened.
@@ -69,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.person_outline,
               label: l10n.profileLabelName,
               value: user.name,
-              valueColor: AppColors.accent,
             ),
             const Divider(height: 1, indent: 56),
             ProfileRow(
@@ -95,6 +95,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const Divider(height: 1, indent: 56),
+            if (auth.currentVenueId != null) ...[
+              ProfileRow(
+                icon: Icons.calendar_today,
+                label: l10n.profileShiftScheduleLabel,
+                leading: shiftScheduleProfileLeadingIcon(),
+                onTap: () => showShiftScheduleDialog(context),
+                trailing: TextButton(
+                  onPressed: () => showShiftScheduleDialog(context),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.accent,
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    l10n.profileShiftScheduleView,
+                    style: const TextStyle(
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+              const Divider(height: 1, indent: 56),
+            ],
             ProfileRowWithSubtitle(
               icon: Icons.notifications_outlined,
               label: l10n.profileReservationReminder,
@@ -107,7 +131,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.language,
               label: l10n.profileLabelLanguage,
               value: localeProvider.currentLocaleName,
-              valueColor: AppColors.accent,
               onTap: () => LanguageSelectionDialog.show(context),
             ),
             const Divider(height: 1, indent: 56),
@@ -115,7 +138,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.payments_outlined,
               label: l10n.profileLabelCurrency,
               value: currencyProvider.selected.code,
-              valueColor: AppColors.accent,
               onTap: () => CurrencySelectionDialog.show(context),
             ),
             const SizedBox(height: 32),

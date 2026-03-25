@@ -86,6 +86,24 @@ class AppLocalizationsSr extends AppLocalizations {
   String get profileDrinksList => 'LISTA PIĆA';
 
   @override
+  String get profileShiftScheduleLabel => 'RASPORED SMENA';
+
+  @override
+  String get profileShiftScheduleView => 'Pogledaj';
+
+  @override
+  String get shiftScheduleDialogTitle => 'Raspored smena';
+
+  @override
+  String get shiftScheduleLoadError => 'Ne može da se učita raspored.';
+
+  @override
+  String get shiftScheduleEmpty => 'Nema podataka o rasporedu.';
+
+  @override
+  String get shiftScheduleRetry => 'Pokušaj ponovo';
+
+  @override
   String get profileLogout => 'IZLOGUJ SE';
 
   @override

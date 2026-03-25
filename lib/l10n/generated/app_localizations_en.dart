@@ -86,6 +86,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileDrinksList => 'DRINKS LIST';
 
   @override
+  String get profileShiftScheduleLabel => 'SHIFT SCHEDULE';
+
+  @override
+  String get profileShiftScheduleView => 'View';
+
+  @override
+  String get shiftScheduleDialogTitle => 'Shift schedule';
+
+  @override
+  String get shiftScheduleLoadError => 'Could not load schedule.';
+
+  @override
+  String get shiftScheduleEmpty => 'No schedule data.';
+
+  @override
+  String get shiftScheduleRetry => 'Try again';
+
+  @override
   String get profileLogout => 'LOG OUT';
 
   @override

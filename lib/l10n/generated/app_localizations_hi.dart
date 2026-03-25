@@ -86,6 +86,24 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileDrinksList => 'पेय सूची';
 
   @override
+  String get profileShiftScheduleLabel => 'शिफ्ट अनुसूची';
+
+  @override
+  String get profileShiftScheduleView => 'देखें';
+
+  @override
+  String get shiftScheduleDialogTitle => 'शिफ्ट अनुसूची';
+
+  @override
+  String get shiftScheduleLoadError => 'अनुसूची लोड नहीं हो सकी।';
+
+  @override
+  String get shiftScheduleEmpty => 'कोई अनुसूची डेटा नहीं।';
+
+  @override
+  String get shiftScheduleRetry => 'पुनः प्रयास करें';
+
+  @override
   String get profileLogout => 'लॉग आउट';
 
   @override

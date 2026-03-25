@@ -31,8 +31,9 @@ class ProfileRowWithSubtitle extends StatelessWidget {
             label,
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
+              color: AppColors.accent,
             ),
           ),
           const SizedBox(height: 2),
@@ -49,7 +50,13 @@ class ProfileRowWithSubtitle extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(value, style: const TextStyle(color: AppColors.textPrimary)),
+          Text(
+            value,
+            style: const TextStyle(
+              color: AppColors.accent,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ),

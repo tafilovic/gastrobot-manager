@@ -42,6 +42,8 @@ import 'package:gastrobotmanager/features/reservations/providers/reservations_pr
 import 'package:gastrobotmanager/features/regions/data/regions_remote.dart';
 import 'package:gastrobotmanager/features/regions/domain/repositories/regions_api.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
+import 'package:gastrobotmanager/features/staff_schedules/data/staff_schedules_remote.dart';
+import 'package:gastrobotmanager/features/staff_schedules/domain/repositories/staff_schedules_api.dart';
 import 'package:gastrobotmanager/features/reservations/data/confirmed_reservations_remote.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
@@ -177,6 +179,11 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
             widget.prefs,
             c.read<LocaleProvider>(),
           ),
+        ),
+
+        // Staff schedules (profile: shift calendar)
+        Provider<StaffSchedulesApi>(
+          create: (_) => StaffSchedulesRemote(_authenticatedDio),
         ),
 
         // Profile

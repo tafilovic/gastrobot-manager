@@ -45,7 +45,8 @@ class ProfileHeader extends StatelessWidget {
           Text(
             user.name,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.accent,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -53,7 +54,8 @@ class ProfileHeader extends StatelessWidget {
           Text(
             user.email,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textMuted,
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.w500,
                 ),
             textAlign: TextAlign.center,
           ),

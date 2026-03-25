@@ -264,6 +264,42 @@ abstract class AppLocalizations {
   /// **'LISTA PIĆA'**
   String get profileDrinksList;
 
+  /// No description provided for @profileShiftScheduleLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'RASPORED SMENA'**
+  String get profileShiftScheduleLabel;
+
+  /// No description provided for @profileShiftScheduleView.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pogledaj'**
+  String get profileShiftScheduleView;
+
+  /// No description provided for @shiftScheduleDialogTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Raspored smena'**
+  String get shiftScheduleDialogTitle;
+
+  /// No description provided for @shiftScheduleLoadError.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ne može da se učita raspored.'**
+  String get shiftScheduleLoadError;
+
+  /// No description provided for @shiftScheduleEmpty.
+  ///
+  /// In sr, this message translates to:
+  /// **'Nema podataka o rasporedu.'**
+  String get shiftScheduleEmpty;
+
+  /// No description provided for @shiftScheduleRetry.
+  ///
+  /// In sr, this message translates to:
+  /// **'Pokušaj ponovo'**
+  String get shiftScheduleRetry;
+
   /// No description provided for @profileLogout.
   ///
   /// In sr, this message translates to:

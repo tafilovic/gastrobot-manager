@@ -87,6 +87,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profileDrinksList => 'GETRÄNKELISTE';
 
   @override
+  String get profileShiftScheduleLabel => 'SCHICHTPLAN';
+
+  @override
+  String get profileShiftScheduleView => 'Ansehen';
+
+  @override
+  String get shiftScheduleDialogTitle => 'Schichtplan';
+
+  @override
+  String get shiftScheduleLoadError =>
+      'Schichtplan konnte nicht geladen werden.';
+
+  @override
+  String get shiftScheduleEmpty => 'Keine Schichtplandaten.';
+
+  @override
+  String get shiftScheduleRetry => 'Erneut versuchen';
+
+  @override
   String get profileLogout => 'ABMELDEN';
 
   @override

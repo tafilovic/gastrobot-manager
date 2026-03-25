@@ -86,6 +86,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileDrinksList => 'LISTA DE BEBIDAS';
 
   @override
+  String get profileShiftScheduleLabel => 'HORARIO DE TURNOS';
+
+  @override
+  String get profileShiftScheduleView => 'Ver';
+
+  @override
+  String get shiftScheduleDialogTitle => 'Horario de turnos';
+
+  @override
+  String get shiftScheduleLoadError => 'No se pudo cargar el horario.';
+
+  @override
+  String get shiftScheduleEmpty => 'Sin datos de horario.';
+
+  @override
+  String get shiftScheduleRetry => 'Reintentar';
+
+  @override
   String get profileLogout => 'CERRAR SESIÓN';
 
   @override

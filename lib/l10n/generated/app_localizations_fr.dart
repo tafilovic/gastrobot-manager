@@ -86,6 +86,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileDrinksList => 'LISTE DES BOISSONS';
 
   @override
+  String get profileShiftScheduleLabel => 'PLANNING DES SHIFTS';
+
+  @override
+  String get profileShiftScheduleView => 'Voir';
+
+  @override
+  String get shiftScheduleDialogTitle => 'Planning des shifts';
+
+  @override
+  String get shiftScheduleLoadError => 'Impossible de charger le planning.';
+
+  @override
+  String get shiftScheduleEmpty => 'Aucune donnée de planning.';
+
+  @override
+  String get shiftScheduleRetry => 'Réessayer';
+
+  @override
   String get profileLogout => 'DÉCONNEXION';
 
   @override

@@ -86,6 +86,24 @@ class AppLocalizationsNe extends AppLocalizations {
   String get profileDrinksList => 'पेय सूची';
 
   @override
+  String get profileShiftScheduleLabel => 'शिफ्ट तालिका';
+
+  @override
+  String get profileShiftScheduleView => 'हेर्नुहोस्';
+
+  @override
+  String get shiftScheduleDialogTitle => 'शिफ्ट तालिका';
+
+  @override
+  String get shiftScheduleLoadError => 'तालिका लोड गर्न सकिएन।';
+
+  @override
+  String get shiftScheduleEmpty => 'कुनै तालिका डेटा छैन।';
+
+  @override
+  String get shiftScheduleRetry => 'पुनः प्रयास गर्नुहोस्';
+
+  @override
   String get profileLogout => 'लगआउट';
 
   @override

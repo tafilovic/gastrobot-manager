@@ -86,6 +86,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get profileDrinksList => 'LISTA BEVANDE';
 
   @override
+  String get profileShiftScheduleLabel => 'TURNAZIONE';
+
+  @override
+  String get profileShiftScheduleView => 'Vedi';
+
+  @override
+  String get shiftScheduleDialogTitle => 'Turnazione';
+
+  @override
+  String get shiftScheduleLoadError => 'Impossibile caricare i turni.';
+
+  @override
+  String get shiftScheduleEmpty => 'Nessun dato sui turni.';
+
+  @override
+  String get shiftScheduleRetry => 'Riprova';
+
+  @override
   String get profileLogout => 'ESCI';
 
   @override
