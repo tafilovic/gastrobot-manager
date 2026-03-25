@@ -73,7 +73,7 @@ class _TablesScreenState extends State<TablesScreen> {
               child: Builder(
                 builder: (context) {
                   final count = provider.tables.length;
-                  final full = l10n.tablesCount(count);
+                  final full = l10n.zonesCount(count);
                   final suffix = full.replaceFirst(RegExp(r'^\d+'), '');
                   return Text.rich(
                     TextSpan(
@@ -182,7 +182,8 @@ class _TablesGroupedListState extends State<_TablesGroupedList> {
               height: MediaQuery.sizeOf(context).height * 0.3,
               child: Center(
                 child: Text(
-                  l10n.tablesCount(0),
+                  l10n.acceptSheetNoTables,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(color: AppColors.textMuted),
                 ),
               ),

@@ -202,8 +202,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tablesOrder => 'ЗАКАЗАТЬ';
 
   @override
-  String tablesCount(int count) {
-    return '$count столов';
+  String zonesCount(int count) {
+    return '$count зон';
   }
 
   @override

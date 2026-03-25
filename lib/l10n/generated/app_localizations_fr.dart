@@ -203,8 +203,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tablesOrder => 'COMMANDER';
 
   @override
-  String tablesCount(int count) {
-    return '$count tables';
+  String zonesCount(int count) {
+    return '$count zones';
   }
 
   @override

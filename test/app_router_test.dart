@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
+import 'package:gastrobotmanager/features/auth/models/register_request.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/auth/services/auth_service.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
@@ -66,6 +67,12 @@ class _DummyAuthApi implements AuthApi {
         refreshToken: 'refresh',
       ),
     );
+  }
+
+  @override
+  Future<void> register(RegisterRequest request) {
+    // TODO: implement register
+    throw UnimplementedError();
   }
 }
 

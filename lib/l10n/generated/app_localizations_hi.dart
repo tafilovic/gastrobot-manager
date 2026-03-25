@@ -202,8 +202,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tablesOrder => 'ऑर्डर करें';
 
   @override
-  String tablesCount(int count) {
-    return '$count टेबल';
+  String zonesCount(int count) {
+    return '$count ज़ोन';
   }
 
   @override

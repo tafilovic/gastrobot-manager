@@ -492,11 +492,11 @@ abstract class AppLocalizations {
   /// **'PORUČI'**
   String get tablesOrder;
 
-  /// No description provided for @tablesCount.
+  /// No description provided for @zonesCount.
   ///
   /// In sr, this message translates to:
-  /// **'{count} stolova'**
-  String tablesCount(int count);
+  /// **'{count} zona'**
+  String zonesCount(int count);
 
   /// No description provided for @tableNumber.
   ///
