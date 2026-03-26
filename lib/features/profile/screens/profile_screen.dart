@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -130,6 +132,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               value: localeProvider.currentLocaleName,
               onTap: () => LanguageSelectionDialog.show(context),
             ),
+            const Divider(height: 1, indent: 56),
+            ProfileRow(
+              icon: Icons.delete_outline,
+              leading: const Icon(
+                Icons.delete_outline,
+                color: AppColors.destructive,
+                size: 24,
+              ),
+              label: l10n.profileDeleteAccount,
+              labelStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+                color: AppColors.destructive,
+              ),
+              value: l10n.profileDeleteAccountAction,
+              valueColor: AppColors.destructive,
+              onTap: () => _showDeleteAccountDialog(context, profile),
+            ),
             const SizedBox(height: 32),
             if (isWaiter)
               Padding(
@@ -197,4 +218,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     });
   }
+
+  void _showDeleteAccountDialog(BuildContext context, ProfileProvider profile) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.profileDeleteAccount),
+        content: Text(
+          l10n.profileDeleteAccountWarning,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.dialogNo),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.destructive),
+            child: Text(l10n.dialogYes),
+          ),
+        ],
+      ),
+    ).then((confirmed) async {
+      if (confirmed != true || !mounted) return;
+      await _simulateDeleteAccountCallAndLogout(profile);
+    });
+  }
+
+  Future<void> _simulateDeleteAccountCallAndLogout(ProfileProvider profile) async {
+    if (!mounted) return;
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // TODO(stefan): Replace with real delete-account endpoint call.
+      await Future<void>.delayed(const Duration(seconds: 1));
+      await profile.logout();
+      if (!mounted) return;
+      context.go(AppRouteNames.pathLogin);
+    } finally {
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+    }
+  }
+
 }

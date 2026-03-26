@@ -118,6 +118,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileLabelLanguage => 'LANGUAGE';
 
   @override
+  String get profileDeleteAccount => 'DELETE ACCOUNT';
+
+  @override
+  String get profileDeleteAccountAction => 'Click to delete';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'If you delete your profile, it cannot be restored.';
+
+  @override
   String get profileLabelCurrency => 'CURRENCY';
 
   @override

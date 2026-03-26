@@ -118,6 +118,16 @@ class AppLocalizationsHr extends AppLocalizations {
   String get profileLabelLanguage => 'JEZIK';
 
   @override
+  String get profileDeleteAccount => 'OBRIŠI RAČUN';
+
+  @override
+  String get profileDeleteAccountAction => 'Klikni za brisanje';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'Ako obrišete profil, više ga nećete moći vratiti.';
+
+  @override
   String get profileLabelCurrency => 'VALUTA';
 
   @override

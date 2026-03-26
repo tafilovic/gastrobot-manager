@@ -324,6 +324,24 @@ abstract class AppLocalizations {
   /// **'JEZIK'**
   String get profileLabelLanguage;
 
+  /// No description provided for @profileDeleteAccount.
+  ///
+  /// In sr, this message translates to:
+  /// **'OBRIŠI NALOG'**
+  String get profileDeleteAccount;
+
+  /// No description provided for @profileDeleteAccountAction.
+  ///
+  /// In sr, this message translates to:
+  /// **'Klikni za brisanje'**
+  String get profileDeleteAccountAction;
+
+  /// No description provided for @profileDeleteAccountWarning.
+  ///
+  /// In sr, this message translates to:
+  /// **'Ako obrišete profil, više nećete moći da ga povratite.'**
+  String get profileDeleteAccountWarning;
+
   /// No description provided for @profileLabelCurrency.
   ///
   /// In sr, this message translates to:

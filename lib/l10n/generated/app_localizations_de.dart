@@ -120,6 +120,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profileLabelLanguage => 'SPRACHE';
 
   @override
+  String get profileDeleteAccount => 'KONTO LÖSCHEN';
+
+  @override
+  String get profileDeleteAccountAction => 'Zum Löschen tippen';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'Wenn Sie Ihr Profil löschen, kann es nicht wiederhergestellt werden.';
+
+  @override
   String get profileLabelCurrency => 'WÄHRUNG';
 
   @override

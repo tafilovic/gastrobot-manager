@@ -118,6 +118,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileLabelLanguage => 'भाषा';
 
   @override
+  String get profileDeleteAccount => 'खाता हटाएं';
+
+  @override
+  String get profileDeleteAccountAction => 'हटाने के लिए टैप करें';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'यदि आप अपनी प्रोफ़ाइल हटाते हैं, तो उसे पुनर्स्थापित नहीं किया जा सकेगा।';
+
+  @override
   String get profileLabelCurrency => 'मुद्रा';
 
   @override

@@ -118,6 +118,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileLabelLanguage => 'ЯЗЫК';
 
   @override
+  String get profileDeleteAccount => 'УДАЛИТЬ АККАУНТ';
+
+  @override
+  String get profileDeleteAccountAction => 'Нажмите, чтобы удалить';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'Если вы удалите профиль, его нельзя будет восстановить.';
+
+  @override
   String get profileLabelCurrency => 'ВАЛЮТА';
 
   @override

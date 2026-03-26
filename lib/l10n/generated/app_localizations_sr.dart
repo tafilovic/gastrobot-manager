@@ -118,6 +118,16 @@ class AppLocalizationsSr extends AppLocalizations {
   String get profileLabelLanguage => 'JEZIK';
 
   @override
+  String get profileDeleteAccount => 'OBRIŠI NALOG';
+
+  @override
+  String get profileDeleteAccountAction => 'Klikni za brisanje';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'Ako obrišete profil, više nećete moći da ga povratite.';
+
+  @override
   String get profileLabelCurrency => 'VALUTA';
 
   @override

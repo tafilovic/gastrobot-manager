@@ -119,6 +119,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileLabelLanguage => 'LANGUE';
 
   @override
+  String get profileDeleteAccount => 'SUPPRIMER LE COMPTE';
+
+  @override
+  String get profileDeleteAccountAction => 'Appuyer pour supprimer';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'Si vous supprimez votre profil, il ne pourra pas être restauré.';
+
+  @override
   String get profileLabelCurrency => 'DEVISE';
 
   @override

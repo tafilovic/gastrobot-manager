@@ -118,6 +118,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileLabelLanguage => 'IDIOMA';
 
   @override
+  String get profileDeleteAccount => 'ELIMINAR CUENTA';
+
+  @override
+  String get profileDeleteAccountAction => 'Toca para eliminar';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'Si eliminas tu perfil, no se podrá restaurar.';
+
+  @override
   String get profileLabelCurrency => 'MONEDA';
 
   @override

@@ -23,7 +23,7 @@ class ProfileProvider extends ChangeNotifier {
   User? get user => _authProvider.user;
 
   /// Signs out and clears session.
-  void logout() => _authProvider.logout();
+  Future<void> logout() => _authProvider.logout();
 
   @override
   void dispose() {

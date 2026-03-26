@@ -118,6 +118,16 @@ class AppLocalizationsNe extends AppLocalizations {
   String get profileLabelLanguage => 'भाषा';
 
   @override
+  String get profileDeleteAccount => 'खाता मेटाउनुहोस्';
+
+  @override
+  String get profileDeleteAccountAction => 'मेटाउन ट्याप गर्नुहोस्';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'यदि तपाईंले आफ्नो प्रोफाइल मेटाउनुभयो भने, यसलाई पुनर्स्थापना गर्न सकिँदैन।';
+
+  @override
   String get profileLabelCurrency => 'मुद्रा';
 
   @override
