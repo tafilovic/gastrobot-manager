@@ -10,7 +10,7 @@ class ApiConfig {
   static const String _env = String.fromEnvironment('ENV', defaultValue: '');
 
   static const String _baseUrlDev = 'https://devapirestobot.brrm.eu';
-  static const String _baseUrlProd = 'https://apirestobot.brrm.eu';
+  static const String _baseUrlProd = 'https://api.gastro-bot.eu';
 
   /// Optional `Authorization: Bearer …` for POST `/v1/users/register`.
   /// Build: `--dart-define=REGISTER_BEARER=your_token`
@@ -20,7 +20,7 @@ class ApiConfig {
   );
 
   static String get baseUrl {
-    return _baseUrlDev;
+    //return _baseUrlDev;
     if (_env == 'prod') return _baseUrlProd;
     if (_env == 'dev') return _baseUrlDev;
     return kDebugMode ? _baseUrlDev : _baseUrlProd;
