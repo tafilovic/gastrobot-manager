@@ -10,4 +10,8 @@ abstract class ProfileApi {
 
   /// Uploads profile image. Returns the new profile image URL on success.
   Future<String?> updateProfileImage(File imageFile);
+
+  /// Deletes the current user (DELETE /v1/users/me). Success when response is 2xx.
+  /// Throws [ProfileException] on failure.
+  Future<void> deleteAccount();
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +7,7 @@ import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/providers/profile_provider.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_header.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_row.dart';
@@ -60,132 +59,136 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-            ProfileHeader(
-              user: user,
-              onEditPhoto: () => ProfileImageDialog.show(context, user),
-            ),
-            const Divider(height: 1),
-            ProfileRow(
-              icon: Icons.person_outline,
-              label: l10n.profileLabelName,
-              value: user.name,
-            ),
-            const Divider(height: 1, indent: 56),
-            ProfileRow(
-              icon: Icons.email_outlined,
-              label: l10n.profileLabelEmail,
-              value: user.email,
-            ),
-            const Divider(height: 1, indent: 56),
-            ProfileRow(
-              icon: Icons.lock_outline,
-              label: l10n.profileLabelPassword,
-              trailing: TextButton(
-                onPressed: () {
-                  // TODO: change password flow
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.accent,
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(l10n.profileChangePassword),
+              ProfileHeader(
+                user: user,
+                onEditPhoto: () => ProfileImageDialog.show(context, user),
               ),
-            ),
-            const Divider(height: 1, indent: 56),
-            if (auth.currentVenueId != null) ...[
+              const Divider(height: 1),
               ProfileRow(
-                icon: Icons.calendar_today,
-                label: l10n.profileShiftScheduleLabel,
-                leading: shiftScheduleProfileLeadingIcon(),
-                onTap: () => showShiftScheduleDialog(context),
+                icon: Icons.person_outline,
+                label: l10n.profileLabelName,
+                value: user.name,
+              ),
+              const Divider(height: 1, indent: 56),
+              ProfileRow(
+                icon: Icons.email_outlined,
+                label: l10n.profileLabelEmail,
+                value: user.email,
+              ),
+              const Divider(height: 1, indent: 56),
+              ProfileRow(
+                icon: Icons.lock_outline,
+                label: l10n.profileLabelPassword,
                 trailing: TextButton(
-                  onPressed: () => showShiftScheduleDialog(context),
+                  onPressed: () {
+                    // TODO: change password flow
+                  },
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.accent,
                     padding: EdgeInsets.zero,
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: Text(
-                    l10n.profileShiftScheduleView,
-                    style: const TextStyle(
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
+                  child: Text(l10n.profileChangePassword),
                 ),
               ),
               const Divider(height: 1, indent: 56),
-            ],
-            ProfileRowWithSubtitle(
-              icon: Icons.notifications_outlined,
-              label: l10n.profileReservationReminder,
-              subtitle: l10n.profileReservationReminderHint,
-              value: l10n.profileReservationReminderValue,
-              trailing: Icon(Icons.more_horiz, color: AppColors.textMuted, size: 20),
-            ),
-            const Divider(height: 1, indent: 56),
-            ProfileRow(
-              icon: Icons.language,
-              label: l10n.profileLabelLanguage,
-              value: localeProvider.currentLocaleName,
-              onTap: () => LanguageSelectionDialog.show(context),
-            ),
-            const Divider(height: 1, indent: 56),
-            ProfileRow(
-              icon: Icons.delete_outline,
-              leading: const Icon(
-                Icons.delete_outline,
-                color: AppColors.destructive,
-                size: 24,
+              if (auth.currentVenueId != null) ...[
+                ProfileRow(
+                  icon: Icons.calendar_today,
+                  label: l10n.profileShiftScheduleLabel,
+                  leading: shiftScheduleProfileLeadingIcon(),
+                  onTap: () => showShiftScheduleDialog(context),
+                  trailing: TextButton(
+                    onPressed: () => showShiftScheduleDialog(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.accent,
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      l10n.profileShiftScheduleView,
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+                const Divider(height: 1, indent: 56),
+              ],
+              ProfileRowWithSubtitle(
+                icon: Icons.notifications_outlined,
+                label: l10n.profileReservationReminder,
+                subtitle: l10n.profileReservationReminderHint,
+                value: l10n.profileReservationReminderValue,
+                trailing: Icon(
+                  Icons.more_horiz,
+                  color: AppColors.textMuted,
+                  size: 20,
+                ),
               ),
-              label: l10n.profileDeleteAccount,
-              labelStyle: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-                color: AppColors.destructive,
+              const Divider(height: 1, indent: 56),
+              ProfileRow(
+                icon: Icons.language,
+                label: l10n.profileLabelLanguage,
+                value: localeProvider.currentLocaleName,
+                onTap: () => LanguageSelectionDialog.show(context),
               ),
-              value: l10n.profileDeleteAccountAction,
-              valueColor: AppColors.destructive,
-              onTap: () => _showDeleteAccountDialog(context, profile),
-            ),
-            const SizedBox(height: 32),
-            if (isWaiter)
+              const Divider(height: 1, indent: 56),
+              ProfileRow(
+                icon: Icons.delete_outline,
+                leading: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.destructive,
+                  size: 24,
+                ),
+                label: l10n.profileDeleteAccount,
+                labelStyle: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: AppColors.destructive,
+                ),
+                value: l10n.profileDeleteAccountAction,
+                valueColor: AppColors.destructive,
+                onTap: () => _showDeleteAccountDialog(context, profile),
+              ),
+              const SizedBox(height: 32),
+              if (isWaiter)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => context.pushNamed(AppRouteNames.drinks),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.accent,
+                        side: BorderSide(color: AppColors.accent),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      icon: const Icon(Icons.local_bar),
+                      label: Text(l10n.profileDrinksList),
+                    ),
+                  ),
+                ),
+              if (isWaiter) const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: SizedBox(
                   width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () => context.pushNamed(AppRouteNames.drinks),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.accent,
-                      side: BorderSide(color: AppColors.accent),
+                  child: FilledButton(
+                    onPressed: () => _showLogoutDialog(context, profile),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.destructive,
+                      foregroundColor: AppColors.onDestructive,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    icon: const Icon(Icons.local_bar),
-                    label: Text(l10n.profileDrinksList),
+                    child: Text(l10n.profileLogout),
                   ),
                 ),
               ),
-            if (isWaiter) const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => _showLogoutDialog(context, profile),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.destructive,
-                    foregroundColor: AppColors.onDestructive,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: Text(l10n.profileLogout),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -207,7 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: FilledButton.styleFrom(backgroundColor: AppColors.destructive),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.destructive,
+            ),
             child: Text(l10n.logoutConfirm),
           ),
         ],
@@ -225,9 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.profileDeleteAccount),
-        content: Text(
-          l10n.profileDeleteAccountWarning,
-        ),
+        content: Text(l10n.profileDeleteAccountWarning),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -235,18 +238,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: FilledButton.styleFrom(backgroundColor: AppColors.destructive),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.destructive,
+            ),
             child: Text(l10n.dialogYes),
           ),
         ],
       ),
     ).then((confirmed) async {
       if (confirmed != true || !mounted) return;
-      await _simulateDeleteAccountCallAndLogout(profile);
+      await _deleteAccountAndGoToLogin(profile);
     });
   }
 
-  Future<void> _simulateDeleteAccountCallAndLogout(ProfileProvider profile) async {
+  Future<void> _deleteAccountAndGoToLogin(ProfileProvider profile) async {
     if (!mounted) return;
     showDialog<void>(
       context: context,
@@ -255,16 +260,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     try {
-      // TODO(stefan): Replace with real delete-account endpoint call.
-      await Future<void>.delayed(const Duration(seconds: 1));
-      await profile.logout();
+      await profile.deleteAccount();
       if (!mounted) return;
       context.go(AppRouteNames.pathLogin);
+    } on ProfileException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
     } finally {
       if (mounted) {
         Navigator.of(context, rootNavigator: true).pop();
       }
     }
   }
-
 }

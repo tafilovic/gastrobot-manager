@@ -53,4 +53,10 @@ class ProfileProvider extends ChangeNotifier {
       await _authProvider.updateUser(user);
     }
   }
+
+  /// Deletes the account on the server (DELETE /v1/users/me), then signs out locally.
+  Future<void> deleteAccount() async {
+    await _profileApi.deleteAccount();
+    await logout();
+  }
 }

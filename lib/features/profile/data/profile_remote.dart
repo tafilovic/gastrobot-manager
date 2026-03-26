@@ -7,7 +7,7 @@ import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
 
-/// Profile API implementation. GET /v1/users/me, PATCH /users/profile-image.
+/// Profile API implementation. GET /v1/users/me, DELETE /v1/users/me, PATCH /users/profile-image.
 class ProfileRemote implements ProfileApi {
   ProfileRemote([Dio? dio])
       : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
@@ -72,6 +72,21 @@ class ProfileRemote implements ProfileApi {
               e.message ??
               'Upload failed'
           : e.message ?? 'Upload failed');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      final response = await _dio.delete<void>('/v1/users/me');
+      final code = response.statusCode;
+      if (code == null || code < 200 || code >= 300) {
+        throw ProfileException('Account deletion failed');
+      }
+    } on DioException catch (e) {
+      final data = e.response?.data;
+      final msg = data is Map ? data['message'] as String? : null;
+      throw ProfileException(msg ?? e.message ?? 'Account deletion failed');
     }
   }
 }
