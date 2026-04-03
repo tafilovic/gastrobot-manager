@@ -5,16 +5,20 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/profile/utils/profile_image_url.dart';
 import 'package:gastrobotmanager/features/profile/widgets/profile_avatar.dart';
 
-/// Profile header: avatar with edit button, name, email.
+/// Profile header: avatar with edit button, name, email, optional app [versionName].
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
     super.key,
     required this.user,
     required this.onEditPhoto,
+    this.versionName,
   });
 
   final User user;
   final VoidCallback onEditPhoto;
+
+  /// User-facing app version (e.g. Android `versionName`); shown under [user.email].
+  final String? versionName;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +63,17 @@ class ProfileHeader extends StatelessWidget {
                 ),
             textAlign: TextAlign.center,
           ),
+          if (versionName != null && versionName!.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              versionName!,
+              style: TextStyle(
+                color: Colors.black.withValues(alpha: 0.5),
+                fontSize: 12,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ],
       ),
     );

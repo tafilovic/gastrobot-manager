@@ -116,7 +116,7 @@ Output: `build/windows/x64/runner/Release/` (includes the executable and DLLs).
 version: 1.0.2+6
 ```
 
-- **`1.0.2`** — user-visible **version name** (Android `versionName`, iOS short version, in-app profile line, etc.).
+- **`1.0.2`** — user-visible **version name** (Android `versionName`, iOS short version, shown in the profile header, etc.).
 - **`6`** — **build number** (Android `versionCode`; must increase for each new Play Store upload).
 
 After changing it, commit the file and run a normal **`flutter build …`** for each platform you ship. **Do not** hand-edit `versionName` / `versionCode` in Gradle or Xcode for routine releases—Flutter propagates **`pubspec.yaml`** into native builds.
@@ -125,7 +125,7 @@ After changing it, commit the file and run a normal **`flutter build …`** for 
 
 ---
 
-The profile screen shows **`PackageInfo.fromPlatform().version`** (user-facing version string). That matches **Android `versionName`** concept on each platform; the **`+N` build number** from `pubspec.yaml` is exposed separately as **`PackageInfo.buildNumber`** (not shown in that UI line).
+The profile screen shows **`PackageInfo.fromPlatform().version`** under the header (avatar, name, email) via **`ProfileHeader`**. That matches **Android `versionName`** on each platform; the **`+N` build number** from `pubspec.yaml` is **`PackageInfo.buildNumber`** (not shown in the profile UI).
 
 | Platform | Source of `version` |
 |----------|---------------------|
@@ -134,7 +134,7 @@ The profile screen shows **`PackageInfo.fromPlatform().version`** (user-facing v
 | **macOS** | Same idea as iOS — bundle short version string. |
 | **Windows** | **`ProductVersion`** in the executable’s version resource; the plugin uses the segment **before** `+` when the string looks like `1.0.2+6`. |
 | **Linux** | Reads **`version.json`** under `data/flutter_assets/` next to the binary (Flutter writes it at build from `pubspec`). |
-| **Web** | Loads **`version.json`** served with the app (`flutter build web` generates it). If it cannot be loaded, `version` may be **empty** — the profile line is omitted when empty. |
+| **Web** | Loads **`version.json`** served with the app (`flutter build web` generates it). If it cannot be loaded, `version` may be **empty** — the profile header omits the version line when empty. |
 
 ---
 
