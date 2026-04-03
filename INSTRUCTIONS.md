@@ -106,6 +106,38 @@ Output: `build/windows/x64/runner/Release/` (includes the executable and DLLs).
 
 ---
 
+## App version (`package_info_plus`)
+
+### Where to change the version (recommended)
+
+**Edit the single source of truth in the project root:** **`pubspec.yaml`** → field **`version:`**, format **`name+number`**:
+
+```yaml
+version: 1.0.2+6
+```
+
+- **`1.0.2`** — user-visible **version name** (Android `versionName`, iOS short version, in-app profile line, etc.).
+- **`6`** — **build number** (Android `versionCode`; must increase for each new Play Store upload).
+
+After changing it, commit the file and run a normal **`flutter build …`** for each platform you ship. **Do not** hand-edit `versionName` / `versionCode` in Gradle or Xcode for routine releases—Flutter propagates **`pubspec.yaml`** into native builds.
+
+**Optional (CI or one-off builds without editing the repo):** pass **`--build-name=1.0.3`** and **`--build-number=7`** to `flutter build apk`, `flutter build appbundle`, `flutter build ios`, etc. Those override the **`pubspec.yaml`** values for that build only.
+
+---
+
+The profile screen shows **`PackageInfo.fromPlatform().version`** (user-facing version string). That matches **Android `versionName`** concept on each platform; the **`+N` build number** from `pubspec.yaml` is exposed separately as **`PackageInfo.buildNumber`** (not shown in that UI line).
+
+| Platform | Source of `version` |
+|----------|---------------------|
+| **Android** | **`versionName`** from the built app (Flutter/Gradle; normally the part before `+` in `pubspec.yaml` `version:`). |
+| **iOS** | **`CFBundleShortVersionString`** (Flutter aligns it with the same `version:` name). |
+| **macOS** | Same idea as iOS — bundle short version string. |
+| **Windows** | **`ProductVersion`** in the executable’s version resource; the plugin uses the segment **before** `+` when the string looks like `1.0.2+6`. |
+| **Linux** | Reads **`version.json`** under `data/flutter_assets/` next to the binary (Flutter writes it at build from `pubspec`). |
+| **Web** | Loads **`version.json`** served with the app (`flutter build web` generates it). If it cannot be loaded, `version` may be **empty** — the profile line is omitted when empty. |
+
+---
+
 ## Launcher icons
 
 The app uses **`flutter_launcher_icons`**. The source image is **`assets/icons/launcher_gastrocrew.png`**, and options (Android adaptive background, iOS alpha removal, etc.) live under **`flutter_launcher_icons:`** in **`pubspec.yaml`**.

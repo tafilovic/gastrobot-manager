@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
@@ -28,12 +30,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  /// Android [versionName] / iOS CFBundleShortVersionString from the built app.
+  String? _versionName;
+
+  /// Apple App Store account-deletion requirement; hidden on Android, web, Windows, Linux.
+  bool get _showDeleteAccountButton {
+    if (kIsWeb) return false;
+    return defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS;
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProfileProvider>().refreshUser();
     });
+    _loadPackageInfo();
+  }
+
+  Future<void> _loadPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    if (!mounted) return;
+    setState(() => _versionName = info.version);
   }
 
   @override
@@ -75,6 +94,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: l10n.profileLabelEmail,
                 value: user.email,
               ),
+              if (_versionName != null && _versionName!.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(72, 0, 16, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _versionName!,
+                      style: TextStyle(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
               const Divider(height: 1, indent: 56),
               ProfileRow(
                 icon: Icons.lock_outline,
@@ -135,25 +168,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 value: localeProvider.currentLocaleName,
                 onTap: () => LanguageSelectionDialog.show(context),
               ),
-              const Divider(height: 1, indent: 56),
-              ProfileRow(
-                icon: Icons.delete_outline,
-                leading: const Icon(
-                  Icons.delete_outline,
-                  color: AppColors.destructive,
-                  size: 24,
+              if (_showDeleteAccountButton) ...[
+                const Divider(height: 1, indent: 56),
+                ProfileRow(
+                  icon: Icons.delete_outline,
+                  leading: const Icon(
+                    Icons.delete_outline,
+                    color: AppColors.destructive,
+                    size: 24,
+                  ),
+                  label: l10n.profileDeleteAccount,
+                  labelStyle: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
+                    color: AppColors.destructive,
+                  ),
+                  value: l10n.profileDeleteAccountAction,
+                  valueColor: AppColors.destructive,
+                  onTap: () => _showDeleteAccountDialog(context, profile),
                 ),
-                label: l10n.profileDeleteAccount,
-                labelStyle: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                  color: AppColors.destructive,
-                ),
-                value: l10n.profileDeleteAccountAction,
-                valueColor: AppColors.destructive,
-                onTap: () => _showDeleteAccountDialog(context, profile),
-              ),
+              ],
               const SizedBox(height: 32),
               if (isWaiter)
                 Padding(
