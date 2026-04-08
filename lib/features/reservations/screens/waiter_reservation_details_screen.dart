@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -10,9 +10,9 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 /// Displays reservation info, optional food/drink items, and ODBIJ / PRIHVATI
 /// action buttons.
 class WaiterReservationDetailsScreen extends StatelessWidget {
-  const WaiterReservationDetailsScreen({super.key, required this.order});
+  const WaiterReservationDetailsScreen({super.key, required this.reservation});
 
-  final PendingOrder order;
+  final PendingReservation reservation;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,7 @@ class WaiterReservationDetailsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  order.orderNumber.isNotEmpty
-                      ? order.orderNumber
-                      : order.orderId,
+                  reservation.displayReference,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
@@ -49,7 +47,7 @@ class WaiterReservationDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: WaiterReservationRequestDetailsContent(order: order),
+      body: WaiterReservationRequestDetailsContent(reservation: reservation),
     );
   }
 }

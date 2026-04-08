@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservation_actions_api.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 
@@ -17,14 +19,21 @@ class ReservationsProvider extends ChangeNotifier {
   final ReservationsApi _api;
   final ReservationActionsApi? _reservationActionsApi;
 
-  List<PendingOrder> _requests = [];
+  List<PendingReservation> _waiterRequests = [];
+  List<PendingOrder> _kitchenBarRequests = [];
   bool _isLoading = false;
   String? _error;
   String? _rejectError;
   String? _acceptError;
   String? _currentVenueId;
 
-  List<PendingOrder> get requests => List.unmodifiable(_requests);
+  /// Waiter: pending reservations from GET …/waiter/reservations/pending.
+  List<PendingReservation> get waiterRequests =>
+      List.unmodifiable(_waiterRequests);
+
+  /// Kitchen/bar: pending order-shaped rows with `source=reservation`.
+  List<PendingOrder> get kitchenBarRequests =>
+      List.unmodifiable(_kitchenBarRequests);
   bool get isLoading => _isLoading;
   String? get error => _error;
   String? get rejectError => _rejectError;
@@ -32,6 +41,10 @@ class ReservationsProvider extends ChangeNotifier {
 
   static int _orderByTargetTimeDesc(PendingOrder a, PendingOrder b) {
     return b.targetTime.compareTo(a.targetTime);
+  }
+
+  static int _reservationByStartDesc(PendingReservation a, PendingReservation b) {
+    return b.reservationStart.compareTo(a.reservationStart);
   }
 
   Future<void> loadOnce(String venueId) async {
@@ -48,7 +61,7 @@ class ReservationsProvider extends ChangeNotifier {
   /// Waiter: reject reservation with reason and remove it from pending list on success.
   Future<bool> rejectWaiterReservation({
     required String venueId,
-    required PendingOrder reservation,
+    required PendingReservation reservation,
     required String reason,
   }) async {
     _rejectError = null;
@@ -61,12 +74,11 @@ class ReservationsProvider extends ChangeNotifier {
     try {
       await api.rejectReservation(
         venueId: venueId,
-        reservationId: reservation.orderId,
+        reservationId: reservation.id,
         reason: reason,
       );
-      _requests = _requests
-          .where((r) => r.orderId != reservation.orderId)
-          .toList();
+      _waiterRequests =
+          _waiterRequests.where((r) => r.id != reservation.id).toList();
       notifyListeners();
       return true;
     } catch (e) {
@@ -79,7 +91,7 @@ class ReservationsProvider extends ChangeNotifier {
   /// Waiter: confirm reservation with selected tableIds and remove it from pending list on success.
   Future<bool> acceptWaiterReservation({
     required String venueId,
-    required PendingOrder reservation,
+    required PendingReservation reservation,
     required List<String> tableIds,
     String? note,
   }) async {
@@ -93,13 +105,12 @@ class ReservationsProvider extends ChangeNotifier {
     try {
       await api.acceptReservation(
         venueId: venueId,
-        reservationId: reservation.orderId,
+        reservationId: reservation.id,
         tableIds: tableIds,
         note: note,
       );
-      _requests = _requests
-          .where((r) => r.orderId != reservation.orderId)
-          .toList();
+      _waiterRequests =
+          _waiterRequests.where((r) => r.id != reservation.id).toList();
       notifyListeners();
       return true;
     } catch (e) {
@@ -118,12 +129,21 @@ class ReservationsProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final list = await _api.getRequests(venueId, profileType);
-      _requests = list..sort(_orderByTargetTimeDesc);
+      if (profileType == ProfileType.waiter) {
+        final list = await _api.getWaiterPendingReservations(venueId);
+        _waiterRequests = list..sort(_reservationByStartDesc);
+        _kitchenBarRequests = [];
+      } else {
+        final list =
+            await _api.getKitchenBarReservationRequests(venueId, profileType);
+        _kitchenBarRequests = list..sort(_orderByTargetTimeDesc);
+        _waiterRequests = [];
+      }
       _error = null;
     } catch (e) {
       _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
-      _requests = [];
+      _waiterRequests = [];
+      _kitchenBarRequests = [];
     } finally {
       _isLoading = false;
       notifyListeners();

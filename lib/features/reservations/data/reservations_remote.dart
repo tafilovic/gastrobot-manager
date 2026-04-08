@@ -3,12 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
-import 'package:gastrobotmanager/features/reservations/data/waiter_reservation_json.dart';
 import 'package:gastrobotmanager/features/reservations/domain/errors/reservations_exception.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 
 /// Fetches reservation requests by role.
-/// Waiter pending: GET …/waiter/reservations/pending
+/// Waiter: GET …/waiter/reservations/pending → [PendingReservation]
 /// Kitchen/bar: …/pending?source=reservation
 class ReservationsRemote implements ReservationsApi {
   ReservationsRemote([Dio? dio])
@@ -46,14 +46,43 @@ class ReservationsRemote implements ReservationsApi {
   }
 
   @override
-  Future<List<PendingOrder>> getRequests(
+  Future<List<PendingReservation>> getWaiterPendingReservations(
+    String venueId,
+  ) async {
+    final path = '/venues/$venueId/waiter/reservations/pending';
+    try {
+      final response = await _dio.get<dynamic>(
+        path,
+        options: Options(
+          validateStatus: (int? status) => status != null && status < 400,
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        final data = response.data;
+        final msg = data is Map ? data['message']?.toString() : null;
+        throw ReservationsException(msg ?? 'Failed to load reservations');
+      }
+
+      final raw = _listFromResponse(response.data);
+      return raw
+          .whereType<Map>()
+          .map((e) => PendingReservation.fromJson(Map<String, dynamic>.from(e)))
+          .where((r) => r.id.isNotEmpty)
+          .toList();
+    } on DioException catch (e) {
+      final message = e.response?.data is Map
+          ? (e.response!.data as Map)['message']?.toString()
+          : null;
+      throw ReservationsException(message ?? e.message ?? 'Network error');
+    }
+  }
+
+  @override
+  Future<List<PendingOrder>> getKitchenBarReservationRequests(
     String venueId,
     ProfileType profileType,
   ) async {
-    if (profileType == ProfileType.waiter) {
-      return _getWaiterPendingReservations(venueId);
-    }
-
     final path = _kitchenBarUrl(venueId, profileType);
     try {
       final response = await _dio.get<List<dynamic>>(
@@ -74,42 +103,6 @@ class ReservationsRemote implements ReservationsApi {
 
       return (response.data!)
           .map((e) => PendingOrder.fromJson(e as Map<String, dynamic>))
-          .toList();
-    } on DioException catch (e) {
-      final message = e.response?.data is Map
-          ? (e.response!.data as Map)['message']?.toString()
-          : null;
-      throw ReservationsException(message ?? e.message ?? 'Network error');
-    }
-  }
-
-  Future<List<PendingOrder>> _getWaiterPendingReservations(
-    String venueId,
-  ) async {
-    final path = '/venues/$venueId/waiter/reservations/pending';
-    try {
-      final response = await _dio.get<dynamic>(
-        path,
-        options: Options(
-          validateStatus: (int? status) => status != null && status < 400,
-        ),
-      );
-
-      if (response.statusCode != 200) {
-        final data = response.data;
-        final msg = data is Map ? data['message']?.toString() : null;
-        throw ReservationsException(msg ?? 'Failed to load reservations');
-      }
-
-      final raw = _listFromResponse(response.data);
-      return raw
-          .map(pendingOrderFromWaiterReservationJson)
-          .where(
-            (o) =>
-                o.orderId.isNotEmpty ||
-                o.orderNumber.isNotEmpty ||
-                o.targetTime.isNotEmpty,
-          )
           .toList();
     } on DioException catch (e) {
       final message = e.response?.data is Map

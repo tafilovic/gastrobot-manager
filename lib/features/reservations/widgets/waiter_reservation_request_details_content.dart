@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
@@ -17,11 +17,11 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 class WaiterReservationRequestDetailsContent extends StatelessWidget {
   const WaiterReservationRequestDetailsContent({
     super.key,
-    required this.order,
+    required this.reservation,
     this.onCompleted,
   });
 
-  final PendingOrder order;
+  final PendingReservation reservation;
   final VoidCallback? onCompleted;
 
   @override
@@ -30,29 +30,30 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
     final accentColor = Theme.of(context).colorScheme.primary;
     final locale = Localizations.localeOf(context).languageCode;
 
-    final dateStr =
-        formatReservationDate(order.targetTime, l10n, locale: locale);
-    final timeStr = formatReservationTime(order.targetTime);
+    final dateStr = formatReservationDate(
+      reservation.reservationStart,
+      l10n,
+      locale: locale,
+    );
+    final timeStr = formatReservationTime(reservation.reservationStart);
 
-    final d = order.reservationDetails;
-    final Map<String, dynamic> rd =
-        d is Map ? Map<String, dynamic>.from(d) : <String, dynamic>{};
+    final userName = reservation.user?.fullName;
+    final region = (reservation.regionTitle != null &&
+            reservation.regionTitle!.trim().isNotEmpty)
+        ? reservation.regionTitle!.trim()
+        : 'N/A';
+    final party = reservation.peopleCount;
+    final occasion = reservation.type.trim();
+    final note = reservation.additionalInfo?.trim();
 
-    final userName = rd['userName']?.toString().trim();
-    final regionRaw = rd['region']?.toString().trim();
-    final region =
-        (regionRaw != null && regionRaw.isNotEmpty) ? regionRaw : 'N/A';
-    final partySize = rd['partySize'];
-    final party = partySize is int ? partySize : int.tryParse('$partySize');
-    final occasion = rd['occasion']?.toString().trim();
-    final note = rd['note']?.toString().trim();
+    final hasFood = reservation.items.any((i) => i.type == 'food');
+    final hasDrinks = reservation.items.any((i) => i.type == 'drink');
+    final hasAnyItems = reservation.items.isNotEmpty;
 
-    final hasFood = order.items.any((i) => i.type == 'food');
-    final hasDrinks = order.items.any((i) => i.type == 'drink');
-    final hasAnyItems = order.items.isNotEmpty;
-
-    final foodItems = order.items.where((i) => i.type == 'food').toList();
-    final drinkItems = order.items.where((i) => i.type == 'drink').toList();
+    final foodItems =
+        reservation.items.where((i) => i.type == 'food').toList();
+    final drinkItems =
+        reservation.items.where((i) => i.type == 'drink').toList();
 
     return Column(
       children: [
@@ -80,7 +81,7 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
               ReservationDetailRow(
                 icon: Icons.groups,
                 label: l10n.reservationLabelPartySize,
-                value: party != null ? '$party' : 'N/A',
+                value: '$party',
               ),
               ReservationDetailRow(
                 icon: Icons.restaurant,
@@ -92,9 +93,8 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
               ReservationDetailRow(
                 icon: Icons.celebration,
                 label: l10n.confirmedResOccasion,
-                value: (occasion != null && occasion.isNotEmpty)
-                    ? occasion
-                    : 'N/A',
+                value:
+                    occasion.isNotEmpty ? occasion : 'N/A',
               ),
               ReservationDetailRow(
                 icon: Icons.note,
@@ -185,7 +185,7 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (_) => AcceptReservationSheet(
-        order: order,
+        reservation: reservation,
         onCompleted: () {
           if (context.mounted) _onComplete(context);
         },
@@ -221,7 +221,7 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
       final provider = context.read<ReservationsProvider>();
       final ok = await provider.rejectWaiterReservation(
         venueId: venueId,
-        reservation: order,
+        reservation: reservation,
         reason: reason,
       );
 

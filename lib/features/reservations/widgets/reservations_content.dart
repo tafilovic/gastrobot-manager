@@ -12,12 +12,14 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/screens/confirmed_reservation_details_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservation_details_screen.dart';
+import 'package:gastrobotmanager/features/reservations/screens/waiter_reservation_details_screen.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/kitchen_bar_reservation_request_details_content.dart';
@@ -44,7 +46,8 @@ class ReservationsContent extends StatefulWidget {
 
 class _ReservationsContentState extends State<ReservationsContent> {
   int _selectedTabIndex = 0;
-  PendingOrder? _selectedRequest;
+  PendingReservation? _selectedWaiterRequest;
+  PendingOrder? _selectedKitchenBarRequest;
   ConfirmedReservation? _selectedConfirmed;
   ActiveReservationsFilters? _activeReservationsFilters;
 
@@ -60,7 +63,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final idx = selected.first;
     setState(() {
       _selectedTabIndex = idx;
-      _selectedRequest = null;
+      _selectedWaiterRequest = null;
+      _selectedKitchenBarRequest = null;
       _selectedConfirmed = null;
       if (idx != 1) _activeReservationsFilters = null;
     });
@@ -82,8 +86,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final theme = Theme.of(context);
     final provider = context.watch<ReservationsProvider>();
     final profileType = context.watch<AuthProvider>().profileType;
-    final requests = provider.requests;
-    final totalItems = requests.fold<int>(0, (sum, o) => sum + o.itemCount);
+    final waiterRequests = provider.waiterRequests;
+    final kitchenRequests = provider.kitchenBarRequests;
+    final totalItems =
+        kitchenRequests.fold<int>(0, (sum, o) => sum + o.itemCount);
 
     final confirmedProvider = context.watch<ConfirmedReservationsProvider>();
     final filteredConfirmed = _applyReservationFilters(
@@ -96,7 +102,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final countLabel = profileType == ProfileType.waiter
         ? (_selectedTabIndex == 1
               ? l10n.reservationCountList(filteredConfirmed.length)
-              : l10n.reservationCountList(requests.length))
+              : l10n.reservationCountList(waiterRequests.length))
         : (isBar
               ? l10n.reservationCountDrinks(totalItems)
               : l10n.reservationCountDishes(totalItems));
@@ -110,14 +116,27 @@ class _ReservationsContentState extends State<ReservationsContent> {
     final width = MediaQuery.sizeOf(context).width;
     final useMasterDetail = width >= AppBreakpoints.expanded;
 
-    void onSeeRequestDetails(PendingOrder order) {
+    void onSeeWaiterReservation(PendingReservation reservation) {
       if (useMasterDetail) {
         setState(() {
-          _selectedRequest = order;
+          _selectedWaiterRequest = reservation;
+          _selectedKitchenBarRequest = null;
           _selectedConfirmed = null;
         });
       } else {
-        _openRequestDetails(context, order, provider);
+        _openWaiterReservationDetails(context, reservation, provider);
+      }
+    }
+
+    void onSeeKitchenRequest(PendingOrder order) {
+      if (useMasterDetail) {
+        setState(() {
+          _selectedKitchenBarRequest = order;
+          _selectedWaiterRequest = null;
+          _selectedConfirmed = null;
+        });
+      } else {
+        _openKitchenReservationDetails(context, order, provider);
       }
     }
 
@@ -125,7 +144,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
       if (useMasterDetail) {
         setState(() {
           _selectedConfirmed = reservation;
-          _selectedRequest = null;
+          _selectedWaiterRequest = null;
+          _selectedKitchenBarRequest = null;
         });
       } else {
         Navigator.of(context).push<void>(
@@ -158,7 +178,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
                     profileType,
                     countLabel,
                     itemCountForCard,
-                    onSeeRequestDetails,
+                    onSeeWaiterReservation,
+                    onSeeKitchenRequest,
                     onSeeConfirmedDetails,
                   ),
                 ),
@@ -174,13 +195,12 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                   widget.onStartRefresh();
                                 },
                               ))
-                      : (_selectedRequest == null
-                            ? _buildDetailPlaceholder(theme, l10n)
-                            : _buildRequestDetailPane(
-                                _selectedRequest!,
-                                profileType,
-                                provider,
-                              )),
+                      : _buildRequestDetailPaneForSelection(
+                          theme,
+                          l10n,
+                          profileType,
+                          provider,
+                        ),
                 ),
               ],
             ),
@@ -318,7 +338,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
                             )
                           : RefreshIndicator(
                               onRefresh: () => provider.pullRefresh(),
-                              child: provider.isLoading && requests.isEmpty
+                              child: provider.isLoading &&
+                                      _pendingRequestsEmpty(provider, profileType)
                                   ? ListView(
                                       physics:
                                           const AlwaysScrollableScrollPhysics(),
@@ -335,7 +356,11 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                         ),
                                       ],
                                     )
-                                  : provider.error != null && requests.isEmpty
+                                  : provider.error != null &&
+                                          _pendingRequestsEmpty(
+                                            provider,
+                                            profileType,
+                                          )
                                   ? ListView(
                                       physics:
                                           const AlwaysScrollableScrollPhysics(),
@@ -364,12 +389,12 @@ class _ReservationsContentState extends State<ReservationsContent> {
                                   : _buildRequestsList(
                                       context,
                                       l10n,
-                                      requests,
                                       crossAxisCount,
                                       itemCountForCard,
                                       profileType,
                                       provider,
-                                      onSeeRequestDetails,
+                                      onSeeWaiterReservation,
+                                      onSeeKitchenRequest,
                                       highlightSelection: useMasterDetail,
                                     ),
                             ),
@@ -463,7 +488,33 @@ class _ReservationsContentState extends State<ReservationsContent> {
     'сад',
   ];
 
-  Future<void> _openRequestDetails(
+  bool _pendingRequestsEmpty(
+    ReservationsProvider provider,
+    ProfileType? profileType,
+  ) {
+    if (profileType == ProfileType.waiter) {
+      return provider.waiterRequests.isEmpty;
+    }
+    return provider.kitchenBarRequests.isEmpty;
+  }
+
+  Future<void> _openWaiterReservationDetails(
+    BuildContext context,
+    PendingReservation reservation,
+    ReservationsProvider provider,
+  ) async {
+    final completed = await Navigator.of(context).push<bool>(
+      FadeSlidePageRoute<bool>(
+        builder: (_) =>
+            WaiterReservationDetailsScreen(reservation: reservation),
+      ),
+    );
+    if (completed == true && context.mounted) {
+      provider.pullRefresh();
+    }
+  }
+
+  Future<void> _openKitchenReservationDetails(
     BuildContext context,
     PendingOrder order,
     ReservationsProvider provider,
@@ -488,7 +539,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
     ProfileType? profileType,
     String countLabel,
     String Function(PendingOrder) itemCountForCard,
-    void Function(PendingOrder) onSeeRequestDetails,
+    void Function(PendingReservation) onSeeWaiterReservation,
+    void Function(PendingOrder) onSeeKitchenRequest,
     void Function(ConfirmedReservation) onSeeConfirmedDetails,
   ) {
     return Column(
@@ -590,7 +642,8 @@ class _ReservationsContentState extends State<ReservationsContent> {
                 )
               : RefreshIndicator(
                   onRefresh: () => provider.pullRefresh(),
-                  child: provider.isLoading && provider.requests.isEmpty
+                  child: provider.isLoading &&
+                          _pendingRequestsEmpty(provider, profileType)
                       ? ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           children: [
@@ -602,38 +655,40 @@ class _ReservationsContentState extends State<ReservationsContent> {
                             ),
                           ],
                         )
-                      : provider.error != null && provider.requests.isEmpty
-                      ? ListView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.3,
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(24),
-                                  child: Text(
-                                    provider.error!,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: AppColors.error,
+                      : provider.error != null &&
+                              _pendingRequestsEmpty(provider, profileType)
+                          ? ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(24),
+                                      child: Text(
+                                        provider.error!,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: AppColors.error,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
+                            )
+                          : _buildRequestsList(
+                              context,
+                              l10n,
+                              1,
+                              itemCountForCard,
+                              profileType,
+                              provider,
+                              onSeeWaiterReservation,
+                              onSeeKitchenRequest,
+                              highlightSelection: true,
                             ),
-                          ],
-                        )
-                      : _buildRequestsList(
-                          context,
-                          l10n,
-                          provider.requests,
-                          1,
-                          itemCountForCard,
-                          profileType,
-                          provider,
-                          onSeeRequestDetails,
-                          highlightSelection: true,
-                        ),
                 ),
         ),
       ],
@@ -649,7 +704,15 @@ class _ReservationsContentState extends State<ReservationsContent> {
     );
   }
 
-  bool _isSameSelectedRequest(PendingOrder? selected, PendingOrder order) {
+  bool _isSameSelectedWaiter(
+    PendingReservation? selected,
+    PendingReservation reservation,
+  ) {
+    if (selected == null) return false;
+    return selected.id == reservation.id;
+  }
+
+  bool _isSameSelectedKitchen(PendingOrder? selected, PendingOrder order) {
     if (selected == null) return false;
     if (selected.orderId.isNotEmpty && order.orderId.isNotEmpty) {
       return selected.orderId == order.orderId;
@@ -666,24 +729,31 @@ class _ReservationsContentState extends State<ReservationsContent> {
     return selected.id == reservation.id;
   }
 
-  Widget _buildRequestDetailPane(
-    PendingOrder order,
+  Widget _buildRequestDetailPaneForSelection(
+    ThemeData theme,
+    AppLocalizations l10n,
     ProfileType? profileType,
     ReservationsProvider provider,
   ) {
     if (profileType == ProfileType.waiter) {
+      if (_selectedWaiterRequest == null) {
+        return _buildDetailPlaceholder(theme, l10n);
+      }
       return WaiterReservationRequestDetailsContent(
-        order: order,
+        reservation: _selectedWaiterRequest!,
         onCompleted: () {
-          setState(() => _selectedRequest = null);
+          setState(() => _selectedWaiterRequest = null);
           widget.onStartRefresh();
         },
       );
     }
+    if (_selectedKitchenBarRequest == null) {
+      return _buildDetailPlaceholder(theme, l10n);
+    }
     return KitchenBarReservationRequestDetailsContent(
-      order: order,
+      order: _selectedKitchenBarRequest!,
       onCompleted: () {
-        setState(() => _selectedRequest = null);
+        setState(() => _selectedKitchenBarRequest = null);
         widget.onStartRefresh();
       },
     );
@@ -692,16 +762,60 @@ class _ReservationsContentState extends State<ReservationsContent> {
   Widget _buildRequestsList(
     BuildContext context,
     AppLocalizations l10n,
-    List<PendingOrder> requests,
     int crossAxisCount,
     String Function(PendingOrder) itemCountForCard,
     ProfileType? profileType,
     ReservationsProvider provider,
-    void Function(PendingOrder) onSeeDetails, {
+    void Function(PendingReservation) onSeeWaiterReservation,
+    void Function(PendingOrder) onSeeKitchenRequest, {
     required bool highlightSelection,
   }) {
     const padding = EdgeInsets.symmetric(horizontal: 20, vertical: 8);
 
+    if (profileType == ProfileType.waiter) {
+      final requests = provider.waiterRequests;
+      Widget buildCard(int index) {
+        final reservation = requests[index];
+        return ListItemEntrance(
+          index: index,
+          child: ReservationRequestCard(
+            waiterReservation: reservation,
+            l10n: l10n,
+            accentColor: widget.accentColor,
+            itemCountLabel: '',
+            showWaiterPendingLayout: true,
+            isSelected: highlightSelection &&
+                _isSameSelectedWaiter(_selectedWaiterRequest, reservation),
+            onSeeDetails: () => onSeeWaiterReservation(reservation),
+          ),
+        );
+      }
+
+      if (crossAxisCount == 1) {
+        return ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: padding,
+          itemCount: requests.length,
+          separatorBuilder: (_, _) => const SizedBox(height: 12),
+          itemBuilder: (context, index) => buildCard(index),
+        );
+      }
+
+      return GridView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: padding,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          mainAxisExtent: 200,
+        ),
+        itemCount: requests.length,
+        itemBuilder: (context, index) => buildCard(index),
+      );
+    }
+
+    final requests = provider.kitchenBarRequests;
     Widget buildCard(int index) {
       final order = requests[index];
       return ListItemEntrance(
@@ -711,10 +825,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
           l10n: l10n,
           accentColor: widget.accentColor,
           itemCountLabel: itemCountForCard(order),
-          showWaiterPendingLayout: profileType == ProfileType.waiter,
+          showWaiterPendingLayout: false,
           isSelected: highlightSelection &&
-              _isSameSelectedRequest(_selectedRequest, order),
-          onSeeDetails: () => onSeeDetails(order),
+              _isSameSelectedKitchen(_selectedKitchenBarRequest, order),
+          onSeeDetails: () => onSeeKitchenRequest(order),
         ),
       );
     }

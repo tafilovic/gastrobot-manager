@@ -3,24 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/selectable_ink_card.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Reservation request card. Waiter pending list: datum + šifra, Vreme, Region, Broj ljudi.
+/// Reservation request card. Waiter pending: datum + šifra, Vreme, Region ([region.title]), Broj ljudi.
 /// Kitchen/bar: stariji prikaz sa brojem stavki.
 class ReservationRequestCard extends StatelessWidget {
   const ReservationRequestCard({
     super.key,
-    required this.order,
+    this.order,
+    this.waiterReservation,
     required this.l10n,
     required this.accentColor,
     required this.itemCountLabel,
     required this.onSeeDetails,
     this.showWaiterPendingLayout = false,
     this.isSelected = false,
-  });
+  }) : assert(
+          (order != null) != (waiterReservation != null),
+          'Exactly one of order or waiterReservation must be provided',
+        );
 
-  final PendingOrder order;
+  final PendingOrder? order;
+  final PendingReservation? waiterReservation;
   final AppLocalizations l10n;
   final Color accentColor;
   final String itemCountLabel;
@@ -28,32 +34,24 @@ class ReservationRequestCard extends StatelessWidget {
   final bool showWaiterPendingLayout;
   final bool isSelected;
 
-  static (String? region, int? party) _regionAndParty(PendingOrder order) {
-    final d = order.reservationDetails;
-    if (d is! Map) return (null, null);
-    final m = Map<String, dynamic>.from(d);
-    final r = m['region']?.toString().trim();
-    final p = m['partySize'];
-    final pi = p is int ? p : int.tryParse(p?.toString() ?? '');
-    return ((r != null && r.isNotEmpty) ? r : null, pi);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    final dateStr = formatReservationDate(
-      order.targetTime,
-      l10n,
-      locale: locale,
-    );
-    final timeStr = formatReservationTime(order.targetTime);
-    final ref = order.orderNumber.isNotEmpty
-        ? order.orderNumber
-        : (order.orderId.isNotEmpty ? order.orderId : '—');
 
     if (showWaiterPendingLayout) {
-      final (region, party) = _regionAndParty(order);
+      final r = waiterReservation!;
+      final dateStr = formatReservationDate(
+        r.reservationStart,
+        l10n,
+        locale: locale,
+      );
+      final timeStr = formatReservationTime(r.reservationStart);
+      final ref = r.displayReference;
+      final regionLabel = (r.regionTitle != null && r.regionTitle!.trim().isNotEmpty)
+          ? r.regionTitle!.trim()
+          : 'N/A';
+
       return SelectableInkCard(
         accentColor: accentColor,
         isSelected: isSelected,
@@ -105,18 +103,26 @@ class ReservationRequestCard extends StatelessWidget {
               _waiterDetailRow(
                 theme,
                 l10n.reservationLabelRegion,
-                region ?? 'N/A',
+                regionLabel,
               ),
               _waiterDetailRow(
                 theme,
                 l10n.reservationLabelPartySize,
-                party != null ? '$party' : 'N/A',
+                '${r.peopleCount}',
               ),
             ],
           ),
         ),
       );
     }
+
+    final o = order!;
+    final dateStr = formatReservationDate(
+      o.targetTime,
+      l10n,
+      locale: locale,
+    );
+    final timeStr = formatReservationTime(o.targetTime);
 
     return SelectableInkCard(
       accentColor: accentColor,
@@ -156,7 +162,7 @@ class ReservationRequestCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '#${order.orderNumber}',
+                        '#${o.orderNumber}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
                         ),
