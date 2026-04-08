@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
+// Android-only: Google Play flexible in-app update (see coordinator file header).
+import 'package:gastrobotmanager/core/update/android_flexible_update_coordinator.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_scroll_behavior.dart';
 import 'package:gastrobotmanager/core/theme/app_theme.dart';
@@ -19,11 +23,29 @@ class GastroBotApp extends StatefulWidget {
 class _GastroBotAppState extends State<GastroBotApp> {
   late final GoRouter _router;
 
+  /// Used for the Android Play-update "restart to apply" snackbar (ignored elsewhere).
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
     final auth = context.read<AuthProvider>();
     _router = AppRouter.create(auth);
+    // Android-only Play flexible update check; coordinator no-ops on other platforms.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(
+        AndroidFlexibleUpdateCoordinator.run(
+          scaffoldMessengerKey: _scaffoldMessengerKey,
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    AndroidFlexibleUpdateCoordinator.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,6 +53,8 @@ class _GastroBotAppState extends State<GastroBotApp> {
     return Consumer<LocaleProvider>(
       builder: (context, localeProvider, _) {
         return MaterialApp.router(
+          // Snackbars for Android Play flexible update completion (harmless on other platforms).
+          scaffoldMessengerKey: _scaffoldMessengerKey,
           title: 'GastroCrew',
           theme: AppTheme.light,
           debugShowCheckedModeBanner: false,
