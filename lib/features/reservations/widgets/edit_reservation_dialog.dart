@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/features/regions/domain/models/region_model.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/region_table_picker.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Dialog shown when the waiter taps "IZMENI REZERVACIJU" on a confirmed
-/// reservation. Lets the waiter pick a new region + table and enter a note.
+/// reservation. Lets the waiter pick a table in the guest's region and enter a note.
 Future<void> showEditReservationDialog({
   required BuildContext context,
   required ConfirmedReservation reservation,
@@ -30,12 +31,20 @@ class _EditReservationDialog extends StatefulWidget {
 }
 
 class _EditReservationDialogState extends State<_EditReservationDialog> {
-  String? _selectedRegionId;
   String? _selectedTableId;
   bool _tableDropdownOpen = false;
   final _noteController = TextEditingController();
   String? _noteError;
   bool _submitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final assigned = widget.reservation.tables;
+    if (assigned.length == 1) {
+      _selectedTableId = assigned.first.id;
+    }
+  }
 
   @override
   void dispose() {
@@ -70,7 +79,13 @@ class _EditReservationDialogState extends State<_EditReservationDialog> {
     final accentColor = theme.colorScheme.primary;
     final regionsProvider = context.watch<RegionsProvider>();
     final regions = regionsProvider.regions;
-    final filteredTables = filterTablesByRegion(regions, _selectedRegionId);
+    final regionIdRaw = widget.reservation.regionId?.trim();
+    final regionId = (regionIdRaw != null && regionIdRaw.isNotEmpty)
+        ? regionIdRaw
+        : null;
+    final filteredTables = regionId != null
+        ? filterTablesByRegion(regions, regionId)
+        : const <RegionTableModel>[];
 
     return Dialog(
       backgroundColor: AppColors.surface,
@@ -110,26 +125,30 @@ class _EditReservationDialogState extends State<_EditReservationDialog> {
                 child: LinearProgressIndicator(),
               )
             else if (regions.isNotEmpty) ...[
-              StyledDropdown(
-                hint: l10n.acceptSheetSelectRegion,
-                value: _selectedRegionId,
-                items: regions
-                    .map(
-                      (r) => DropdownMenuItem<String>(
-                        value: r.id,
-                        child: Text(r.title),
+              if (widget.reservation.regionTitle != null &&
+                  widget.reservation.regionTitle!.isNotEmpty) ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.map_outlined,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '${l10n.reservationLabelRegion} ${widget.reservation.regionTitle}',
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 14,
+                        ),
                       ),
-                    )
-                    .toList(),
-                onChanged: _submitting
-                    ? null
-                    : (id) => setState(() {
-                          _selectedRegionId = id;
-                          _selectedTableId = null;
-                          _tableDropdownOpen = false;
-                        }),
-              ),
-              const SizedBox(height: 12),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+              ],
             ],
 
             InlineTableSelector(

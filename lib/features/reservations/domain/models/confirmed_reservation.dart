@@ -49,6 +49,7 @@ class ConfirmedReservation {
     required this.type,
     this.user,
     this.assignedTableName,
+    this.regionId,
     this.regionTitle,
     this.additionalInfo,
     this.items = const [],
@@ -69,6 +70,9 @@ class ConfirmedReservation {
 
   /// Fallback table label when [tables] is empty.
   final String? assignedTableName;
+
+  /// Region id from API (`region.id`); used to restrict table picker to that zone.
+  final String? regionId;
 
   /// Region display name, populated when the API includes region data.
   final String? regionTitle;
@@ -109,10 +113,15 @@ class ConfirmedReservation {
         ? ConfirmedReservationUser.fromJson(rawUser)
         : null;
 
-    // Region: try title, then area
+    // Region: id + display (title, else area)
     final rawRegion = json['region'];
+    String? regionId;
     String? regionTitle;
     if (rawRegion is Map<String, dynamic>) {
+      final idVal = rawRegion['id'];
+      if (idVal != null && idVal.toString().trim().isNotEmpty) {
+        regionId = idVal.toString();
+      }
       final title = rawRegion['title'] as String?;
       final area = rawRegion['area'] as String?;
       regionTitle = (title != null && title.isNotEmpty) ? title : area;
@@ -141,6 +150,7 @@ class ConfirmedReservation {
       type: json['type'] as String? ?? 'classic',
       tables: tables,
       assignedTableName: json['assignedTableName'] as String?,
+      regionId: regionId,
       regionTitle: regionTitle,
       additionalInfo: json['additionalInfo'] as String?,
       user: user,

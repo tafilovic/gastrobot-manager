@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/regions/domain/models/region_model.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -12,7 +13,7 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 /// Bottom sheet shown when the waiter taps PRIHVATI on a pending reservation.
 ///
 /// Loads venue regions (with their tables) via [RegionsProvider].
-/// The waiter selects a region to filter tables, then picks a specific table.
+/// Tables are restricted to the region the guest chose on the request.
 /// Selecting a table enables the POTVRDI REZERVACIJU button.
 class AcceptReservationSheet extends StatefulWidget {
   const AcceptReservationSheet({
@@ -29,7 +30,6 @@ class AcceptReservationSheet extends StatefulWidget {
 }
 
 class _AcceptReservationSheetState extends State<AcceptReservationSheet> {
-  String? _selectedRegionId;
   String? _selectedTableId;
   bool _tableDropdownOpen = false;
   final _noteController = TextEditingController();
@@ -87,7 +87,13 @@ class _AcceptReservationSheetState extends State<AcceptReservationSheet> {
     final l10n = AppLocalizations.of(context)!;
     final regionsProvider = context.watch<RegionsProvider>();
     final regions = regionsProvider.regions;
-    final filteredTables = filterTablesByRegion(regions, _selectedRegionId);
+    final regionIdRaw = widget.reservation.region?.id.trim();
+    final regionId = (regionIdRaw != null && regionIdRaw.isNotEmpty)
+        ? regionIdRaw
+        : null;
+    final filteredTables = regionId != null
+        ? filterTablesByRegion(regions, regionId)
+        : const <RegionTableModel>[];
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
     final canConfirm = _selectedTableId != null && !_submitting;
 
@@ -132,26 +138,30 @@ class _AcceptReservationSheetState extends State<AcceptReservationSheet> {
                         child: LinearProgressIndicator(),
                       )
                     else if (regions.isNotEmpty) ...[
-                      StyledDropdown(
-                        hint: l10n.acceptSheetSelectRegion,
-                        value: _selectedRegionId,
-                        items: regions
-                            .map(
-                              (r) => DropdownMenuItem<String>(
-                                value: r.id,
-                                child: Text(r.title),
+                      if (widget.reservation.regionTitle != null &&
+                          widget.reservation.regionTitle!.isNotEmpty) ...[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.map_outlined,
+                              size: 20,
+                              color: AppColors.textSecondary,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '${l10n.reservationLabelRegion} ${widget.reservation.regionTitle}',
+                                style: const TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 14,
+                                ),
                               ),
-                            )
-                            .toList(),
-                        onChanged: _submitting
-                            ? null
-                            : (id) => setState(() {
-                                  _selectedRegionId = id;
-                                  _selectedTableId = null;
-                                  _tableDropdownOpen = false;
-                                }),
-                      ),
-                      const SizedBox(height: 12),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                      ],
                     ],
 
                     InlineTableSelector(
