@@ -2,6 +2,18 @@ import 'package:intl/intl.dart';
 
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
+/// [intl] does not ship date symbols for every app language (e.g. Maltese `mt`).
+String _intlDateFormatLocale(String? languageCode) {
+  final requested = (languageCode ?? 'sr').trim().toLowerCase();
+  if (requested.isNotEmpty && DateFormat.localeExists(requested)) {
+    return requested;
+  }
+  if (DateFormat.localeExists('en')) {
+    return 'en';
+  }
+  return 'sr';
+}
+
 /// Formats [targetTimeIso] for reservation card: "Danas" or "dd.MM.yyyy. (Weekday)".
 String formatReservationDate(
   String targetTimeIso,
@@ -19,7 +31,10 @@ String formatReservationDate(
     return l10n.reservationToday;
   }
 
-  final formatter = DateFormat('dd.MM.yyyy. (EEEE)', locale ?? 'sr');
+  final formatter = DateFormat(
+    'dd.MM.yyyy. (EEEE)',
+    _intlDateFormatLocale(locale),
+  );
   return formatter.format(date);
 }
 

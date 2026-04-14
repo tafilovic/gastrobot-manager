@@ -1,0 +1,374 @@
+{
+  "@@locale": "el",
+  "appTitle": "GastroCrew",
+  "loginSubtitle": "Συνδεθείτε για να συνεχίσετε",
+  "loginEmailLabel": "Email",
+  "loginEmailHint": "π.χ. user@example.com",
+  "loginEmailRequired": "Εισάγετε email",
+  "loginEmailInvalid": "Εισάγετε έγκυρο email",
+  "loginPasswordLabel": "Κωδικός",
+  "loginPasswordRequired": "Εισάγετε κωδικό",
+  "loginRememberEmail": "Απομνημόνευση email",
+  "loginButton": "Σύνδεση",
+  "loginFailed": "Η σύνδεση απέτυχε. Δοκιμάστε ξανά.",
+  "loginRoleNotSupported": "Ο ρόλος σας δεν υποστηρίζεται. Η εφαρμογή είναι για σερβιτόρους, μάγειρες και μπαρίστες.",
+  "loginRegisterButton": "Εγγραφή",
+  "registerTitle": "Δημιουργία λογαριασμού",
+  "registerFirstnameLabel": "Όνομα",
+  "registerLastnameLabel": "Επώνυμο",
+  "registerEmailLabel": "Email",
+  "registerPasswordConfirmLabel": "Επιβεβαίωση κωδικού",
+  "registerPasswordMismatch": "Οι κωδικοί δεν ταιριάζουν",
+  "registerFieldRequired": "Υποχρεωτικό πεδίο",
+  "registerSubmitButton": "Εγγραφή",
+  "registerSuccessTitle": "Επιτυχής εγγραφή",
+  "registerSuccessMessage": "Στο {email} στάλθηκε σύνδεσμος επαλήθευσης. Ανοίξτε το email σας και ακολουθήστε τον σύνδεσμο για να ενεργοποιήσετε τον λογαριασμό. Στη συνέχεια μπορείτε να συνδεθείτε στην εφαρμογή.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
+  "registerBackToLogin": "Πίσω στη σύνδεση",
+  "profileTitle": "Το προφίλ μου",
+  "profileLabelName": "ΟΝΟΜΑ",
+  "profileLabelEmail": "EMAIL",
+  "profileLabelPassword": "ΚΩΔΙΚΟΣ",
+  "profileChangePassword": "Αλλαγή",
+  "profileReservationReminder": "ΥΠΕΝΘΥΜΙΣΗ ΚΡΑΤΗΣΗΣ",
+  "profileReservationReminderHint": "*Πόσο νωρίτερα λαμβάνετε ειδοποιήσεις για προετοιμασία προπαραγγελθέντος φαγητού",
+  "profileReservationReminderValue": "1 ώρα νωρίτερα",
+  "profileLabelLanguage": "ΓΛΩΣΣΑ",
+  "profileDeleteAccount": "ΔΙΑΓΡΑΦΗ ΛΟΓΑΡΙΑΣΜΟΥ",
+  "profileDeleteAccountAction": "Πατήστε για διαγραφή",
+  "profileDeleteAccountWarning": "Αν διαγράψετε το προφίλ σας, δεν μπορεί να αποκατασταθεί.",
+  "profileLabelCurrency": "ΝΟΜΙΣΜΑ",
+  "profileLanguageValue": "Ελληνικά",
+  "profileDrinksList": "ΛΙΣΤΑ ΠΟΤΩΝ",
+  "profileShiftScheduleLabel": "ΠΡΟΓΡΑΜΜΑ ΒΑΡΔΙΩΝ",
+  "profileShiftScheduleView": "Προβολή",
+  "shiftScheduleDialogTitle": "Πρόγραμμα βαρδιών",
+  "shiftScheduleLoadError": "Δεν ήταν δυνατή η φόρτωση του προγράμματος.",
+  "shiftScheduleEmpty": "Δεν υπάρχουν δεδομένα προγράμματος.",
+  "shiftScheduleRetry": "Δοκιμάστε ξανά",
+  "shiftScheduleSelfLabel": "Εγώ",
+  "profileLogout": "ΑΠΟΣΥΝΔΕΣΗ",
+  "profileImageDialogTitle": "Φωτογραφία προφίλ",
+  "profileImageUploadButton": "ΑΝΕΒΑΣΜΑ ΦΩΤΟΓΡΑΦΙΑΣ",
+  "profileImageMaxSize": "3MB (μέγιστο μέγεθος εικόνας)",
+  "profileImageSaveChanges": "ΑΠΟΘΗΚΕΥΣΗ ΑΛΛΑΓΩΝ",
+  "logoutDialogTitle": "Αποσύνδεση",
+  "logoutDialogMessage": "Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;",
+  "logoutCancel": "Ακύρωση",
+  "logoutConfirm": "Αποσύνδεση",
+  "navOrders": "ΠΑΡΑΓΓΕΛΙΕΣ",
+  "navReady": "ΕΤΟΙΜΑ",
+  "navPreparing": "ΣΕ ΕΤΟΙΜΑΣΙΑ",
+  "navReservations": "ΚΡΑΤΗΣΕΙΣ",
+  "navMenu": "ΜΕΝΟΥ",
+  "navDrinks": "ΠΟΤΑ",
+  "navZones": "ΖΩΝΕΣ",
+  "tablesReserve": "ΚΡΑΤΗΣΗ",
+  "tablesOrder": "ΠΑΡΑΓΓΕΛΙΑ",
+  "zonesCount": "{count} ζώνες",
+  "@zonesCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableNumber": "Τραπέζι {number}",
+  "@tableNumber": {"placeholders": {"number": {"type": "String"}}},
+  "tableReservationAt": "Κράτηση:",
+  "tableTypeTable": "Τραπέζι",
+  "tableTypeRoom": "Δωμάτιο",
+  "tableTypeSunbed": "Ξαπλώστρα",
+  "seatingNumberTable": "Τραπέζι {number}",
+  "@seatingNumberTable": {"placeholders": {"number": {"type": "String"}}},
+  "seatingNumberRoom": "Δωμάτιο {number}",
+  "@seatingNumberRoom": {"placeholders": {"number": {"type": "String"}}},
+  "seatingNumberSunbed": "Ξαπλώστρα {number}",
+  "@seatingNumberSunbed": {"placeholders": {"number": {"type": "String"}}},
+  "navProfile": "ΠΡΟΦΙΛ",
+  "readyTitle": "Έτοιμα για σερβίρισμα",
+  "readySubtitle": "Παραγγελίες έτοιμες για σερβίρισμα",
+  "readyOrdersCountSuffix": " έτοιμες παραγγελίες",
+  "readyMarkAsServed": "ΣΗΜΕΙΩΣΗ ΩΣ ΣΕΡΒΙΡΙΣΜΕΝΗ",
+  "readyMarkAsDelivered": "ΣΗΜΕΙΩΣΗ ΩΣ ΠΑΡΑΔΟΘΕΙΣΑ",
+  "readySectionFood": "ΦΑΓΗΤΟ",
+  "readySectionDrinks": "ΠΟΤΑ",
+  "readyMarkAsServedSuccess": "Η παραγγελία σημειώθηκε ως σερβιρισμένη",
+  "readyMarkAsServedError": "Αποτυχία σημείωσης",
+  "ordersTitle": "Παραγγελίες",
+  "ordersCount": "{count} παραγγελίες",
+  "ordersCountSuffix": " παραγγελίες",
+  "ordersTabActive": "Ενεργές",
+  "ordersTabHistory": "Ιστορικό",
+  "ordersFilters": "ΦΙΛΤΡΑ",
+  "ordersOrderButton": "ΠΑΡΑΓΓΕΛΙΑ",
+  "ordersFoodLabel": "Φαγητό:",
+  "ordersDrinksLabel": "Ποτά:",
+  "orderStatusPending": "ΕΚΚΡΕΜΕΙ",
+  "orderStatusInPreparation": "ΣΕ ΕΤΟΙΜΑΣΙΑ",
+  "orderStatusServed": "ΣΕΡΒΙΡΙΣΤΗΚΕ",
+  "orderStatusRejected": "ΑΠΟΡΡΙΦΘΗΚΕ",
+  "orderBill": "Λογαριασμός:",
+  "@ordersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTableNumber": "Τραπέζι {number}",
+  "@orderTableNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "orderDishCount": "Αριθμός πιάτων: {count}",
+  "@orderDishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderDrinksCount": "Αριθμός ποτών: {count}",
+  "@orderDrinksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderSeeDetails": "ΠΡΟΒΟΛΗ ΛΕΠΤΟΜΕΡΕΙΩΝ",
+  "orderTimeAgoDays": "Πριν {count} ημέρα",
+  "@orderTimeAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoHoursMinutes": "Πριν {hours}ώ {minutes}λ",
+  "@orderTimeAgoHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoHours": "Πριν {count} ώρες",
+  "@orderTimeAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoMinutes": "Πριν {count} λεπτά",
+  "@orderTimeAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoSeconds": "Πριν {count} δευτ.",
+  "@orderTimeAgoSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderRejectAll": "ΑΠΟΡΡΙΨΗ ΟΛΩΝ",
+  "orderAccept": "ΑΠΟΔΟΧΗ",
+  "orderMarkAsPaid": "ΣΗΜΕΙΩΣΗ ΩΣ ΠΛΗΡΩΜΕΝΗ",
+  "orderMarkAsPaidConfirmTitle": "Σημείωση ως πληρωμένη",
+  "orderMarkAsPaidConfirmMessage": "Είστε σίγουροι ότι θέλετε να εκτελέσετε αυτή την ενέργεια;",
+  "dialogYes": "Ναι",
+  "dialogNo": "Όχι",
+  "orderMarkAsPaidError": "Δεν ήταν δυνατή η σημείωση της παραγγελίας ως πληρωμένης",
+  "orderMarkAsPaidSuccess": "Η παραγγελία σημειώθηκε ως πληρωμένη",
+  "ordersHistoryEmpty": "Δεν υπάρχουν ακόμα παραγγελίες στο ιστορικό",
+  "orderPaidLabel": "ΠΛΗΡΩΜΕΝΗ",
+  "orderPaidAt": "Πληρώθηκε στις {dateTime}",
+  "@orderPaidAt": {"placeholders": {"dateTime": {"type": "String"}}},
+  "orderProcessingComplete": "Ολοκληρώθηκε η επεξεργασία της παραγγελίας \"{orderNumber}\"",
+  "@orderProcessingComplete": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEstimationTitle": "Εκτίμηση χρόνου",
+  "timeEstimationQuestion": "Σε πόσο χρόνο θα είναι έτοιμη αυτή η παραγγελία;",
+  "timeEstimationSkip": "ΠΑΡΑΛΕΙΨΗ ΕΚΤΙΜΗΣΗΣ",
+  "timeEstimationConfirm": "ΕΠΙΒΕΒΑΙΩΣΗ ΧΡΟΝΟΥ",
+  "reservationsTitle": "Κρατήσεις",
+  "reservationsSubtitle": "Διαχείριση κρατήσεων τραπεζιών",
+  "reservationsRequestsTitle": "Κρατήσεις",
+  "reservationsTabRequests": "Αιτήματα",
+  "reservationsTabAccepted": "Αποδεκτές",
+  "reservationToday": "Σήμερα",
+  "reservationCountDrinks": "{count} ποτά",
+  "reservationCountDishes": "{count} πιάτα",
+  "@reservationCountDrinks": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "@reservationCountDishes": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reservationCountList": "{count} κρατήσεις",
+  "@reservationCountList": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reservationsFilters": "ΦΙΛΤΡΑ",
+  "reservationLabelTime": "Ώρα:",
+  "reservationLabelRegion": "Περιοχή:",
+  "reservationLabelPartySize": "Αριθμός ατόμων:",
+  "preparingTitle": "Σε ετοιμασία",
+  "preparingSubtitle": "Είδη σε ετοιμασία",
+  "preparingDishCount": "{count} πιάτα",
+  "preparingDishCountSuffix": " πιάτα",
+  "preparingDrinksCountSuffix": " ποτά",
+  "@preparingDishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preparingMarkAsReady": "ΣΗΜΕΙΩΣΗ ΩΣ ΕΤΟΙΜΗ",
+  "preparingMarkAsReadySuccess": "Η παραγγελία σημειώθηκε ως έτοιμη",
+  "preparingMarkAsReadyError": "Αποτυχία σημείωσης",
+  "menuTitle": "Μενού",
+  "menuSubtitle": "Περιήγηση στο μενού",
+  "menuInstruction": "Σημειώστε όταν ένα πιάτο ή ποτό είναι διαθέσιμο ή μη διαθέσιμο",
+  "menuSearchHint": "Αναζήτηση πιάτου...",
+  "menuAvailableCount": "{available} διαθέσιμα από {total} συνολικά",
+  "menuAvailableCountMiddle": " διαθέσιμα από ",
+  "drinksListTitle": "Λίστα ποτών",
+  "drinksListInstruction": "Σημειώστε όταν ένα ποτό είναι διαθέσιμο ή μη διαθέσιμο",
+  "drinksAvailableCountSuffix": " διαθέσιμα ποτά",
+  "menuSearchHintDrinks": "Αναζήτηση ποτού...",
+  "@menuAvailableCount": {
+    "placeholders": {
+      "available": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "profileTypeWaiter": "Σερβιτόρος",
+  "profileTypeKitchen": "Κουζίνα",
+  "profileTypeBar": "Μπαρ",
+  "authLoginFailed": "Η σύνδεση απέτυχε.",
+  "authInvalidResponse": "Μη έγκυρη απάντηση διακομιστή.",
+  "filterTitle": "Φίλτρα",
+  "filterTableNumber": "Αριθμός τραπεζιού:",
+  "filterFood": "Φαγητό:",
+  "filterDrinks": "Ποτά:",
+  "filterBillAmount": "Ποσό λογαριασμού:",
+  "filterStatusPending": "Εκκρεμεί ?",
+  "filterStatusInPreparation": "Σε ετοιμασία ⏱",
+  "filterStatusServed": "Σερβιρίστηκε ✔",
+  "filterStatusRejected": "Απορρίφθηκε ✖",
+  "filterReset": "ΕΠΑΝΑΦΟΡΑ ΦΙΛΤΡΩΝ",
+  "filterApply": "ΕΦΑΡΜΟΓΗ ΦΙΛΤΡΩΝ",
+  "filterBillRSD": "{min} - {max} RSD",
+  "@filterBillRSD": {"placeholders": {"min": {"type": "String"}, "max": {"type": "String"}}},
+  "filterDate": "Ημερομηνία:",
+  "filterDateFrom": "Από:",
+  "filterDateTo": "Έως:",
+  "filterDateToday": "Σήμερα",
+  "filterDateYesterday": "Χθες",
+  "filterDateTomorrow": "Αύριο",
+  "filterOrderContent": "Περιεχόμενο παραγγελίας:",
+  "filterOrderContentDrinks": "Ποτά",
+  "filterOrderContentFood": "Φαγητό",
+  "filterPeopleCount": "Αριθμός ατόμων:",
+  "filterRegion": "Περιοχή:",
+  "filterRegionIndoors": "Εσωτερικό",
+  "filterRegionGarden": "Κήπος",
+  "filterReservationContent": "Περιεχόμενο κράτησης:",
+  "acceptSheetTitle": "Ολοκλήρωση επιβεβαίωσης",
+  "acceptSheetSelectRegion": "Επιλέξτε περιοχή εστιατορίου",
+  "acceptSheetSelectTable": "Επιλέξτε αριθμό τραπεζιού",
+  "acceptSheetNoteHint": "Σημείωση για τον πελάτη... (προαιρετικό)",
+  "acceptSheetConfirm": "ΕΠΙΒΕΒΑΙΩΣΗ ΚΡΑΤΗΣΗΣ",
+  "acceptSheetNoTables": "Δεν υπάρχουν διαθέσιμα τραπέζια.",
+  "acceptSheetErrorGeneric": "Δεν ήταν δυνατή η αποδοχή της κράτησης. Δοκιμάστε ξανά.",
+  "acceptSheetRegionLabel": "Περιοχή {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Κράτηση στις {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Χρήστης:",
+  "confirmedResTableNumber": "Τραπέζι:",
+  "confirmedResOccasion": "Περίσταση:",
+  "confirmedResOccasionBirthday": "Γενέθλια",
+  "confirmedResOccasionClassic": "Κλασική",
+  "confirmedResNote": "Σημείωση:",
+  "confirmedResEditButton": "ΕΠΕΞΕΡΓΑΣΙΑ ΚΡΑΤΗΣΗΣ",
+  "confirmedResCancelButton": "ΑΚΥΡΩΣΗ ΚΡΑΤΗΣΗΣ",
+  "editResDialogTitle": "Επεξεργασία",
+  "editResNoteHint": "Εισάγετε λόγους και λεπτομέρειες της αλλαγής για τον πελάτη... (υποχρεωτικό)",
+  "editResConfirm": "ΕΠΙΒΕΒΑΙΩΣΗ ΑΛΛΑΓΩΝ",
+  "cancelDialogTitle": "Ακύρωση",
+  "cancelReasonHint": "Εισάγετε λόγο ακύρωσης (υποχρεωτικό)",
+  "rejectDialogTitle": "Τελική επιβεβαίωση",
+  "rejectReasonHint": "Εισάγετε επεξήγηση (υποχρεωτικό)",
+  "rejectErrorFallback": "Δεν ήταν δυνατή η απόρριψη της κράτησης. Δοκιμάστε ξανά.",
+  "buttonRejectReservation": "ΑΠΟΡΡΙΨΗ ΚΡΑΤΗΣΗΣ",
+  "buttonReject": "ΑΠΟΡΡΙΨΗ",
+  "buttonAccept": "ΑΠΟΔΟΧΗ",
+  "labelFoodDrink": "Φαγητό/Ποτό:",
+  "tableSeatCount": "{count} θέσεις",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableReservationDialogTitle": "Κράτηση",
+  "tableReservationNameHint": "Στο όνομα...",
+  "tableReservationNameRequired": "Εισάγετε όνομα",
+  "tableReservationPartySizeHint": "Αριθμός ατόμων",
+  "tableReservationPartySizeRequired": "Επιλέξτε αριθμό ατόμων",
+  "tableReservationDateHint": "Ημερομηνία",
+  "tableReservationDateRequired": "Επιλέξτε ημερομηνία",
+  "tableReservationTimeHint": "Ώρα",
+  "tableReservationTimeRequired": "Επιλέξτε ώρα",
+  "tableReservationTableRequired": "Επιλέξτε τραπέζι",
+  "tableReservationInternalNoteHint": "Εσωτερική σημείωση...",
+  "tableReservationCreateButton": "ΔΗΜΙΟΥΡΓΙΑ ΚΡΑΤΗΣΗΣ",
+  "tableOrderScreenTitle": "Νέα παραγγελία",
+  "tableOrderAiBanner": "Meli • Ρωτήστε το AI bot μας για προτάσεις...",
+  "billSheetTitle": "Λογαριασμός",
+  "billSheetTotal": "ΣΥΝΟΛΟ:",
+  "billSheetEmpty": "Το καλάθι είναι άδειο",
+  "billSheetOrderButton": "ΠΑΡΑΓΓΕΛΙΑ",
+  "tableOrderSubmitSuccess": "Η παραγγελία στάλθηκε",
+  "tableOrderSubmitError": "Δεν ήταν δυνατή η αποστολή της παραγγελίας",
+  "tableOverviewNoReservations": "Δεν υπάρχουν ενεργές κρατήσεις για αυτό το τραπέζι",
+  "tableOverviewNoOrders": "Δεν υπάρχουν ενεργές παραγγελίες για αυτό το τραπέζι",
+  "tableOverviewMakeOrder": "ΠΑΡΑΓΓΕΛΙΑ",
+  "tableOrdersFilterTypeAny": "Οποιοδήποτε",
+  "tableOrdersFilterStatusLabel": "Κατάσταση παραγγελίας:",
+  "tableOrdersFilterStatusAny": "Οποιοδήποτε",
+  "tableOrdersFilterStatusAwaitingConfirmation": "Αναμονή επιβεβαίωσης",
+  "tableOrdersFilterStatusPending": "Εκκρεμεί",
+  "tableOrdersFilterStatusConfirmed": "Επιβεβαιωμένη",
+  "tableOrdersFilterStatusRejected": "Απορρίφθηκε",
+  "tableOrdersFilterStatusExpired": "Έληξε",
+  "tableOrdersFilterStatusPaid": "Πληρωμένη"
+}

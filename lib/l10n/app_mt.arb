@@ -1,0 +1,374 @@
+{
+  "@@locale": "mt",
+  "appTitle": "GastroCrew",
+  "loginSubtitle": "Idħol biex tkompli",
+  "loginEmailLabel": "Email",
+  "loginEmailHint": "eż. user@example.com",
+  "loginEmailRequired": "Daħħal l-email",
+  "loginEmailInvalid": "Daħħal email validu",
+  "loginPasswordLabel": "Password",
+  "loginPasswordRequired": "Daħħal il-password",
+  "loginRememberEmail": "Ftakar l-email",
+  "loginButton": "Idħol",
+  "loginFailed": "Id-dħul falla. Erġa' pprova.",
+  "loginRoleNotSupported": "Ir-rwol tiegħek mhux appoġġjat. Din l-app hija għall-kelliema, iċ-ċkejken u l-barman.",
+  "loginRegisterButton": "Irreġistra",
+  "registerTitle": "Oħloq kont",
+  "registerFirstnameLabel": "Isem",
+  "registerLastnameLabel": "Kunjom",
+  "registerEmailLabel": "Email",
+  "registerPasswordConfirmLabel": "Ikkonferma l-password",
+  "registerPasswordMismatch": "Il-passwords mhumiex l-istess",
+  "registerFieldRequired": "Dan il-qasam huwa meħtieġ",
+  "registerSubmitButton": "Irreġistra",
+  "registerSuccessTitle": "Reġistrazzjoni b'suċċess",
+  "registerSuccessMessage": "Link ta' verifika ntbagħat lil {email}. Jekk jogħġbok iftaħ l-email u kklikkja fuq il-link biex tivverifika u tattiva l-kont. Imbagħad tista' tidħol fl-app.",
+  "@registerSuccessMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registerSuccessOk": "OK",
+  "registerErrorGeneric": "Xi ħaġa marret ħażin. Erġa' pprova.",
+  "registerBackToLogin": "Lura għad-dħul",
+  "profileTitle": "Il-profil tiegħi",
+  "profileLabelName": "ISEM",
+  "profileLabelEmail": "EMAIL",
+  "profileLabelPassword": "PASSWORD",
+  "profileChangePassword": "Ibdel",
+  "profileReservationReminder": "TFAKKIRA TAR-RIŻERVAZZJONI",
+  "profileReservationReminderHint": "*Kemm qabel tirċievi notifiki biex tipprepara ikel minn qabel",
+  "profileReservationReminderValue": "1 siegħa qabel",
+  "profileLabelLanguage": "LINGWA",
+  "profileDeleteAccount": "ĦASSAR IL-KONT",
+  "profileDeleteAccountAction": "Ikklikkja biex tħassar",
+  "profileDeleteAccountWarning": "Jekk tħassar il-profil tiegħek, ma jistax jiġi restawrut.",
+  "profileLabelCurrency": "MUNITA",
+  "profileLanguageValue": "Malti",
+  "profileDrinksList": "LISTA TAX-XORB",
+  "profileShiftScheduleLabel": "SKEDA TAL-VARDJI",
+  "profileShiftScheduleView": "Ara",
+  "shiftScheduleDialogTitle": "Skeda tal-vardji",
+  "shiftScheduleLoadError": "Ma stajtx nilħaq l-iskeda.",
+  "shiftScheduleEmpty": "L-ebda dejta tal-iskeda.",
+  "shiftScheduleRetry": "Erġa' pprova",
+  "shiftScheduleSelfLabel": "Jien",
+  "profileLogout": "OĦROĠ",
+  "profileImageDialogTitle": "Ritratt tal-profil",
+  "profileImageUploadButton": "ITTELLA' RITRATT",
+  "profileImageMaxSize": "3MB (daqs massimu tal-immaġni)",
+  "profileImageSaveChanges": "ISSEJVJA L-BIDLIET",
+  "logoutDialogTitle": "Oħroġ",
+  "logoutDialogMessage": "Int żgur li trid toħroġ?",
+  "logoutCancel": "Annulla",
+  "logoutConfirm": "Oħroġ",
+  "navOrders": "ORDNIJIET",
+  "navReady": "LEST",
+  "navPreparing": "QED JIPPREPARA",
+  "navReservations": "RIŻERVAZZJONIJIET",
+  "navMenu": "MENU",
+  "navDrinks": "XORB",
+  "navZones": "ŻONI",
+  "tablesReserve": "IRRIŻERVA",
+  "tablesOrder": "ORDNA",
+  "zonesCount": "{count} żoni",
+  "@zonesCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableNumber": "Mejda {number}",
+  "@tableNumber": {"placeholders": {"number": {"type": "String"}}},
+  "tableReservationAt": "Riżervazzjoni:",
+  "tableTypeTable": "Mejda",
+  "tableTypeRoom": "Kamra",
+  "tableTypeSunbed": "Sunbed",
+  "seatingNumberTable": "Mejda {number}",
+  "@seatingNumberTable": {"placeholders": {"number": {"type": "String"}}},
+  "seatingNumberRoom": "Kamra {number}",
+  "@seatingNumberRoom": {"placeholders": {"number": {"type": "String"}}},
+  "seatingNumberSunbed": "Sunbed {number}",
+  "@seatingNumberSunbed": {"placeholders": {"number": {"type": "String"}}},
+  "navProfile": "PROFIL",
+  "readyTitle": "Lest għas-servizz",
+  "readySubtitle": "Ordniijiet lesti biex isiru servizz",
+  "readyOrdersCountSuffix": " ordniijiet lesti",
+  "readyMarkAsServed": "IMMARKA BĦALA SERVUT",
+  "readyMarkAsDelivered": "IMMARKA BĦALA MOĦDLI",
+  "readySectionFood": "IKEL",
+  "readySectionDrinks": "XORB",
+  "readyMarkAsServedSuccess": "L-ordni immarkata bħala servuta",
+  "readyMarkAsServedError": "Falliet l-immarkar",
+  "ordersTitle": "Ordniijiet",
+  "ordersCount": "{count} ordniijiet",
+  "ordersCountSuffix": " ordniijiet",
+  "ordersTabActive": "Attivi",
+  "ordersTabHistory": "Kronoloġija",
+  "ordersFilters": "FILTRI",
+  "ordersOrderButton": "ORDNA",
+  "ordersFoodLabel": "Ikel:",
+  "ordersDrinksLabel": "Xorb:",
+  "orderStatusPending": "PENDENTI",
+  "orderStatusInPreparation": "QED JIPPREPARA",
+  "orderStatusServed": "SERVUT",
+  "orderStatusRejected": "RIFJUTAT",
+  "orderBill": "Kont:",
+  "@ordersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTableNumber": "Mejda {number}",
+  "@orderTableNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "orderDishCount": "Numru ta' platti: {count}",
+  "@orderDishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderDrinksCount": "Numru ta' xorb: {count}",
+  "@orderDrinksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderSeeDetails": "ARA D-DETTAJJI",
+  "orderTimeAgoDays": "{count} jum ilu",
+  "@orderTimeAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoHoursMinutes": "{hours}h {minutes}min ilu",
+  "@orderTimeAgoHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoHours": "{count} siegħat ilu",
+  "@orderTimeAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoMinutes": "{count} minuti ilu",
+  "@orderTimeAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderTimeAgoSeconds": "{count} sekondi ilu",
+  "@orderTimeAgoSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderRejectAll": "IRRIFJUTA KOLLHA",
+  "orderAccept": "AĊĊETTA",
+  "orderMarkAsPaid": "IMMARKA BĦALA ĦALLAS",
+  "orderMarkAsPaidConfirmTitle": "Immarka bħala ħallas",
+  "orderMarkAsPaidConfirmMessage": "Int żgur li trid tagħmel din l-azzjoni?",
+  "dialogYes": "Iva",
+  "dialogNo": "Le",
+  "orderMarkAsPaidError": "Ma stajtx nimmarka l-ordni bħala ħallasa",
+  "orderMarkAsPaidSuccess": "L-ordni immarkata bħala ħallasa",
+  "ordersHistoryEmpty": "Għad m'hemm l-ebda ordni fil-kronoloġija",
+  "orderPaidLabel": "ĦALLAS",
+  "orderPaidAt": "Ħallas fi {dateTime}",
+  "@orderPaidAt": {"placeholders": {"dateTime": {"type": "String"}}},
+  "orderProcessingComplete": "Ipproċessar tal-ordni \"{orderNumber}\" lesta",
+  "@orderProcessingComplete": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEstimationTitle": "Stima tal-ħin",
+  "timeEstimationQuestion": "Fi kemm ħin tkun lesta din l-ordni?",
+  "timeEstimationSkip": "AQTA' L-ISTIMA",
+  "timeEstimationConfirm": "IKKONFERMA L-ĦIN",
+  "reservationsTitle": "Riżervazzjonijiet",
+  "reservationsSubtitle": "Immaniġġja r-riżervazzjonijiet tal-mejda",
+  "reservationsRequestsTitle": "Riżervazzjonijiet",
+  "reservationsTabRequests": "Talbiet",
+  "reservationsTabAccepted": "Aċċettati",
+  "reservationToday": "Illum",
+  "reservationCountDrinks": "{count} xorb",
+  "reservationCountDishes": "{count} platti",
+  "@reservationCountDrinks": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "@reservationCountDishes": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reservationCountList": "{count} riżervazzjonijiet",
+  "@reservationCountList": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reservationsFilters": "FILTRI",
+  "reservationLabelTime": "Ħin:",
+  "reservationLabelRegion": "Reġjun:",
+  "reservationLabelPartySize": "Numru ta' nies:",
+  "preparingTitle": "Qed jipprepara",
+  "preparingSubtitle": "Oġġetti qed jippreparaw",
+  "preparingDishCount": "{count} platti",
+  "preparingDishCountSuffix": " platti",
+  "preparingDrinksCountSuffix": " xorb",
+  "@preparingDishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preparingMarkAsReady": "IMMARKA BĦALA LEST",
+  "preparingMarkAsReadySuccess": "L-ordni immarkata bħala lesta",
+  "preparingMarkAsReadyError": "Falliet l-immarkar",
+  "menuTitle": "Menu",
+  "menuSubtitle": "Ibbrawżja l-oġġetti tal-menu",
+  "menuInstruction": "Immarka meta platt jew xorb ikun disponibbli jew mhux",
+  "menuSearchHint": "Fittex platt...",
+  "menuAvailableCount": "{available} disponibbli minn {total} totali",
+  "menuAvailableCountMiddle": " disponibbli minn ",
+  "drinksListTitle": "Lista tax-xorb",
+  "drinksListInstruction": "Immarka meta xorb ikun disponibbli jew mhux",
+  "drinksAvailableCountSuffix": " xorb disponibbli",
+  "menuSearchHintDrinks": "Fittex xorb...",
+  "@menuAvailableCount": {
+    "placeholders": {
+      "available": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "profileTypeWaiter": "Kelliem",
+  "profileTypeKitchen": "Kċina",
+  "profileTypeBar": "Bar",
+  "authLoginFailed": "Id-dħul falla.",
+  "authInvalidResponse": "Rispons invalidu mis-server.",
+  "filterTitle": "Filtri",
+  "filterTableNumber": "Numru tal-mejda:",
+  "filterFood": "Ikel:",
+  "filterDrinks": "Xorb:",
+  "filterBillAmount": "Ammont tal-kont:",
+  "filterStatusPending": "Pendenti ?",
+  "filterStatusInPreparation": "Qed jipprepara ⏱",
+  "filterStatusServed": "Servut ✔",
+  "filterStatusRejected": "Rifjutat ✖",
+  "filterReset": "RESETTA L-FILTRI",
+  "filterApply": "APPLIKA L-FILTRI",
+  "filterBillRSD": "{min} - {max} RSD",
+  "@filterBillRSD": {"placeholders": {"min": {"type": "String"}, "max": {"type": "String"}}},
+  "filterDate": "Data:",
+  "filterDateFrom": "Minn:",
+  "filterDateTo": "Sa:",
+  "filterDateToday": "Illum",
+  "filterDateYesterday": "Ilbieraħ",
+  "filterDateTomorrow": "Għada",
+  "filterOrderContent": "Kontenut tal-ordni:",
+  "filterOrderContentDrinks": "Xorb",
+  "filterOrderContentFood": "Ikel",
+  "filterPeopleCount": "Numru ta' nies:",
+  "filterRegion": "Reġjun:",
+  "filterRegionIndoors": "Ġewwa",
+  "filterRegionGarden": "Ġnien",
+  "filterReservationContent": "Kontenut tar-riżervazzjoni:",
+  "acceptSheetTitle": "Ikkompleta l-konferma",
+  "acceptSheetSelectRegion": "Agħżel ir-reġjun tar-restoran",
+  "acceptSheetSelectTable": "Agħżel in-numru tal-mejda",
+  "acceptSheetNoteHint": "Żid nota għall-mistieden... (mhux obbligatorju)",
+  "acceptSheetConfirm": "IKKONFERMA R-RIŻERVAZZJONI",
+  "acceptSheetNoTables": "L-ebda mejda disponibbli.",
+  "acceptSheetErrorGeneric": "Ma nistax naċċetta r-riżervazzjoni. Erġa' pprova.",
+  "acceptSheetRegionLabel": "Reġjun {number}",
+  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "acceptSheetReservationAt": "Riżervazzjoni fi {time}",
+  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "confirmedResUser": "Utent:",
+  "confirmedResTableNumber": "Mejda:",
+  "confirmedResOccasion": "Okkażjoni:",
+  "confirmedResOccasionBirthday": "Għeluq sninek",
+  "confirmedResOccasionClassic": "Klassika",
+  "confirmedResNote": "Nota:",
+  "confirmedResEditButton": "EDITJA R-RIŻERVAZZJONI",
+  "confirmedResCancelButton": "IKKANċELLA R-RIŻERVAZZJONI",
+  "editResDialogTitle": "Editjar",
+  "editResNoteHint": "Daħħal ir-raġunijiet u d-dettalji tal-bidla għall-mistieden... (meħtieġ)",
+  "editResConfirm": "IKKONFERMA L-BIDLIET",
+  "cancelDialogTitle": "Ikkanċellazzjoni",
+  "cancelReasonHint": "Daħħal ir-raġuni tal-ikkanċellazzjoni (meħtieġ)",
+  "rejectDialogTitle": "Konferma finali",
+  "rejectReasonHint": "Daħħal spjegazzjoni (meħtieġ)",
+  "rejectErrorFallback": "Ma nistax nirrifjuta r-riżervazzjoni. Erġa' pprova.",
+  "buttonRejectReservation": "IRRIFJUTA R-RIŻERVAZZJONI",
+  "buttonReject": "IRRIFJUTA",
+  "buttonAccept": "AĊĊETTA",
+  "labelFoodDrink": "Ikel/Xorb:",
+  "tableSeatCount": "{count} postijiet",
+  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "tableReservationDialogTitle": "Riżervazzjoni",
+  "tableReservationNameHint": "Fl-isem...",
+  "tableReservationNameRequired": "Daħħal l-isem",
+  "tableReservationPartySizeHint": "Numru ta' nies",
+  "tableReservationPartySizeRequired": "Agħżel in-numru ta' nies",
+  "tableReservationDateHint": "Data",
+  "tableReservationDateRequired": "Agħżel id-data",
+  "tableReservationTimeHint": "Ħin",
+  "tableReservationTimeRequired": "Agħżel iż-żmien",
+  "tableReservationTableRequired": "Agħżel il-mejda",
+  "tableReservationInternalNoteHint": "Daħħal nota interna...",
+  "tableReservationCreateButton": "OĦLOQ RIŻERVAZZJONI",
+  "tableOrderScreenTitle": "Ordni Ġdida",
+  "tableOrderAiBanner": "Meli • Staqsil il-bot AI tagħna għal rakkomandazzjonijiet...",
+  "billSheetTitle": "Kont",
+  "billSheetTotal": "TOTAL:",
+  "billSheetEmpty": "Il-basket huwa vojt",
+  "billSheetOrderButton": "ORDNA",
+  "tableOrderSubmitSuccess": "L-ordni ntbagħet",
+  "tableOrderSubmitError": "Ma stajtx nibgħat l-ordni",
+  "tableOverviewNoReservations": "L-ebda riżervazzjoni attiva għal din il-mejda",
+  "tableOverviewNoOrders": "L-ebda ordni attiva għal din il-mejda",
+  "tableOverviewMakeOrder": "AGĦMEL ORDNI",
+  "tableOrdersFilterTypeAny": "Kull waħda",
+  "tableOrdersFilterStatusLabel": "Status tal-ordni:",
+  "tableOrdersFilterStatusAny": "Kull waħda",
+  "tableOrdersFilterStatusAwaitingConfirmation": "Qed jistenna konferma",
+  "tableOrdersFilterStatusPending": "Pendenti",
+  "tableOrdersFilterStatusConfirmed": "Ikkonfermat",
+  "tableOrdersFilterStatusRejected": "Rifjutat",
+  "tableOrdersFilterStatusExpired": "Skada",
+  "tableOrdersFilterStatusPaid": "Ħallas"
+}

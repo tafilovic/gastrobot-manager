@@ -27,6 +27,8 @@ const supportedLocales = [
   SupportedLocale(locale: Locale('es'), country: CountryEsp(), name: 'Español'),
   SupportedLocale(locale: Locale('hr'), country: CountryHrv(), name: 'Hrvatski'),
   SupportedLocale(locale: Locale('fr'), country: CountryFra(), name: 'Français'),
+  SupportedLocale(locale: Locale('el'), country: CountryGrc(), name: 'Ελληνικά'),
+  SupportedLocale(locale: Locale('mt'), country: CountryMlt(), name: 'Malti'),
   SupportedLocale(locale: Locale('hi'), country: CountryInd(), name: 'हिन्दी'),
   SupportedLocale(locale: Locale('ne'), country: CountryNpl(), name: 'नेपाली'),
 ];

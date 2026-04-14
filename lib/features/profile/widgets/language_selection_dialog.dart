@@ -25,6 +25,10 @@ class LanguageSelectionDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final localeProvider = context.watch<LocaleProvider>();
     final colorScheme = Theme.of(context).colorScheme;
+    final sortedLocales = [...supportedLocales]..sort(
+          (a, b) =>
+              a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+        );
 
     const radius = 28.0;
     return Dialog(
@@ -63,7 +67,7 @@ class LanguageSelectionDialog extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: supportedLocales.map((supported) {
+                  children: sortedLocales.map((supported) {
                     final isSelected =
                         localeProvider.locale?.languageCode ==
                             supported.locale.languageCode;
@@ -77,6 +81,12 @@ class LanguageSelectionDialog extends StatelessWidget {
                         ),
                       ),
                       title: Text(supported.name),
+                      subtitle: Text(
+                        supported.locale.languageCode.toUpperCase(),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                      ),
                       trailing: isSelected
                           ? Icon(Icons.check, color: AppColors.accent, size: 24)
                           : null,

@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/l10n/cupertino_localizations_fallback_delegate.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
+import 'package:gastrobotmanager/core/l10n/material_localizations_fallback_delegate.dart';
 // Android-only: Google Play flexible in-app update (see coordinator file header).
 import 'package:gastrobotmanager/core/update/android_flexible_update_coordinator.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
@@ -60,7 +63,12 @@ class _GastroBotAppState extends State<GastroBotApp> {
           debugShowCheckedModeBanner: false,
           scrollBehavior: const AppScrollBehavior(),
           locale: localeProvider.locale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            MaterialLocalizationsFallbackDelegate(),
+            CupertinoLocalizationsFallbackDelegate(),
+            GlobalWidgetsLocalizations.delegate,
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           routerConfig: _router,
         );
