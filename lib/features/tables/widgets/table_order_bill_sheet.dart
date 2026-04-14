@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ void showTableOrderBillSheet({
   required BuildContext context,
   required ValueListenable<Map<String, int>> cartListenable,
   required TableOrderMenuProvider menuProvider,
-  required String Function(int) formatPrice,
+  required String Function(Decimal) formatPrice,
   required void Function(String itemId, int quantity) onUpdateQuantity,
   required void Function(String itemId) onRemove,
   required Future<void> Function(String tableId) onOrder,
@@ -57,7 +58,7 @@ class _TableOrderBillSheet extends StatelessWidget {
   final ValueListenable<Map<String, int>> cartListenable;
   final Map<String, int>? initialCart;
   final TableOrderMenuProvider menuProvider;
-  final String Function(int) formatPrice;
+  final String Function(Decimal) formatPrice;
   final void Function(String itemId, int quantity) onUpdateQuantity;
   final void Function(String itemId) onRemove;
   final Future<void> Function(String tableId) onOrder;
@@ -79,10 +80,10 @@ class _TableOrderBillSheet extends StatelessWidget {
     return entries;
   }
 
-  int _totalPrice(List<_CartEntry> entries) {
-    return entries.fold(
-      0,
-      (sum, e) => sum + (e.item.price * e.quantity),
+  Decimal _totalPrice(List<_CartEntry> entries) {
+    return entries.fold<Decimal>(
+      Decimal.zero,
+      (sum, e) => sum + (e.item.price * Decimal.fromInt(e.quantity)),
     );
   }
 
@@ -348,7 +349,7 @@ class _BillItemRow extends StatelessWidget {
   });
 
   final _CartEntry entry;
-  final String Function(int) formatPrice;
+  final String Function(Decimal) formatPrice;
   final Color accentColor;
   final void Function(int) onUpdateQuantity;
   final VoidCallback onRemove;
@@ -356,7 +357,7 @@ class _BillItemRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final price = entry.item.price * entry.quantity;
+    final price = entry.item.price * Decimal.fromInt(entry.quantity);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),

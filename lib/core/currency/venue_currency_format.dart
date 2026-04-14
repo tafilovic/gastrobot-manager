@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
@@ -43,6 +44,15 @@ String formatVenueAmountForDisplay(
 String formatVenueIntForDisplay(
   BuildContext context,
   int amount,
+  String? backendCode,
+) {
+  return formatVenueAmountForDisplay(context, amount.toDouble(), backendCode);
+}
+
+/// Formats a major-unit decimal amount (e.g. menu line from API `199.99`).
+String formatVenueDecimalForDisplay(
+  BuildContext context,
+  Decimal amount,
   String? backendCode,
 ) {
   return formatVenueAmountForDisplay(context, amount.toDouble(), backendCode);

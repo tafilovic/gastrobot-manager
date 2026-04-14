@@ -16,13 +16,18 @@ class VenueMenu {
   final List<MenuCategory> categories;
 
   factory VenueMenu.fromJson(Map<String, dynamic> json) {
-    final categoriesList = json['categories'] as List<dynamic>?;
+    final categoriesList = json['categories'] as List<dynamic>? ??
+        json['menuCategories'] as List<dynamic>? ??
+        json['sections'] as List<dynamic>?;
     return VenueMenu(
-      id: json['id'] as String,
+      id: json['id']?.toString() ?? '',
       name: json['name'] as String? ?? '',
-      type: json['type'] as String? ?? 'food',
+      type: json['type'] as String? ??
+          json['menuType'] as String? ??
+          'food',
       categories: categoriesList
-              ?.map((e) => MenuCategory.fromJson(e as Map<String, dynamic>))
+              ?.whereType<Map>()
+              .map((e) => MenuCategory.fromJson(Map<String, dynamic>.from(e)))
               .toList() ??
           const [],
     );

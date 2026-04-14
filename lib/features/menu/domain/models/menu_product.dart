@@ -14,10 +14,13 @@ class MenuProduct {
 
   factory MenuProduct.fromJson(Map<String, dynamic> json) {
     return MenuProduct(
-      id: json['id'] as String,
-      name: json['name'] as String? ?? '',
+      id: json['id']?.toString() ?? '',
+      name: json['name'] as String? ??
+          json['title'] as String? ??
+          json['label'] as String? ??
+          '',
       description: json['description'] as String?,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl: json['imageUrl'] as String? ?? json['image_url'] as String?,
     );
   }
 }

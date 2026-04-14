@@ -12,10 +12,44 @@ class VenueMenusRemote implements MenusApi {
 
   final Dio _dio;
 
+  /// Normalizes GET /menus body: raw list, `{ "data": [...] }`, `{ "menus": [...] }`,
+  /// or a single menu object `{ "id", "categories": ... }`.
+  static List<Map<String, dynamic>> _menusPayloadToList(dynamic raw) {
+    if (raw is List<dynamic>) {
+      return raw
+          .whereType<Map>()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
+    }
+    if (raw is Map) {
+      final m = Map<String, dynamic>.from(raw);
+      final data = m['data'];
+      if (data is List<dynamic>) {
+        return data
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
+      }
+      final menus = m['menus'];
+      if (menus is List<dynamic>) {
+        return menus
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
+      }
+      if (m.containsKey('categories') ||
+          m.containsKey('menuCategories') ||
+          m.containsKey('sections')) {
+        return [m];
+      }
+    }
+    return const [];
+  }
+
   @override
   Future<List<VenueMenu>> getMenus(String venueId, String menuType) async {
     try {
-      final response = await _dio.get<List<dynamic>>(
+      final response = await _dio.get<dynamic>(
         '/v1/venues/$venueId/menus',
         queryParameters: {'type': menuType},
         options: Options(
@@ -34,9 +68,8 @@ class VenueMenusRemote implements MenusApi {
         throw MenuException(msg ?? 'Failed to load menu');
       }
 
-      return (response.data!)
-          .map((e) => VenueMenu.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final list = _menusPayloadToList(response.data);
+      return list.map(VenueMenu.fromJson).toList();
     } on DioException catch (e) {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()

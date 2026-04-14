@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -82,7 +83,7 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
       cartListenable: _cartNotifier,
       initialCart: Map.from(_cart),
       menuProvider: context.read<TableOrderMenuProvider>(),
-      formatPrice: (price) => formatVenueIntForDisplay(
+      formatPrice: (price) => formatVenueDecimalForDisplay(
             context,
             price,
             context.read<AuthProvider>().currentVenueCurrency,
@@ -157,7 +158,7 @@ class _TableOrderScreenState extends State<TableOrderScreen> {
     }
   }
 
-  String _formatMenuPrice(int price) => formatVenueIntForDisplay(
+  String _formatMenuPrice(Decimal price) => formatVenueDecimalForDisplay(
         context,
         price,
         context.read<AuthProvider>().currentVenueCurrency,
@@ -351,7 +352,7 @@ class _OrderMenuItemCard extends StatelessWidget {
 
   final MenuItem item;
   final Color accentColor;
-  final String Function(int) formatPrice;
+  final String Function(Decimal) formatPrice;
   final String? Function(String?) resolveImageUrl;
   final VoidCallback onAdd;
 
