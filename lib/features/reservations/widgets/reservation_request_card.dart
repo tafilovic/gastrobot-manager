@@ -110,6 +110,12 @@ class ReservationRequestCard extends StatelessWidget {
                 l10n.reservationLabelPartySize,
                 '${r.peopleCount}',
               ),
+              if (r.hasOrder)
+                _waiterDetailRow(
+                  theme,
+                  'Food/Drinks:',
+                  'YES',
+                ),
             ],
           ),
         ),

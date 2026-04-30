@@ -17,6 +17,7 @@ class PendingReservation {
     this.user,
     this.region,
     this.items = const [],
+    this.hasOrder = false,
     this.createdAt,
     this.updatedAt,
   });
@@ -33,6 +34,7 @@ class PendingReservation {
   final PendingReservationUser? user;
   final PendingReservationRegion? region;
   final List<PendingOrderItem> items;
+  final bool hasOrder;
   final String? createdAt;
   final String? updatedAt;
 
@@ -42,6 +44,22 @@ class PendingReservation {
 
   /// Region label for cards and details — API `region.title`.
   String? get regionTitle => region?.title;
+
+  static bool _isFoodType(String? type) {
+    final t = type?.trim().toLowerCase() ?? '';
+    return t == 'food' || t == 'meal';
+  }
+
+  static bool _isDrinkType(String? type) {
+    final t = type?.trim().toLowerCase() ?? '';
+    return t == 'drink' || t == 'beverage';
+  }
+
+  List<PendingOrderItem> get foodItems =>
+      items.where((i) => _isFoodType(i.type)).toList();
+
+  List<PendingOrderItem> get drinkItems =>
+      items.where((i) => _isDrinkType(i.type)).toList();
 
   factory PendingReservation.fromJson(Map<String, dynamic> json) {
     final itemsList = json['items'] as List<dynamic>?;
@@ -95,6 +113,7 @@ class PendingReservation {
                 e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{},
               ))
           .toList(),
+      hasOrder: rawOrder != null,
       createdAt: json['createdAt']?.toString(),
       updatedAt: json['updatedAt']?.toString(),
     );
