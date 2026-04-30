@@ -52,6 +52,7 @@ class ConfirmedReservation {
     this.regionId,
     this.regionTitle,
     this.additionalInfo,
+    this.confirmedMessage,
     this.items = const [],
   });
 
@@ -79,6 +80,9 @@ class ConfirmedReservation {
 
   /// Guest note / additional info added to the reservation.
   final String? additionalInfo;
+
+  /// Backend confirmation message key (e.g. reservation.confirmed_with_note).
+  final String? confirmedMessage;
 
   /// Pre-ordered items (food / drink) linked via the reservation's order.
   /// Empty when the API response does not include order data.
@@ -153,6 +157,7 @@ class ConfirmedReservation {
       regionId: regionId,
       regionTitle: regionTitle,
       additionalInfo: json['additionalInfo'] as String?,
+      confirmedMessage: json['confirmedMessage'] as String?,
       user: user,
       items: items,
     );

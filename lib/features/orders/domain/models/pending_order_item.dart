@@ -3,6 +3,58 @@ Map<String, dynamic>? _stringKeyedMap(Object? value) {
   return Map<String, dynamic>.from(value);
 }
 
+String? _normalizeItemType(String? raw) {
+  final t = raw?.trim().toLowerCase();
+  if (t == null || t.isEmpty) return null;
+  if (t == 'drink' || t == 'beverage') return 'drink';
+  if (t == 'food' || t == 'meal') return 'food';
+  return null;
+}
+
+bool _isLikelyDrinkName(String name) {
+  final n = name.toLowerCase();
+  const drinkKeywords = <String>[
+    'kafa',
+    'coffee',
+    'espresso',
+    'cappuccino',
+    'latte',
+    'čaj',
+    'caj',
+    'tea',
+    'matcha',
+    'sok',
+    'juice',
+    'ceđena',
+    'cedena',
+    'narandža',
+    'narandza',
+    'cola',
+    'coca',
+    'fanta',
+    'sprite',
+    'water',
+    'voda',
+    'wine',
+    'vino',
+    'beer',
+    'pivo',
+    'rakija',
+    'whiskey',
+    'viski',
+    'vodka',
+    'gin',
+    'tonic',
+    'liker',
+    'liqueur',
+    'prosecco',
+    'champagne',
+    'šampanj',
+    'sampanj',
+  ];
+  return drinkKeywords.any(n.contains);
+}
+
 /// Single item in a pending order (kitchen, bar, waiter).
 /// [type] is 'food' | 'drink' for waiter; null otherwise.
 /// [totalPrice] when present (from API) is used to compute order bill total.
@@ -55,7 +107,20 @@ class PendingOrderItem {
         ? json['quantity'] as int
         : (int.tryParse(json['quantity']?.toString() ?? '1') ?? 1);
 
-    final type = json['type'] as String? ?? category?['type'] as String?;
+    final menuItemType = menuItem?['type']?.toString();
+    final productType = product?['type']?.toString();
+    final productCategory = _stringKeyedMap(product?['category']);
+    final productCategoryType = productCategory?['type']?.toString();
+    var type = _normalizeItemType(
+      json['type']?.toString() ??
+          category?['type']?.toString() ??
+          menuItemType ??
+          productType ??
+          productCategoryType,
+    );
+    if (type == null && name.isNotEmpty) {
+      type = _isLikelyDrinkName(name) ? 'drink' : 'food';
+    }
 
     double? totalPrice;
     if (json['totalPrice'] != null) {

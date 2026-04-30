@@ -162,6 +162,12 @@ class ConfirmedReservationDetailsContent extends StatelessWidget {
 
     final food = reservation.foodItems;
     final drinks = reservation.drinkItems;
+    final info = reservation.additionalInfo?.trim() ?? '';
+    final confirmationMessage =
+        reservation.confirmedMessage == 'reservation.confirmed_with_note' &&
+            info.isNotEmpty
+        ? l10n.confirmedResMessageConfirmedWithNote(info)
+        : l10n.confirmedResMessageConfirmed;
 
     return Column(
       children: [
@@ -203,13 +209,11 @@ class ConfirmedReservationDetailsContent extends StatelessWidget {
                 label: l10n.confirmedResOccasion,
                 value: occasionLabel,
               ),
-              if (reservation.additionalInfo != null &&
-                  reservation.additionalInfo!.isNotEmpty)
-                ReservationDetailRow(
-                  icon: Icons.note,
-                  label: l10n.confirmedResNote,
-                  value: reservation.additionalInfo!,
-                ),
+              ReservationDetailRow(
+                icon: Icons.message_outlined,
+                label: l10n.confirmedResMessageLabel,
+                value: confirmationMessage,
+              ),
               if (food.isNotEmpty) ...[
                 _SectionHeader(title: l10n.readySectionFood, icon: Icons.restaurant),
                 ...food.map((i) => _ItemLine(item: i)),
