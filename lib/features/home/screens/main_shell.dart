@@ -130,7 +130,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         context.read<QueueProvider>().loadOnce(venueId);
         break;
       case 'reservations':
-        context.read<ReservationsProvider>().loadOnce(venueId);
+        if (context.read<AuthProvider>().profileType == ProfileType.waiter) {
+          context.read<ReservationsProvider>().refreshPendingIncremental(venueId);
+        } else {
+          context.read<ReservationsProvider>().loadOnce(venueId);
+        }
         break;
       default:
         break;

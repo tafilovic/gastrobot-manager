@@ -38,7 +38,7 @@ class ConfirmedReservationUser {
   }
 }
 
-/// A confirmed reservation from GET /venues/:venueId/waiter/reservations/confirmed.
+/// A confirmed reservation from GET /v1/venues/:venueId/reservations?status=confirmed.
 class ConfirmedReservation {
   const ConfirmedReservation({
     required this.id,
@@ -131,7 +131,7 @@ class ConfirmedReservation {
     final rawOrder = json['order'];
     List<PendingOrderItem> items = const [];
     if (rawOrder is Map<String, dynamic>) {
-      final rawItems = rawOrder['items'];
+      final rawItems = rawOrder['items'] ?? rawOrder['orderItems'];
       if (rawItems is List) {
         items = rawItems
             .whereType<Map<String, dynamic>>()

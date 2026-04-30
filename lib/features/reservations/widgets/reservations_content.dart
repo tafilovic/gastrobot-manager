@@ -45,18 +45,60 @@ class ReservationsContent extends StatefulWidget {
 }
 
 class _ReservationsContentState extends State<ReservationsContent> {
+  static const double _loadMoreThresholdPx = 280;
   int _selectedTabIndex = 0;
   PendingReservation? _selectedWaiterRequest;
   PendingOrder? _selectedKitchenBarRequest;
   ConfirmedReservation? _selectedConfirmed;
   ActiveReservationsFilters? _activeReservationsFilters;
+  final ScrollController _waiterRequestsScrollController = ScrollController();
+  final ScrollController _confirmedScrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _waiterRequestsScrollController.addListener(_onWaiterRequestsScroll);
+    _confirmedScrollController.addListener(_onConfirmedScroll);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => widget.onStartRefresh(),
     );
+  }
+
+  @override
+  void dispose() {
+    _waiterRequestsScrollController
+      ..removeListener(_onWaiterRequestsScroll)
+      ..dispose();
+    _confirmedScrollController
+      ..removeListener(_onConfirmedScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onWaiterRequestsScroll() {
+    if (_selectedTabIndex != 0) return;
+    final auth = context.read<AuthProvider>();
+    if (auth.profileType != ProfileType.waiter) return;
+    final c = _waiterRequestsScrollController;
+    if (!c.hasClients) return;
+    if (_isNearListEnd(c)) {
+      context.read<ReservationsProvider>().loadMoreWaiterRequests();
+    }
+  }
+
+  void _onConfirmedScroll() {
+    if (_selectedTabIndex != 1) return;
+    final auth = context.read<AuthProvider>();
+    if (auth.profileType != ProfileType.waiter) return;
+    final c = _confirmedScrollController;
+    if (!c.hasClients) return;
+    if (_isNearListEnd(c)) {
+      context.read<ConfirmedReservationsProvider>().loadMore();
+    }
+  }
+
+  bool _isNearListEnd(ScrollController c) {
+    return c.position.pixels >= c.position.maxScrollExtent - _loadMoreThresholdPx;
   }
 
   void _onTabChanged(Set<int> selected, ProfileType? profileType) {
@@ -774,7 +816,15 @@ class _ReservationsContentState extends State<ReservationsContent> {
 
     if (profileType == ProfileType.waiter) {
       final requests = provider.waiterRequests;
+      final showLoader = provider.isLoadingMoreWaiter;
+      final totalCount = requests.length + (showLoader ? 1 : 0);
       Widget buildCard(int index) {
+        if (index >= requests.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
         final reservation = requests[index];
         return ListItemEntrance(
           index: index,
@@ -793,15 +843,17 @@ class _ReservationsContentState extends State<ReservationsContent> {
 
       if (crossAxisCount == 1) {
         return ListView.separated(
+          controller: _waiterRequestsScrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: padding,
-          itemCount: requests.length,
+          itemCount: totalCount,
           separatorBuilder: (_, _) => const SizedBox(height: 12),
           itemBuilder: (context, index) => buildCard(index),
         );
       }
 
       return GridView.builder(
+        controller: _waiterRequestsScrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         padding: padding,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -810,7 +862,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
           crossAxisSpacing: 12,
           mainAxisExtent: 200,
         ),
-        itemCount: requests.length,
+        itemCount: totalCount,
         itemBuilder: (context, index) => buildCard(index),
       );
     }
@@ -917,8 +969,16 @@ class _ReservationsContentState extends State<ReservationsContent> {
     }
 
     const padding = EdgeInsets.symmetric(horizontal: 20, vertical: 8);
+    final showLoader = confirmedProvider.isLoadingMore;
+    final totalCount = items.length + (showLoader ? 1 : 0);
 
     Widget buildCard(int index) {
+      if (index >= items.length) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: Center(child: CircularProgressIndicator()),
+        );
+      }
       final reservation = items[index];
       return ListItemEntrance(
         index: index,
@@ -937,13 +997,15 @@ class _ReservationsContentState extends State<ReservationsContent> {
       onRefresh: () => confirmedProvider.pullRefresh(),
       child: crossAxisCount == 1
           ? ListView.separated(
+              controller: _confirmedScrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: padding,
-              itemCount: items.length,
+              itemCount: totalCount,
               separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) => buildCard(index),
             )
           : GridView.builder(
+              controller: _confirmedScrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: padding,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -952,7 +1014,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                 crossAxisSpacing: 12,
                 mainAxisExtent: 200,
               ),
-              itemCount: items.length,
+              itemCount: totalCount,
               itemBuilder: (context, index) => buildCard(index),
             ),
     );

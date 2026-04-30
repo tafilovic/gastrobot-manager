@@ -1,4 +1,4 @@
-/// Region nested object on GET …/waiter/reservations/pending items.
+/// Region nested object on GET …/v1/venues/:venueId/reservations items.
 class PendingReservationRegion {
   const PendingReservationRegion({
     required this.id,

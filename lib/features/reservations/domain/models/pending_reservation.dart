@@ -2,7 +2,7 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order_ite
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation_region.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation_user.dart';
 
-/// Pending reservation from GET `/venues/:venueId/waiter/reservations/pending`.
+/// Pending reservation from GET `/v1/venues/:venueId/reservations?status=pending`.
 class PendingReservation {
   const PendingReservation({
     required this.id,
@@ -46,8 +46,12 @@ class PendingReservation {
   factory PendingReservation.fromJson(Map<String, dynamic> json) {
     final itemsList = json['items'] as List<dynamic>?;
     final orderItemsList = json['orderItems'] as List<dynamic>?;
+    final rawOrder = json['order'];
+    final nestedOrderItemsList = rawOrder is Map ? rawOrder['orderItems'] as List<dynamic>? : null;
     final rawItems = (orderItemsList != null && orderItemsList.isNotEmpty)
         ? orderItemsList
+        : (nestedOrderItemsList != null && nestedOrderItemsList.isNotEmpty)
+            ? nestedOrderItemsList
         : (itemsList ?? const <dynamic>[]);
 
     PendingReservationRegion? regionObj;
