@@ -673,6 +673,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmedResNote => 'Заметка:';
 
   @override
+  String get confirmedResMessageLabel => 'Сообщение:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'Ваше бронирование подтверждено. До скорой встречи!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'Ваше бронирование подтверждено. До скорой встречи! Примечание: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'ИЗМЕНИТЬ БРОНИРОВАНИЕ';
 
   @override

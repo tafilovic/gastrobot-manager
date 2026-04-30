@@ -671,6 +671,18 @@ class AppLocalizationsNe extends AppLocalizations {
   String get confirmedResNote => 'नोट:';
 
   @override
+  String get confirmedResMessageLabel => 'सन्देश:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'तपाईंको आरक्षण पुष्टि भयो। छिट्टै भेटौंला!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'तपाईंको आरक्षण पुष्टि भयो। छिट्टै भेटौंला! नोट: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'आरक्षण सम्पादन';
 
   @override

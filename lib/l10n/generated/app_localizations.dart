@@ -1330,6 +1330,24 @@ abstract class AppLocalizations {
   /// **'Napomena:'**
   String get confirmedResNote;
 
+  /// No description provided for @confirmedResMessageLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Poruka:'**
+  String get confirmedResMessageLabel;
+
+  /// No description provided for @confirmedResMessageConfirmed.
+  ///
+  /// In sr, this message translates to:
+  /// **'Vaša rezervacija je potvrđena. Vidimo se uskoro!'**
+  String get confirmedResMessageConfirmed;
+
+  /// No description provided for @confirmedResMessageConfirmedWithNote.
+  ///
+  /// In sr, this message translates to:
+  /// **'Vaša rezervacija je potvrđena. Vidimo se uskoro! Napomena: {note}'**
+  String confirmedResMessageConfirmedWithNote(String note);
+
   /// No description provided for @confirmedResEditButton.
   ///
   /// In sr, this message translates to:

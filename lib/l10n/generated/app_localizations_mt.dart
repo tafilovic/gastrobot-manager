@@ -673,6 +673,18 @@ class AppLocalizationsMt extends AppLocalizations {
   String get confirmedResNote => 'Nota:';
 
   @override
+  String get confirmedResMessageLabel => 'Messaġġ:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'Ir-riżervazzjoni tiegħek hija kkonfermata. Narawk dalwaqt!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'Ir-riżervazzjoni tiegħek hija kkonfermata. Narawk dalwaqt! Nota: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'EDITJA R-RIŻERVAZZJONI';
 
   @override

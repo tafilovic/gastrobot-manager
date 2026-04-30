@@ -677,6 +677,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get confirmedResNote => 'Notiz:';
 
   @override
+  String get confirmedResMessageLabel => 'Nachricht:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'Ihre Reservierung ist bestätigt. Bis bald!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'Ihre Reservierung ist bestätigt. Bis bald! Hinweis: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'RESERVIERUNG BEARBEITEN';
 
   @override

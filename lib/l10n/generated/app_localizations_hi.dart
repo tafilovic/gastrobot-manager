@@ -673,6 +673,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get confirmedResNote => 'नोट:';
 
   @override
+  String get confirmedResMessageLabel => 'संदेश:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'आपकी आरक्षण की पुष्टि हो गई है। जल्द मिलते हैं!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'आपकी आरक्षण की पुष्टि हो गई है। जल्द मिलते हैं! नोट: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'आरक्षण संपादित करें';
 
   @override

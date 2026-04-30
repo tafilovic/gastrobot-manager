@@ -678,6 +678,18 @@ class AppLocalizationsEl extends AppLocalizations {
   String get confirmedResNote => 'Σημείωση:';
 
   @override
+  String get confirmedResMessageLabel => 'Μήνυμα:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'Η κράτησή σας επιβεβαιώθηκε. Τα λέμε σύντομα!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'Η κράτησή σας επιβεβαιώθηκε. Τα λέμε σύντομα! Σημείωση: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'ΕΠΕΞΕΡΓΑΣΙΑ ΚΡΑΤΗΣΗΣ';
 
   @override

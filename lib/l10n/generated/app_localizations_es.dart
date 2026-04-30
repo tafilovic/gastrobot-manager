@@ -674,6 +674,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get confirmedResNote => 'Nota:';
 
   @override
+  String get confirmedResMessageLabel => 'Mensaje:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'Tu reserva está confirmada. ¡Nos vemos pronto!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'Tu reserva está confirmada. ¡Nos vemos pronto! Nota: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'EDITAR RESERVA';
 
   @override

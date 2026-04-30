@@ -675,6 +675,18 @@ class AppLocalizationsSr extends AppLocalizations {
   String get confirmedResNote => 'Napomena:';
 
   @override
+  String get confirmedResMessageLabel => 'Poruka:';
+
+  @override
+  String get confirmedResMessageConfirmed =>
+      'Vaša rezervacija je potvrđena. Vidimo se uskoro!';
+
+  @override
+  String confirmedResMessageConfirmedWithNote(String note) {
+    return 'Vaša rezervacija je potvrđena. Vidimo se uskoro! Napomena: $note';
+  }
+
+  @override
   String get confirmedResEditButton => 'IZMENI REZERVACIJU';
 
   @override
