@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/ready_items/providers/ready_items_provider.dart';
 import 'package:gastrobotmanager/features/ready_items/widgets/ready_items_content.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -31,16 +30,9 @@ class ReadyItemsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.done_all,
-                size: 64,
-                color: AppColors.textMuted,
-              ),
+              const Icon(Icons.done_all, size: 64, color: AppColors.textMuted),
               const SizedBox(height: 16),
-              Text(
-                l10n.readyTitle,
-                style: theme.textTheme.titleLarge,
-              ),
+              Text(l10n.readyTitle, style: theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               Text(
                 l10n.readySubtitle,
@@ -54,14 +46,6 @@ class ReadyItemsScreen extends StatelessWidget {
     }
 
     final accentColor = theme.colorScheme.primary;
-    return ReadyItemsContent(
-      accentColor: accentColor,
-      onStartRefresh: () {
-        final venueId = auth.currentVenueId;
-        if (venueId != null) {
-          context.read<ReadyItemsProvider>().loadOnce(venueId);
-        }
-      },
-    );
+    return ReadyItemsContent(accentColor: accentColor);
   }
 }

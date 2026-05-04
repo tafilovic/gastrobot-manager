@@ -26,6 +26,7 @@ class ReadyItemsProvider extends ChangeNotifier {
   }
 
   Future<void> loadOnce(String venueId) async {
+    if (_isLoading && _currentVenueId == venueId) return;
     _currentVenueId = venueId;
     await _load(venueId);
   }
@@ -33,6 +34,7 @@ class ReadyItemsProvider extends ChangeNotifier {
   Future<void> pullRefresh() async {
     final venueId = _currentVenueId;
     if (venueId == null) return;
+    if (_isLoading) return;
     await _load(venueId);
   }
 
@@ -80,5 +82,4 @@ class ReadyItemsProvider extends ChangeNotifier {
       return false;
     }
   }
-
 }

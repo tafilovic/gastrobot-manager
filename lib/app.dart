@@ -14,6 +14,7 @@ import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/theme/app_scroll_behavior.dart';
 import 'package:gastrobotmanager/core/theme/app_theme.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/notifications/services/push_notification_service.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 class GastroBotApp extends StatefulWidget {
@@ -35,6 +36,9 @@ class _GastroBotAppState extends State<GastroBotApp> {
     super.initState();
     final auth = context.read<AuthProvider>();
     _router = AppRouter.create(auth);
+    context.read<PushNotificationService>().setTapHandler(
+      _handleNotificationTap,
+    );
     // Android-only Play flexible update check; coordinator no-ops on other platforms.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       unawaited(
@@ -55,6 +59,9 @@ class _GastroBotAppState extends State<GastroBotApp> {
   Widget build(BuildContext context) {
     return Consumer<LocaleProvider>(
       builder: (context, localeProvider, _) {
+        context.read<PushNotificationService>().updateLocale(
+          localeProvider.locale,
+        );
         return MaterialApp.router(
           // Snackbars for Android Play flexible update completion (harmless on other platforms).
           scaffoldMessengerKey: _scaffoldMessengerKey,
@@ -74,5 +81,30 @@ class _GastroBotAppState extends State<GastroBotApp> {
         );
       },
     );
+  }
+
+  void _handleNotificationTap(Map<String, String> payload) {
+    final subtype = payload['subtype'];
+    if (subtype == 'food_ready' || subtype == 'drinks_ready') {
+      _router.go(AppRouteNames.pathReady);
+      return;
+    }
+
+    switch (payload['type']) {
+      case 'reservation':
+      case 'reservation_reminder':
+        _router.go(AppRouteNames.pathReservations);
+        return;
+      case 'kitchen':
+        _router.go(AppRouteNames.pathPreparing);
+        return;
+      case 'order':
+      case 'item_rejection':
+      case 'item_accepted':
+        _router.go(AppRouteNames.pathOrders);
+        return;
+      default:
+        _router.go(AppRouteNames.pathOrders);
+    }
   }
 }

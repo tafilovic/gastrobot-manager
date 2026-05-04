@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:gastrobotmanager/core/log/app_logger.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/models/user.dart';
@@ -59,6 +60,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       var session = await _authService.restoreSession();
       if (session != null && !isSupportedRole(session.user.role)) {
+        debugLog('Restored session role is unsupported: ${session.user.role}');
         await _authService.signOut();
         session = null;
       }
@@ -67,8 +69,10 @@ class AuthProvider extends ChangeNotifier {
         _accessToken = session.accessToken;
         _refreshToken = session.refreshToken;
         _syncTokenStore();
+        debugLog('AuthProvider restored logged-in user=${session.user.id}');
       }
-    } catch (_) {
+    } catch (e) {
+      debugLog('AuthProvider session restore failed: $e');
       // On any error, treat as logged out so user can retry
     } finally {
       _isRestoring = false;
@@ -106,6 +110,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    debugLog('Logging out and clearing auth state');
     await _authService.signOut();
     _user = null;
     _accessToken = null;

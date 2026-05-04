@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "977838903383",
+    "project_id": "gastrobot-5bc84",
+    "storage_bucket": "gastrobot-5bc84.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977838903383:android:7b086512bacb570d8e5312",
+        "android_client_info": {
+          "package_name": "eu.brrm.gastrobot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVnHE7UEIX8XatKlTd7wKYhRjLpWcczFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977838903383:android:96e5987c520081a98e5312",
+        "android_client_info": {
+          "package_name": "eu.brrm.gastrobot.fake"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVnHE7UEIX8XatKlTd7wKYhRjLpWcczFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977838903383:android:4c8b4157d638a2c18e5312",
+        "android_client_info": {
+          "package_name": "eu.brrm.gastrocrew"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVnHE7UEIX8XatKlTd7wKYhRjLpWcczFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

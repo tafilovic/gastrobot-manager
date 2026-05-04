@@ -10,28 +10,15 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Ready-for-serving list for waiter: title, order count (blue), loading/error/list of [ReadyOrderCard].
 class ReadyItemsContent extends StatefulWidget {
-  const ReadyItemsContent({
-    super.key,
-    required this.accentColor,
-    required this.onStartRefresh,
-  });
+  const ReadyItemsContent({super.key, required this.accentColor});
 
   final Color accentColor;
-  final VoidCallback onStartRefresh;
 
   @override
   State<ReadyItemsContent> createState() => _ReadyItemsContentState();
 }
 
 class _ReadyItemsContentState extends State<ReadyItemsContent> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => widget.onStartRefresh(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

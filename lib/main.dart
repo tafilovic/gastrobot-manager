@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +14,7 @@ import 'package:gastrobotmanager/core/api/logging_interceptor.dart';
 import 'package:gastrobotmanager/core/api/auth_interceptor.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
+import 'package:gastrobotmanager/core/log/app_logger.dart';
 import 'package:gastrobotmanager/features/auth/data/auth_remote.dart';
 import 'package:gastrobotmanager/features/auth/data/shared_preferences_session_storage.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
@@ -19,6 +23,8 @@ import 'package:gastrobotmanager/features/auth/services/auth_service.dart';
 import 'package:gastrobotmanager/features/menu/data/venue_menus_remote.dart';
 import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dart';
 import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
+import 'package:gastrobotmanager/features/notifications/data/device_token_remote.dart';
+import 'package:gastrobotmanager/features/notifications/services/push_notification_service.dart';
 import 'package:gastrobotmanager/features/orders/data/order_items_remote.dart';
 import 'package:gastrobotmanager/features/orders/data/pending_orders_remote.dart';
 import 'package:gastrobotmanager/features/orders/data/waiter_order_actions_remote.dart';
@@ -53,8 +59,12 @@ import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.
 import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
 import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  }
   runApp(const _AppLoader());
 }
 
@@ -107,6 +117,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   late final AuthProvider _authProvider;
   late final Dio _authenticatedDio;
   late final ProfileApi _profileApi;
+  late final PushNotificationService _pushNotificationService;
 
   bool _bootstrapComplete = false;
 
@@ -134,6 +145,11 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
       ..interceptors.add(LoggingInterceptor());
 
     _profileApi = ProfileRemote(_authenticatedDio);
+    _pushNotificationService = PushNotificationService(
+      authProvider: _authProvider,
+      tokenRemote: DeviceTokenRemote(_authenticatedDio),
+    );
+    _authProvider.addListener(_handleAuthChanged);
 
     _runSessionBootstrap();
   }
@@ -143,18 +159,32 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   Future<void> _runSessionBootstrap() async {
     await _authProvider.whenRestoreComplete;
     if (_authProvider.isLoggedIn) {
+      debugLog('Bootstrap validating restored session with /v1/users/me');
       final user = await _profileApi.getMe();
       if (user != null) {
+        debugLog('Bootstrap session validation succeeded for user=${user.id}');
         await _authProvider.updateUser(user);
+        unawaited(_pushNotificationService.start());
       } else {
+        debugLog('Bootstrap session validation failed; logging out');
         await _authProvider.logout();
       }
     }
     if (mounted) setState(() => _bootstrapComplete = true);
   }
 
+  void _handleAuthChanged() {
+    if (_authProvider.isLoggedIn) {
+      unawaited(_pushNotificationService.start());
+    } else {
+      _pushNotificationService.clearRegisteredTokenCache();
+    }
+  }
+
   @override
   void dispose() {
+    _authProvider.removeListener(_handleAuthChanged);
+    unawaited(_pushNotificationService.dispose());
     _authProvider.dispose();
     super.dispose();
   }
@@ -173,6 +203,9 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
           create: (_) => SharedPreferencesSessionStorage(widget.prefs),
         ),
         ChangeNotifierProvider<AuthProvider>.value(value: _authProvider),
+        Provider<PushNotificationService>.value(
+          value: _pushNotificationService,
+        ),
 
         // Locale
         ChangeNotifierProvider<LocaleProvider>(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:gastrobotmanager/core/api/api_config.dart';
+import 'package:gastrobotmanager/core/log/app_logger.dart';
 import 'package:gastrobotmanager/core/models/user.dart';
 import 'package:gastrobotmanager/features/profile/domain/errors/profile_exception.dart';
 import 'package:gastrobotmanager/features/profile/domain/repositories/profile_api.dart';
@@ -10,7 +11,7 @@ import 'package:gastrobotmanager/features/profile/domain/repositories/profile_ap
 /// Profile API implementation. GET /v1/users/me, DELETE /v1/users/me, PATCH /users/profile-image.
 class ProfileRemote implements ProfileApi {
   ProfileRemote([Dio? dio])
-      : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+    : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   final Dio _dio;
 
@@ -22,12 +23,18 @@ class ProfileRemote implements ProfileApi {
         options: Options(validateStatus: (s) => s != null && s < 400),
       );
       final data = response.data;
-      if (data == null || response.statusCode != 200) return null;
+      if (data == null || response.statusCode != 200) {
+        debugLog('GET /v1/users/me returned status=${response.statusCode}');
+        return null;
+      }
       final map = data['user'] is Map
           ? Map<String, dynamic>.from(data['user'] as Map)
           : Map<String, dynamic>.from(data);
       return User.fromJson(map);
-    } on DioException catch (_) {
+    } on DioException catch (e) {
+      debugLog(
+        'GET /v1/users/me failed: status=${e.response?.statusCode}, message=${e.message}',
+      );
       return null;
     }
   }
@@ -64,14 +71,16 @@ class ProfileRemote implements ProfileApi {
       return data['profileImageUrl'] as String? ??
           (data['user'] is Map
               ? (data['user'] as Map<String, dynamic>)['profileImageUrl']
-                  as String?
+                    as String?
               : null);
     } on DioException catch (e) {
-      throw ProfileException(e.response?.data is Map
-          ? (e.response!.data as Map)['message'] as String? ??
-              e.message ??
-              'Upload failed'
-          : e.message ?? 'Upload failed');
+      throw ProfileException(
+        e.response?.data is Map
+            ? (e.response!.data as Map)['message'] as String? ??
+                  e.message ??
+                  'Upload failed'
+            : e.message ?? 'Upload failed',
+      );
     }
   }
 
