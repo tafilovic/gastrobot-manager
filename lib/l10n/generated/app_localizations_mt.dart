@@ -832,4 +832,184 @@ class AppLocalizationsMt extends AppLocalizations {
 
   @override
   String get tableOrdersFilterStatusPaid => 'Ħallas';
+
+  @override
+  String notificationOrderForTableTitle(String table) {
+    return 'Order for table $table';
+  }
+
+  @override
+  String notificationOrderForTableBody(String items) {
+    return '$items';
+  }
+
+  @override
+  String notificationOrderKitchenForTableTitle(String table) {
+    return 'Kitchen Order for table $table';
+  }
+
+  @override
+  String notificationOrderKitchenForTableBody(String items) {
+    return '$items';
+  }
+
+  @override
+  String notificationOrderBarForTableTitle(String table) {
+    return 'Bar Order for table $table';
+  }
+
+  @override
+  String notificationOrderBarForTableBody(String items) {
+    return '$items';
+  }
+
+  @override
+  String notificationOrderRejectedTitle(String orderNumber) {
+    return 'Order $orderNumber rejected';
+  }
+
+  @override
+  String notificationOrderRejectedBody(String table, String rejectionNote) {
+    return 'Table $table. $rejectionNote';
+  }
+
+  @override
+  String notificationOrderConfirmedTitle(String orderNumber) {
+    return 'Order $orderNumber confirmed';
+  }
+
+  @override
+  String notificationOrderConfirmedBody(String table, String venueName) {
+    return 'Table $table at $venueName';
+  }
+
+  @override
+  String get notificationOrderCompletionTimeTitle => 'Order completion time';
+
+  @override
+  String notificationOrderCompletionTimeBody(String time) {
+    return 'Estimated completion time: $time';
+  }
+
+  @override
+  String notificationOrderItemRejectedTitle(String productName) {
+    return 'Item Rejected: $productName';
+  }
+
+  @override
+  String notificationOrderItemRejectedCustomerBody(String productName) {
+    return 'We are sorry, but \"$productName\" is currently unavailable. It has been removed from your order bill.';
+  }
+
+  @override
+  String notificationOrderItemRejectedWaiterTitle(String table) {
+    return 'Item Rejected: $table';
+  }
+
+  @override
+  String notificationOrderItemRejectedWaiterBody(String productName) {
+    return '\"$productName\" was rejected and removed from the order.';
+  }
+
+  @override
+  String notificationOrderItemEtaTitle(String table) {
+    return 'ETA Set: $table';
+  }
+
+  @override
+  String notificationOrderItemEtaBody(String minutes, String productName) {
+    return 'Kitchen set $minutes min estimate for $productName';
+  }
+
+  @override
+  String notificationOrderItemAcceptedTitle(String productName) {
+    return 'Item Accepted: $productName';
+  }
+
+  @override
+  String notificationOrderItemAcceptedBody(String productName) {
+    return '\"$productName\" has been accepted and is being prepared.';
+  }
+
+  @override
+  String get notificationReservationNewRequestTitle =>
+      'New Reservation Request';
+
+  @override
+  String notificationReservationNewRequestBody(
+    String people,
+    String time,
+    String table,
+  ) {
+    return '$people guests at $time. Table: $table';
+  }
+
+  @override
+  String notificationReservationConfirmedTitle(String reservationNumber) {
+    return 'Reservation $reservationNumber confirmed';
+  }
+
+  @override
+  String notificationReservationConfirmedBody(String table, String venueName) {
+    return 'Table: $table at $venueName';
+  }
+
+  @override
+  String notificationReservationRejectedTitle(String reservationNumber) {
+    return 'Reservation $reservationNumber rejected';
+  }
+
+  @override
+  String notificationReservationRejectedBody(String reason) {
+    return '$reason';
+  }
+
+  @override
+  String notificationReservationCancelledTitle(String reservationNumber) {
+    return 'Reservation $reservationNumber cancelled';
+  }
+
+  @override
+  String notificationReservationCancelledBody(String venueName) {
+    return '$venueName';
+  }
+
+  @override
+  String get notificationReservationReminderTitle => 'Reservation Reminder';
+
+  @override
+  String get notificationReservationReminderBody =>
+      'Your reservation is in 8 hours';
+
+  @override
+  String get notificationKitchenStartPreparationTitle =>
+      'Start Preparation: Reservation Order';
+
+  @override
+  String notificationKitchenStartPreparationBody(
+    String reservationNumber,
+    String time,
+  ) {
+    return 'Time to prepare food for Reservation #$reservationNumber. Guests arrive at $time.';
+  }
+
+  @override
+  String notificationFoodReadyTitle(String table) {
+    return 'Food Ready: Table $table';
+  }
+
+  @override
+  String notificationFoodReadyBody(String items) {
+    return '$items are ready to serve.';
+  }
+
+  @override
+  String notificationDrinksReadyTitle(String table) {
+    return 'Drinks Ready: Table $table';
+  }
+
+  @override
+  String notificationDrinksReadyBody(String items) {
+    return '$items are ready at the bar.';
+  }
 }

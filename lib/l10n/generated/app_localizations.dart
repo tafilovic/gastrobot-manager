@@ -1629,6 +1629,229 @@ abstract class AppLocalizations {
   /// In sr, this message translates to:
   /// **'Plaćeno'**
   String get tableOrdersFilterStatusPaid;
+
+  /// No description provided for @notificationOrderForTableTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Order for table {table}'**
+  String notificationOrderForTableTitle(String table);
+
+  /// No description provided for @notificationOrderForTableBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{items}'**
+  String notificationOrderForTableBody(String items);
+
+  /// No description provided for @notificationOrderKitchenForTableTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Kitchen Order for table {table}'**
+  String notificationOrderKitchenForTableTitle(String table);
+
+  /// No description provided for @notificationOrderKitchenForTableBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{items}'**
+  String notificationOrderKitchenForTableBody(String items);
+
+  /// No description provided for @notificationOrderBarForTableTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Bar Order for table {table}'**
+  String notificationOrderBarForTableTitle(String table);
+
+  /// No description provided for @notificationOrderBarForTableBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{items}'**
+  String notificationOrderBarForTableBody(String items);
+
+  /// No description provided for @notificationOrderRejectedTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Order {orderNumber} rejected'**
+  String notificationOrderRejectedTitle(String orderNumber);
+
+  /// No description provided for @notificationOrderRejectedBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Table {table}. {rejectionNote}'**
+  String notificationOrderRejectedBody(String table, String rejectionNote);
+
+  /// No description provided for @notificationOrderConfirmedTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Order {orderNumber} confirmed'**
+  String notificationOrderConfirmedTitle(String orderNumber);
+
+  /// No description provided for @notificationOrderConfirmedBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Table {table} at {venueName}'**
+  String notificationOrderConfirmedBody(String table, String venueName);
+
+  /// No description provided for @notificationOrderCompletionTimeTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Order completion time'**
+  String get notificationOrderCompletionTimeTitle;
+
+  /// No description provided for @notificationOrderCompletionTimeBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Estimated completion time: {time}'**
+  String notificationOrderCompletionTimeBody(String time);
+
+  /// No description provided for @notificationOrderItemRejectedTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Item Rejected: {productName}'**
+  String notificationOrderItemRejectedTitle(String productName);
+
+  /// No description provided for @notificationOrderItemRejectedCustomerBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'We are sorry, but \"{productName}\" is currently unavailable. It has been removed from your order bill.'**
+  String notificationOrderItemRejectedCustomerBody(String productName);
+
+  /// No description provided for @notificationOrderItemRejectedWaiterTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Item Rejected: {table}'**
+  String notificationOrderItemRejectedWaiterTitle(String table);
+
+  /// No description provided for @notificationOrderItemRejectedWaiterBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'\"{productName}\" was rejected and removed from the order.'**
+  String notificationOrderItemRejectedWaiterBody(String productName);
+
+  /// No description provided for @notificationOrderItemEtaTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'ETA Set: {table}'**
+  String notificationOrderItemEtaTitle(String table);
+
+  /// No description provided for @notificationOrderItemEtaBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Kitchen set {minutes} min estimate for {productName}'**
+  String notificationOrderItemEtaBody(String minutes, String productName);
+
+  /// No description provided for @notificationOrderItemAcceptedTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Item Accepted: {productName}'**
+  String notificationOrderItemAcceptedTitle(String productName);
+
+  /// No description provided for @notificationOrderItemAcceptedBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'\"{productName}\" has been accepted and is being prepared.'**
+  String notificationOrderItemAcceptedBody(String productName);
+
+  /// No description provided for @notificationReservationNewRequestTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'New Reservation Request'**
+  String get notificationReservationNewRequestTitle;
+
+  /// No description provided for @notificationReservationNewRequestBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{people} guests at {time}. Table: {table}'**
+  String notificationReservationNewRequestBody(
+    String people,
+    String time,
+    String table,
+  );
+
+  /// No description provided for @notificationReservationConfirmedTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Reservation {reservationNumber} confirmed'**
+  String notificationReservationConfirmedTitle(String reservationNumber);
+
+  /// No description provided for @notificationReservationConfirmedBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Table: {table} at {venueName}'**
+  String notificationReservationConfirmedBody(String table, String venueName);
+
+  /// No description provided for @notificationReservationRejectedTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Reservation {reservationNumber} rejected'**
+  String notificationReservationRejectedTitle(String reservationNumber);
+
+  /// No description provided for @notificationReservationRejectedBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{reason}'**
+  String notificationReservationRejectedBody(String reason);
+
+  /// No description provided for @notificationReservationCancelledTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Reservation {reservationNumber} cancelled'**
+  String notificationReservationCancelledTitle(String reservationNumber);
+
+  /// No description provided for @notificationReservationCancelledBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{venueName}'**
+  String notificationReservationCancelledBody(String venueName);
+
+  /// No description provided for @notificationReservationReminderTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Reservation Reminder'**
+  String get notificationReservationReminderTitle;
+
+  /// No description provided for @notificationReservationReminderBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Your reservation is in 8 hours'**
+  String get notificationReservationReminderBody;
+
+  /// No description provided for @notificationKitchenStartPreparationTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Start Preparation: Reservation Order'**
+  String get notificationKitchenStartPreparationTitle;
+
+  /// No description provided for @notificationKitchenStartPreparationBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'Time to prepare food for Reservation #{reservationNumber}. Guests arrive at {time}.'**
+  String notificationKitchenStartPreparationBody(
+    String reservationNumber,
+    String time,
+  );
+
+  /// No description provided for @notificationFoodReadyTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Food Ready: Table {table}'**
+  String notificationFoodReadyTitle(String table);
+
+  /// No description provided for @notificationFoodReadyBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{items} are ready to serve.'**
+  String notificationFoodReadyBody(String items);
+
+  /// No description provided for @notificationDrinksReadyTitle.
+  ///
+  /// In sr, this message translates to:
+  /// **'Drinks Ready: Table {table}'**
+  String notificationDrinksReadyTitle(String table);
+
+  /// No description provided for @notificationDrinksReadyBody.
+  ///
+  /// In sr, this message translates to:
+  /// **'{items} are ready at the bar.'**
+  String notificationDrinksReadyBody(String items);
 }
 
 class _AppLocalizationsDelegate

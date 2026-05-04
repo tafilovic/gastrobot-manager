@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,6 +11,9 @@ import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/notifications/data/device_token_remote.dart';
 import 'package:gastrobotmanager/features/notifications/data/notification_localizer.dart';
 import 'package:gastrobotmanager/features/notifications/domain/notification_payload.dart';
+import 'package:gastrobotmanager/firebase_options.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/l10n/generated/app_localizations_en.dart';
 
 typedef NotificationTapHandler = void Function(Map<String, String> payload);
 
@@ -44,7 +46,7 @@ class PushNotificationService {
   StreamSubscription<RemoteMessage>? _openedSubscription;
   StreamSubscription<String>? _tokenSubscription;
   NotificationTapHandler? _tapHandler;
-  Locale _locale = PlatformDispatcher.instance.locale;
+  AppLocalizations? _localizations;
   bool _initialized = false;
   bool _started = false;
   String? _lastRegisteredToken;
@@ -57,7 +59,9 @@ class PushNotificationService {
     _initialized = true;
 
     if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
     }
 
     const androidInitialization = AndroidInitializationSettings(
@@ -130,8 +134,8 @@ class PushNotificationService {
     await _registerToken(token);
   }
 
-  void updateLocale(Locale? locale) {
-    if (locale != null) _locale = locale;
+  void updateLocalizations(AppLocalizations? localizations) {
+    _localizations = localizations;
   }
 
   void setTapHandler(NotificationTapHandler handler) {
@@ -153,12 +157,12 @@ class PushNotificationService {
     _logRemoteMessage('foreground', message);
     final payload = NotificationPayload.fromRemoteData(message.data);
     final notification = message.notification;
-    final title = payload == null
-        ? notification?.title
-        : _localizer.resolve(payload, _locale).title;
-    final body = payload == null
-        ? notification?.body
-        : _localizer.resolve(payload, _locale).body;
+    final localizations = _localizations ?? AppLocalizationsEn();
+    final text = payload == null
+        ? null
+        : _localizer.resolve(payload, localizations);
+    final title = payload == null ? notification?.title : text?.title;
+    final body = payload == null ? notification?.body : text?.body;
 
     if (title == null || title.isEmpty) return;
 
@@ -208,14 +212,16 @@ class PushNotificationService {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
   PushNotificationService._logRemoteMessage('background', message);
   final payload = NotificationPayload.fromRemoteData(message.data);
   if (payload == null || message.notification != null) return;
 
   const localizer = NotificationLocalizer();
-  final text = localizer.resolve(payload, const Locale('en'));
+  final text = localizer.resolve(payload, AppLocalizationsEn());
   final plugin = FlutterLocalNotificationsPlugin();
   const initializationSettings = InitializationSettings(
     android: AndroidInitializationSettings('@mipmap/ic_launcher'),

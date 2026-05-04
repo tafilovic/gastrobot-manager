@@ -59,9 +59,6 @@ class _GastroBotAppState extends State<GastroBotApp> {
   Widget build(BuildContext context) {
     return Consumer<LocaleProvider>(
       builder: (context, localeProvider, _) {
-        context.read<PushNotificationService>().updateLocale(
-          localeProvider.locale,
-        );
         return MaterialApp.router(
           // Snackbars for Android Play flexible update completion (harmless on other platforms).
           scaffoldMessengerKey: _scaffoldMessengerKey,
@@ -78,6 +75,12 @@ class _GastroBotAppState extends State<GastroBotApp> {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           routerConfig: _router,
+          builder: (context, child) {
+            context.read<PushNotificationService>().updateLocalizations(
+              AppLocalizations.of(context),
+            );
+            return child ?? const SizedBox.shrink();
+          },
         );
       },
     );

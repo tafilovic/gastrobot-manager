@@ -74,19 +74,49 @@
   "tablesReserve": "RESERVE",
   "tablesOrder": "ORDER",
   "zonesCount": "{count} zones",
-  "@zonesCount": {"placeholders": {"count": {"type": "int"}}},
+  "@zonesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tableNumber": "Table {number}",
-  "@tableNumber": {"placeholders": {"number": {"type": "String"}}},
+  "@tableNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "tableReservationAt": "Reservation:",
   "tableTypeTable": "Table",
   "tableTypeRoom": "Room",
   "tableTypeSunbed": "Sunbed",
   "seatingNumberTable": "Table {number}",
-  "@seatingNumberTable": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberTable": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "seatingNumberRoom": "Room {number}",
-  "@seatingNumberRoom": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberRoom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "seatingNumberSunbed": "Sunbed {number}",
-  "@seatingNumberSunbed": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberSunbed": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "navProfile": "PROFILE",
   "readyTitle": "Ready for serving",
   "readySubtitle": "Orders ready to be served",
@@ -132,7 +162,13 @@
   "ordersHistoryEmpty": "No orders in history yet",
   "orderPaidLabel": "PAID",
   "orderPaidAt": "Paid on {dateTime}",
-  "@orderPaidAt": {"placeholders": {"dateTime": {"type": "String"}}},
+  "@orderPaidAt": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
   "orderProcessingComplete": "Order \"{orderNumber}\" processing complete",
   "timeEstimationTitle": "Time estimation",
   "timeEstimationQuestion": "In how much time will this order be ready?",
@@ -146,10 +182,28 @@
   "reservationToday": "Today",
   "reservationCountDrinks": "{count} drinks",
   "reservationCountDishes": "{count} dishes",
-  "@reservationCountDrinks": {"placeholders": {"count": {"type": "int"}}},
-  "@reservationCountDishes": {"placeholders": {"count": {"type": "int"}}},
+  "@reservationCountDrinks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@reservationCountDishes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "reservationCountList": "{count} reservations",
-  "@reservationCountList": {"placeholders": {"count": {"type": "int"}}},
+  "@reservationCountList": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "reservationsFilters": "FILTERS",
   "reservationLabelTime": "Time:",
   "reservationLabelRegion": "Region:",
@@ -189,7 +243,16 @@
   "filterReset": "RESET FILTERS",
   "filterApply": "APPLY FILTERS",
   "filterBillRSD": "{min} - {max} RSD",
-  "@filterBillRSD": {"placeholders": {"min": {"type": "String"}, "max": {"type": "String"}}},
+  "@filterBillRSD": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "filterDate": "Date:",
   "filterDateFrom": "From:",
   "filterDateTo": "To:",
@@ -212,9 +275,21 @@
   "acceptSheetNoTables": "No tables available.",
   "acceptSheetErrorGeneric": "Cannot accept reservation. Please try again.",
   "acceptSheetRegionLabel": "Region {number}",
-  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "@acceptSheetRegionLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "acceptSheetReservationAt": "Reservation at {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "@acceptSheetReservationAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "confirmedResUser": "User:",
   "confirmedResTableNumber": "Table:",
   "confirmedResOccasion": "Occasion:",
@@ -224,7 +299,13 @@
   "confirmedResMessageLabel": "Message:",
   "confirmedResMessageConfirmed": "Your reservation is confirmed. See you soon!",
   "confirmedResMessageConfirmedWithNote": "Your reservation is confirmed. See you soon! Note: {note}",
-  "@confirmedResMessageConfirmedWithNote": {"placeholders": {"note": {"type": "String"}}},
+  "@confirmedResMessageConfirmedWithNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
   "confirmedResEditButton": "EDIT RESERVATION",
   "confirmedResCancelButton": "CANCEL RESERVATION",
   "editResDialogTitle": "Edit",
@@ -240,7 +321,13 @@
   "buttonAccept": "ACCEPT",
   "labelFoodDrink": "Food/Drink:",
   "tableSeatCount": "{count} seats",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "@tableSeatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tableReservationDialogTitle": "Reservation",
   "tableReservationNameHint": "For the name...",
   "tableReservationNameRequired": "Enter name",
@@ -272,5 +359,279 @@
   "tableOrdersFilterStatusConfirmed": "Confirmed",
   "tableOrdersFilterStatusRejected": "Rejected",
   "tableOrdersFilterStatusExpired": "Expired",
-  "tableOrdersFilterStatusPaid": "Paid"
+  "tableOrdersFilterStatusPaid": "Paid",
+  "notificationOrderForTableTitle": "Order for table {table}",
+  "@notificationOrderForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderForTableBody": "{items}",
+  "@notificationOrderForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderKitchenForTableTitle": "Kitchen Order for table {table}",
+  "@notificationOrderKitchenForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderKitchenForTableBody": "{items}",
+  "@notificationOrderKitchenForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderBarForTableTitle": "Bar Order for table {table}",
+  "@notificationOrderBarForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderBarForTableBody": "{items}",
+  "@notificationOrderBarForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderRejectedTitle": "Order {orderNumber} rejected",
+  "@notificationOrderRejectedTitle": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderRejectedBody": "Table {table}. {rejectionNote}",
+  "@notificationOrderRejectedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "rejectionNote": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderConfirmedTitle": "Order {orderNumber} confirmed",
+  "@notificationOrderConfirmedTitle": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderConfirmedBody": "Table {table} at {venueName}",
+  "@notificationOrderConfirmedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderCompletionTimeTitle": "Order completion time",
+  "notificationOrderCompletionTimeBody": "Estimated completion time: {time}",
+  "@notificationOrderCompletionTimeBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedTitle": "Item Rejected: {productName}",
+  "@notificationOrderItemRejectedTitle": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedCustomerBody": "We are sorry, but \"{productName}\" is currently unavailable. It has been removed from your order bill.",
+  "@notificationOrderItemRejectedCustomerBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedWaiterTitle": "Item Rejected: {table}",
+  "@notificationOrderItemRejectedWaiterTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedWaiterBody": "\"{productName}\" was rejected and removed from the order.",
+  "@notificationOrderItemRejectedWaiterBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemEtaTitle": "ETA Set: {table}",
+  "@notificationOrderItemEtaTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemEtaBody": "Kitchen set {minutes} min estimate for {productName}",
+  "@notificationOrderItemEtaBody": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
+  "@notificationOrderItemAcceptedTitle": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAcceptedBody": "\"{productName}\" has been accepted and is being prepared.",
+  "@notificationOrderItemAcceptedBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationNewRequestTitle": "New Reservation Request",
+  "notificationReservationNewRequestBody": "{people} guests at {time}. Table: {table}",
+  "@notificationReservationNewRequestBody": {
+    "placeholders": {
+      "people": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationConfirmedTitle": "Reservation {reservationNumber} confirmed",
+  "@notificationReservationConfirmedTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationConfirmedBody": "Table: {table} at {venueName}",
+  "@notificationReservationConfirmedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationRejectedTitle": "Reservation {reservationNumber} rejected",
+  "@notificationReservationRejectedTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationRejectedBody": "{reason}",
+  "@notificationReservationRejectedBody": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationCancelledTitle": "Reservation {reservationNumber} cancelled",
+  "@notificationReservationCancelledTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationCancelledBody": "{venueName}",
+  "@notificationReservationCancelledBody": {
+    "placeholders": {
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationReminderTitle": "Reservation Reminder",
+  "notificationReservationReminderBody": "Your reservation is in 8 hours",
+  "notificationKitchenStartPreparationTitle": "Start Preparation: Reservation Order",
+  "notificationKitchenStartPreparationBody": "Time to prepare food for Reservation #{reservationNumber}. Guests arrive at {time}.",
+  "@notificationKitchenStartPreparationBody": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFoodReadyTitle": "Food Ready: Table {table}",
+  "@notificationFoodReadyTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFoodReadyBody": "{items} are ready to serve.",
+  "@notificationFoodReadyBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDrinksReadyTitle": "Drinks Ready: Table {table}",
+  "@notificationDrinksReadyTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDrinksReadyBody": "{items} are ready at the bar.",
+  "@notificationDrinksReadyBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  }
 }

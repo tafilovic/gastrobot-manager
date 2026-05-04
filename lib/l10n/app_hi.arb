@@ -74,19 +74,49 @@
   "tablesReserve": "आरक्षित करें",
   "tablesOrder": "ऑर्डर करें",
   "zonesCount": "{count} ज़ोन",
-  "@zonesCount": {"placeholders": {"count": {"type": "int"}}},
+  "@zonesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tableNumber": "टेबल {number}",
-  "@tableNumber": {"placeholders": {"number": {"type": "String"}}},
+  "@tableNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "tableReservationAt": "आरक्षण:",
   "tableTypeTable": "टेबल",
   "tableTypeRoom": "कमरा",
   "tableTypeSunbed": "सनबेड",
   "seatingNumberTable": "टेबल {number}",
-  "@seatingNumberTable": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberTable": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "seatingNumberRoom": "कमरा {number}",
-  "@seatingNumberRoom": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberRoom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "seatingNumberSunbed": "सनबेड {number}",
-  "@seatingNumberSunbed": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberSunbed": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "navProfile": "प्रोफ़ाइल",
   "readyTitle": "सर्व करने के लिए तैयार",
   "readySubtitle": "सर्व करने के लिए तैयार ऑर्डर",
@@ -132,7 +162,13 @@
   "ordersHistoryEmpty": "अभी तक इतिहास में कोई ऑर्डर नहीं",
   "orderPaidLabel": "भुगतान किया",
   "orderPaidAt": "{dateTime} को भुगतान",
-  "@orderPaidAt": {"placeholders": {"dateTime": {"type": "String"}}},
+  "@orderPaidAt": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
   "orderProcessingComplete": "ऑर्डर \"{orderNumber}\" प्रक्रिया पूर्ण",
   "timeEstimationTitle": "समय अनुमान",
   "timeEstimationQuestion": "यह ऑर्डर कितने समय में तैयार होगा?",
@@ -146,10 +182,28 @@
   "reservationToday": "आज",
   "reservationCountDrinks": "{count} पेय",
   "reservationCountDishes": "{count} व्यंजन",
-  "@reservationCountDrinks": {"placeholders": {"count": {"type": "int"}}},
-  "@reservationCountDishes": {"placeholders": {"count": {"type": "int"}}},
+  "@reservationCountDrinks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@reservationCountDishes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "reservationCountList": "{count} आरक्षण",
-  "@reservationCountList": {"placeholders": {"count": {"type": "int"}}},
+  "@reservationCountList": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "reservationsFilters": "फ़िल्टर",
   "reservationLabelTime": "समय:",
   "reservationLabelRegion": "क्षेत्र:",
@@ -189,7 +243,16 @@
   "filterReset": "फ़िल्टर रीसेट",
   "filterApply": "फ़िल्टर लागू करें",
   "filterBillRSD": "{min} - {max} RSD",
-  "@filterBillRSD": {"placeholders": {"min": {"type": "String"}, "max": {"type": "String"}}},
+  "@filterBillRSD": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "filterDate": "तारीख:",
   "filterDateFrom": "से:",
   "filterDateTo": "तक:",
@@ -212,9 +275,21 @@
   "acceptSheetNoTables": "कोई टेबल उपलब्ध नहीं।",
   "acceptSheetErrorGeneric": "आरक्षण स्वीकार नहीं किया जा सका। पुनः प्रयास करें।",
   "acceptSheetRegionLabel": "क्षेत्र {number}",
-  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "@acceptSheetRegionLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "acceptSheetReservationAt": "{time} पर आरक्षण",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "@acceptSheetReservationAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "confirmedResUser": "उपयोगकर्ता:",
   "confirmedResTableNumber": "टेबल:",
   "confirmedResOccasion": "अवसर:",
@@ -224,7 +299,13 @@
   "confirmedResMessageLabel": "संदेश:",
   "confirmedResMessageConfirmed": "आपकी आरक्षण की पुष्टि हो गई है। जल्द मिलते हैं!",
   "confirmedResMessageConfirmedWithNote": "आपकी आरक्षण की पुष्टि हो गई है। जल्द मिलते हैं! नोट: {note}",
-  "@confirmedResMessageConfirmedWithNote": {"placeholders": {"note": {"type": "String"}}},
+  "@confirmedResMessageConfirmedWithNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
   "confirmedResEditButton": "आरक्षण संपादित करें",
   "confirmedResCancelButton": "आरक्षण रद्द करें",
   "editResDialogTitle": "संपादन",
@@ -240,7 +321,13 @@
   "buttonAccept": "स्वीकार",
   "labelFoodDrink": "भोजन/पेय:",
   "tableSeatCount": "{count} सीट",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "@tableSeatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tableReservationDialogTitle": "आरक्षण",
   "tableReservationNameHint": "नाम पर...",
   "tableReservationNameRequired": "नाम दर्ज करें",
@@ -263,5 +350,279 @@
   "tableOrderSubmitError": "ऑर्डर नहीं भेजा जा सका",
   "tableOverviewNoReservations": "इस टेबल के लिए कोई सक्रिय आरक्षण नहीं",
   "tableOverviewNoOrders": "इस टेबल के लिए कोई सक्रिय ऑर्डर नहीं",
-  "tableOverviewMakeOrder": "ऑर्डर करें"
+  "tableOverviewMakeOrder": "ऑर्डर करें",
+  "notificationOrderForTableTitle": "Order for table {table}",
+  "@notificationOrderForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderForTableBody": "{items}",
+  "@notificationOrderForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderKitchenForTableTitle": "Kitchen Order for table {table}",
+  "@notificationOrderKitchenForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderKitchenForTableBody": "{items}",
+  "@notificationOrderKitchenForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderBarForTableTitle": "Bar Order for table {table}",
+  "@notificationOrderBarForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderBarForTableBody": "{items}",
+  "@notificationOrderBarForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderRejectedTitle": "Order {orderNumber} rejected",
+  "@notificationOrderRejectedTitle": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderRejectedBody": "Table {table}. {rejectionNote}",
+  "@notificationOrderRejectedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "rejectionNote": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderConfirmedTitle": "Order {orderNumber} confirmed",
+  "@notificationOrderConfirmedTitle": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderConfirmedBody": "Table {table} at {venueName}",
+  "@notificationOrderConfirmedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderCompletionTimeTitle": "Order completion time",
+  "notificationOrderCompletionTimeBody": "Estimated completion time: {time}",
+  "@notificationOrderCompletionTimeBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedTitle": "Item Rejected: {productName}",
+  "@notificationOrderItemRejectedTitle": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedCustomerBody": "We are sorry, but \"{productName}\" is currently unavailable. It has been removed from your order bill.",
+  "@notificationOrderItemRejectedCustomerBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedWaiterTitle": "Item Rejected: {table}",
+  "@notificationOrderItemRejectedWaiterTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedWaiterBody": "\"{productName}\" was rejected and removed from the order.",
+  "@notificationOrderItemRejectedWaiterBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemEtaTitle": "ETA Set: {table}",
+  "@notificationOrderItemEtaTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemEtaBody": "Kitchen set {minutes} min estimate for {productName}",
+  "@notificationOrderItemEtaBody": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
+  "@notificationOrderItemAcceptedTitle": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAcceptedBody": "\"{productName}\" has been accepted and is being prepared.",
+  "@notificationOrderItemAcceptedBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationNewRequestTitle": "New Reservation Request",
+  "notificationReservationNewRequestBody": "{people} guests at {time}. Table: {table}",
+  "@notificationReservationNewRequestBody": {
+    "placeholders": {
+      "people": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationConfirmedTitle": "Reservation {reservationNumber} confirmed",
+  "@notificationReservationConfirmedTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationConfirmedBody": "Table: {table} at {venueName}",
+  "@notificationReservationConfirmedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationRejectedTitle": "Reservation {reservationNumber} rejected",
+  "@notificationReservationRejectedTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationRejectedBody": "{reason}",
+  "@notificationReservationRejectedBody": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationCancelledTitle": "Reservation {reservationNumber} cancelled",
+  "@notificationReservationCancelledTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationCancelledBody": "{venueName}",
+  "@notificationReservationCancelledBody": {
+    "placeholders": {
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationReminderTitle": "Reservation Reminder",
+  "notificationReservationReminderBody": "Your reservation is in 8 hours",
+  "notificationKitchenStartPreparationTitle": "Start Preparation: Reservation Order",
+  "notificationKitchenStartPreparationBody": "Time to prepare food for Reservation #{reservationNumber}. Guests arrive at {time}.",
+  "@notificationKitchenStartPreparationBody": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFoodReadyTitle": "Food Ready: Table {table}",
+  "@notificationFoodReadyTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFoodReadyBody": "{items} are ready to serve.",
+  "@notificationFoodReadyBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDrinksReadyTitle": "Drinks Ready: Table {table}",
+  "@notificationDrinksReadyTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDrinksReadyBody": "{items} are ready at the bar.",
+  "@notificationDrinksReadyBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  }
 }

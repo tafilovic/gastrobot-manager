@@ -74,19 +74,49 @@
   "tablesReserve": "IRRIŻERVA",
   "tablesOrder": "ORDNA",
   "zonesCount": "{count} żoni",
-  "@zonesCount": {"placeholders": {"count": {"type": "int"}}},
+  "@zonesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tableNumber": "Mejda {number}",
-  "@tableNumber": {"placeholders": {"number": {"type": "String"}}},
+  "@tableNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "tableReservationAt": "Riżervazzjoni:",
   "tableTypeTable": "Mejda",
   "tableTypeRoom": "Kamra",
   "tableTypeSunbed": "Sunbed",
   "seatingNumberTable": "Mejda {number}",
-  "@seatingNumberTable": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberTable": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "seatingNumberRoom": "Kamra {number}",
-  "@seatingNumberRoom": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberRoom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "seatingNumberSunbed": "Sunbed {number}",
-  "@seatingNumberSunbed": {"placeholders": {"number": {"type": "String"}}},
+  "@seatingNumberSunbed": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "navProfile": "PROFIL",
   "readyTitle": "Lest għas-servizz",
   "readySubtitle": "Ordniijiet lesti biex isiru servizz",
@@ -198,7 +228,13 @@
   "ordersHistoryEmpty": "Għad m'hemm l-ebda ordni fil-kronoloġija",
   "orderPaidLabel": "ĦALLAS",
   "orderPaidAt": "Ħallas fi {dateTime}",
-  "@orderPaidAt": {"placeholders": {"dateTime": {"type": "String"}}},
+  "@orderPaidAt": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
   "orderProcessingComplete": "Ipproċessar tal-ordni \"{orderNumber}\" lesta",
   "@orderProcessingComplete": {
     "placeholders": {
@@ -221,18 +257,24 @@
   "reservationCountDishes": "{count} platti",
   "@reservationCountDrinks": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "@reservationCountDishes": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "reservationCountList": "{count} riżervazzjonijiet",
   "@reservationCountList": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "reservationsFilters": "FILTRI",
@@ -291,7 +333,16 @@
   "filterReset": "RESETTA L-FILTRI",
   "filterApply": "APPLIKA L-FILTRI",
   "filterBillRSD": "{min} - {max} RSD",
-  "@filterBillRSD": {"placeholders": {"min": {"type": "String"}, "max": {"type": "String"}}},
+  "@filterBillRSD": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "filterDate": "Data:",
   "filterDateFrom": "Minn:",
   "filterDateTo": "Sa:",
@@ -314,9 +365,21 @@
   "acceptSheetNoTables": "L-ebda mejda disponibbli.",
   "acceptSheetErrorGeneric": "Ma nistax naċċetta r-riżervazzjoni. Erġa' pprova.",
   "acceptSheetRegionLabel": "Reġjun {number}",
-  "@acceptSheetRegionLabel": {"placeholders": {"number": {"type": "int"}}},
+  "@acceptSheetRegionLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "acceptSheetReservationAt": "Riżervazzjoni fi {time}",
-  "@acceptSheetReservationAt": {"placeholders": {"time": {"type": "String"}}},
+  "@acceptSheetReservationAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "confirmedResUser": "Utent:",
   "confirmedResTableNumber": "Mejda:",
   "confirmedResOccasion": "Okkażjoni:",
@@ -326,7 +389,13 @@
   "confirmedResMessageLabel": "Messaġġ:",
   "confirmedResMessageConfirmed": "Ir-riżervazzjoni tiegħek hija kkonfermata. Narawk dalwaqt!",
   "confirmedResMessageConfirmedWithNote": "Ir-riżervazzjoni tiegħek hija kkonfermata. Narawk dalwaqt! Nota: {note}",
-  "@confirmedResMessageConfirmedWithNote": {"placeholders": {"note": {"type": "String"}}},
+  "@confirmedResMessageConfirmedWithNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
   "confirmedResEditButton": "EDITJA R-RIŻERVAZZJONI",
   "confirmedResCancelButton": "IKKANċELLA R-RIŻERVAZZJONI",
   "editResDialogTitle": "Editjar",
@@ -342,7 +411,13 @@
   "buttonAccept": "AĊĊETTA",
   "labelFoodDrink": "Ikel/Xorb:",
   "tableSeatCount": "{count} postijiet",
-  "@tableSeatCount": {"placeholders": {"count": {"type": "int"}}},
+  "@tableSeatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tableReservationDialogTitle": "Riżervazzjoni",
   "tableReservationNameHint": "Fl-isem...",
   "tableReservationNameRequired": "Daħħal l-isem",
@@ -374,5 +449,279 @@
   "tableOrdersFilterStatusConfirmed": "Ikkonfermat",
   "tableOrdersFilterStatusRejected": "Rifjutat",
   "tableOrdersFilterStatusExpired": "Skada",
-  "tableOrdersFilterStatusPaid": "Ħallas"
+  "tableOrdersFilterStatusPaid": "Ħallas",
+  "notificationOrderForTableTitle": "Order for table {table}",
+  "@notificationOrderForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderForTableBody": "{items}",
+  "@notificationOrderForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderKitchenForTableTitle": "Kitchen Order for table {table}",
+  "@notificationOrderKitchenForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderKitchenForTableBody": "{items}",
+  "@notificationOrderKitchenForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderBarForTableTitle": "Bar Order for table {table}",
+  "@notificationOrderBarForTableTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderBarForTableBody": "{items}",
+  "@notificationOrderBarForTableBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderRejectedTitle": "Order {orderNumber} rejected",
+  "@notificationOrderRejectedTitle": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderRejectedBody": "Table {table}. {rejectionNote}",
+  "@notificationOrderRejectedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "rejectionNote": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderConfirmedTitle": "Order {orderNumber} confirmed",
+  "@notificationOrderConfirmedTitle": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderConfirmedBody": "Table {table} at {venueName}",
+  "@notificationOrderConfirmedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderCompletionTimeTitle": "Order completion time",
+  "notificationOrderCompletionTimeBody": "Estimated completion time: {time}",
+  "@notificationOrderCompletionTimeBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedTitle": "Item Rejected: {productName}",
+  "@notificationOrderItemRejectedTitle": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedCustomerBody": "We are sorry, but \"{productName}\" is currently unavailable. It has been removed from your order bill.",
+  "@notificationOrderItemRejectedCustomerBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedWaiterTitle": "Item Rejected: {table}",
+  "@notificationOrderItemRejectedWaiterTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemRejectedWaiterBody": "\"{productName}\" was rejected and removed from the order.",
+  "@notificationOrderItemRejectedWaiterBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemEtaTitle": "ETA Set: {table}",
+  "@notificationOrderItemEtaTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemEtaBody": "Kitchen set {minutes} min estimate for {productName}",
+  "@notificationOrderItemEtaBody": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
+  "@notificationOrderItemAcceptedTitle": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAcceptedBody": "\"{productName}\" has been accepted and is being prepared.",
+  "@notificationOrderItemAcceptedBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationNewRequestTitle": "New Reservation Request",
+  "notificationReservationNewRequestBody": "{people} guests at {time}. Table: {table}",
+  "@notificationReservationNewRequestBody": {
+    "placeholders": {
+      "people": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationConfirmedTitle": "Reservation {reservationNumber} confirmed",
+  "@notificationReservationConfirmedTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationConfirmedBody": "Table: {table} at {venueName}",
+  "@notificationReservationConfirmedBody": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      },
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationRejectedTitle": "Reservation {reservationNumber} rejected",
+  "@notificationReservationRejectedTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationRejectedBody": "{reason}",
+  "@notificationReservationRejectedBody": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationCancelledTitle": "Reservation {reservationNumber} cancelled",
+  "@notificationReservationCancelledTitle": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationCancelledBody": "{venueName}",
+  "@notificationReservationCancelledBody": {
+    "placeholders": {
+      "venueName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReservationReminderTitle": "Reservation Reminder",
+  "notificationReservationReminderBody": "Your reservation is in 8 hours",
+  "notificationKitchenStartPreparationTitle": "Start Preparation: Reservation Order",
+  "notificationKitchenStartPreparationBody": "Time to prepare food for Reservation #{reservationNumber}. Guests arrive at {time}.",
+  "@notificationKitchenStartPreparationBody": {
+    "placeholders": {
+      "reservationNumber": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFoodReadyTitle": "Food Ready: Table {table}",
+  "@notificationFoodReadyTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFoodReadyBody": "{items} are ready to serve.",
+  "@notificationFoodReadyBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDrinksReadyTitle": "Drinks Ready: Table {table}",
+  "@notificationDrinksReadyTitle": {
+    "placeholders": {
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDrinksReadyBody": "{items} are ready at the bar.",
+  "@notificationDrinksReadyBody": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -15,6 +15,7 @@ import 'package:gastrobotmanager/core/api/auth_interceptor.dart';
 import 'package:gastrobotmanager/core/api/token_store.dart';
 import 'package:gastrobotmanager/core/l10n/locale_provider.dart';
 import 'package:gastrobotmanager/core/log/app_logger.dart';
+import 'package:gastrobotmanager/firebase_options.dart';
 import 'package:gastrobotmanager/features/auth/data/auth_remote.dart';
 import 'package:gastrobotmanager/features/auth/data/shared_preferences_session_storage.dart';
 import 'package:gastrobotmanager/features/auth/domain/repositories/session_storage.dart';
@@ -62,7 +63,9 @@ import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart'
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
   runApp(const _AppLoader());
