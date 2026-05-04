@@ -31,10 +31,11 @@ class PushNotificationService {
            localNotifications ?? FlutterLocalNotificationsPlugin(),
        _localizer = localizer;
 
-  static const _channelId = 'gastrocrew_operations';
+  static const _channelId = 'gastrocrew_operations_v2';
   static const _channelName = 'Operations';
   static const _channelDescription =
       'Order, reservation, kitchen, bar and waiter notifications.';
+  static const _androidNotificationIcon = '@drawable/ic_stat_gastrocrew';
 
   final AuthProvider _authProvider;
   final DeviceTokenRemote _tokenRemote;
@@ -65,7 +66,7 @@ class PushNotificationService {
     }
 
     const androidInitialization = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      _androidNotificationIcon,
     );
     const initializationSettings = InitializationSettings(
       android: androidInitialization,
@@ -85,6 +86,8 @@ class PushNotificationService {
       _channelName,
       description: _channelDescription,
       importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
     );
     await _localNotifications
         .resolvePlatformSpecificImplementation<
@@ -175,8 +178,11 @@ class PushNotificationService {
           _channelId,
           _channelName,
           channelDescription: _channelDescription,
+          icon: _androidNotificationIcon,
           importance: Importance.high,
           priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
         ),
       ),
       payload: payload?.toLocalPayload(),
@@ -224,7 +230,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final text = localizer.resolve(payload, AppLocalizationsEn());
   final plugin = FlutterLocalNotificationsPlugin();
   const initializationSettings = InitializationSettings(
-    android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    android: AndroidInitializationSettings(
+      PushNotificationService._androidNotificationIcon,
+    ),
   );
   await plugin.initialize(settings: initializationSettings);
   await plugin.show(
@@ -236,8 +244,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         PushNotificationService._channelId,
         PushNotificationService._channelName,
         channelDescription: PushNotificationService._channelDescription,
+        icon: PushNotificationService._androidNotificationIcon,
         importance: Importance.high,
         priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
       ),
     ),
     payload: jsonEncode(payload.toJson()),

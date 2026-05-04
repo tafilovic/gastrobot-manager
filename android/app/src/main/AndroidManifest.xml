@@ -6,6 +6,15 @@
         android:label="GastroCrew"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_gastrocrew" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_color" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="gastrocrew_operations_v2" />
         <activity
             android:name="eu.brrm.gastrocrew.MainActivity"
             android:exported="true"
