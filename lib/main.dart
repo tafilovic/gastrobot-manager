@@ -163,14 +163,35 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
     await _authProvider.whenRestoreComplete;
     if (_authProvider.isLoggedIn) {
       debugLog('Bootstrap validating restored session with /v1/users/me');
-      final user = await _profileApi.getMe();
-      if (user != null) {
-        debugLog('Bootstrap session validation succeeded for user=${user.id}');
-        await _authProvider.updateUser(user);
+      try {
+        final user = await _profileApi.getMe();
+        if (user != null) {
+          debugLog(
+            'Bootstrap session validation succeeded for user=${user.id}',
+          );
+          await _authProvider.updateUser(user);
+        } else {
+          debugLog(
+            'Bootstrap session validation returned empty user; logging out',
+          );
+          await _authProvider.logout();
+        }
+      } on DioException catch (e) {
+        final statusCode = e.response?.statusCode;
+        if (statusCode == 401 || statusCode == 403) {
+          debugLog(
+            'Bootstrap session rejected with status=$statusCode; logging out',
+          );
+          await _authProvider.logout();
+        } else {
+          debugLog(
+            'Bootstrap session validation skipped after transient error: '
+            'type=${e.type}, status=$statusCode, message=${e.message}',
+          );
+        }
+      }
+      if (_authProvider.isLoggedIn) {
         unawaited(_pushNotificationService.start());
-      } else {
-        debugLog('Bootstrap session validation failed; logging out');
-        await _authProvider.logout();
       }
     }
     if (mounted) setState(() => _bootstrapComplete = true);

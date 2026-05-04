@@ -17,26 +17,19 @@ class ProfileRemote implements ProfileApi {
 
   @override
   Future<User?> getMe() async {
-    try {
-      final response = await _dio.get<Map<String, dynamic>>(
-        '/v1/users/me',
-        options: Options(validateStatus: (s) => s != null && s < 400),
-      );
-      final data = response.data;
-      if (data == null || response.statusCode != 200) {
-        debugLog('GET /v1/users/me returned status=${response.statusCode}');
-        return null;
-      }
-      final map = data['user'] is Map
-          ? Map<String, dynamic>.from(data['user'] as Map)
-          : Map<String, dynamic>.from(data);
-      return User.fromJson(map);
-    } on DioException catch (e) {
-      debugLog(
-        'GET /v1/users/me failed: status=${e.response?.statusCode}, message=${e.message}',
-      );
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/v1/users/me',
+      options: Options(validateStatus: (s) => s != null && s < 400),
+    );
+    final data = response.data;
+    if (data == null || response.statusCode != 200) {
+      debugLog('GET /v1/users/me returned status=${response.statusCode}');
       return null;
     }
+    final map = data['user'] is Map
+        ? Map<String, dynamic>.from(data['user'] as Map)
+        : Map<String, dynamic>.from(data);
+    return User.fromJson(map);
   }
 
   @override
