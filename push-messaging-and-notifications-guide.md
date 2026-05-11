@@ -31,45 +31,45 @@ Every notification now follows this shape:
 
 ### Orders
 
-| `title` key | `body.messageKey` | Dynamic values in `body` |
-|---|---|---|
-| `order.for_table` | — | `table`, `items[]`, `venueId`, `venueName` |
-| `order.kitchen_for_table` | — | `table`, `items[]` |
-| `order.bar_for_table` | — | `table`, `items[]` |
-| `order.rejected` | — | `orderNumber`, `table`, `status`, `rejectionNote`, `venueId`, `venueName` |
-| `order.confirmed` | — | `orderNumber`, `table`, `status`, `venueId`, `venueName` |
-| `order.completion_time` | — | `time`, `orderId` |
+| `title` key               | `body.messageKey` | Dynamic values in `body`                                                  |
+| ------------------------- | ----------------- | ------------------------------------------------------------------------- |
+| `order.for_table`         | —                 | `table`, `items[]`, `venueId`, `venueName`                                |
+| `order.kitchen_for_table` | —                 | `table`, `items[]`                                                        |
+| `order.bar_for_table`     | —                 | `table`, `items[]`                                                        |
+| `order.rejected`          | —                 | `orderNumber`, `table`, `status`, `rejectionNote`, `venueId`, `venueName` |
+| `order.confirmed`         | —                 | `orderNumber`, `table`, `status`, `venueId`, `venueName`                  |
+| `order.completion_time`   | —                 | `time`, `orderId`                                                         |
 
 ### Order Items
 
-| `title` key | `body.messageKey` | Dynamic values in `body` |
-|---|---|---|
-| `order_item.rejected_title` | `order_item.rejected_customer_body` | `productName`, `orderId`, `itemId`, `reason`, `venueName`, `orderStatus` |
-| `order_item.rejected_waiter_title` | `order_item.rejected_waiter_body` | `table`, `productName`, `orderId`, `itemId`, `reason`, `orderStatus` |
-| `order_item.eta_title` | `order_item.eta_body` | `table`, `productName`, `minutes`, `orderId`, `itemId`, `estimatedTime` |
-| `order_item.accepted_title` | `order_item.accepted_body` | `productName`, `orderId`, `itemId`, `venueName`, `estimatedTime?` |
+| `title` key                        | `body.messageKey`                   | Dynamic values in `body`                                                 |
+| ---------------------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| `order_item.rejected_title`        | `order_item.rejected_customer_body` | `productName`, `orderId`, `itemId`, `reason`, `venueName`, `orderStatus` |
+| `order_item.rejected_waiter_title` | `order_item.rejected_waiter_body`   | `table`, `productName`, `orderId`, `itemId`, `reason`, `orderStatus`     |
+| `order_item.eta_title`             | `order_item.eta_body`               | `table`, `productName`, `minutes`, `orderId`, `itemId`, `estimatedTime`  |
+| `order_item.accepted_title`        | `order_item.accepted_body`          | `productName`, `orderId`, `itemId`, `venueName`, `estimatedTime?`        |
 
 ### Reservations
 
-| `title` key | `body.messageKey` | Dynamic values in `body` |
-|---|---|---|
-| `reservation.new_request` | — | `reservationNumber`, `table`, `time`, `people`, `venueId`, `venueName` |
-| `reservation.confirmed` | — | `reservationNumber`, `reservationId`, `table`, `status`, `venueId`, `venueName` |
-| `reservation.rejected` | — | `reservationNumber`, `reservationId`, `status`, `reason`, `venueId`, `venueName` |
-| `reservation.cancelled` | — | `reservationNumber`, `reservationId`, `status`, `venueId`, `venueName` |
-| `reservation_reminder.title` | `reservation_reminder.body` | `reservationNumber`, `venue`, `time`, `people`, `table` |
+| `title` key                  | `body.messageKey`           | Dynamic values in `body`                                                         |
+| ---------------------------- | --------------------------- | -------------------------------------------------------------------------------- |
+| `reservation.new_request`    | —                           | `reservationNumber`, `table`, `time`, `people`, `venueId`, `venueName`           |
+| `reservation.confirmed`      | —                           | `reservationNumber`, `reservationId`, `table`, `status`, `venueId`, `venueName`  |
+| `reservation.rejected`       | —                           | `reservationNumber`, `reservationId`, `status`, `reason`, `venueId`, `venueName` |
+| `reservation.cancelled`      | —                           | `reservationNumber`, `reservationId`, `status`, `venueId`, `venueName`           |
+| `reservation_reminder.title` | `reservation_reminder.body` | `reservationNumber`, `venue`, `time`, `people`, `table`                          |
 
 ### Kitchen
 
-| `title` key | `body.messageKey` | Dynamic values in `body` |
-|---|---|---|
+| `title` key                       | `body.messageKey`                | Dynamic values in `body`                                       |
+| --------------------------------- | -------------------------------- | -------------------------------------------------------------- |
 | `kitchen.start_preparation_title` | `kitchen.start_preparation_body` | `reservationNumber`, `time`, `orderId`, `orderNumber`, `table` |
 
 ### Food & Drinks
 
-| `title` key | `body.messageKey` | Dynamic values in `body` |
-|---|---|---|
-| `food_ready.title` | `food_ready.body` | `table`, `items[]`, `orderId` |
+| `title` key          | `body.messageKey`   | Dynamic values in `body`      |
+| -------------------- | ------------------- | ----------------------------- |
+| `food_ready.title`   | `food_ready.body`   | `table`, `items[]`, `orderId` |
 | `drinks_ready.title` | `drinks_ready.body` | `table`, `items[]`, `orderId` |
 
 ---
@@ -93,6 +93,7 @@ Every notification now follows this shape:
   "order_item.eta_body": "Kitchen set {{minutes}} min estimate for {{productName}}",
   "order_item.accepted_title": "Item Accepted: {{productName}}",
   "order_item.accepted_body": "\"{{productName}}\" has been accepted and is being prepared.",
+  "order_item.eta_body_no_time": "Kitchen accepted \"{{productName}}\" and is preparing it.",
 
   "reservation.new_request": "New Reservation Request",
   "reservation.confirmed": "Reservation {{reservationNumber}} confirmed",
@@ -117,7 +118,9 @@ Every notification now follows this shape:
 ## Example Payloads
 
 ### order.for_table
+
 Sent to: **waiters** when a new order is placed.
+
 ```json
 {
   "title": "order.for_table",
@@ -136,15 +139,15 @@ Sent to: **waiters** when a new order is placed.
 ```
 
 ### order.kitchen_for_table
+
 Sent to: **kitchen staff** when a new order has food items.
+
 ```json
 {
   "title": "order.kitchen_for_table",
   "body": {
     "table": "5",
-    "items": [
-      { "productName": "Burger", "quantity": 2 }
-    ]
+    "items": [{ "productName": "Burger", "quantity": 2 }]
   },
   "type": "order",
   "entityId": "order-uuid"
@@ -152,15 +155,15 @@ Sent to: **kitchen staff** when a new order has food items.
 ```
 
 ### order.bar_for_table
+
 Sent to: **bar staff** when a new order has drink items.
+
 ```json
 {
   "title": "order.bar_for_table",
   "body": {
     "table": "5",
-    "items": [
-      { "productName": "Cola", "quantity": 2 }
-    ]
+    "items": [{ "productName": "Cola", "quantity": 2 }]
   },
   "type": "order",
   "entityId": "order-uuid"
@@ -168,7 +171,9 @@ Sent to: **bar staff** when a new order has drink items.
 ```
 
 ### order.confirmed
+
 Sent to: **customer** when their order is confirmed.
+
 ```json
 {
   "title": "order.confirmed",
@@ -186,7 +191,9 @@ Sent to: **customer** when their order is confirmed.
 ```
 
 ### order.rejected
+
 Sent to: **customer** when their order is rejected.
+
 ```json
 {
   "title": "order.rejected",
@@ -205,7 +212,9 @@ Sent to: **customer** when their order is rejected.
 ```
 
 ### order.completion_time
+
 Sent to: **waiters** when estimated completion time is set.
+
 ```json
 {
   "title": "order.completion_time",
@@ -221,7 +230,9 @@ Sent to: **waiters** when estimated completion time is set.
 ---
 
 ### order_item.rejected_title (customer)
+
 Sent to: **customer** when a specific item is rejected.
+
 ```json
 {
   "title": "order_item.rejected_title",
@@ -240,7 +251,9 @@ Sent to: **customer** when a specific item is rejected.
 ```
 
 ### order_item.rejected_waiter_title (waiter)
+
 Sent to: **waiters** when a specific item is rejected.
+
 ```json
 {
   "title": "order_item.rejected_waiter_title",
@@ -260,7 +273,9 @@ Sent to: **waiters** when a specific item is rejected.
 ```
 
 ### order_item.eta_title
+
 Sent to: **waiters** when kitchen sets a prep time estimate.
+
 ```json
 {
   "title": "order_item.eta_title",
@@ -280,7 +295,9 @@ Sent to: **waiters** when kitchen sets a prep time estimate.
 ```
 
 ### order_item.accepted_title
+
 Sent to: **customer** when their item is accepted by kitchen.
+
 ```json
 {
   "title": "order_item.accepted_title",
@@ -300,7 +317,9 @@ Sent to: **customer** when their item is accepted by kitchen.
 ---
 
 ### reservation.new_request
+
 Sent to: **venue staff (waiters/managers)** when a customer creates a reservation.
+
 ```json
 {
   "title": "reservation.new_request",
@@ -318,7 +337,9 @@ Sent to: **venue staff (waiters/managers)** when a customer creates a reservatio
 ```
 
 ### reservation.confirmed
+
 Sent to: **customer** when their reservation is confirmed.
+
 ```json
 {
   "title": "reservation.confirmed",
@@ -336,7 +357,9 @@ Sent to: **customer** when their reservation is confirmed.
 ```
 
 ### reservation.rejected
+
 Sent to: **customer** when their reservation is rejected.
+
 ```json
 {
   "title": "reservation.rejected",
@@ -354,7 +377,9 @@ Sent to: **customer** when their reservation is rejected.
 ```
 
 ### reservation.cancelled
+
 Sent to: **venue staff (waiters/managers)** when a customer cancels their reservation.
+
 ```json
 {
   "title": "reservation.cancelled",
@@ -371,7 +396,9 @@ Sent to: **venue staff (waiters/managers)** when a customer cancels their reserv
 ```
 
 ### reservation_reminder.title
+
 Sent to: **customer** 8 hours before their reservation.
+
 ```json
 {
   "title": "reservation_reminder.title",
@@ -391,7 +418,9 @@ Sent to: **customer** 8 hours before their reservation.
 ---
 
 ### kitchen.start_preparation_title
+
 Sent to: **kitchen staff** when it's time to start preparing a reservation order.
+
 ```json
 {
   "title": "kitchen.start_preparation_title",
@@ -413,7 +442,9 @@ Sent to: **kitchen staff** when it's time to start preparing a reservation order
 ---
 
 ### food_ready.title
+
 Sent to: **waiters** when kitchen marks items as ready.
+
 ```json
 {
   "title": "food_ready.title",
@@ -430,7 +461,9 @@ Sent to: **waiters** when kitchen marks items as ready.
 ```
 
 ### drinks_ready.title
+
 Sent to: **waiters** when bar marks drinks as ready.
+
 ```json
 {
   "title": "drinks_ready.title",
@@ -458,7 +491,9 @@ const { title, body } = notification;
 const translatedTitle = t(title, { ...body });
 
 // 3. If body has a messageKey, translate that too
-const translatedMessage = body.messageKey ? t(body.messageKey, { ...body }) : null;
+const translatedMessage = body.messageKey
+  ? t(body.messageKey, { ...body })
+  : null;
 ```
 
 The client reads `title` as a translation key, looks up the translation, and interpolates values from `body`.

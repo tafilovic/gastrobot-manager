@@ -504,6 +504,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "Кухня приняла {productName} и готовит его.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

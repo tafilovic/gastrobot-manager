@@ -919,6 +919,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String notificationOrderItemEtaBodyNoTime(String productName) {
+    return 'रसोई ने $productName स्वीकार कर लिया है और उसे तैयार कर रही है।';
+  }
+
+  @override
   String notificationOrderItemAcceptedTitle(String productName) {
     return 'Item Accepted: $productName';
   }

@@ -918,6 +918,11 @@ class AppLocalizationsNe extends AppLocalizations {
   }
 
   @override
+  String notificationOrderItemEtaBodyNoTime(String productName) {
+    return 'भान्साले $productName स्वीकार गरेको छ र तयार गर्दैछ।';
+  }
+
+  @override
   String notificationOrderItemAcceptedTitle(String productName) {
     return 'Item Accepted: $productName';
   }

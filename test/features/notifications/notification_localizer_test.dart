@@ -54,6 +54,11 @@ void main() {
         'productName': 'Burger',
         'minutes': 15,
       }),
+      _payload('order_item.eta_title', {
+        'messageKey': 'order_item.eta_body_no_time',
+        'table': '5',
+        'productName': 'Burger',
+      }),
       _payload('order_item.accepted_title', {
         'messageKey': 'order_item.accepted_body',
         'productName': 'Burger',

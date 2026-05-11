@@ -497,6 +497,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "भान्साले {productName} स्वीकार गरेको छ र तयार गर्दैछ।",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

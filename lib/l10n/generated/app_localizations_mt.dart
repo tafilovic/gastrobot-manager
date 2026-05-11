@@ -922,6 +922,11 @@ class AppLocalizationsMt extends AppLocalizations {
   }
 
   @override
+  String notificationOrderItemEtaBodyNoTime(String productName) {
+    return 'Il-kċina aċċettat $productName u qed tippreparah.';
+  }
+
+  @override
   String notificationOrderItemAcceptedTitle(String productName) {
     return 'Item Accepted: $productName';
   }

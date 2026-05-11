@@ -1738,6 +1738,12 @@ abstract class AppLocalizations {
   /// **'Kitchen set {minutes} min estimate for {productName}'**
   String notificationOrderItemEtaBody(String minutes, String productName);
 
+  /// No description provided for @notificationOrderItemEtaBodyNoTime.
+  ///
+  /// In sr, this message translates to:
+  /// **'Kuhinja je prihvatila {productName} i priprema ga.'**
+  String notificationOrderItemEtaBodyNoTime(String productName);
+
   /// No description provided for @notificationOrderItemAcceptedTitle.
   ///
   /// In sr, this message translates to:

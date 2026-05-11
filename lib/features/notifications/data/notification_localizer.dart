@@ -93,6 +93,9 @@ class NotificationLocalizer {
         _s(values, 'minutes'),
         _s(values, 'productName'),
       ),
+      'order_item.eta_body_no_time' => l10n.notificationOrderItemEtaBodyNoTime(
+        _s(values, 'productName'),
+      ),
       'order_item.accepted_body' => l10n.notificationOrderItemAcceptedBody(
         _s(values, 'productName'),
       ),

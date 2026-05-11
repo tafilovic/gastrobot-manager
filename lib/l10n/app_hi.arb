@@ -497,6 +497,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "रसोई ने {productName} स्वीकार कर लिया है और उसे तैयार कर रही है।",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

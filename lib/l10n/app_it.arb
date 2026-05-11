@@ -504,6 +504,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "La cucina ha accettato {productName} e lo sta preparando.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

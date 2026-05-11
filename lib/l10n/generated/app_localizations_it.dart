@@ -923,6 +923,11 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String notificationOrderItemEtaBodyNoTime(String productName) {
+    return 'La cucina ha accettato $productName e lo sta preparando.';
+  }
+
+  @override
   String notificationOrderItemAcceptedTitle(String productName) {
     return 'Item Accepted: $productName';
   }

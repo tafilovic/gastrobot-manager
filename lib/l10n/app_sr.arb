@@ -596,6 +596,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "Kuhinja je prihvatila {productName} i priprema ga.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

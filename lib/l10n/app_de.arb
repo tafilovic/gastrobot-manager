@@ -497,6 +497,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "Die Küche hat {productName} angenommen und bereitet es zu.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

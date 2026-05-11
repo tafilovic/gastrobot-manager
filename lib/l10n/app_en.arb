@@ -506,6 +506,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "Kitchen accepted {productName} and is preparing it.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

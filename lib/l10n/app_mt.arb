@@ -596,6 +596,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "Il-kċina aċċettat {productName} u qed tippreparah.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {

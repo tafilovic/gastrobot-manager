@@ -596,6 +596,14 @@
       }
     }
   },
+  "notificationOrderItemEtaBodyNoTime": "Η κουζίνα αποδέχτηκε το {productName} και το προετοιμάζει.",
+  "@notificationOrderItemEtaBodyNoTime": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "notificationOrderItemAcceptedTitle": "Item Accepted: {productName}",
   "@notificationOrderItemAcceptedTitle": {
     "placeholders": {
