@@ -9,6 +9,7 @@
 .tags*
 **/.vagrant/
 **/DerivedData/
+build/ios/XCBuildData/
 Icon?
 **/Pods/
 **/.symlinks/
