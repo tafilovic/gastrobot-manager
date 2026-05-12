@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'package:gastrobotmanager/features/notifications/domain/notification_payload.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -162,7 +164,19 @@ class NotificationLocalizer {
     final value = values[key];
     if (value == null) return '';
     if (value is Iterable) return value.map(_formatValue).join(', ');
+    if (key == 'time') return _formatTime(value);
     return _formatValue(value);
+  }
+
+  /// Converts ISO-8601 (e.g. `2025-06-15T19:00:00.000Z`) into local-time
+  /// `HH:mm`. Already-formatted strings (like `07:00 PM`) pass through.
+  static String _formatTime(dynamic value) {
+    if (value is! String || value.isEmpty) {
+      return _formatValue(value);
+    }
+    final parsed = DateTime.tryParse(value);
+    if (parsed == null) return value;
+    return DateFormat('HH:mm').format(parsed.toLocal());
   }
 
   static String? _fallbackBody(Map<String, dynamic> values) {

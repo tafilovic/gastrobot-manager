@@ -1,0 +1,59 @@
+/*
+ * Localizable.strings
+ * NotificationService (Italian – matches `lib/l10n/app_it.arb`)
+ */
+
+"notificationOrderForTableTitle" = "Order for table %@";
+"notificationOrderForTableBody" = "%@";
+
+"notificationOrderKitchenForTableTitle" = "Kitchen Order for table %@";
+"notificationOrderKitchenForTableBody" = "%@";
+
+"notificationOrderBarForTableTitle" = "Bar Order for table %@";
+"notificationOrderBarForTableBody" = "%@";
+
+"notificationOrderRejectedTitle" = "Order %@ rejected";
+"notificationOrderRejectedBody" = "Table %1$@. %2$@";
+
+"notificationOrderConfirmedTitle" = "Order %@ confirmed";
+"notificationOrderConfirmedBody" = "Table %1$@ at %2$@";
+
+"notificationOrderCompletionTimeTitle" = "Order completion time";
+"notificationOrderCompletionTimeBody" = "Estimated completion time: %@";
+
+"notificationOrderItemRejectedTitle" = "Item Rejected: %@";
+"notificationOrderItemRejectedCustomerBody" = "We are sorry, but \"%@\" is currently unavailable. It has been removed from your order bill.";
+
+"notificationOrderItemRejectedWaiterTitle" = "Item Rejected: %@";
+"notificationOrderItemRejectedWaiterBody" = "\"%@\" was rejected and removed from the order.";
+
+"notificationOrderItemEtaTitle" = "ETA Set: %@";
+"notificationOrderItemEtaBody" = "Kitchen set %1$@ min estimate for %2$@";
+"notificationOrderItemEtaBodyNoTime" = "La cucina ha accettato %@ e lo sta preparando.";
+
+"notificationOrderItemAcceptedTitle" = "Item Accepted: %@";
+"notificationOrderItemAcceptedBody" = "\"%@\" has been accepted and is being prepared.";
+
+"notificationReservationNewRequestTitle" = "New Reservation Request";
+"notificationReservationNewRequestBody" = "%1$@ guests at %2$@. Table: %3$@";
+
+"notificationReservationConfirmedTitle" = "Reservation %@ confirmed";
+"notificationReservationConfirmedBody" = "Table: %1$@ at %2$@";
+
+"notificationReservationRejectedTitle" = "Reservation %@ rejected";
+"notificationReservationRejectedBody" = "%@";
+
+"notificationReservationCancelledTitle" = "Reservation %@ cancelled";
+"notificationReservationCancelledBody" = "%@";
+
+"notificationReservationReminderTitle" = "Reservation Reminder";
+"notificationReservationReminderBody" = "Your reservation is in 8 hours";
+
+"notificationKitchenStartPreparationTitle" = "Start Preparation: Reservation Order";
+"notificationKitchenStartPreparationBody" = "Time to prepare food for Reservation #%1$@. Guests arrive at %2$@.";
+
+"notificationFoodReadyTitle" = "Food Ready: Table %@";
+"notificationFoodReadyBody" = "%@ are ready to serve.";
+
+"notificationDrinksReadyTitle" = "Drinks Ready: Table %@";
+"notificationDrinksReadyBody" = "%@ are ready at the bar.";

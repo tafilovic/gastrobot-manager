@@ -36,6 +36,7 @@ class _GastroBotAppState extends State<GastroBotApp> {
     super.initState();
     final auth = context.read<AuthProvider>();
     _router = AppRouter.create(auth);
+    // Notification tap routing runs on Android only; iOS opens the app without deep links.
     context.read<PushNotificationService>().setTapHandler(
       _handleNotificationTap,
     );

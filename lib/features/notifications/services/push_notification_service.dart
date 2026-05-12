@@ -52,8 +52,18 @@ class PushNotificationService {
   bool _started = false;
   String? _lastRegisteredToken;
 
-  bool get _isSupported =>
+  static bool get _isAndroid =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+  static bool get _isIos =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
+  bool get _isSupported => _isAndroid || _isIos;
+
+  /// Deep link routing from notification taps is Android-only; iOS opens the app only.
+  static bool get _routeOnNotificationTap => _isAndroid;
+
+  String get _fcmPlatformLabel => _isIos ? 'ios' : 'android';
 
   Future<void> initialize() async {
     if (_initialized || !_isSupported) return;
@@ -65,15 +75,21 @@ class PushNotificationService {
       );
     }
 
-    const androidInitialization = AndroidInitializationSettings(
-      _androidNotificationIcon,
+    const darwinInitialization = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestSoundPermission: false,
+      requestBadgePermission: false,
     );
-    const initializationSettings = InitializationSettings(
-      android: androidInitialization,
+    final initializationSettings = InitializationSettings(
+      android: _isAndroid
+          ? const AndroidInitializationSettings(_androidNotificationIcon)
+          : null,
+      iOS: _isIos ? darwinInitialization : null,
     );
     await _localNotifications.initialize(
       settings: initializationSettings,
       onDidReceiveNotificationResponse: (response) {
+        if (!_routeOnNotificationTap) return;
         final payload = NotificationPayload.fromLocalPayload(response.payload);
         if (payload != null) {
           _tapHandler?.call(payload.routePayload);
@@ -81,24 +97,26 @@ class PushNotificationService {
       },
     );
 
-    const channel = AndroidNotificationChannel(
-      _channelId,
-      _channelName,
-      description: _channelDescription,
-      importance: Importance.high,
-      playSound: true,
-      enableVibration: true,
-    );
-    await _localNotifications
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.createNotificationChannel(channel);
-    await _localNotifications
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.requestNotificationsPermission();
+    if (_isAndroid) {
+      const channel = AndroidNotificationChannel(
+        _channelId,
+        _channelName,
+        description: _channelDescription,
+        importance: Importance.high,
+        playSound: true,
+        enableVibration: true,
+      );
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(channel);
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.requestNotificationsPermission();
+    }
 
     await _messaging.requestPermission(alert: true, badge: true, sound: true);
     await _messaging.setForegroundNotificationPresentationOptions(
@@ -151,8 +169,11 @@ class PushNotificationService {
 
   Future<void> _registerToken(String token) async {
     if (!_authProvider.isLoggedIn || token == _lastRegisteredToken) return;
-    debugLog('Registering FCM token for android: $token');
-    await _tokenRemote.registerToken(token: token, platform: 'android');
+    debugLog('Registering FCM token for $_fcmPlatformLabel: $token');
+    await _tokenRemote.registerToken(
+      token: token,
+      platform: _fcmPlatformLabel,
+    );
     _lastRegisteredToken = token;
   }
 
@@ -173,17 +194,28 @@ class PushNotificationService {
       id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
       title: title,
       body: body,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _channelId,
-          _channelName,
-          channelDescription: _channelDescription,
-          icon: _androidNotificationIcon,
-          importance: Importance.high,
-          priority: Priority.high,
-          playSound: true,
-          enableVibration: true,
-        ),
+      notificationDetails: NotificationDetails(
+        android: _isAndroid
+            ? const AndroidNotificationDetails(
+                _channelId,
+                _channelName,
+                channelDescription: _channelDescription,
+                icon: _androidNotificationIcon,
+                importance: Importance.high,
+                priority: Priority.high,
+                playSound: true,
+                enableVibration: true,
+              )
+            : null,
+        iOS: _isIos
+            ? const DarwinNotificationDetails(
+                presentAlert: true,
+                presentSound: true,
+                presentBadge: true,
+                presentBanner: true,
+                presentList: true,
+              )
+            : null,
       ),
       payload: payload?.toLocalPayload(),
     );
@@ -191,6 +223,7 @@ class PushNotificationService {
 
   void _handleRemoteMessageTap(RemoteMessage message) {
     _logRemoteMessage('tap', message);
+    if (!_routeOnNotificationTap) return;
     final payload = NotificationPayload.fromRemoteData(message.data);
     if (payload != null) {
       _tapHandler?.call(payload.routePayload);
@@ -217,6 +250,7 @@ class PushNotificationService {
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (kIsWeb) return;
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -229,27 +263,46 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   const localizer = NotificationLocalizer();
   final text = localizer.resolve(payload, AppLocalizationsEn());
   final plugin = FlutterLocalNotificationsPlugin();
-  const initializationSettings = InitializationSettings(
-    android: AndroidInitializationSettings(
-      PushNotificationService._androidNotificationIcon,
-    ),
+  const darwinInit = DarwinInitializationSettings(
+    requestAlertPermission: false,
+    requestSoundPermission: false,
+    requestBadgePermission: false,
+  );
+  final initializationSettings = InitializationSettings(
+    android: PushNotificationService._isAndroid
+        ? const AndroidInitializationSettings(
+            PushNotificationService._androidNotificationIcon,
+          )
+        : null,
+    iOS: PushNotificationService._isIos ? darwinInit : null,
   );
   await plugin.initialize(settings: initializationSettings);
   await plugin.show(
     id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
     title: text.title,
     body: text.body,
-    notificationDetails: const NotificationDetails(
-      android: AndroidNotificationDetails(
-        PushNotificationService._channelId,
-        PushNotificationService._channelName,
-        channelDescription: PushNotificationService._channelDescription,
-        icon: PushNotificationService._androidNotificationIcon,
-        importance: Importance.high,
-        priority: Priority.high,
-        playSound: true,
-        enableVibration: true,
-      ),
+    notificationDetails: NotificationDetails(
+      android: PushNotificationService._isAndroid
+          ? const AndroidNotificationDetails(
+              PushNotificationService._channelId,
+              PushNotificationService._channelName,
+              channelDescription: PushNotificationService._channelDescription,
+              icon: PushNotificationService._androidNotificationIcon,
+              importance: Importance.high,
+              priority: Priority.high,
+              playSound: true,
+              enableVibration: true,
+            )
+          : null,
+      iOS: PushNotificationService._isIos
+          ? const DarwinNotificationDetails(
+              presentAlert: true,
+              presentSound: true,
+              presentBadge: true,
+              presentBanner: true,
+              presentList: true,
+            )
+          : null,
     ),
     payload: jsonEncode(payload.toJson()),
   );
