@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/pending_orders_api.dart';
@@ -29,6 +30,10 @@ void main() {
     items: const [],
   );
 
+  setUpAll(() {
+    registerFallbackValue(WorkArea.ownRole);
+  });
+
   setUp(() {
     auth = MockAuthProvider();
     pendingApi = MockPendingOrdersApi();
@@ -39,7 +44,13 @@ void main() {
       waiterOrderActionsApi: payApi,
     );
     when(() => auth.profileType).thenReturn(ProfileType.waiter);
-    when(() => pendingApi.getPendingOrders(any(), any()))
+    when(
+      () => pendingApi.getPendingOrders(
+        any(),
+        any(),
+        workArea: any(named: 'workArea'),
+      ),
+    )
         .thenAnswer((_) async => [order]);
     when(() => payApi.getPaidOrders(any())).thenAnswer((_) async => []);
   });

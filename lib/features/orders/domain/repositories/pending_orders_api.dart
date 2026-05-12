@@ -1,4 +1,5 @@
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 
 /// Contract for fetching pending orders per role (kitchen, bar, etc.).
@@ -6,6 +7,7 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dar
 abstract class PendingOrdersApi {
   Future<List<PendingOrder>> getPendingOrders(
     String venueId,
-    ProfileType profileType,
-  );
+    ProfileType profileType, {
+    WorkArea workArea = WorkArea.ownRole,
+  });
 }

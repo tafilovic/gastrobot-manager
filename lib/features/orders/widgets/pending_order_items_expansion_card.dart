@@ -12,7 +12,7 @@ import 'package:gastrobotmanager/features/orders/utils/order_group_status.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
-import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
+import 'package:gastrobotmanager/features/zones/utils/zone_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Layout for [PendingOrderItemsExpansionCard].
@@ -45,7 +45,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
   final AppLocalizations l10n;
   final Color accentColor;
 
-  /// [tableOverviewHighlight] matches [TableOverviewActiveOrderCard].
+  /// [tableOverviewHighlight] matches [ZoneOverviewActiveOrderCard].
   final PendingOrderItemsCardLayout layout;
 
   /// When true, shows "See details" and does not wrap the card in [InkWell].
@@ -225,7 +225,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
     }
 
     // list + listCompact: seating title (Room 1 / Sunbed 2 / Table …)
-    final category = tableDisplayCategoryFromApiType(order.tableType);
+    final category = zoneDisplayCategoryFromApiType(order.tableType);
     final seatingTitle = orderSeatingDisplayTitle(l10n, order);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +233,7 @@ class PendingOrderItemsExpansionCard extends StatelessWidget {
         Row(
           children: [
             Icon(
-              tableDisplayCategoryIcon(category),
+              zoneDisplayCategoryIcon(category),
               size: 18,
               color: accentColor,
             ),

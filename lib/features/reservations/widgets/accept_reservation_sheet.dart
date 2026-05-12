@@ -93,7 +93,7 @@ class _AcceptReservationSheetState extends State<AcceptReservationSheet> {
         : null;
     final filteredTables = regionId != null
         ? filterTablesByRegion(regions, regionId)
-        : const <RegionTableModel>[];
+        : const <RegionZoneModel>[];
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
     final canConfirm = _selectedTableId != null && !_submitting;
 

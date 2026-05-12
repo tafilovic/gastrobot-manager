@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/features/preparing/domain/errors/preparing_exception.dart';
 import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
 import 'package:gastrobotmanager/features/preparing/domain/repositories/queue_api.dart';
@@ -14,15 +15,23 @@ class QueueRemote implements QueueApi {
 
   final Dio _dio;
 
-  String _queueUrl(String venueId, ProfileType profileType) {
-    if (profileType == ProfileType.bar) {
+  String _queueUrl(
+    String venueId,
+    ProfileType profileType,
+    WorkArea workArea,
+  ) {
+    if (workArea == WorkArea.bar || profileType == ProfileType.bar) {
       return '${ApiConfig.baseUrl}/venues/$venueId/bar/queue';
     }
     return '/venues/$venueId/kitchen/queue';
   }
 
-  String _readyUrl(String venueId, ProfileType profileType) {
-    if (profileType == ProfileType.bar) {
+  String _readyUrl(
+    String venueId,
+    ProfileType profileType,
+    WorkArea workArea,
+  ) {
+    if (workArea == WorkArea.bar || profileType == ProfileType.bar) {
       return '${ApiConfig.baseUrl}/venues/$venueId/bar/ready';
     }
     return '/venues/$venueId/kitchen/ready';
@@ -32,12 +41,14 @@ class QueueRemote implements QueueApi {
   Future<List<QueueOrder>> getQueue(
     String venueId,
     ProfileType profileType,
-  ) async {
-    if (profileType == ProfileType.waiter) {
+    {
+    WorkArea workArea = WorkArea.ownRole,
+  }) async {
+    if (profileType == ProfileType.waiter && workArea != WorkArea.bar) {
       return [];
     }
 
-    final url = _queueUrl(venueId, profileType);
+    final url = _queueUrl(venueId, profileType, workArea);
 
     try {
       final response = await _dio.get<List<dynamic>>(
@@ -56,7 +67,10 @@ class QueueRemote implements QueueApi {
         final msg = (response.data is Map)
             ? (response.data as Map)['message']?.toString()
             : null;
-        throw PreparingException(msg ?? 'Failed to load queue');
+        throw PreparingException(
+          msg ?? 'Failed to load queue',
+          statusCode: response.statusCode,
+        );
       }
 
       return (response.data!)
@@ -66,7 +80,10 @@ class QueueRemote implements QueueApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw PreparingException(message ?? e.message ?? 'Network error');
+      throw PreparingException(
+        message ?? e.message ?? 'Network error',
+        statusCode: e.response?.statusCode,
+      );
     }
   }
 
@@ -75,10 +92,14 @@ class QueueRemote implements QueueApi {
     String venueId,
     List<String> orderItemIds,
     ProfileType profileType,
-  ) async {
-    if (profileType == ProfileType.waiter) return false;
+    {
+    WorkArea workArea = WorkArea.ownRole,
+  }) async {
+    if (profileType == ProfileType.waiter && workArea != WorkArea.bar) {
+      return false;
+    }
 
-    final url = _readyUrl(venueId, profileType);
+    final url = _readyUrl(venueId, profileType, workArea);
 
     try {
       final response = await _dio.patch<Map<String, dynamic>>(
@@ -95,7 +116,10 @@ class QueueRemote implements QueueApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw PreparingException(message ?? e.message ?? 'Network error');
+      throw PreparingException(
+        message ?? e.message ?? 'Network error',
+        statusCode: e.response?.statusCode,
+      );
     }
   }
 }

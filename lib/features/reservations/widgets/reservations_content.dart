@@ -25,7 +25,7 @@ import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reserva
 import 'package:gastrobotmanager/features/reservations/widgets/kitchen_bar_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_request_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
-import 'package:gastrobotmanager/features/tables/utils/venue_table_id_match.dart';
+import 'package:gastrobotmanager/features/zones/utils/venue_zone_id_match.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reservations screen content: title, tabs (Zahtevi / Prihvaćeno), count, list of request cards.

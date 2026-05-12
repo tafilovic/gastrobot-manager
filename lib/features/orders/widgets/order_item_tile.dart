@@ -24,9 +24,13 @@ class OrderItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isUnchecked = !isChecked;
+    final contentOpacity = isDisabled || isUnchecked ? 0.5 : 1.0;
+    final textDecoration =
+        isUnchecked ? TextDecoration.lineThrough : TextDecoration.none;
 
     return Opacity(
-      opacity: isDisabled ? 0.5 : 1,
+      opacity: contentOpacity,
       child: Material(
         color: AppColors.surface,
         child: InkWell(
@@ -67,6 +71,7 @@ class OrderItemTile extends StatelessWidget {
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.w500,
+                          decoration: textDecoration,
                         ),
                       ),
                       if (item.notes.isNotEmpty) ...[
@@ -76,6 +81,7 @@ class OrderItemTile extends StatelessWidget {
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: AppColors.textMuted,
                             fontStyle: FontStyle.italic,
+                            decoration: textDecoration,
                           ),
                         ),
                       ],
@@ -88,6 +94,7 @@ class OrderItemTile extends StatelessWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w500,
+                    decoration: textDecoration,
                   ),
                 ),
               ],

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/features/orders/domain/errors/orders_exception.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/pending_orders_api.dart';
@@ -19,15 +20,17 @@ class PendingOrdersRemote implements PendingOrdersApi {
   Future<List<PendingOrder>> getPendingOrders(
     String venueId,
     ProfileType profileType,
-  ) async {
+    {
+    WorkArea workArea = WorkArea.ownRole,
+  }) async {
     final String path;
     final Map<String, dynamic>? queryParams;
-    if (profileType == ProfileType.waiter) {
-      path = '/venues/$venueId/waiter/confirmed-orders';
-      queryParams = null;
-    } else if (profileType == ProfileType.bar) {
+    if (workArea == WorkArea.bar || profileType == ProfileType.bar) {
       path = '/venues/$venueId/bar/pending';
       queryParams = {'source': 'walk_in'};
+    } else if (profileType == ProfileType.waiter) {
+      path = '/venues/$venueId/waiter/confirmed-orders';
+      queryParams = null;
     } else {
       path = '/venues/$venueId/kitchen/pending';
       queryParams = {'source': 'walk_in'};
@@ -50,7 +53,10 @@ class PendingOrdersRemote implements PendingOrdersApi {
         final msg = (response.data is Map)
             ? (response.data as Map)['message']?.toString()
             : null;
-        throw OrdersException(msg ?? 'Failed to load orders');
+        throw OrdersException(
+          msg ?? 'Failed to load orders',
+          statusCode: response.statusCode,
+        );
       }
 
       final raw = response.data as dynamic;
@@ -69,7 +75,10 @@ class PendingOrdersRemote implements PendingOrdersApi {
       final message = e.response?.data is Map
           ? (e.response!.data as Map)['message']?.toString()
           : null;
-      throw OrdersException(message ?? e.message ?? 'Network error');
+      throw OrdersException(
+        message ?? e.message ?? 'Network error',
+        statusCode: e.response?.statusCode,
+      );
     }
   }
 }

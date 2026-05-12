@@ -6,6 +6,7 @@ import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -24,11 +25,15 @@ class OrdersContent extends StatefulWidget {
     required this.accentColor,
     required this.l10n,
     required this.onStartRefresh,
+    this.workArea = WorkArea.ownRole,
+    this.detailsPath = AppRouteNames.pathOrdersDetails,
   });
 
   final Color accentColor;
   final AppLocalizations l10n;
   final VoidCallback onStartRefresh;
+  final WorkArea workArea;
+  final String detailsPath;
 
   @override
   State<OrdersContent> createState() => _OrdersContentState();
@@ -50,8 +55,9 @@ class _OrdersContentState extends State<OrdersContent> {
     AppLocalizations l10n,
     ProfileType? profileType,
     PendingOrder order,
+    WorkArea workArea,
   ) {
-    if (profileType == ProfileType.bar) {
+    if (workArea == WorkArea.bar || profileType == ProfileType.bar) {
       return l10n.orderDrinksCount(order.itemCount);
     }
     return null;
@@ -59,8 +65,11 @@ class _OrdersContentState extends State<OrdersContent> {
 
   Future<void> _openDetails(PendingOrder order, OrdersProvider provider) async {
     final completed = await context.push<bool>(
-      AppRouteNames.pathOrdersDetails,
-      extra: OrderDetailsScreen(order: order),
+      widget.detailsPath,
+      extra: OrderDetailsScreen(
+        order: order,
+        useBarAcceptFlow: widget.workArea == WorkArea.bar,
+      ),
     );
     if (completed == true && context.mounted) {
       provider.pullRefresh();
@@ -107,8 +116,9 @@ class _OrdersContentState extends State<OrdersContent> {
                   flex: 1,
                   child: _selectedOrder == null
                       ? _buildDetailPlaceholder(theme)
-                      : OrderDetailsContent(
+                        : OrderDetailsContent(
                           order: _selectedOrder!,
+                          useBarAcceptFlow: widget.workArea == WorkArea.bar,
                           onCompleted: () {
                             setState(() => _selectedOrder = null);
                             widget.onStartRefresh();
@@ -282,7 +292,12 @@ class _OrdersContentState extends State<OrdersContent> {
             order: order,
             accentColor: widget.accentColor,
             l10n: widget.l10n,
-            itemCountLabel: _itemCountLabel(widget.l10n, profileType, order),
+            itemCountLabel: _itemCountLabel(
+              widget.l10n,
+              profileType,
+              order,
+              widget.workArea,
+            ),
             onSeeDetails: () => onSeeDetails(order),
           ),
         );

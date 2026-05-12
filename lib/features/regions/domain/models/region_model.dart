@@ -1,9 +1,9 @@
 /// A table embedded inside a [RegionModel] from GET /regions.
 ///
-/// Unlike [TableModel] (from /venues/:id/tables), this does not include
+/// Unlike [ZoneModel] (from /venues/:id/tables), this does not include
 /// real-time status or next-reservation data.
-class RegionTableModel {
-  const RegionTableModel({
+class RegionZoneModel {
+  const RegionZoneModel({
     required this.id,
     required this.name,
     required this.type,
@@ -26,8 +26,8 @@ class RegionTableModel {
   final String regionId;
   final String? code;
 
-  factory RegionTableModel.fromJson(Map<String, dynamic> json) {
-    return RegionTableModel(
+  factory RegionZoneModel.fromJson(Map<String, dynamic> json) {
+    return RegionZoneModel(
       id: json['id'] as String,
       name: json['name'] as String,
       type: json['type'] as String? ?? 'table',
@@ -60,16 +60,16 @@ class RegionModel {
   /// "inside" | "outside"
   final String area;
 
-  final List<RegionTableModel> tables;
+  final List<RegionZoneModel> tables;
 
   factory RegionModel.fromJson(Map<String, dynamic> json) {
     final rawTables = json['tables'];
     final tables = rawTables is List
         ? rawTables
             .whereType<Map<String, dynamic>>()
-            .map(RegionTableModel.fromJson)
+            .map(RegionZoneModel.fromJson)
             .toList()
-        : <RegionTableModel>[];
+        : <RegionZoneModel>[];
 
     return RegionModel(
       id: json['id'] as String,

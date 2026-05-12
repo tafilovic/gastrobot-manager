@@ -188,8 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: SizedBox(
                           width: double.infinity,
                           child: OutlinedButton.icon(
-                            onPressed: () =>
-                                context.pushNamed(AppRouteNames.drinks),
+                            onPressed: () => context.pushNamed(AppRouteNames.menu),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.accent,
                               side: BorderSide(color: AppColors.accent),

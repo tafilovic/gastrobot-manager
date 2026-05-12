@@ -7,8 +7,8 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
-import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
-import 'package:gastrobotmanager/features/tables/widgets/tables_filter_table_chips_grouped.dart';
+import 'package:gastrobotmanager/features/zones/providers/zones_provider.dart';
+import 'package:gastrobotmanager/features/zones/widgets/zones_filter_zone_chips_grouped.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Screen for filtering active (accepted) reservations.
@@ -50,7 +50,7 @@ class _ActiveReservationsFilterScreenState
     if (!mounted) return;
     final venueId = context.read<AuthProvider>().currentVenueId;
     if (venueId != null) {
-      context.read<TablesProvider>().load(venueId);
+      context.read<ZonesProvider>().load(venueId);
     }
   }
 
@@ -348,9 +348,9 @@ class _ActiveReservationsFilterScreenState
   }
 
   Widget _buildTableNumberGrid() {
-    return TablesFilterTableChipsGrouped(
-      selectedTableIds: _tableIds,
-      onToggleTableId: (id) {
+    return ZonesFilterZoneChipsGrouped(
+      selectedZoneIds: _tableIds,
+      onToggleZoneId: (id) {
         setState(() {
           if (_tableIds.contains(id)) {
             _tableIds = {..._tableIds}..remove(id);

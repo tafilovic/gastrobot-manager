@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
+import 'package:gastrobotmanager/features/preparing/domain/errors/preparing_exception.dart';
 import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
 import 'package:gastrobotmanager/features/preparing/domain/repositories/queue_api.dart';
 
@@ -18,40 +20,61 @@ class QueueProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   String? _currentVenueId;
+  WorkArea _currentWorkArea = WorkArea.ownRole;
+  int? _errorStatusCode;
 
   List<QueueOrder> get orders => List.unmodifiable(_orders);
   bool get isLoading => _isLoading;
   String? get error => _error;
+  int? get errorStatusCode => _errorStatusCode;
 
   static int _orderByTargetTime(QueueOrder a, QueueOrder b) {
     return a.targetTime.compareTo(b.targetTime);
   }
 
-  Future<void> loadOnce(String venueId) async {
+  Future<void> loadOnce(
+    String venueId, {
+    WorkArea workArea = WorkArea.ownRole,
+  }) async {
     _currentVenueId = venueId;
-    await _load(venueId);
+    _currentWorkArea = workArea;
+    await _load(venueId, workArea: workArea);
   }
 
   Future<void> pullRefresh() async {
     final venueId = _currentVenueId;
     if (venueId == null) return;
-    await _load(venueId);
+    await _load(venueId, workArea: _currentWorkArea);
   }
 
-  Future<void> _load(String venueId) async {
+  Future<void> _load(
+    String venueId, {
+    WorkArea workArea = WorkArea.ownRole,
+  }) async {
     final profileType = _authProvider.profileType;
     if (profileType == null) return;
 
     _isLoading = true;
     _error = null;
+    _errorStatusCode = null;
     notifyListeners();
 
     try {
-      final list = await _api.getQueue(venueId, profileType);
+      final list = await _api.getQueue(
+        venueId,
+        profileType,
+        workArea: workArea,
+      );
       _orders = list..sort(_orderByTargetTime);
       _error = null;
+      _errorStatusCode = null;
+    } on PreparingException catch (e) {
+      _error = e.message;
+      _errorStatusCode = e.statusCode;
+      _orders = [];
     } catch (e) {
       _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
+      _errorStatusCode = null;
       _orders = [];
     } finally {
       _isLoading = false;
@@ -70,15 +93,26 @@ class QueueProvider extends ChangeNotifier {
     if (itemIds.isEmpty) return false;
 
     try {
-      final success = await _api.markAsReady(venueId, itemIds, profileType);
+      final success = await _api.markAsReady(
+        venueId,
+        itemIds,
+        profileType,
+        workArea: _currentWorkArea,
+      );
       if (success) {
         _orders = _orders.where((o) => o.orderId != order.orderId).toList();
         _error = null;
         notifyListeners();
       }
       return success;
+    } on PreparingException catch (e) {
+      _error = e.message;
+      _errorStatusCode = e.statusCode;
+      notifyListeners();
+      return false;
     } catch (e) {
       _error = e.toString().replaceFirst(RegExp(r'^Exception: '), '');
+      _errorStatusCode = null;
       notifyListeners();
       return false;
     }

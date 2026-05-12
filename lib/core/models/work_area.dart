@@ -1,0 +1,4 @@
+enum WorkArea {
+  ownRole,
+  bar,
+}

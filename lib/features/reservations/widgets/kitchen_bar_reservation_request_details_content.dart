@@ -32,14 +32,24 @@ class KitchenBarReservationRequestDetailsContent extends StatefulWidget {
 class _KitchenBarReservationRequestDetailsContentState
     extends State<KitchenBarReservationRequestDetailsContent> {
   late Set<String> _checkedIds;
-  final Set<String> _processedIds = {};
+  late Set<String> _processedIds;
   bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
-    _checkedIds = {for (final item in widget.order.items) item.id};
+    _processedIds = {
+      for (final item in widget.order.items)
+        if (!_isActionableStatus(item.status)) item.id,
+    };
+    _checkedIds = {
+      for (final item in widget.order.items)
+        if (!_processedIds.contains(item.id)) item.id,
+    };
   }
+
+  bool _isActionableStatus(String status) =>
+      status.trim().toLowerCase() == 'pending';
 
   bool get _allProcessed =>
       widget.order.items.every((i) => _processedIds.contains(i.id));

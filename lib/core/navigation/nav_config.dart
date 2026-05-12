@@ -60,10 +60,10 @@ class NavConfig {
     svgAssetPath: 'assets/icons/wine_glasses.svg',
   );
 
-  static const tables = NavItem(
+  static const zones = NavItem(
     label: 'ZONE',
     icon: Icons.table_restaurant,
-    route: 'tables',
+    route: 'zones',
     svgAssetPath: 'assets/icons/table.svg',
   );
 
@@ -77,7 +77,7 @@ class NavConfig {
   static List<NavItem> itemsFor(ProfileType type) {
     switch (type) {
       case ProfileType.waiter:
-        return [ready, orders, reservations, tables, profile];
+        return [ready, orders, reservations, zones, profile];
       case ProfileType.kitchen:
         return [orders, preparing, reservations, menu, profile];
       case ProfileType.bar:

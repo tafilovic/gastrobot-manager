@@ -19,10 +19,12 @@ class OrderDetailsContent extends StatefulWidget {
     super.key,
     required this.order,
     this.onCompleted,
+    this.useBarAcceptFlow = false,
   });
 
   final PendingOrder order;
   final VoidCallback? onCompleted;
+  final bool useBarAcceptFlow;
 
   @override
   State<OrderDetailsContent> createState() => _OrderDetailsContentState();
@@ -30,16 +32,24 @@ class OrderDetailsContent extends StatefulWidget {
 
 class _OrderDetailsContentState extends State<OrderDetailsContent> {
   late Set<String> _checkedIds;
-  final Set<String> _processedIds = {};
+  late Set<String> _processedIds;
   bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
+    _processedIds = {
+      for (final item in widget.order.items)
+        if (!_isActionableStatus(item.status)) item.id,
+    };
     _checkedIds = {
-      for (final item in widget.order.items) item.id,
+      for (final item in widget.order.items)
+        if (!_processedIds.contains(item.id)) item.id,
     };
   }
+
+  bool _isActionableStatus(String status) =>
+      status.trim().toLowerCase() == 'pending';
 
   bool get _allProcessed =>
       widget.order.items.every((i) => _processedIds.contains(i.id));
@@ -183,7 +193,7 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
 
   void _onAcceptPressed(BuildContext context) {
     final profileType = context.read<AuthProvider>().profileType;
-    if (profileType == ProfileType.bar) {
+    if (widget.useBarAcceptFlow || profileType == ProfileType.bar) {
       _runBarAccept(context);
     } else {
       _openTimeEstimation(context);
@@ -194,9 +204,13 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
-    final unprocessed = _checkedIds.where((id) => !_processedIds.contains(id));
-    final isRejectDisabled = unprocessed.isEmpty || _isSubmitting;
-    final isAcceptDisabled = unprocessed.isEmpty || _isSubmitting;
+    final unprocessedIds = widget.order.items
+        .map((item) => item.id)
+        .where((id) => !_processedIds.contains(id));
+    final checkedUnprocessedIds =
+        _checkedIds.where((id) => !_processedIds.contains(id));
+    final isRejectDisabled = unprocessedIds.isEmpty || _isSubmitting;
+    final isAcceptDisabled = checkedUnprocessedIds.isEmpty || _isSubmitting;
 
     return Stack(
       children: [

@@ -14,15 +14,18 @@ import 'package:gastrobotmanager/features/orders/domain/models/history_order_fil
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_matches_selected_table_ids.dart';
-import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
-import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/zones/domain/models/zone_model.dart';
+import 'package:gastrobotmanager/features/zones/providers/zones_provider.dart';
 import 'package:gastrobotmanager/features/orders/screens/active_order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/screens/history_order_details_screen.dart';
+import 'package:gastrobotmanager/features/orders/screens/order_details_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/active_order_details_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/history_order_details_content.dart';
+import 'package:gastrobotmanager/features/orders/widgets/order_details_content.dart';
 import 'package:gastrobotmanager/features/orders/widgets/waiter_order_card.dart';
 import 'package:gastrobotmanager/features/orders/widgets/waiter_order_history_card.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
+import 'package:gastrobotmanager/features/venue_settings/providers/venue_settings_provider.dart';
 
 /// Waiter orders: title, Order button (plus icon), segmented Active/History, count + FILTERI, list of cards.
 /// Active / history use expandable food & drink rows like table overview ([PendingOrderItemsExpansionCard]).
@@ -58,7 +61,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
 
   List<PendingOrder> _applyFilters(
     List<PendingOrder> orders,
-    List<TableModel> venueTables,
+    List<ZoneModel> venueTables,
   ) {
     if (_activeFilters == null || _activeFilters!.isEmpty) return orders;
     final f = _activeFilters!;
@@ -88,7 +91,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
 
   List<PendingOrder> _applyHistoryFilters(
     List<PendingOrder> orders,
-    List<TableModel> venueTables,
+    List<ZoneModel> venueTables,
   ) {
     if (_historyFilters == null || _historyFilters!.isEmpty) return orders;
     final f = _historyFilters!;
@@ -185,7 +188,9 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final provider = context.watch<OrdersProvider>();
-    final venueTables = context.watch<TablesProvider>().tables;
+    final waiterActsAsBartender =
+        context.watch<VenueSettingsProvider>().canWaiterActAsBartender;
+    final venueTables = context.watch<ZonesProvider>().zones;
     final activeOrders = _applyFilters(provider.orders, venueTables);
     final historyOrders =
         _applyHistoryFilters(provider.waiterHistoryOrders, venueTables);
@@ -218,27 +223,24 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                   flex: 1,
                   child: _selectedOrder == null
                       ? _buildDetailPlaceholder(theme)
-                      : _selectedTabIndex == 0
-                      ? ActiveOrderDetailsContent(
-                          order: _selectedOrder!,
-                          markOrderAsPaid: () async {
-                            final venueId = context
-                                .read<AuthProvider>()
-                                .currentVenueId;
-                            if (venueId == null) return false;
-                            return context
-                                .read<OrdersProvider>()
-                                .markWaiterOrderAsPaid(
-                                  venueId,
-                                  _selectedOrder!,
-                                );
-                          },
-                          onCompleted: () {
-                            setState(() => _selectedOrder = null);
-                            widget.onStartRefresh();
-                          },
-                        )
-                      : HistoryOrderDetailsContent(order: _selectedOrder!),
+                      : _selectedTabIndex == 1
+                          ? HistoryOrderDetailsContent(order: _selectedOrder!)
+                          : _canEditOrderAsBar(
+                              _selectedOrder!,
+                              waiterActsAsBartender,
+                            )
+                              ? OrderDetailsContent(
+                                  order: _selectedOrder!,
+                                  useBarAcceptFlow: true,
+                                  onCompleted: () {
+                                    setState(() => _selectedOrder = null);
+                                    widget.onStartRefresh();
+                                  },
+                                )
+                              : ActiveOrderDetailsContent(
+                                  order: _selectedOrder!,
+                                  showActions: false,
+                                ),
                 ),
               ],
             ),
@@ -499,6 +501,16 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
         selected.targetTime == order.targetTime;
   }
 
+  bool _hasPendingItems(PendingOrder order) {
+    return order.items.any(
+      (item) => item.status.trim().toLowerCase() == 'pending',
+    );
+  }
+
+  bool _canEditOrderAsBar(PendingOrder order, bool waiterActsAsBartender) {
+    return waiterActsAsBartender && _hasPendingItems(order);
+  }
+
   Widget _buildList(
     List<PendingOrder> orders,
     OrdersProvider provider,
@@ -616,9 +628,27 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
       );
       return;
     }
+    final waiterActsAsBartender =
+        context.read<VenueSettingsProvider>().canWaiterActAsBartender;
+    if (_canEditOrderAsBar(order, waiterActsAsBartender)) {
+      final completed = await context.push<bool>(
+        AppRouteNames.pathOrdersDetails,
+        extra: OrderDetailsScreen(
+          order: order,
+          useBarAcceptFlow: true,
+        ),
+      );
+      if (completed == true && context.mounted) {
+        provider.pullRefresh();
+      }
+      return;
+    }
     final completed = await context.push<bool>(
       AppRouteNames.pathOrdersActive,
-      extra: ActiveOrderDetailsScreen(order: order),
+      extra: ActiveOrderDetailsScreen(
+        order: order,
+        showActions: false,
+      ),
     );
     if (completed == true && context.mounted) {
       provider.pullRefresh();
