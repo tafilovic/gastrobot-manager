@@ -211,7 +211,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
     if (_authProvider.isLoggedIn) {
       unawaited(_pushNotificationService.start());
     } else {
-      _pushNotificationService.clearRegisteredTokenCache();
+      unawaited(_pushNotificationService.handleLogout());
     }
   }
 

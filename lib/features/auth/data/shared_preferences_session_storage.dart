@@ -11,20 +11,20 @@ class SharedPreferencesSessionStorage implements SessionStorage {
 
   final SharedPreferences _prefs;
 
-  static const _keySession = 'auth_session';
-  static const _keyRememberedEmail = 'auth_remembered_email';
+  static const keySession = 'auth_session';
+  static const keyRememberedEmail = 'auth_remembered_email';
 
   @override
   Future<void> saveSession(AuthSession session) async {
     debugLog(
       'Saving auth session for user=${session.user.id}, role=${session.user.role}',
     );
-    await _prefs.setString(_keySession, jsonEncode(session.toJson()));
+    await _prefs.setString(keySession, jsonEncode(session.toJson()));
   }
 
   @override
   Future<AuthSession?> getSession() async {
-    final raw = _prefs.getString(_keySession);
+    final raw = _prefs.getString(keySession);
     if (raw == null) {
       debugLog('No saved auth session found');
       return null;
@@ -45,21 +45,21 @@ class SharedPreferencesSessionStorage implements SessionStorage {
   @override
   Future<void> clearAll() async {
     debugLog('Clearing saved auth session');
-    await _prefs.remove(_keySession);
-    await _prefs.remove(_keyRememberedEmail);
+    await _prefs.remove(keySession);
+    await _prefs.remove(keyRememberedEmail);
   }
 
   @override
   Future<void> saveRememberedEmail(String? email) async {
     if (email == null || email.isEmpty) {
-      await _prefs.remove(_keyRememberedEmail);
+      await _prefs.remove(keyRememberedEmail);
     } else {
-      await _prefs.setString(_keyRememberedEmail, email);
+      await _prefs.setString(keyRememberedEmail, email);
     }
   }
 
   @override
   Future<String?> getRememberedEmail() async {
-    return _prefs.getString(_keyRememberedEmail);
+    return _prefs.getString(keyRememberedEmail);
   }
 }

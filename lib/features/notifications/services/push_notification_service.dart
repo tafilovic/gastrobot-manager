@@ -5,8 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:gastrobotmanager/core/log/app_logger.dart';
+import 'package:gastrobotmanager/features/auth/data/shared_preferences_session_storage.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/notifications/data/device_token_remote.dart';
 import 'package:gastrobotmanager/features/notifications/data/notification_localizer.dart';
@@ -167,6 +169,17 @@ class PushNotificationService {
     _lastRegisteredToken = null;
   }
 
+  Future<void> handleLogout() async {
+    _started = false;
+    _lastRegisteredToken = null;
+    try {
+      await _messaging.deleteToken();
+    } catch (error) {
+      debugLog('Failed to delete FCM token on logout: $error');
+    }
+    await _localNotifications.cancelAll();
+  }
+
   Future<void> _registerToken(String token) async {
     if (!_authProvider.isLoggedIn || token == _lastRegisteredToken) return;
     debugLog('Registering FCM token for $_fcmPlatformLabel: $token');
@@ -179,6 +192,10 @@ class PushNotificationService {
 
   Future<void> _showForegroundNotification(RemoteMessage message) async {
     _logRemoteMessage('foreground', message);
+    if (!_authProvider.isLoggedIn) {
+      debugLog('Ignoring foreground FCM message because user is logged out');
+      return;
+    }
     final payload = NotificationPayload.fromRemoteData(message.data);
     final notification = message.notification;
     final localizations = _localizations ?? AppLocalizationsEn();
@@ -223,6 +240,10 @@ class PushNotificationService {
 
   void _handleRemoteMessageTap(RemoteMessage message) {
     _logRemoteMessage('tap', message);
+    if (!_authProvider.isLoggedIn) {
+      debugLog('Ignoring FCM tap because user is logged out');
+      return;
+    }
     if (!_routeOnNotificationTap) return;
     final payload = NotificationPayload.fromRemoteData(message.data);
     if (payload != null) {
@@ -257,6 +278,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     );
   }
   PushNotificationService._logRemoteMessage('background', message);
+  if (!await _hasSavedAuthSession()) {
+    debugLog('Ignoring background FCM message because user is logged out');
+    return;
+  }
   final payload = NotificationPayload.fromRemoteData(message.data);
   if (payload == null || message.notification != null) return;
 
@@ -306,4 +331,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     ),
     payload: jsonEncode(payload.toJson()),
   );
+}
+
+Future<bool> _hasSavedAuthSession() async {
+  final prefs = await SharedPreferences.getInstance();
+  final raw = prefs.getString(SharedPreferencesSessionStorage.keySession);
+  return raw != null && raw.isNotEmpty;
 }

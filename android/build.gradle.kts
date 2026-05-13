@@ -1,3 +1,5 @@
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
+
 allprojects {
     repositories {
         google()
@@ -17,6 +19,15 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(":app")
+}
+subprojects {
+    plugins.withId("com.android.library") {
+        extensions.configure<LibraryAndroidComponentsExtension>("androidComponents") {
+            beforeVariants(selector().all()) { variant ->
+                variant.enableUnitTest = false
+            }
+        }
+    }
 }
 
 tasks.register<Delete>("clean") {
