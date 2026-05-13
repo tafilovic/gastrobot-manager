@@ -87,7 +87,7 @@ Notes:
 
 ## Capabilities & signing
 
-- Bundle ID: `eu.brrm.gastrocrew.NotificationService` (already configured).
+- Bundle ID: `com.brrm.eu.gastro-app-dashboard.NotificationService` (must be prefixed with the host app’s bundle ID).
 - Same Apple Team as `Runner`; separate provisioning profile / App ID is
   required for App Store distribution.
 - NSE does **not** need `Background Modes`; iOS launches it from APNs.
