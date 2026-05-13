@@ -4,7 +4,7 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
-import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
+import 'package:gastrobotmanager/features/zones/utils/zone_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Card for a single pending order in the list.
@@ -75,8 +75,8 @@ class KitchenOrderCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Icon(
-                      tableDisplayCategoryIcon(
-                        tableDisplayCategoryFromApiType(order.tableType),
+                      zoneDisplayCategoryIcon(
+                        zoneDisplayCategoryFromApiType(order.tableType),
                       ),
                       size: 18,
                       color: AppColors.textMuted,

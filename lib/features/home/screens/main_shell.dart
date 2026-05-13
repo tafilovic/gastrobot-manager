@@ -8,6 +8,7 @@ import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/navigation/nav_config.dart';
+import 'package:gastrobotmanager/core/navigation/navigation_logger.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_bottom_nav.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_navigation_rail.dart';
@@ -54,7 +55,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             : l10n.navMenu;
       case 'drinks':
         return l10n.navDrinks;
-      case 'tables':
+      case 'zones':
         return l10n.navZones;
       case 'profile':
         return l10n.navProfile;
@@ -155,6 +156,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       );
     }
     final currentLocation = GoRouterState.of(context).matchedLocation;
+    NavigationLogger.logOpened(currentLocation);
     final items = NavConfig.itemsFor(profileType);
 
     int selectedIndex = 0;
@@ -179,8 +181,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         case 'drinks':
           if (currentLocation.startsWith(AppRouteNames.pathDrinks)) selectedIndex = i;
           break;
-        case 'tables':
-          if (currentLocation.startsWith(AppRouteNames.pathTables)) selectedIndex = i;
+        case 'zones':
+          if (currentLocation.startsWith(AppRouteNames.pathZones)) selectedIndex = i;
           break;
         case 'profile':
           if (currentLocation.startsWith(AppRouteNames.pathProfile)) selectedIndex = i;
@@ -255,8 +257,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       case 'drinks':
         context.goNamed(AppRouteNames.drinks);
         break;
-      case 'tables':
-        context.goNamed(AppRouteNames.tables);
+      case 'zones':
+        context.goNamed(AppRouteNames.zones);
         break;
       case 'profile':
         context.goNamed(AppRouteNames.profile);

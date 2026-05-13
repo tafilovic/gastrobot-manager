@@ -11,7 +11,7 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dar
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
-import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
+import 'package:gastrobotmanager/features/zones/utils/zone_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reusable history order details body: order date, food/drinks (name + quantity), bill, paid status.
@@ -73,8 +73,8 @@ class HistoryOrderDetailsContent extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  tableDisplayCategoryIcon(
-                    tableDisplayCategoryFromApiType(order.tableType),
+                  zoneDisplayCategoryIcon(
+                    zoneDisplayCategoryFromApiType(order.tableType),
                   ),
                   size: 20,
                   color: accentColor,
@@ -196,19 +196,24 @@ class HistoryOrderDetailsContent extends StatelessWidget {
             ),
             if (billTotal != null) ...[
               const SizedBox(height: 16),
-              _SectionHeader(
-                  icon: Icons.receipt_long, label: l10n.orderBill),
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  billTotal,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+              Row(
+                children: [
+                  Expanded(
+                    child: _SectionHeader(
+                      icon: Icons.receipt_long,
+                      label: l10n.orderBill,
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Text(
+                    billTotal,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
             ],

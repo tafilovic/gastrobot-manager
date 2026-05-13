@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/preparing/domain/models/queue_order.dart';
 import 'package:gastrobotmanager/features/preparing/utils/format_queue_time_ago.dart';
-import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
+import 'package:gastrobotmanager/features/zones/utils/zone_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// One order card on Preparing screen: time (accent), table, items list, Mark as ready button.
@@ -46,15 +46,15 @@ class PreparingOrderCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Icon(
-                  tableDisplayCategoryIcon(
-                    tableDisplayCategoryFromApiType(order.tableType),
+                  zoneDisplayCategoryIcon(
+                    zoneDisplayCategoryFromApiType(order.tableType),
                   ),
                   size: 18,
                   color: AppColors.textPrimary,
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  seatingQualifiedTitleForSeating(
+                  zoneQualifiedTitleForSeating(
                     l10n,
                     displayName: order.tableNumber,
                     seatingType: order.tableType,

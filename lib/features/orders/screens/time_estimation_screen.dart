@@ -57,9 +57,17 @@ class _TimeEstimationScreenState extends State<TimeEstimationScreen> {
 
     final api = context.read<OrderItemsApi>();
     final orderId = widget.order.orderId;
-    final allIds = {for (final i in widget.order.items) i.id};
-    final toReject = allIds.difference(widget.checkedItemIds).toList();
-    final toAccept = widget.checkedItemIds.toList();
+    final actionableIds = {
+      for (final item in widget.order.items)
+        if (item.status.trim().toLowerCase() == 'pending') item.id,
+    };
+    final checkedActionableIds = widget.checkedItemIds.intersection(
+      actionableIds,
+    );
+    final toReject = actionableIds.difference(checkedActionableIds).toList();
+    final toAccept = checkedActionableIds.toList();
+
+    if (toReject.isEmpty && toAccept.isEmpty) return true;
 
     setState(() => _isLoading = true);
 

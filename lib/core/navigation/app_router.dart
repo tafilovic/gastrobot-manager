@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/navigation/navigation_logger.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/auth/screens/login_screen.dart';
 import 'package:gastrobotmanager/features/auth/screens/register_screen.dart';
@@ -22,12 +23,12 @@ import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen
 import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/screens/active_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
-import 'package:gastrobotmanager/features/tables/domain/models/table_model.dart';
-import 'package:gastrobotmanager/features/tables/domain/models/table_orders_filters.dart';
-import 'package:gastrobotmanager/features/tables/screens/filter_table_orders_screen.dart';
-import 'package:gastrobotmanager/features/tables/screens/table_order_screen.dart';
-import 'package:gastrobotmanager/features/tables/screens/table_overview_screen.dart';
-import 'package:gastrobotmanager/features/tables/screens/tables_screen.dart';
+import 'package:gastrobotmanager/features/zones/domain/models/zone_model.dart';
+import 'package:gastrobotmanager/features/zones/domain/models/zone_orders_filters.dart';
+import 'package:gastrobotmanager/features/zones/screens/filter_zone_orders_screen.dart';
+import 'package:gastrobotmanager/features/zones/screens/zone_order_screen.dart';
+import 'package:gastrobotmanager/features/zones/screens/zone_overview_screen.dart';
+import 'package:gastrobotmanager/features/zones/screens/zones_screen.dart';
 
 /// Centralized route names and path constants.
 abstract class AppRouteNames {
@@ -42,7 +43,7 @@ abstract class AppRouteNames {
   static const reservations = 'reservations';
   static const menu = 'menu';
   static const drinks = 'drinks';
-  static const tables = 'tables';
+  static const zones = 'zones';
   static const profile = 'profile';
 
   // Orders details / filters
@@ -57,10 +58,10 @@ abstract class AppRouteNames {
   static const reservationDetails = 'reservation-details';
   static const filterActiveReservations = 'filter-active-reservations';
 
-  // Tables sub-routes
-  static const tableOrder = 'table-order';
-  static const tableOverview = 'table-overview';
-  static const filterTableOrders = 'filter-table-orders';
+  // Zones sub-routes
+  static const zoneOrder = 'zone-order';
+  static const zoneOverview = 'zone-overview';
+  static const filterZoneOrders = 'filter-zone-orders';
 
   // Path constants
   static const pathLogin = '/login';
@@ -71,8 +72,8 @@ abstract class AppRouteNames {
   static const pathReservations = '/reservations';
   static const pathMenu = '/menu';
   static const pathDrinks = '/drinks';
-  static const pathTables = '/tables';
-  static const pathTablesFilterTableOrders = '/tables/overview/filter-orders';
+  static const pathZones = '/zones';
+  static const pathZonesFilterZoneOrders = '/zones/overview/filter-orders';
   static const pathProfile = '/profile';
 
   // Orders sub-routes (full paths for context.push)
@@ -114,12 +115,18 @@ class AppRouter {
         GoRoute(
           path: AppRouteNames.pathLogin,
           name: AppRouteNames.login,
-          builder: (context, state) => const LoginScreen(),
+          builder: (context, state) {
+            NavigationLogger.logOpened(state.matchedLocation);
+            return const LoginScreen();
+          },
         ),
         GoRoute(
           path: AppRouteNames.pathRegister,
           name: AppRouteNames.register,
-          builder: (context, state) => const RegisterScreen(),
+          builder: (context, state) {
+            NavigationLogger.logOpened(state.matchedLocation);
+            return const RegisterScreen();
+          },
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
@@ -258,45 +265,45 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: AppRouteNames.pathTables,
-                  name: AppRouteNames.tables,
-                  builder: (context, state) => const TablesScreen(),
+                  path: AppRouteNames.pathZones,
+                  name: AppRouteNames.zones,
+                  builder: (context, state) => const ZonesScreen(),
                   routes: [
                     GoRoute(
                       path: 'order',
-                      name: AppRouteNames.tableOrder,
+                      name: AppRouteNames.zoneOrder,
                       builder: (context, state) {
                         final extra = state.extra;
-                        if (extra is! TableModel) {
+                        if (extra is! ZoneModel) {
                           throw ArgumentError(
-                            'TableOrderScreen requires TableModel in '
+                            'ZoneOrderScreen requires ZoneModel in '
                             'GoRouterState.extra',
                           );
                         }
-                        return TableOrderScreen(orderForTable: extra);
+                        return ZoneOrderScreen(orderForZone: extra);
                       },
                     ),
                     GoRoute(
                       path: 'overview',
-                      name: AppRouteNames.tableOverview,
+                      name: AppRouteNames.zoneOverview,
                       builder: (context, state) {
                         final extra = state.extra;
-                        if (extra is! TableModel) {
+                        if (extra is! ZoneModel) {
                           throw ArgumentError(
-                            'TableOverviewScreen requires TableModel in '
+                            'ZoneOverviewScreen requires ZoneModel in '
                             'GoRouterState.extra',
                           );
                         }
-                        return TableOverviewScreen(table: extra);
+                        return ZoneOverviewScreen(zone: extra);
                       },
                       routes: [
                         GoRoute(
                           path: 'filter-orders',
-                          name: AppRouteNames.filterTableOrders,
+                          name: AppRouteNames.filterZoneOrders,
                           builder: (context, state) {
                             final extra = state.extra;
-                            return FilterTableOrdersScreen(
-                              initialFilters: extra is TableOrdersFilters
+                            return FilterZoneOrdersScreen(
+                              initialFilters: extra is ZoneOrdersFilters
                                   ? extra
                                   : null,
                             );

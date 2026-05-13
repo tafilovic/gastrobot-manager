@@ -55,10 +55,13 @@ import 'package:gastrobotmanager/features/staff_schedules/domain/repositories/st
 import 'package:gastrobotmanager/features/reservations/data/confirmed_reservations_remote.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
-import 'package:gastrobotmanager/features/tables/data/tables_remote.dart';
-import 'package:gastrobotmanager/features/tables/domain/repositories/tables_api.dart';
-import 'package:gastrobotmanager/features/tables/providers/table_order_menu_provider.dart';
-import 'package:gastrobotmanager/features/tables/providers/tables_provider.dart';
+import 'package:gastrobotmanager/features/zones/data/zones_remote.dart';
+import 'package:gastrobotmanager/features/zones/domain/repositories/zones_api.dart';
+import 'package:gastrobotmanager/features/zones/providers/zone_order_menu_provider.dart';
+import 'package:gastrobotmanager/features/zones/providers/zones_provider.dart';
+import 'package:gastrobotmanager/features/venue_settings/data/venue_settings_remote.dart';
+import 'package:gastrobotmanager/features/venue_settings/domain/repositories/venue_settings_api.dart';
+import 'package:gastrobotmanager/features/venue_settings/providers/venue_settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -123,6 +126,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   late final Dio _authenticatedDio;
   late final ProfileApi _profileApi;
   late final PushNotificationService _pushNotificationService;
+  late final VenueSettingsProvider _venueSettingsProvider;
 
   bool _bootstrapComplete = false;
 
@@ -150,6 +154,10 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
       ..interceptors.add(LoggingInterceptor());
 
     _profileApi = ProfileRemote(_authenticatedDio);
+    _venueSettingsProvider = VenueSettingsProvider(
+      _authProvider,
+      VenueSettingsRemote(_authenticatedDio),
+    );
     _pushNotificationService = PushNotificationService(
       authProvider: _authProvider,
       tokenRemote: DeviceTokenRemote(_authenticatedDio),
@@ -211,6 +219,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   void dispose() {
     _authProvider.removeListener(_handleAuthChanged);
     unawaited(_pushNotificationService.dispose());
+    _venueSettingsProvider.dispose();
     _authProvider.dispose();
     super.dispose();
   }
@@ -231,6 +240,12 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ChangeNotifierProvider<AuthProvider>.value(value: _authProvider),
         Provider<PushNotificationService>.value(
           value: _pushNotificationService,
+        ),
+        Provider<VenueSettingsApi>(
+          create: (_) => VenueSettingsRemote(_authenticatedDio),
+        ),
+        ChangeNotifierProvider<VenueSettingsProvider>.value(
+          value: _venueSettingsProvider,
         ),
 
         // Locale
@@ -305,12 +320,12 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         ),
 
         // Tables (waiter: venue table list with status)
-        Provider<TablesApi>(create: (_) => TablesRemote(_authenticatedDio)),
-        ChangeNotifierProvider<TablesProvider>(
-          create: (c) => TablesProvider(c.read<TablesApi>()),
+        Provider<ZonesApi>(create: (_) => ZonesRemote(_authenticatedDio)),
+        ChangeNotifierProvider<ZonesProvider>(
+          create: (c) => ZonesProvider(c.read<ZonesApi>()),
         ),
-        ChangeNotifierProvider<TableOrderMenuProvider>(
-          create: (c) => TableOrderMenuProvider(c.read<MenusApi>()),
+        ChangeNotifierProvider<ZoneOrderMenuProvider>(
+          create: (c) => ZoneOrderMenuProvider(c.read<MenusApi>()),
         ),
 
         // Regions (waiter: region list with embedded tables for reservation confirmation)

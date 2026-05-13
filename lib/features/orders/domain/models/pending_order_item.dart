@@ -88,8 +88,8 @@ class PendingOrderItem {
     final product = _stringKeyedMap(menuItem?['product']);
     final category = _stringKeyedMap(product?['category']);
 
-    final name = (json['name'] as String? ??
-            json['productName'] as String? ??
+    final name = (json['productName'] as String? ??
+            json['name'] as String? ??
             product?['name'] as String? ??
             '')
         .trim();

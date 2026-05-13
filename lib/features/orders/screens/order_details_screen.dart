@@ -10,9 +10,11 @@ class OrderDetailsScreen extends StatelessWidget {
   const OrderDetailsScreen({
     super.key,
     required this.order,
+    this.useBarAcceptFlow = false,
   });
 
   final PendingOrder order;
+  final bool useBarAcceptFlow;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,10 @@ class OrderDetailsScreen extends StatelessWidget {
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
       ),
-      body: OrderDetailsContent(order: order),
+      body: OrderDetailsContent(
+        order: order,
+        useBarAcceptFlow: useBarAcceptFlow,
+      ),
     );
   }
 }

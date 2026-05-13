@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
+import 'package:gastrobotmanager/core/models/work_area.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -16,10 +17,12 @@ class PreparingContent extends StatefulWidget {
     super.key,
     required this.accentColor,
     required this.onStartRefresh,
+    this.workArea = WorkArea.ownRole,
   });
 
   final Color accentColor;
   final VoidCallback onStartRefresh;
+  final WorkArea workArea;
 
   @override
   State<PreparingContent> createState() => _PreparingContentState();
@@ -42,7 +45,8 @@ class _PreparingContentState extends State<PreparingContent> {
     final profileType = context.watch<AuthProvider>().profileType;
     final orders = provider.orders;
     final totalItems = orders.fold<int>(0, (sum, o) => sum + o.itemCount);
-    final countSuffix = profileType == ProfileType.bar
+    final countSuffix = widget.workArea == WorkArea.bar ||
+            profileType == ProfileType.bar
         ? l10n.preparingDrinksCountSuffix
         : l10n.preparingDishCountSuffix;
 

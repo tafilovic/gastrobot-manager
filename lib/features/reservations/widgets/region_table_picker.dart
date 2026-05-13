@@ -5,7 +5,7 @@ import 'package:gastrobotmanager/features/regions/domain/models/region_model.dar
 
 /// Returns the tables for [regionId], or all tables across all regions when
 /// [regionId] is null.
-List<RegionTableModel> filterTablesByRegion(
+List<RegionZoneModel> filterTablesByRegion(
   List<RegionModel> regions,
   String? regionId,
 ) {
@@ -80,7 +80,7 @@ class InlineTableSelector extends StatelessWidget {
 
   final String hint;
   final String noTablesLabel;
-  final List<RegionTableModel> tables;
+  final List<RegionZoneModel> tables;
   final bool isLoading;
   final bool isOpen;
 

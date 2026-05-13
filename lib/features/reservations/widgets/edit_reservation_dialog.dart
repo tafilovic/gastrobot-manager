@@ -85,7 +85,7 @@ class _EditReservationDialogState extends State<_EditReservationDialog> {
         : null;
     final filteredTables = regionId != null
         ? filterTablesByRegion(regions, regionId)
-        : const <RegionTableModel>[];
+        : const <RegionZoneModel>[];
 
     return Dialog(
       backgroundColor: AppColors.surface,

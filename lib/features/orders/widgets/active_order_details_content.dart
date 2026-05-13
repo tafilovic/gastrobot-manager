@@ -12,7 +12,7 @@ import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart'
 import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_seating_display_title.dart';
 import 'package:gastrobotmanager/features/orders/utils/order_time_ago.dart';
-import 'package:gastrobotmanager/features/tables/utils/table_type_display.dart';
+import 'package:gastrobotmanager/features/zones/utils/zone_type_display.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reusable active order details body: table, time, food/drinks with status, bill, Mark as paid.
@@ -24,11 +24,13 @@ class ActiveOrderDetailsContent extends StatefulWidget {
     required this.order,
     this.onCompleted,
     this.markOrderAsPaid,
+    this.showActions = true,
   });
 
   final PendingOrder order;
   final VoidCallback? onCompleted;
   final Future<bool> Function()? markOrderAsPaid;
+  final bool showActions;
 
   @override
   State<ActiveOrderDetailsContent> createState() =>
@@ -134,8 +136,8 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
                   Row(
                     children: [
                       Icon(
-                        tableDisplayCategoryIcon(
-                          tableDisplayCategoryFromApiType(order.tableType),
+                        zoneDisplayCategoryIcon(
+                          zoneDisplayCategoryFromApiType(order.tableType),
                         ),
                         size: 20,
                         color: accentColor,
@@ -265,54 +267,61 @@ class _ActiveOrderDetailsContentState extends State<ActiveOrderDetailsContent> {
                   ),
                   if (billTotal != null) ...[
                     const SizedBox(height: 16),
-                    _SectionHeader(
-                        icon: Icons.receipt_long, label: l10n.orderBill),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        billTotal,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _SectionHeader(
+                            icon: Icons.receipt_long,
+                            label: l10n.orderBill,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 12),
+                        Text(
+                          billTotal,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ],
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              border: Border(top: BorderSide(color: AppColors.border)),
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed:
-                    (_isPaying || !canMarkAsPaid) ? null : _onMarkAsPaidPressed,
-                style: FilledButton.styleFrom(
-                  backgroundColor: accentColor,
-                  foregroundColor: AppColors.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+          if (widget.showActions)
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                border: Border(top: BorderSide(color: AppColors.border)),
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: (_isPaying || !canMarkAsPaid)
+                      ? null
+                      : _onMarkAsPaidPressed,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: accentColor,
+                    foregroundColor: AppColors.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: _isPaying
+                      ? SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.onPrimary,
+                          ),
+                        )
+                      : Text(l10n.orderMarkAsPaid),
                 ),
-                child: _isPaying
-                    ? SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.onPrimary,
-                        ),
-                      )
-                    : Text(l10n.orderMarkAsPaid),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -14,9 +14,11 @@ class ActiveOrderDetailsScreen extends StatelessWidget {
   const ActiveOrderDetailsScreen({
     super.key,
     required this.order,
+    this.showActions = true,
   });
 
   final PendingOrder order;
+  final bool showActions;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class ActiveOrderDetailsScreen extends StatelessWidget {
       ),
       body: ActiveOrderDetailsContent(
         order: order,
+        showActions: showActions,
         markOrderAsPaid: () async {
           final venueId = context.read<AuthProvider>().currentVenueId;
           if (venueId == null) return false;
