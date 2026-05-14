@@ -13,6 +13,7 @@ class OrderItemTile extends StatelessWidget {
     required this.accentColor,
     required this.onTap,
     this.isDisabled = false,
+    this.isLocked = false,
   });
 
   final PendingOrderItem item;
@@ -20,14 +21,18 @@ class OrderItemTile extends StatelessWidget {
   final Color accentColor;
   final VoidCallback? onTap;
   final bool isDisabled;
+  final bool isLocked;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isUnchecked = !isChecked;
-    final contentOpacity = isDisabled || isUnchecked ? 0.5 : 1.0;
-    final textDecoration =
-        isUnchecked ? TextDecoration.lineThrough : TextDecoration.none;
+    final contentOpacity = isLocked
+        ? 0.72
+        : (!isDisabled && !isUnchecked ? 1.0 : 0.5);
+    final textDecoration = isUnchecked && !isLocked
+        ? TextDecoration.lineThrough
+        : TextDecoration.none;
 
     return Opacity(
       opacity: contentOpacity,
@@ -45,12 +50,34 @@ class OrderItemTile extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Checkbox(
-                  value: isChecked,
-                  onChanged: isDisabled ? null : (_) => onTap?.call(),
-                  activeColor: accentColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Center(
+                    child: isLocked
+                        ? Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF59E0B)
+                                  .withValues(alpha: 0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.help_outline,
+                              size: 18,
+                              color: Color(0xFFF59E0B),
+                            ),
+                          )
+                        : Checkbox(
+                            value: isChecked,
+                            onChanged:
+                                isDisabled ? null : (_) => onTap?.call(),
+                            activeColor: accentColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 12),

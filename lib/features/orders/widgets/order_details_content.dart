@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:gastrobotmanager/core/currency/venue_currency_format.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
@@ -9,6 +10,7 @@ import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dar
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
 import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.dart';
+import 'package:gastrobotmanager/features/orders/utils/order_items_total_price_sum.dart';
 import 'package:gastrobotmanager/features/orders/widgets/order_item_tile.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
@@ -27,7 +29,9 @@ class OrderDetailsContent extends StatefulWidget {
   final PendingOrder order;
   final VoidCallback? onCompleted;
   final bool useBarAcceptFlow;
-  /// When true with [useBarAcceptFlow], only pending drinks are accept/reject targets; food stays for kitchen.
+
+  /// When true with [useBarAcceptFlow], only pending drinks are accept/reject
+  /// targets; food stays for kitchen.
   final bool barActionsDrinksOnly;
 
   @override
@@ -264,39 +268,61 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
     });
     final isRejectDisabled = unprocessedIds.isEmpty || _isSubmitting;
     final isAcceptDisabled = checkedUnprocessedIds.isEmpty || _isSubmitting;
+    final foodItems = widget.order.items
+        .where((item) => item.type == null || item.type == 'food')
+        .toList();
+    final drinkItems =
+        widget.order.items.where((item) => item.type == 'drink').toList();
+    final venueCurrency = context.read<AuthProvider>().currentVenueCurrency;
+    final effectiveVenueCurrency =
+        venueCurrency == null || venueCurrency.trim().isEmpty
+            ? 'RSD'
+            : venueCurrency;
+    final billTotal = formatVenueAmountForDisplay(
+      context,
+      orderItemsTotalPriceSum(widget.order.items) ?? 0,
+      effectiveVenueCurrency,
+    );
 
     return Stack(
       children: [
         Column(
           children: [
             Expanded(
-              child: ListView.separated(
+              child: ListView(
                 padding: const EdgeInsets.all(20),
-                itemCount: widget.order.items.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final item = widget.order.items[index];
-                  final isChecked = _checkedIds.contains(item.id);
-                  final isDisabled = _processedIds.contains(item.id) ||
-                      _isRowLockedForWaiterBar(item);
-                  return OrderItemTile(
-                    item: item,
-                    isChecked: isChecked,
-                    accentColor: accentColor,
-                    isDisabled: isDisabled,
-                    onTap: isDisabled
-                        ? null
-                        : () {
-                            setState(() {
-                              if (isChecked) {
-                                _checkedIds.remove(item.id);
-                              } else {
-                                _checkedIds.add(item.id);
-                              }
-                            });
-                          },
-                  );
-                },
+                children: [
+                  if (foodItems.isNotEmpty)
+                    _OrderItemsSection(
+                      icon: Icons.restaurant,
+                      label: l10n.ordersFoodLabel,
+                      children: [
+                        for (var index = 0;
+                            index < foodItems.length;
+                            index++) ...[
+                          _buildItemTile(foodItems[index], accentColor),
+                          if (index < foodItems.length - 1)
+                            const SizedBox(height: 12),
+                        ],
+                      ],
+                    ),
+                  if (foodItems.isNotEmpty && drinkItems.isNotEmpty)
+                    const SizedBox(height: 20),
+                  if (drinkItems.isNotEmpty)
+                    _OrderItemsSection(
+                      icon: Icons.local_bar,
+                      label: l10n.ordersDrinksLabel,
+                      children: [
+                        for (var index = 0;
+                            index < drinkItems.length;
+                            index++) ...[
+                          _buildItemTile(drinkItems[index], accentColor),
+                          if (index < drinkItems.length - 1)
+                            const SizedBox(height: 12),
+                        ],
+                      ],
+                    ),
+                ],
               ),
             ),
             Container(
@@ -305,6 +331,30 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Row(
+                    children: [
+                      Text(
+                        l10n.orderBill,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        billTotal,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Divider(height: 1),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
@@ -343,6 +393,83 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
               child: CircularProgressIndicator(),
             ),
           ),
+      ],
+    );
+  }
+
+  Widget _buildItemTile(PendingOrderItem item, Color accentColor) {
+    final isChecked = _checkedIds.contains(item.id);
+    final isLocked = _isRowLockedForWaiterBar(item);
+    final isDisabled = _processedIds.contains(item.id) || isLocked;
+    return OrderItemTile(
+      key: ValueKey(item.id),
+      item: item,
+      isChecked: isChecked,
+      accentColor: accentColor,
+      isDisabled: isDisabled,
+      isLocked: isLocked,
+      onTap: isDisabled
+          ? null
+          : () {
+              setState(() {
+                if (isChecked) {
+                  _checkedIds.remove(item.id);
+                } else {
+                  _checkedIds.add(item.id);
+                }
+              });
+            },
+    );
+  }
+}
+
+class _OrderItemsSection extends StatelessWidget {
+  const _OrderItemsSection({
+    required this.icon,
+    required this.label,
+    required this.children,
+  });
+
+  final IconData icon;
+  final String label;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionHeader(icon: icon, label: label),
+        const SizedBox(height: 12),
+        ...children,
+      ],
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: AppColors.textPrimary),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
+          ),
+        ),
       ],
     );
   }
