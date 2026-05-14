@@ -6,6 +6,7 @@ import 'package:gastrobotmanager/core/navigation/fade_slide_page_route.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
+import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
 import 'package:gastrobotmanager/features/orders/domain/repositories/order_items_api.dart';
 import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.dart';
 import 'package:gastrobotmanager/features/orders/widgets/order_item_tile.dart';
@@ -20,11 +21,14 @@ class OrderDetailsContent extends StatefulWidget {
     required this.order,
     this.onCompleted,
     this.useBarAcceptFlow = false,
+    this.barActionsDrinksOnly = false,
   });
 
   final PendingOrder order;
   final VoidCallback? onCompleted;
   final bool useBarAcceptFlow;
+  /// When true with [useBarAcceptFlow], only pending drinks are accept/reject targets; food stays for kitchen.
+  final bool barActionsDrinksOnly;
 
   @override
   State<OrderDetailsContent> createState() => _OrderDetailsContentState();
@@ -42,11 +46,31 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
       for (final item in widget.order.items)
         if (!_isActionableStatus(item.status)) item.id,
     };
-    _checkedIds = {
-      for (final item in widget.order.items)
-        if (!_processedIds.contains(item.id)) item.id,
-    };
+    if (_effectiveBarDrinksOnly) {
+      _checkedIds = {
+        for (final item in widget.order.items)
+          if (!_processedIds.contains(item.id) && _isDrinkPending(item))
+            item.id,
+      };
+    } else {
+      _checkedIds = {
+        for (final item in widget.order.items)
+          if (!_processedIds.contains(item.id)) item.id,
+      };
+    }
   }
+
+  bool get _effectiveBarDrinksOnly =>
+      widget.useBarAcceptFlow && widget.barActionsDrinksOnly;
+
+  bool _isDrinkPending(PendingOrderItem item) =>
+      _isActionableStatus(item.status) && item.type == 'drink';
+
+  /// Pending food or unknown type: waiter must not act; kitchen handles food.
+  bool _isRowLockedForWaiterBar(PendingOrderItem item) =>
+      _effectiveBarDrinksOnly &&
+      _isActionableStatus(item.status) &&
+      item.type != 'drink';
 
   bool _isActionableStatus(String status) =>
       status.trim().toLowerCase() == 'pending';
@@ -82,10 +106,19 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
     final venueId = auth.currentVenueId;
     if (venueId == null) return;
 
-    final toProcess = [
-      for (final item in widget.order.items)
-        if (!_processedIds.contains(item.id)) item.id,
-    ];
+    final List<String> toProcess;
+    if (_effectiveBarDrinksOnly) {
+      toProcess = [
+        for (final item in widget.order.items)
+          if (!_processedIds.contains(item.id) && _isDrinkPending(item))
+            item.id,
+      ];
+    } else {
+      toProcess = [
+        for (final item in widget.order.items)
+          if (!_processedIds.contains(item.id)) item.id,
+      ];
+    }
     if (toProcess.isEmpty) return;
 
     for (final itemId in toProcess) {
@@ -125,10 +158,19 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
     final venueId = auth.currentVenueId;
     if (venueId == null) return;
 
-    final unprocessed = [
-      for (final item in widget.order.items)
-        if (!_processedIds.contains(item.id)) item.id,
-    ];
+    final List<String> unprocessed;
+    if (_effectiveBarDrinksOnly) {
+      unprocessed = [
+        for (final item in widget.order.items)
+          if (!_processedIds.contains(item.id) && _isDrinkPending(item))
+            item.id,
+      ];
+    } else {
+      unprocessed = [
+        for (final item in widget.order.items)
+          if (!_processedIds.contains(item.id)) item.id,
+      ];
+    }
     if (unprocessed.isEmpty) return;
 
     final toReject =
@@ -204,11 +246,22 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final accentColor = Theme.of(context).colorScheme.primary;
-    final unprocessedIds = widget.order.items
-        .map((item) => item.id)
-        .where((id) => !_processedIds.contains(id));
-    final checkedUnprocessedIds =
-        _checkedIds.where((id) => !_processedIds.contains(id));
+    final Iterable<String> unprocessedIds = _effectiveBarDrinksOnly
+        ? widget.order.items
+            .where(
+              (item) =>
+                  !_processedIds.contains(item.id) && _isDrinkPending(item),
+            )
+            .map((item) => item.id)
+        : widget.order.items
+            .map((item) => item.id)
+            .where((id) => !_processedIds.contains(id));
+    final checkedUnprocessedIds = _checkedIds.where((id) {
+      if (_processedIds.contains(id)) return false;
+      if (!_effectiveBarDrinksOnly) return true;
+      final item = widget.order.items.firstWhere((i) => i.id == id);
+      return _isDrinkPending(item);
+    });
     final isRejectDisabled = unprocessedIds.isEmpty || _isSubmitting;
     final isAcceptDisabled = checkedUnprocessedIds.isEmpty || _isSubmitting;
 
@@ -224,7 +277,8 @@ class _OrderDetailsContentState extends State<OrderDetailsContent> {
                 itemBuilder: (context, index) {
                   final item = widget.order.items[index];
                   final isChecked = _checkedIds.contains(item.id);
-                  final isDisabled = _processedIds.contains(item.id);
+                  final isDisabled = _processedIds.contains(item.id) ||
+                      _isRowLockedForWaiterBar(item);
                   return OrderItemTile(
                     item: item,
                     isChecked: isChecked,

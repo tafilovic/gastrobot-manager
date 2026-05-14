@@ -11,10 +11,12 @@ class OrderDetailsScreen extends StatelessWidget {
     super.key,
     required this.order,
     this.useBarAcceptFlow = false,
+    this.barActionsDrinksOnly = false,
   });
 
   final PendingOrder order;
   final bool useBarAcceptFlow;
+  final bool barActionsDrinksOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class OrderDetailsScreen extends StatelessWidget {
       body: OrderDetailsContent(
         order: order,
         useBarAcceptFlow: useBarAcceptFlow,
+        barActionsDrinksOnly: barActionsDrinksOnly,
       ),
     );
   }

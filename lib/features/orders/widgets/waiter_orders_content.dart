@@ -232,6 +232,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
                               ? OrderDetailsContent(
                                   order: _selectedOrder!,
                                   useBarAcceptFlow: true,
+                                  barActionsDrinksOnly: true,
                                   onCompleted: () {
                                     setState(() => _selectedOrder = null);
                                     widget.onStartRefresh();
@@ -636,6 +637,7 @@ class _WaiterOrdersContentState extends State<WaiterOrdersContent> {
         extra: OrderDetailsScreen(
           order: order,
           useBarAcceptFlow: true,
+          barActionsDrinksOnly: true,
         ),
       );
       if (completed == true && context.mounted) {
