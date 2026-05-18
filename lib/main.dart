@@ -376,6 +376,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders>
         ),
 
         Provider<NotificationRealtimeCoordinator>(
+          lazy: false,
           create: (c) {
             final coordinator = NotificationRealtimeCoordinator(
               socketService: c.read<SocketNotificationService>(),

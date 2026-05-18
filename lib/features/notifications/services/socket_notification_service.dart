@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/log/app_logger.dart';
@@ -29,7 +29,7 @@ class SocketNotificationService extends ChangeNotifier {
   final StreamController<BotResponsePayload> _botResponseController =
       StreamController<BotResponsePayload>.broadcast();
 
-  IO.Socket? _socket;
+  io.Socket? _socket;
   SocketConnectionState _connectionState = SocketConnectionState.disconnected;
   String? _connectedUserId;
   String? _connectedVenueId;
@@ -78,9 +78,9 @@ class SocketNotificationService extends ChangeNotifier {
       'SocketNotificationService: connecting userId=$userId venueId=$venueId',
     );
 
-    final socket = IO.io(
+    final socket = io.io(
       ApiConfig.baseUrl,
-      IO.OptionBuilder()
+      io.OptionBuilder()
           .disableAutoConnect()
           .setTransports(['websocket'])
           .setQuery({'userId': userId, 'venueId': venueId})

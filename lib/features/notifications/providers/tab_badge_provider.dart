@@ -25,10 +25,12 @@ class TabBadgeProvider extends ChangeNotifier {
   }
 
   void setActiveRoute(String routeKey) {
-    if (_activeRouteKey == routeKey) return;
+    final wasActiveRoute = _activeRouteKey == routeKey;
     _activeRouteKey = routeKey;
-    _clearBadgeForRoute(routeKey);
-    notifyListeners();
+    final clearedBadge = _clearBadgeForRoute(routeKey);
+    if (!wasActiveRoute || clearedBadge) {
+      notifyListeners();
+    }
   }
 
   void markUnread(NotificationRefreshTarget target) {
@@ -62,14 +64,18 @@ class TabBadgeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _clearBadgeForRoute(String routeKey) {
+  bool _clearBadgeForRoute(String routeKey) {
     switch (routeKey) {
       case NavRouteKeys.orders:
-        clearOrders();
+        if (!_hasUnreadOrders) return false;
+        _hasUnreadOrders = false;
+        return true;
       case NavRouteKeys.reservations:
-        clearReservations();
+        if (!_hasUnreadReservations) return false;
+        _hasUnreadReservations = false;
+        return true;
       default:
-        break;
+        return false;
     }
   }
 }

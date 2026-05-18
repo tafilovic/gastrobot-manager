@@ -6,7 +6,7 @@ import 'package:gastrobotmanager/core/theme/app_colors.dart';
 class NavUnreadDot extends StatelessWidget {
   const NavUnreadDot({super.key});
 
-  static const double size = 8;
+  static const double size = 10;
 
   @override
   Widget build(BuildContext context) {

@@ -50,7 +50,7 @@ class AppNavigationRail extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         icon,
-        const Positioned(right: -2, top: -2, child: NavUnreadDot()),
+        const Positioned(right: -4, top: -4, child: NavUnreadDot()),
       ],
     );
   }

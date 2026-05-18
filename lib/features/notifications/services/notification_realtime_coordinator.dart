@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:gastrobotmanager/core/log/app_logger.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
@@ -93,15 +91,12 @@ class NotificationRealtimeCoordinator {
     if (target == NotificationRefreshTarget.none) return;
     if (_isDuplicate(dedupeKey)) return;
 
+    _tabBadgeProvider.markUnread(target);
+
     final venueId = _authProvider.currentVenueId;
     if (venueId == null) return;
 
     unawaited(_refreshTarget(target, venueId));
-
-    final routeKey = NotificationRefreshTargetMapper.routeKeyFor(target);
-    if (routeKey != null && _tabBadgeProvider.activeRouteKey != routeKey) {
-      _tabBadgeProvider.markUnread(target);
-    }
   }
 
   bool _isDuplicate(String key) {

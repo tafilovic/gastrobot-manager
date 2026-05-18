@@ -25,4 +25,12 @@ void main() {
     provider.markUnread(NotificationRefreshTarget.orders);
     expect(provider.hasUnreadOrders, isFalse);
   });
+
+  test('setActiveRoute clears badge even when route is already active', () {
+    final provider = TabBadgeProvider();
+    provider.setActiveRoute(NavRouteKeys.orders);
+    provider.markUnread(NotificationRefreshTarget.orders);
+    provider.setActiveRoute(NavRouteKeys.orders);
+    expect(provider.hasUnreadOrders, isFalse);
+  });
 }

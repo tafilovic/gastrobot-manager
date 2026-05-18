@@ -76,8 +76,8 @@ class AppBottomNav extends StatelessWidget {
                                   ),
                             if (unreadByRoute[item.route] == true)
                               const Positioned(
-                                right: -2,
-                                top: -2,
+                                right: -4,
+                                top: -4,
                                 child: NavUnreadDot(),
                               ),
                           ],

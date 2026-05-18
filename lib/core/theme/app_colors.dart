@@ -35,5 +35,5 @@ abstract final class AppColors {
   static const Color appBarBackground = Color(0xFFFFFFFF);
   static const Color appBarForeground = Color(0xFF000000);
   /// Unread tab indicator (orders / reservations).
-  static const Color unreadIndicator = Color(0xFFFF9800);
+  static const Color unreadIndicator = Color(0xFFE53935);
 }

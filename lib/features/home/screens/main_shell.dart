@@ -238,6 +238,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   void _goToBranch(BuildContext context, String route) {
+    context.read<TabBadgeProvider>().setActiveRoute(route);
+
     switch (route) {
       case 'ready':
         context.goNamed(AppRouteNames.ready);
