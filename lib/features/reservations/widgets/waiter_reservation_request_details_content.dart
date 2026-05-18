@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
-import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
-import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
-import 'package:gastrobotmanager/features/reservations/widgets/accept_reservation_sheet.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_date_time_header.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_detail_row.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Reusable waiter reservation request details body.
-/// Used in [WaiterReservationDetailsScreen] and in master-detail detail pane.
+/// Read-only waiter pending reservation details (no accept/reject actions).
 class WaiterReservationRequestDetailsContent extends StatelessWidget {
   const WaiterReservationRequestDetailsContent({
     super.key,
@@ -93,8 +87,7 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
               ReservationDetailRow(
                 icon: Icons.celebration,
                 label: l10n.confirmedResOccasion,
-                value:
-                    occasion.isNotEmpty ? occasion : 'N/A',
+                value: occasion.isNotEmpty ? occasion : 'N/A',
               ),
               ReservationDetailRow(
                 icon: Icons.note,
@@ -124,193 +117,8 @@ class WaiterReservationRequestDetailsContent extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          padding: const EdgeInsets.all(20),
-          color: AppColors.surface,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => _openRejectSheet(context, l10n),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.destructive,
-                    foregroundColor: AppColors.onDestructive,
-                  ),
-                  child: Text(l10n.buttonReject),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => _openAcceptSheet(context),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.success,
-                    foregroundColor: AppColors.onSuccess,
-                  ),
-                  child: Text(l10n.buttonAccept),
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
-  }
-
-  void _onComplete(BuildContext context) {
-    if (onCompleted != null) {
-      onCompleted!();
-    } else {
-      Navigator.of(context).pop(true);
-    }
-  }
-
-  Future<void> _openAcceptSheet(BuildContext context) async {
-    final venueId = context.read<AuthProvider>().currentVenueId;
-    if (venueId != null) {
-      final rp = context.read<RegionsProvider>();
-      if (rp.regions.isEmpty && !rp.isLoading) {
-        rp.load(venueId);
-      }
-    }
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (_) => AcceptReservationSheet(
-        reservation: reservation,
-        onCompleted: () {
-          if (context.mounted) _onComplete(context);
-        },
-      ),
-    );
-  }
-
-  Future<void> _openRejectSheet(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) async {
-    final controller = TextEditingController();
-    bool submitting = false;
-    String? fieldError;
-
-    Future<void> submit(StateSetter setSheetState) async {
-      final reason = controller.text.trim();
-      if (reason.isEmpty) {
-        setSheetState(() => fieldError = l10n.rejectReasonHint);
-        return;
-      }
-      setSheetState(() {
-        fieldError = null;
-        submitting = true;
-      });
-
-      final venueId = context.read<AuthProvider>().currentVenueId;
-      if (venueId == null) {
-        setSheetState(() => submitting = false);
-        return;
-      }
-
-      final provider = context.read<ReservationsProvider>();
-      final ok = await provider.rejectWaiterReservation(
-        venueId: venueId,
-        reservation: reservation,
-        reason: reason,
-      );
-
-      if (!context.mounted) return;
-      if (ok) {
-        Navigator.of(context).pop(); // close sheet
-        _onComplete(context);
-      } else {
-        setSheetState(() {
-          submitting = false;
-          fieldError = provider.rejectError ?? l10n.rejectErrorFallback;
-        });
-      }
-    }
-
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setSheetState) {
-            final bottomInset = MediaQuery.viewInsetsOf(ctx).bottom;
-            return Padding(
-              padding: EdgeInsets.fromLTRB(16, 12, 16, 16 + bottomInset),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l10n.rejectDialogTitle,
-                          style:
-                              Theme.of(ctx).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.textPrimary,
-                                  ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed:
-                            submitting ? null : () => Navigator.of(ctx).pop(),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: controller,
-                    enabled: !submitting,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      hintText: l10n.rejectReasonHint,
-                      errorText: fieldError,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  FilledButton(
-                    onPressed:
-                        submitting ? null : () => submit(setSheetState),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.destructive,
-                      foregroundColor: AppColors.onDestructive,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: submitting
-                        ? const SizedBox(
-                            height: 22,
-                            width: 22,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(l10n.buttonRejectReservation),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-    controller.dispose();
   }
 }
 
