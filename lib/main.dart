@@ -25,7 +25,10 @@ import 'package:gastrobotmanager/features/menu/data/venue_menus_remote.dart';
 import 'package:gastrobotmanager/features/menu/domain/repositories/menus_api.dart';
 import 'package:gastrobotmanager/features/menu/providers/menu_provider.dart';
 import 'package:gastrobotmanager/features/notifications/data/device_token_remote.dart';
+import 'package:gastrobotmanager/features/notifications/providers/tab_badge_provider.dart';
+import 'package:gastrobotmanager/features/notifications/services/notification_realtime_coordinator.dart';
 import 'package:gastrobotmanager/features/notifications/services/push_notification_service.dart';
+import 'package:gastrobotmanager/features/notifications/services/socket_notification_service.dart';
 import 'package:gastrobotmanager/features/orders/data/order_items_remote.dart';
 import 'package:gastrobotmanager/features/orders/data/pending_orders_remote.dart';
 import 'package:gastrobotmanager/features/orders/data/waiter_order_actions_remote.dart';
@@ -120,13 +123,18 @@ class _GastroBotProviders extends StatefulWidget {
   State<_GastroBotProviders> createState() => _GastroBotProvidersState();
 }
 
-class _GastroBotProvidersState extends State<_GastroBotProviders> {
+class _GastroBotProvidersState extends State<_GastroBotProviders>
+    with WidgetsBindingObserver {
   late final TokenStore _tokenStore;
   late final AuthProvider _authProvider;
   late final Dio _authenticatedDio;
   late final ProfileApi _profileApi;
   late final PushNotificationService _pushNotificationService;
+  late final SocketNotificationService _socketNotificationService;
+  late final TabBadgeProvider _tabBadgeProvider;
   late final VenueSettingsProvider _venueSettingsProvider;
+
+  NotificationRealtimeCoordinator? _realtimeCoordinator;
 
   bool _bootstrapComplete = false;
 
@@ -162,7 +170,10 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
       authProvider: _authProvider,
       tokenRemote: DeviceTokenRemote(_authenticatedDio),
     );
+    _socketNotificationService = SocketNotificationService(_authProvider);
+    _tabBadgeProvider = TabBadgeProvider();
     _authProvider.addListener(_handleAuthChanged);
+    WidgetsBinding.instance.addObserver(this);
 
     _runSessionBootstrap();
   }
@@ -202,6 +213,7 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
       }
       if (_authProvider.isLoggedIn) {
         unawaited(_pushNotificationService.start());
+        _socketNotificationService.connect();
       }
     }
     if (mounted) setState(() => _bootstrapComplete = true);
@@ -210,15 +222,55 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
   void _handleAuthChanged() {
     if (_authProvider.isLoggedIn) {
       unawaited(_pushNotificationService.start());
+      _socketNotificationService.connect();
     } else {
       unawaited(_pushNotificationService.handleLogout());
+      _socketNotificationService.disconnect();
+      _pushNotificationService.clearForegroundPayloadHandler();
+      _realtimeCoordinator?.stop();
+    }
+  }
+
+  void _attachRealtimeCoordinator(BuildContext context) {
+    if (_realtimeCoordinator != null) return;
+    final coordinator = NotificationRealtimeCoordinator(
+      socketService: _socketNotificationService,
+      authProvider: _authProvider,
+      ordersProvider: context.read<OrdersProvider>(),
+      reservationsProvider: context.read<ReservationsProvider>(),
+      tabBadgeProvider: _tabBadgeProvider,
+    );
+    coordinator.start();
+    _pushNotificationService.setForegroundPayloadHandler(
+      coordinator.handleForegroundPayload,
+    );
+    _realtimeCoordinator = coordinator;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (!_authProvider.isLoggedIn) return;
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _socketNotificationService.connect();
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        _socketNotificationService.disconnect();
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+        break;
     }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _authProvider.removeListener(_handleAuthChanged);
+    _realtimeCoordinator?.dispose();
     unawaited(_pushNotificationService.dispose());
+    _socketNotificationService.dispose();
+    _tabBadgeProvider.dispose();
     _venueSettingsProvider.dispose();
     _authProvider.dispose();
     super.dispose();
@@ -241,6 +293,10 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
         Provider<PushNotificationService>.value(
           value: _pushNotificationService,
         ),
+        ChangeNotifierProvider<SocketNotificationService>.value(
+          value: _socketNotificationService,
+        ),
+        ChangeNotifierProvider<TabBadgeProvider>.value(value: _tabBadgeProvider),
         Provider<VenueSettingsApi>(
           create: (_) => VenueSettingsRemote(_authenticatedDio),
         ),
@@ -343,7 +399,12 @@ class _GastroBotProvidersState extends State<_GastroBotProviders> {
               ConfirmedReservationsProvider(c.read<ConfirmedReservationsApi>()),
         ),
       ],
-      child: const GastroBotApp(),
+      child: Builder(
+        builder: (context) {
+          _attachRealtimeCoordinator(context);
+          return const GastroBotApp();
+        },
+      ),
     );
   }
 }

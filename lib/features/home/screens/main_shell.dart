@@ -12,10 +12,9 @@ import 'package:gastrobotmanager/core/navigation/navigation_logger.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_bottom_nav.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_navigation_rail.dart';
-import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/notifications/providers/tab_badge_provider.dart';
 import 'package:gastrobotmanager/features/preparing/providers/queue_provider.dart';
 import 'package:gastrobotmanager/features/ready_items/providers/ready_items_provider.dart';
-import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Main shell with bottom navigation. Items depend on [ProfileType].
@@ -99,10 +98,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   void _startRefreshTimer(BuildContext context, String routeKey) {
     _refreshTimer?.cancel();
     _activeRouteKey = routeKey;
+    context.read<TabBadgeProvider>().setActiveRoute(routeKey);
 
-    // Only these tabs have periodic refresh.
-    final refreshableKeys = {'orders', 'ready', 'preparing', 'reservations'};
-    if (!refreshableKeys.contains(routeKey)) {
+    // Orders/reservations refresh via Socket.IO; only ready/preparing poll.
+    const periodicRefreshKeys = {'ready', 'preparing'};
+    if (!periodicRefreshKeys.contains(routeKey)) {
       return;
     }
 
@@ -110,43 +110,40 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     final venueId = auth.currentVenueId;
     if (venueId == null) return;
 
-    _triggerLoad(context, routeKey, venueId);
+    _triggerPeriodicLoad(context, routeKey, venueId);
 
     _refreshTimer = Timer.periodic(_refreshInterval, (_) {
       final currentVenueId = auth.currentVenueId;
       if (currentVenueId == null) return;
-      _triggerLoad(context, routeKey, currentVenueId);
+      _triggerPeriodicLoad(context, routeKey, currentVenueId);
     });
   }
 
-  void _triggerLoad(BuildContext context, String routeKey, String venueId) {
+  void _triggerPeriodicLoad(BuildContext context, String routeKey, String venueId) {
     switch (routeKey) {
-      case 'orders':
-        context.read<OrdersProvider>().loadOnce(venueId);
-        break;
       case 'ready':
         context.read<ReadyItemsProvider>().loadOnce(venueId);
-        break;
       case 'preparing':
         context.read<QueueProvider>().loadOnce(venueId);
-        break;
-      case 'reservations':
-        if (context.read<AuthProvider>().profileType == ProfileType.waiter) {
-          context.read<ReservationsProvider>().refreshPendingIncremental(venueId);
-        } else {
-          context.read<ReservationsProvider>().loadOnce(venueId);
-        }
-        break;
       default:
         break;
     }
+  }
+
+  Map<String, bool> _unreadByRoute(TabBadgeProvider badges) {
+    return {
+      'orders': badges.hasUnreadOrders,
+      'reservations': badges.hasUnreadReservations,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
+    final tabBadges = context.watch<TabBadgeProvider>();
     final profileType = auth.profileType;
+    final unreadByRoute = _unreadByRoute(tabBadges);
 
     if (auth.isRestoring || profileType == null) {
       return const Scaffold(
@@ -212,6 +209,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               items: items,
               labels: labels,
               selectedIndex: selectedIndex,
+              unreadByRoute: unreadByRoute,
               onDestinationSelected: (i) {
                 final target = items[i].route;
                 _goToBranch(context, target);
@@ -229,6 +227,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         items: items,
         labels: labels,
         selectedIndex: selectedIndex,
+        unreadByRoute: unreadByRoute,
         onDestinationSelected: (i) {
           final target = items[i].route;
           _goToBranch(context, target);

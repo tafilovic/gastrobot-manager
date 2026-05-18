@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:gastrobotmanager/core/navigation/nav_item.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/nav_unread_dot.dart';
 
 /// Side rail for tablet/desktop. Same destinations as [AppBottomNav].
 class AppNavigationRail extends StatelessWidget {
@@ -12,6 +13,7 @@ class AppNavigationRail extends StatelessWidget {
     this.labels,
     required this.selectedIndex,
     required this.onDestinationSelected,
+    this.unreadByRoute = const {},
   });
 
   final List<NavItem> items;
@@ -20,6 +22,9 @@ class AppNavigationRail extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
 
+  /// Route key → show orange unread dot (e.g. `orders`, `reservations`).
+  final Map<String, bool> unreadByRoute;
+
   String _label(int index) {
     if (labels != null && index < labels!.length) return labels![index];
     return items[index].label;
@@ -27,15 +32,27 @@ class AppNavigationRail extends StatelessWidget {
 
   Widget _buildIcon(NavItem item, bool isSelected) {
     final color = isSelected ? AppColors.accent : AppColors.textMuted;
+    final Widget icon;
     if (item.svgAssetPath != null) {
-      return SvgPicture.asset(
+      icon = SvgPicture.asset(
         item.svgAssetPath!,
         width: 24,
         height: 24,
         colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
       );
+    } else {
+      icon = Icon(item.icon!, size: 24, color: color);
     }
-    return Icon(item.icon!, size: 24, color: color);
+
+    if (unreadByRoute[item.route] != true) return icon;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        icon,
+        const Positioned(right: -2, top: -2, child: NavUnreadDot()),
+      ],
+    );
   }
 
   static const double _compactHeightThreshold = 500;

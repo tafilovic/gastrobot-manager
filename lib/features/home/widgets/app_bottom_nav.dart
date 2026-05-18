@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gastrobotmanager/core/navigation/nav_item.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/nav_unread_dot.dart';
 
 /// Custom bottom nav with labels limited to 1 line.
 class AppBottomNav extends StatelessWidget {
@@ -11,6 +12,7 @@ class AppBottomNav extends StatelessWidget {
     this.labels,
     required this.selectedIndex,
     required this.onDestinationSelected,
+    this.unreadByRoute = const {},
   });
 
   final List<NavItem> items;
@@ -19,6 +21,9 @@ class AppBottomNav extends StatelessWidget {
   final List<String>? labels;
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
+
+  /// Route key → show orange unread dot (e.g. `orders`, `reservations`).
+  final Map<String, bool> unreadByRoute;
 
   String _label(int index) {
     if (labels != null && index < labels!.length) return labels![index];
@@ -47,25 +52,36 @@ class AppBottomNav extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        item.svgAssetPath != null
-                            ? SvgPicture.asset(
-                                item.svgAssetPath!,
-                                width: 24,
-                                height: 24,
-                                colorFilter: ColorFilter.mode(
-                                  isSelected
-                                      ? AppColors.accent
-                                      : AppColors.textMuted,
-                                  BlendMode.srcIn,
-                                ),
-                              )
-                            : Icon(
-                                item.icon!,
-                                size: 24,
-                                color: isSelected
-                                    ? AppColors.accent
-                                    : AppColors.textMuted,
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            item.svgAssetPath != null
+                                ? SvgPicture.asset(
+                                    item.svgAssetPath!,
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: ColorFilter.mode(
+                                      isSelected
+                                          ? AppColors.accent
+                                          : AppColors.textMuted,
+                                      BlendMode.srcIn,
+                                    ),
+                                  )
+                                : Icon(
+                                    item.icon!,
+                                    size: 24,
+                                    color: isSelected
+                                        ? AppColors.accent
+                                        : AppColors.textMuted,
+                                  ),
+                            if (unreadByRoute[item.route] == true)
+                              const Positioned(
+                                right: -2,
+                                top: -2,
+                                child: NavUnreadDot(),
                               ),
+                          ],
+                        ),
                         const SizedBox(height: 4),
                         Text(
                           _label(index),

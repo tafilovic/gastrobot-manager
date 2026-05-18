@@ -49,6 +49,7 @@ class PushNotificationService {
   StreamSubscription<RemoteMessage>? _openedSubscription;
   StreamSubscription<String>? _tokenSubscription;
   NotificationTapHandler? _tapHandler;
+  void Function(NotificationPayload payload)? _foregroundPayloadHandler;
   AppLocalizations? _localizations;
   bool _initialized = false;
   bool _started = false;
@@ -165,6 +166,17 @@ class PushNotificationService {
     _tapHandler = handler;
   }
 
+  /// Invoked for parsed foreground FCM payloads (list refresh / badges).
+  void setForegroundPayloadHandler(
+    void Function(NotificationPayload payload) handler,
+  ) {
+    _foregroundPayloadHandler = handler;
+  }
+
+  void clearForegroundPayloadHandler() {
+    _foregroundPayloadHandler = null;
+  }
+
   void clearRegisteredTokenCache() {
     _lastRegisteredToken = null;
   }
@@ -197,6 +209,9 @@ class PushNotificationService {
       return;
     }
     final payload = NotificationPayload.fromRemoteData(message.data);
+    if (payload != null) {
+      _foregroundPayloadHandler?.call(payload);
+    }
     final notification = message.notification;
     final localizations = _localizations ?? AppLocalizationsEn();
     final text = payload == null

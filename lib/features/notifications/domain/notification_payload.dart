@@ -4,10 +4,12 @@ class NotificationPayload {
   const NotificationPayload({
     required this.titleKey,
     required this.body,
+    this.id,
     this.type,
     this.entityId,
   });
 
+  final String? id;
   final String titleKey;
   final Map<String, dynamic> body;
   final String? type;
@@ -27,16 +29,28 @@ class NotificationPayload {
 
   String encodeRoutePayload() => jsonEncode(routePayload);
 
-  static NotificationPayload? fromRemoteData(Map<String, dynamic> data) {
+  /// Parses a full notification object (Socket.IO `notification` event or FCM data).
+  static NotificationPayload? fromMap(Map<String, dynamic> data) {
     final title = data['title']?.toString();
     if (title == null || title.isEmpty) return null;
 
     return NotificationPayload(
+      id: data['id']?.toString(),
       titleKey: title,
       body: _parseBody(data['body']),
       type: data['type']?.toString(),
       entityId: data['entityId']?.toString(),
     );
+  }
+
+  static NotificationPayload? fromRemoteData(Map<String, dynamic> data) {
+    return fromMap(data);
+  }
+
+  static NotificationPayload? fromDynamic(dynamic data) {
+    if (data is Map<String, dynamic>) return fromMap(data);
+    if (data is Map) return fromMap(Map<String, dynamic>.from(data));
+    return null;
   }
 
   static NotificationPayload? fromLocalPayload(String? payload) {
