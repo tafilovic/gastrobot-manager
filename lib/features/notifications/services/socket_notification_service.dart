@@ -9,16 +9,18 @@ import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/notifications/domain/bot_response_payload.dart';
 import 'package:gastrobotmanager/features/notifications/domain/notification_payload.dart';
 import 'package:gastrobotmanager/features/notifications/domain/socket_connection_state.dart';
+import 'package:gastrobotmanager/features/notifications/domain/socket_events.dart';
 
 /// Global Socket.IO client for realtime notifications.
 ///
 /// Mirrors the web panel connection:
 /// `io(BACKEND_URL, { autoConnect: false, transports: ['websocket'], query: { userId, venueId } })`
 ///
-/// Subscribe via [notifications] / [botResponses] streams or register listeners with
-/// [addNotificationListener] from any screen.
+/// Subscribe via [notifications] and [botResponses] broadcast streams.
 class SocketNotificationService extends ChangeNotifier {
-  SocketNotificationService(this._authProvider);
+  SocketNotificationService(this._authProvider) {
+    _authProvider.addListener(_onAuthChanged);
+  }
 
   final AuthProvider _authProvider;
 
@@ -45,6 +47,11 @@ class SocketNotificationService extends ChangeNotifier {
 
   /// Connects when logged in with a valid [AuthProvider.currentVenueId].
   void connect() {
+    if (!_authProvider.isLoggedIn) {
+      disconnect();
+      return;
+    }
+
     final userId = _authProvider.user?.id;
     final venueId = _authProvider.currentVenueId;
     if (userId == null || venueId == null) {
@@ -101,8 +108,8 @@ class SocketNotificationService extends ChangeNotifier {
       debugLog('SocketNotificationService: error $error');
     });
 
-    socket.on('notification', _handleNotification);
-    socket.on('bot_response', _handleBotResponse);
+    socket.on(SocketEvents.notification, _handleNotification);
+    socket.on(SocketEvents.botResponse, _handleBotResponse);
 
     _socket = socket;
     socket.connect();
@@ -114,20 +121,20 @@ class SocketNotificationService extends ChangeNotifier {
     final socket = _socket;
     _socket = null;
     if (socket != null) {
-      socket.off('notification');
-      socket.off('bot_response');
+      socket.off(SocketEvents.notification);
+      socket.off(SocketEvents.botResponse);
       socket.dispose();
     }
     _setConnectionState(SocketConnectionState.disconnected);
     debugLog('SocketNotificationService: disconnect');
   }
 
-  void addNotificationListener(void Function(NotificationPayload) listener) {
-    _notificationController.stream.listen(listener);
-  }
-
-  void addBotResponseListener(void Function(BotResponsePayload) listener) {
-    _botResponseController.stream.listen(listener);
+  void _onAuthChanged() {
+    if (!_authProvider.isLoggedIn) {
+      disconnect();
+      return;
+    }
+    connect();
   }
 
   void _handleNotification(dynamic data) {
@@ -164,6 +171,7 @@ class SocketNotificationService extends ChangeNotifier {
 
   @override
   void dispose() {
+    _authProvider.removeListener(_onAuthChanged);
     disconnect();
     unawaited(_notificationController.close());
     unawaited(_botResponseController.close());

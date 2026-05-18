@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:gastrobotmanager/core/navigation/nav_route_keys.dart';
 import 'package:gastrobotmanager/features/notifications/domain/notification_refresh_target.dart';
 
 /// Unread indicators on bottom nav / rail for orders and reservations.
@@ -14,9 +15,9 @@ class TabBadgeProvider extends ChangeNotifier {
 
   bool showUnreadForRoute(String route) {
     switch (route) {
-      case 'orders':
+      case NavRouteKeys.orders:
         return _hasUnreadOrders;
-      case 'reservations':
+      case NavRouteKeys.reservations:
         return _hasUnreadReservations;
       default:
         return false;
@@ -33,13 +34,13 @@ class TabBadgeProvider extends ChangeNotifier {
   void markUnread(NotificationRefreshTarget target) {
     switch (target) {
       case NotificationRefreshTarget.orders:
-        if (_activeRouteKey == 'orders') return;
+        if (_activeRouteKey == NavRouteKeys.orders) return;
         if (!_hasUnreadOrders) {
           _hasUnreadOrders = true;
           notifyListeners();
         }
       case NotificationRefreshTarget.reservations:
-        if (_activeRouteKey == 'reservations') return;
+        if (_activeRouteKey == NavRouteKeys.reservations) return;
         if (!_hasUnreadReservations) {
           _hasUnreadReservations = true;
           notifyListeners();
@@ -63,9 +64,9 @@ class TabBadgeProvider extends ChangeNotifier {
 
   void _clearBadgeForRoute(String routeKey) {
     switch (routeKey) {
-      case 'orders':
+      case NavRouteKeys.orders:
         clearOrders();
-      case 'reservations':
+      case NavRouteKeys.reservations:
         clearReservations();
       default:
         break;

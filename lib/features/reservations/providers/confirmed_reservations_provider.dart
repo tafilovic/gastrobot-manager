@@ -18,6 +18,10 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
   String? _currentVenueId;
 
   List<ConfirmedReservation> get items => List.unmodifiable(_items);
+
+  /// True after [load] has been called at least once (accepted tab opened).
+  bool get hasLoadedOnce => _currentVenueId != null;
+
   bool get isLoading => _isLoading;
   bool get isLoadingMore => _pagination.isLoadingMore;
   bool get hasMore => _pagination.hasMore;

@@ -8,6 +8,7 @@ import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/navigation/nav_config.dart';
+import 'package:gastrobotmanager/core/navigation/nav_route_keys.dart';
 import 'package:gastrobotmanager/core/navigation/navigation_logger.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/home/widgets/app_bottom_nav.dart';
@@ -101,7 +102,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     context.read<TabBadgeProvider>().setActiveRoute(routeKey);
 
     // Orders/reservations refresh via Socket.IO; only ready/preparing poll.
-    const periodicRefreshKeys = {'ready', 'preparing'};
+    const periodicRefreshKeys = {NavRouteKeys.ready, NavRouteKeys.preparing};
     if (!periodicRefreshKeys.contains(routeKey)) {
       return;
     }
@@ -121,9 +122,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   void _triggerPeriodicLoad(BuildContext context, String routeKey, String venueId) {
     switch (routeKey) {
-      case 'ready':
+      case NavRouteKeys.ready:
         context.read<ReadyItemsProvider>().loadOnce(venueId);
-      case 'preparing':
+      case NavRouteKeys.preparing:
         context.read<QueueProvider>().loadOnce(venueId);
       default:
         break;
@@ -132,8 +133,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   Map<String, bool> _unreadByRoute(TabBadgeProvider badges) {
     return {
-      'orders': badges.hasUnreadOrders,
-      'reservations': badges.hasUnreadReservations,
+      NavRouteKeys.orders: badges.hasUnreadOrders,
+      NavRouteKeys.reservations: badges.hasUnreadReservations,
     };
   }
 

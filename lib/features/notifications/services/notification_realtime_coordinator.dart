@@ -11,6 +11,7 @@ import 'package:gastrobotmanager/features/notifications/domain/notification_refr
 import 'package:gastrobotmanager/features/notifications/providers/tab_badge_provider.dart';
 import 'package:gastrobotmanager/features/notifications/services/socket_notification_service.dart';
 import 'package:gastrobotmanager/features/orders/providers/orders_provider.dart';
+import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 
 /// Routes socket (and optional FCM) notifications to list refresh and nav badges.
@@ -20,11 +21,13 @@ class NotificationRealtimeCoordinator {
     required AuthProvider authProvider,
     required OrdersProvider ordersProvider,
     required ReservationsProvider reservationsProvider,
+    required ConfirmedReservationsProvider confirmedReservationsProvider,
     required TabBadgeProvider tabBadgeProvider,
   }) : _socketService = socketService,
        _authProvider = authProvider,
        _ordersProvider = ordersProvider,
        _reservationsProvider = reservationsProvider,
+       _confirmedReservationsProvider = confirmedReservationsProvider,
        _tabBadgeProvider = tabBadgeProvider;
 
   static const Duration _dedupeWindow = Duration(seconds: 2);
@@ -33,6 +36,7 @@ class NotificationRealtimeCoordinator {
   final AuthProvider _authProvider;
   final OrdersProvider _ordersProvider;
   final ReservationsProvider _reservationsProvider;
+  final ConfirmedReservationsProvider _confirmedReservationsProvider;
   final TabBadgeProvider _tabBadgeProvider;
 
   StreamSubscription<NotificationPayload>? _notificationSub;
@@ -57,14 +61,14 @@ class NotificationRealtimeCoordinator {
   void handleForegroundPayload(NotificationPayload payload) {
     _dispatch(
       target: NotificationRefreshTargetMapper.fromPayload(payload),
-      dedupeKey: payload.id ?? payload.titleKey,
+      dedupeKey: _dedupeKeyFor(payload),
     );
   }
 
   void _onNotification(NotificationPayload payload) {
     _dispatch(
       target: NotificationRefreshTargetMapper.fromPayload(payload),
-      dedupeKey: payload.id ?? '${payload.type}:${payload.entityId}',
+      dedupeKey: _dedupeKeyFor(payload),
     );
   }
 
@@ -73,6 +77,13 @@ class NotificationRealtimeCoordinator {
       target: NotificationRefreshTargetMapper.fromBotResponse(payload),
       dedupeKey: 'bot:${payload.type}',
     );
+  }
+
+  static String _dedupeKeyFor(NotificationPayload payload) {
+    if (payload.id != null && payload.id!.isNotEmpty) return payload.id!;
+    final entity = payload.entityId ?? '';
+    final type = payload.type ?? '';
+    return '$type:$entity:${payload.titleKey}';
   }
 
   void _dispatch({
@@ -116,11 +127,7 @@ class NotificationRealtimeCoordinator {
           await _ordersProvider.loadOnce(venueId);
         case NotificationRefreshTarget.reservations:
           debugLog('NotificationRealtimeCoordinator: refresh reservations');
-          if (_authProvider.profileType == ProfileType.waiter) {
-            await _reservationsProvider.pullRefresh();
-          } else {
-            await _reservationsProvider.loadOnce(venueId);
-          }
+          await _refreshReservations(venueId);
         case NotificationRefreshTarget.none:
           break;
       }
@@ -129,6 +136,21 @@ class NotificationRealtimeCoordinator {
         'NotificationRealtimeCoordinator: refresh failed $error\n$stack',
       );
     }
+  }
+
+  Future<void> _refreshReservations(String venueId) async {
+    if (_authProvider.profileType == ProfileType.waiter) {
+      await _reservationsProvider.pullRefresh();
+      await _refreshConfirmedIfLoaded();
+    } else {
+      await _reservationsProvider.loadOnce(venueId);
+    }
+  }
+
+  /// Refreshes accepted list only after the user has opened that tab at least once.
+  Future<void> _refreshConfirmedIfLoaded() async {
+    if (!_confirmedReservationsProvider.hasLoadedOnce) return;
+    await _confirmedReservationsProvider.pullRefresh();
   }
 
   void dispose() {

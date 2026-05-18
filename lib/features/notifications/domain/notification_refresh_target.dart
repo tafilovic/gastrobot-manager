@@ -1,3 +1,4 @@
+import 'package:gastrobotmanager/core/navigation/nav_route_keys.dart';
 import 'package:gastrobotmanager/features/notifications/domain/bot_response_payload.dart';
 import 'package:gastrobotmanager/features/notifications/domain/notification_payload.dart';
 
@@ -41,9 +42,9 @@ abstract final class NotificationRefreshTargetMapper {
   static String? routeKeyFor(NotificationRefreshTarget target) {
     switch (target) {
       case NotificationRefreshTarget.orders:
-        return 'orders';
+        return NavRouteKeys.orders;
       case NotificationRefreshTarget.reservations:
-        return 'reservations';
+        return NavRouteKeys.reservations;
       case NotificationRefreshTarget.none:
         return null;
     }

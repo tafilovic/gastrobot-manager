@@ -134,8 +134,6 @@ class _GastroBotProvidersState extends State<_GastroBotProviders>
   late final TabBadgeProvider _tabBadgeProvider;
   late final VenueSettingsProvider _venueSettingsProvider;
 
-  NotificationRealtimeCoordinator? _realtimeCoordinator;
-
   bool _bootstrapComplete = false;
 
   @override
@@ -213,7 +211,6 @@ class _GastroBotProvidersState extends State<_GastroBotProviders>
       }
       if (_authProvider.isLoggedIn) {
         unawaited(_pushNotificationService.start());
-        _socketNotificationService.connect();
       }
     }
     if (mounted) setState(() => _bootstrapComplete = true);
@@ -222,29 +219,9 @@ class _GastroBotProvidersState extends State<_GastroBotProviders>
   void _handleAuthChanged() {
     if (_authProvider.isLoggedIn) {
       unawaited(_pushNotificationService.start());
-      _socketNotificationService.connect();
     } else {
       unawaited(_pushNotificationService.handleLogout());
-      _socketNotificationService.disconnect();
-      _pushNotificationService.clearForegroundPayloadHandler();
-      _realtimeCoordinator?.stop();
     }
-  }
-
-  void _attachRealtimeCoordinator(BuildContext context) {
-    if (_realtimeCoordinator != null) return;
-    final coordinator = NotificationRealtimeCoordinator(
-      socketService: _socketNotificationService,
-      authProvider: _authProvider,
-      ordersProvider: context.read<OrdersProvider>(),
-      reservationsProvider: context.read<ReservationsProvider>(),
-      tabBadgeProvider: _tabBadgeProvider,
-    );
-    coordinator.start();
-    _pushNotificationService.setForegroundPayloadHandler(
-      coordinator.handleForegroundPayload,
-    );
-    _realtimeCoordinator = coordinator;
   }
 
   @override
@@ -267,7 +244,6 @@ class _GastroBotProvidersState extends State<_GastroBotProviders>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _authProvider.removeListener(_handleAuthChanged);
-    _realtimeCoordinator?.dispose();
     unawaited(_pushNotificationService.dispose());
     _socketNotificationService.dispose();
     _tabBadgeProvider.dispose();
@@ -398,13 +374,33 @@ class _GastroBotProvidersState extends State<_GastroBotProviders>
           create: (c) =>
               ConfirmedReservationsProvider(c.read<ConfirmedReservationsApi>()),
         ),
+
+        Provider<NotificationRealtimeCoordinator>(
+          create: (c) {
+            final coordinator = NotificationRealtimeCoordinator(
+              socketService: c.read<SocketNotificationService>(),
+              authProvider: c.read<AuthProvider>(),
+              ordersProvider: c.read<OrdersProvider>(),
+              reservationsProvider: c.read<ReservationsProvider>(),
+              confirmedReservationsProvider:
+                  c.read<ConfirmedReservationsProvider>(),
+              tabBadgeProvider: c.read<TabBadgeProvider>(),
+            );
+            coordinator.start();
+            c.read<PushNotificationService>().setForegroundPayloadHandler(
+              coordinator.handleForegroundPayload,
+            );
+            return coordinator;
+          },
+          dispose: (context, coordinator) {
+            context
+                .read<PushNotificationService>()
+                .clearForegroundPayloadHandler();
+            coordinator.dispose();
+          },
+        ),
       ],
-      child: Builder(
-        builder: (context) {
-          _attachRealtimeCoordinator(context);
-          return const GastroBotApp();
-        },
-      ),
+      child: const GastroBotApp(),
     );
   }
 }
