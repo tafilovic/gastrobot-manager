@@ -5,10 +5,7 @@ import 'package:gastrobotmanager/features/reservations/domain/models/pending_res
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Full-screen detail view for a *pending* waiter reservation.
-///
-/// Displays reservation info, optional food/drink items, and ODBIJ / PRIHVATI
-/// action buttons.
+/// Full-screen read-only detail view for a pending waiter reservation.
 class WaiterReservationDetailsScreen extends StatelessWidget {
   const WaiterReservationDetailsScreen({super.key, required this.reservation});
 

@@ -12,6 +12,7 @@ class ReservationItemTile extends StatelessWidget {
     required this.accentColor,
     required this.onTap,
     this.isDisabled = false,
+    this.readOnly = false,
     this.itemIcon = Icons.local_bar,
   });
 
@@ -20,18 +21,21 @@ class ReservationItemTile extends StatelessWidget {
   final Color accentColor;
   final VoidCallback? onTap;
   final bool isDisabled;
+  final bool readOnly;
   final IconData itemIcon;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final interactive = !readOnly && !isDisabled;
+
     return Opacity(
-      opacity: isDisabled ? 0.5 : 1,
+      opacity: isDisabled && !readOnly ? 0.5 : 1,
       child: Material(
         color: AppColors.surface,
         child: InkWell(
-          onTap: isDisabled ? null : onTap,
+          onTap: interactive ? onTap : null,
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -42,15 +46,17 @@ class ReservationItemTile extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Checkbox(
-                  value: isChecked,
-                  onChanged: isDisabled ? null : (_) => onTap?.call(),
-                  activeColor: accentColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                if (!readOnly) ...[
+                  Checkbox(
+                    value: isChecked,
+                    onChanged: isDisabled ? null : (_) => onTap?.call(),
+                    activeColor: accentColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
+                  const SizedBox(width: 12),
+                ],
                 Icon(itemIcon, size: 22, color: AppColors.textMuted),
                 const SizedBox(width: 12),
                 Expanded(
