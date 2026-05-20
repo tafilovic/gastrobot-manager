@@ -232,10 +232,6 @@ class _ReservationsContentState extends State<ReservationsContent> {
                             ? _buildDetailPlaceholder(theme, l10n)
                             : ConfirmedReservationDetailsContent(
                                 reservation: _selectedConfirmed!,
-                                onCompleted: () {
-                                  setState(() => _selectedConfirmed = null);
-                                  widget.onStartRefresh();
-                                },
                               ))
                       : _buildRequestDetailPaneForSelection(
                           theme,

@@ -1,146 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
-import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order_item.dart';
-import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_reservation_date.dart';
-import 'package:gastrobotmanager/features/reservations/widgets/edit_reservation_dialog.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_date_time_header.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_detail_row.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Reusable confirmed reservation details body.
-/// Used in [ConfirmedReservationDetailsScreen] and in master-detail detail pane.
+/// Read-only confirmed reservation details (waiter view).
+/// Used in [ConfirmedReservationDetailsScreen] and master-detail pane.
 class ConfirmedReservationDetailsContent extends StatelessWidget {
   const ConfirmedReservationDetailsContent({
     super.key,
     required this.reservation,
-    this.onCompleted,
   });
 
   final ConfirmedReservation reservation;
-  final VoidCallback? onCompleted;
-
-  Future<void> _showCancelDialog(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController();
-    bool submitting = false;
-    String? fieldError;
-
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: !submitting,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            return Dialog(
-              backgroundColor: AppColors.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            l10n.cancelDialogTitle,
-                            style:
-                                Theme.of(ctx).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.textPrimary,
-                                    ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: submitting
-                              ? null
-                              : () => Navigator.of(ctx).pop(),
-                          icon: const Icon(Icons.close),
-                          color: AppColors.textSecondary,
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: controller,
-                      enabled: !submitting,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        hintText: l10n.cancelReasonHint,
-                        errorText: fieldError,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColors.border),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColors.border),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    FilledButton(
-                      onPressed: submitting
-                          ? null
-                          : () async {
-                              final reason = controller.text.trim();
-                              if (reason.isEmpty) {
-                                setDialogState(
-                                  () => fieldError = l10n.cancelReasonHint,
-                                );
-                                return;
-                              }
-                              setDialogState(() {
-                                fieldError = null;
-                                submitting = true;
-                              });
-
-                              // TODO: call cancel reservation API
-                              if (ctx.mounted) Navigator.of(ctx).pop();
-                              if (context.mounted) {
-                                if (onCompleted != null) {
-                                  onCompleted!();
-                                } else {
-                                  Navigator.of(context).pop();
-                                }
-                              }
-                            },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.destructive,
-                        foregroundColor: AppColors.onDestructive,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: submitting
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(l10n.confirmedResCancelButton),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-    controller.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,53 +98,6 @@ class ConfirmedReservationDetailsContent extends StatelessWidget {
                 _SectionHeader(title: l10n.readySectionDrinks, icon: Icons.local_bar),
                 ...drinks.map((i) => _ItemLine(item: i)),
               ],
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(20),
-          color: AppColors.surface,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {
-                    final venueId =
-                        context.read<AuthProvider>().currentVenueId;
-                    if (venueId != null) {
-                      final rp = context.read<RegionsProvider>();
-                      if (rp.regions.isEmpty && !rp.isLoading) {
-                        rp.load(venueId);
-                      }
-                    }
-                    showEditReservationDialog(
-                      context: context,
-                      reservation: reservation,
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: accentColor,
-                    side: BorderSide(color: accentColor),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Text(l10n.confirmedResEditButton),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => _showCancelDialog(context),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.destructive,
-                    foregroundColor: AppColors.onDestructive,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Text(l10n.confirmedResCancelButton),
-                ),
-              ),
             ],
           ),
         ),

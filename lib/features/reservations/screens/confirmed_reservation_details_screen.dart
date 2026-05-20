@@ -7,8 +7,7 @@ import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Detail view for a confirmed reservation.
 ///
-/// Shows: date/time header, guest info rows, optional food & drink sections,
-/// and action buttons (Edit / Cancel).
+/// Read-only: date/time header, guest info rows, optional food & drink sections.
 class ConfirmedReservationDetailsScreen extends StatelessWidget {
   const ConfirmedReservationDetailsScreen({
     super.key,

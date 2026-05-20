@@ -583,10 +583,6 @@ class _ZoneOverviewScreenState extends State<ZoneOverviewScreen> {
       }
       return ConfirmedReservationDetailsContent(
         reservation: _selectedReservation!,
-        onCompleted: () {
-          setState(() => _selectedReservation = null);
-          _onRefresh();
-        },
       );
     }
     if (_selectedOrder == null) {
