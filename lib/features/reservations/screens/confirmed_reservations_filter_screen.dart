@@ -5,11 +5,12 @@ import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/core/widgets/filter/filter_form_fields.dart';
+import 'package:gastrobotmanager/core/widgets/filter/filter_screen_footer.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
-import 'package:gastrobotmanager/features/regions/domain/models/region_model.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/utils/format_filter_date.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/reservation_code_region_filter_fields.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Filter screen for confirmed reservations: unique code, region, date range.
@@ -39,20 +40,13 @@ class _ConfirmedReservationsFilterScreenState
     _regionId = f?.regionId;
     _dateFrom = f?.dateFrom;
     _dateTo = f?.dateTo;
-    _codeController.addListener(_notifyLocalChange);
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadRegions());
   }
 
   @override
   void dispose() {
-    _codeController
-      ..removeListener(_notifyLocalChange)
-      ..dispose();
+    _codeController.dispose();
     super.dispose();
-  }
-
-  void _notifyLocalChange() {
-    if (mounted) setState(() {});
   }
 
   void _loadRegions() {
@@ -139,83 +133,6 @@ class _ConfirmedReservationsFilterScreenState
     );
   }
 
-  Future<void> _openRegionPicker(
-    AppLocalizations l10n,
-    List<RegionModel> regions,
-  ) async {
-    final result = await showDialog<_RegionPickerResult>(
-      context: context,
-      barrierDismissible: true,
-      builder: (ctx) {
-        return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420, maxHeight: 520),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      l10n.filterRegionLabel,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(height: 1),
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      RadioListTile<String?>(
-                        title: Text(l10n.filterAllRegions),
-                        value: null,
-                        groupValue: _regionId,
-                        onChanged: (value) => Navigator.pop(
-                          ctx,
-                          _RegionPickerResult(regionId: value),
-                        ),
-                      ),
-                      ...regions.map(
-                        (r) => RadioListTile<String?>(
-                          title: Text(r.title),
-                          value: r.id,
-                          groupValue: _regionId,
-                          onChanged: (value) => Navigator.pop(
-                            ctx,
-                            _RegionPickerResult(regionId: value),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-    if (mounted && result != null) {
-      setState(() => _regionId = result.regionId);
-    }
-  }
-
-  String _regionLabel(AppLocalizations l10n, List<RegionModel> regions) {
-    if (_regionId == null) return l10n.filterAllRegions;
-    for (final r in regions) {
-      if (r.id == _regionId) return r.title;
-    }
-    return l10n.filterAllRegions;
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -257,24 +174,13 @@ class _ConfirmedReservationsFilterScreenState
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            FilterFieldLabel(l10n.filterUniqueCode),
-                            const SizedBox(height: 8),
-                            FilterTextField(
-                              controller: _codeController,
-                              hint: l10n.filterUniqueCodeHint,
-                              prefixText: '# ',
-                            ),
-                            const SizedBox(height: 16),
-                            FilterFieldLabel(l10n.filterRegionLabel),
-                            const SizedBox(height: 8),
-                            FilterTapField(
-                              value: _regionLabel(l10n, regions),
-                              trailing: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: AppColors.textSecondary,
-                                size: 22,
-                              ),
-                              onTap: () => _openRegionPicker(l10n, regions),
+                            ReservationCodeRegionFilterFields(
+                              codeController: _codeController,
+                              selectedRegionId: _regionId,
+                              regions: regions,
+                              onRegionSelected: (regionId) {
+                                setState(() => _regionId = regionId);
+                              },
                             ),
                             const SizedBox(height: 16),
                             FilterFieldLabel(l10n.filterDateFilter),
@@ -321,42 +227,12 @@ class _ConfirmedReservationsFilterScreenState
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                border: Border(top: BorderSide(color: AppColors.border)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: _resetFilters,
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.accent,
-                        side: const BorderSide(color: AppColors.accent),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: Text(l10n.filterReset),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _apply,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.accent,
-                        foregroundColor: AppColors.onPrimary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: Text(l10n.filterApply),
-                    ),
-                  ),
-                ],
-              ),
+            FilterScreenFooter(
+              layout: FilterFooterLayout.column,
+              secondaryLabel: l10n.filterReset,
+              primaryLabel: l10n.filterApply,
+              onSecondary: _resetFilters,
+              onPrimary: _apply,
             ),
           ],
         ),
@@ -365,9 +241,3 @@ class _ConfirmedReservationsFilterScreenState
   }
 }
 
-/// Non-null when the user picked a region; null when the dialog was dismissed.
-class _RegionPickerResult {
-  const _RegionPickerResult({required this.regionId});
-
-  final String? regionId;
-}

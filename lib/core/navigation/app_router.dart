@@ -21,7 +21,9 @@ import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dar
 import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
 import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/screens/confirmed_reservations_filter_screen.dart';
+import 'package:gastrobotmanager/features/reservations/screens/pending_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 import 'package:gastrobotmanager/features/zones/domain/models/zone_model.dart';
 import 'package:gastrobotmanager/features/zones/domain/models/zone_orders_filters.dart';
@@ -57,6 +59,7 @@ abstract class AppRouteNames {
   // Reservations details / filters
   static const reservationDetails = 'reservation-details';
   static const filterActiveReservations = 'filter-active-reservations';
+  static const filterPendingReservations = 'filter-pending-reservations';
 
   // Zones sub-routes
   static const zoneOrder = 'zone-order';
@@ -83,6 +86,7 @@ abstract class AppRouteNames {
   static const pathOrdersFilterActive = '/orders/filter/active';
   static const pathOrdersFilterHistory = '/orders/filter/history';
   static const pathReservationsFilterActive = '/reservations/filter/active';
+  static const pathReservationsFilterPending = '/reservations/filter/pending';
 }
 
 /// Centralized app router factory.
@@ -253,6 +257,19 @@ class AppRouter {
                         return ConfirmedReservationsFilterScreen(
                           initialFilters: initialFilters
                               is ConfirmedReservationsFilters
+                              ? initialFilters
+                              : null,
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: 'filter/pending',
+                      name: AppRouteNames.filterPendingReservations,
+                      builder: (context, state) {
+                        final initialFilters = state.extra;
+                        return PendingReservationsFilterScreen(
+                          initialFilters: initialFilters
+                              is PendingReservationsFilters
                               ? initialFilters
                               : null,
                         );

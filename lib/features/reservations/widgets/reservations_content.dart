@@ -13,6 +13,7 @@ import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -22,6 +23,8 @@ import 'package:gastrobotmanager/features/reservations/screens/waiter_reservatio
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_filter_chips.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/pending_reservation_filter_chips.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservations_filter_header.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/kitchen_bar_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_request_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
@@ -309,48 +312,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child:
-                    _selectedTabIndex == 1 && profileType == ProfileType.waiter
-                    ? Row(
-                        children: [
-                          Text(
-                            countLabel,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          const Spacer(),
-                          TextButton.icon(
-                            onPressed: _openReservationFilters,
-                            icon: Icon(
-                              Icons.filter_list,
-                              size: 18,
-                              color: widget.accentColor,
-                            ),
-                            label: Text(
-                              l10n.reservationsFilters,
-                              style: TextStyle(
-                                color: widget.accentColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Text(
-                        countLabel,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
+              _waiterFilterHeader(
+                countLabel: countLabel,
+                profileType: profileType,
               ),
-              if (_selectedTabIndex == 1 && profileType == ProfileType.waiter)
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
-                  child: ConfirmedReservationFilterChips(),
-                ),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, _) {
@@ -451,6 +416,41 @@ class _ReservationsContentState extends State<ReservationsContent> {
         ),
       ),
     );
+  }
+
+  bool _showsWaiterFilterRow(ProfileType? profileType) {
+    return profileType == ProfileType.waiter &&
+        (_selectedTabIndex == 0 || _selectedTabIndex == 1);
+  }
+
+  Widget _waiterFilterHeader({
+    required String countLabel,
+    required ProfileType? profileType,
+  }) {
+    final show = _showsWaiterFilterRow(profileType);
+    return WaiterReservationsFilterHeader(
+      countLabel: countLabel,
+      showFilterControls: show,
+      accentColor: widget.accentColor,
+      onOpenFilters: _selectedTabIndex == 0
+          ? _openPendingReservationFilters
+          : _openReservationFilters,
+      filterChips: show
+          ? (_selectedTabIndex == 0
+                ? const PendingReservationFilterChips()
+                : const ConfirmedReservationFilterChips())
+          : null,
+    );
+  }
+
+  Future<void> _openPendingReservationFilters() async {
+    final reservationsProvider = context.read<ReservationsProvider>();
+    final result = await context.push<PendingReservationsFilters>(
+      AppRouteNames.pathReservationsFilterPending,
+      extra: reservationsProvider.pendingFilters,
+    );
+    if (!mounted || result == null) return;
+    await reservationsProvider.applyPendingFilters(result);
   }
 
   Future<void> _openReservationFilters() async {
@@ -568,47 +568,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-          child: _selectedTabIndex == 1 && profileType == ProfileType.waiter
-              ? Row(
-                  children: [
-                    Text(
-                      countLabel,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const Spacer(),
-                    TextButton.icon(
-                      onPressed: _openReservationFilters,
-                      icon: Icon(
-                        Icons.filter_list,
-                        size: 18,
-                        color: widget.accentColor,
-                      ),
-                      label: Text(
-                        l10n.reservationsFilters,
-                        style: TextStyle(
-                          color: widget.accentColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Text(
-                  countLabel,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
+        _waiterFilterHeader(
+          countLabel: countLabel,
+          profileType: profileType,
         ),
-        if (_selectedTabIndex == 1 && profileType == ProfileType.waiter)
-          const Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
-            child: ConfirmedReservationFilterChips(),
-          ),
         Expanded(
           child: _selectedTabIndex == 1
               ? _buildConfirmedList(

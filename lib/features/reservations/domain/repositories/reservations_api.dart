@@ -2,6 +2,7 @@ import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/core/models/paginated_result.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
 
 /// Contract for fetching reservation requests.
 /// Waiter: GET …/v1/venues/:venueId/reservations?status=pending → [PendingReservation]
@@ -13,6 +14,7 @@ abstract class ReservationsApi {
     required String venueId,
     required int page,
     required int limit,
+    PendingReservationsFilters? filters,
   });
 
   /// Kitchen/bar pending rows that represent reservations ([PendingOrder] shape).

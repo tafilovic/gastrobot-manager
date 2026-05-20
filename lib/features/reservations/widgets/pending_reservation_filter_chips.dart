@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
-import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
-import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
-import 'package:gastrobotmanager/features/reservations/utils/format_filter_date.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/utils/region_filter_label.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_filter_chip.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Removable chips for active confirmed-reservation filters (code, region, dates).
-class ConfirmedReservationFilterChips extends StatelessWidget {
-  const ConfirmedReservationFilterChips({super.key});
+/// Removable chips for active pending-reservation filters (code, region).
+class PendingReservationFilterChips extends StatelessWidget {
+  const PendingReservationFilterChips({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final filters = context.watch<ConfirmedReservationsProvider>().filters;
+    final filters = context.watch<ReservationsProvider>().pendingFilters;
     if (filters == null || filters.isEmpty) return const SizedBox.shrink();
 
     final regions = context.watch<RegionsProvider>().regions;
@@ -48,26 +47,15 @@ class ConfirmedReservationFilterChips extends StatelessWidget {
         ),
       );
     }
-    if (filters.hasCustomDateRange) {
-      chips.add(
-        ReservationFilterChip(
-          label: formatFilterDateRangeLabel(filters),
-          onRemove: () => _clearFilter(
-            context,
-            filters.copyWith(clearDateRange: true),
-          ),
-        ),
-      );
-    }
 
     return Wrap(spacing: 8, runSpacing: 8, children: chips);
   }
 
   Future<void> _clearFilter(
     BuildContext context,
-    ConfirmedReservationsFilters next,
+    PendingReservationsFilters next,
   ) async {
-    await context.read<ConfirmedReservationsProvider>().applyFilters(
+    await context.read<ReservationsProvider>().applyPendingFilters(
       next.isEmpty ? null : next,
     );
   }

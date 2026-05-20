@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gastrobotmanager/core/models/paginated_result.dart';
 import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservation_actions_api.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -48,8 +50,21 @@ void main() {
     actions = MockReservationActionsApi();
     provider = ReservationsProvider(auth, api, reservationActionsApi: actions);
     when(() => auth.profileType).thenReturn(ProfileType.waiter);
-    when(() => api.getWaiterPendingReservations(any()))
-        .thenAnswer((_) async => [reservation]);
+    when(
+      () => api.getWaiterPendingReservations(
+        venueId: any(named: 'venueId'),
+        page: any(named: 'page'),
+        limit: any(named: 'limit'),
+        filters: any(named: 'filters'),
+      ),
+    ).thenAnswer(
+      (_) async => PaginatedResult<PendingReservation>(
+        items: [reservation],
+        total: 1,
+        page: 1,
+        limit: 20,
+      ),
+    );
   });
 
   test('loadOnce for waiter loads via getWaiterPendingReservations', () async {
@@ -57,7 +72,34 @@ void main() {
 
     expect(provider.waiterRequests.length, 1);
     expect(provider.waiterRequests.first.id, 'r1');
-    verify(() => api.getWaiterPendingReservations('venue-x')).called(1);
+    verify(
+      () => api.getWaiterPendingReservations(
+        venueId: 'venue-x',
+        page: 1,
+        limit: any(named: 'limit'),
+        filters: null,
+      ),
+    ).called(1);
+  });
+
+  test('applyPendingFilters passes filters to API', () async {
+    await provider.loadOnce('venue-x');
+    final filters = PendingReservationsFilters(
+      reservationNumber: 'ABC',
+      regionId: 'region-1',
+    );
+
+    await provider.applyPendingFilters(filters);
+
+    expect(provider.pendingFilters, filters);
+    verify(
+      () => api.getWaiterPendingReservations(
+        venueId: 'venue-x',
+        page: 1,
+        limit: any(named: 'limit'),
+        filters: filters,
+      ),
+    ).called(2);
   });
 
   test('rejectWaiterReservation removes reservation from waiterRequests', () async {

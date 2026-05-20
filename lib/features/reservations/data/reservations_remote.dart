@@ -6,6 +6,7 @@ import 'package:gastrobotmanager/core/models/profile_type.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/errors/reservations_exception.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 
 /// Fetches reservation requests by role.
@@ -17,7 +18,7 @@ class ReservationsRemote implements ReservationsApi {
 
   final Dio _dio;
   static const String _sortBy = 'createdAt';
-  static const String _sortOrder = 'DESC';
+  static const String _sortOrder = 'ASC';
 
   static List<dynamic> _listFromResponse(dynamic data) {
     if (data == null) return [];
@@ -53,20 +54,31 @@ class ReservationsRemote implements ReservationsApi {
     required String venueId,
     required int page,
     required int limit,
+    PendingReservationsFilters? filters,
   }) async {
     const path = '/v1/venues';
     final endpoint = '$path/$venueId/reservations';
 
+    final queryParameters = <String, dynamic>{
+      'page': page,
+      'limit': limit,
+      'status': 'pending',
+      'sortBy': _sortBy,
+      'sortOrder': _sortOrder,
+    };
+    final reservationNumber = filters?.trimmedReservationNumber;
+    if (reservationNumber != null) {
+      queryParameters['reservationNumber'] = reservationNumber;
+    }
+    final regionId = filters?.regionId;
+    if (regionId != null && regionId.isNotEmpty) {
+      queryParameters['regionId'] = regionId;
+    }
+
     try {
       final response = await _dio.get<dynamic>(
         endpoint,
-        queryParameters: <String, dynamic>{
-          'page': page,
-          'limit': limit,
-          'status': 'pending',
-          'sortBy': _sortBy,
-          'sortOrder': _sortOrder,
-        },
+        queryParameters: queryParameters,
         options: Options(
           validateStatus: (int? status) => status != null && status < 400,
         ),

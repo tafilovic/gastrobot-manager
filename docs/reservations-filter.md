@@ -42,7 +42,7 @@ GET /v1/venues/{venueId}/reservations
 | `reservationNumber` | `string` | Pretraga po broju rezervacije |
 | `regionId`          | `string` | Filtriranje po regionu        |
 
-> Pending lista **ne koristi** zajednički filter state — samo prima `pendingCode` i `pendingRegionId` direktno.
+> Mobilna aplikacija koristi `PendingReservationsFilters` u `ReservationsProvider` (isti UX kao potvrđene: filter ekran, chipovi, Apply / Reset). API parametri: `reservationNumber`, `regionId` — **bez** `from` / `to`.
 
 ---
 

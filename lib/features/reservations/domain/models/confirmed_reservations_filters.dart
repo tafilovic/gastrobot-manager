@@ -1,4 +1,5 @@
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
+import 'package:gastrobotmanager/features/reservations/utils/trim_reservation_number.dart';
 
 /// Filter state for confirmed (processed) reservations.
 /// Matches API: reservationNumber, regionId, from/to date range.
@@ -59,11 +60,8 @@ class ConfirmedReservationsFilters {
     return (from: from, to: to);
   }
 
-  String? get trimmedReservationNumber {
-    final raw = reservationNumber?.trim();
-    if (raw == null || raw.isEmpty) return null;
-    return raw.startsWith('#') ? raw.substring(1).trim() : raw;
-  }
+  String? get trimmedReservationNumber =>
+      trimReservationNumber(reservationNumber);
 
   ConfirmedReservationsFilters copyWith({
     String? reservationNumber,

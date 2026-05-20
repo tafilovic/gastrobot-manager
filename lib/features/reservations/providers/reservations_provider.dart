@@ -5,6 +5,7 @@ import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/constants/reservations_pagination.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservation_actions_api.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/pagination_state.dart';
@@ -30,6 +31,10 @@ class ReservationsProvider extends ChangeNotifier {
   String? _rejectError;
   String? _acceptError;
   String? _currentVenueId;
+  PendingReservationsFilters? _pendingFilters;
+
+  /// Active filters for waiter pending list (code, region).
+  PendingReservationsFilters? get pendingFilters => _pendingFilters;
 
   /// Waiter: pending reservations from GET …/v1/venues/:venueId/reservations?status=pending.
   List<PendingReservation> get waiterRequests =>
@@ -49,8 +54,15 @@ class ReservationsProvider extends ChangeNotifier {
     return b.targetTime.compareTo(a.targetTime);
   }
 
-  static int _reservationByStartDesc(PendingReservation a, PendingReservation b) {
-    return b.reservationStart.compareTo(a.reservationStart);
+  /// Matches API: sortBy=createdAt, sortOrder=ASC (oldest request first).
+  static String _pendingSortKey(PendingReservation r) =>
+      r.createdAt ?? r.reservationStart;
+
+  static int _reservationByCreatedAtAsc(
+    PendingReservation a,
+    PendingReservation b,
+  ) {
+    return _pendingSortKey(a).compareTo(_pendingSortKey(b));
   }
 
   Future<void> loadOnce(String venueId) async {
@@ -67,17 +79,34 @@ class ReservationsProvider extends ChangeNotifier {
     final venueId = _currentVenueId;
     if (venueId == null) return;
     if (_authProvider.profileType == ProfileType.waiter &&
-        _waiterRequests.isNotEmpty) {
+        _waiterRequests.isNotEmpty &&
+        _pendingFilters == null) {
       await refreshPendingIncremental();
       return;
     }
     await _load(venueId);
   }
 
+  Future<void> applyPendingFilters(PendingReservationsFilters? filters) async {
+    _pendingFilters = _normalizePendingFilters(filters);
+    final venueId = _currentVenueId;
+    if (venueId == null) return;
+    if (_authProvider.profileType != ProfileType.waiter) return;
+    await _load(venueId);
+  }
+
+  static PendingReservationsFilters? _normalizePendingFilters(
+    PendingReservationsFilters? filters,
+  ) {
+    if (filters == null || filters.isEmpty) return null;
+    return filters;
+  }
+
   bool _shouldUseIncrementalRefresh({required bool sameVenue}) {
     return _authProvider.profileType == ProfileType.waiter &&
         sameVenue &&
-        _waiterRequests.isNotEmpty;
+        _waiterRequests.isNotEmpty &&
+        _pendingFilters == null;
   }
 
   Future<void> refreshPendingIncremental([String? venueIdOverride]) async {
@@ -98,7 +127,8 @@ class ReservationsProvider extends ChangeNotifier {
       final newItems = refreshResult.$1;
       final total = refreshResult.$2;
       if (newItems.isNotEmpty) {
-        _waiterRequests = [...newItems, ..._waiterRequests];
+        _waiterRequests = [...newItems, ..._waiterRequests]
+          ..sort(_reservationByCreatedAtAsc);
         _updateWaiterHasMore(total: total);
         notifyListeners();
       }
@@ -134,6 +164,7 @@ class ReservationsProvider extends ChangeNotifier {
         venueId: venueId,
         page: page,
         limit: reservationsPageSize,
+        filters: _pendingFilters,
       );
       if (page == 1) {
         total = pageData.total;
@@ -172,6 +203,7 @@ class ReservationsProvider extends ChangeNotifier {
         venueId: venueId,
         page: nextPage,
         limit: reservationsPageSize,
+        filters: _pendingFilters,
       );
       _waiterRequests = [..._waiterRequests, ...pageData.items];
       _waiterPagination.markFetched(page: nextPage, loadedItemsCount: _waiterRequests.length, total: pageData.total);
@@ -256,12 +288,14 @@ class ReservationsProvider extends ChangeNotifier {
 
     try {
       if (profileType == ProfileType.waiter) {
+        _waiterPagination.reset();
         final pageData = await _api.getWaiterPendingReservations(
           venueId: venueId,
           page: 1,
           limit: reservationsPageSize,
+          filters: _pendingFilters,
         );
-        _waiterRequests = pageData.items..sort(_reservationByStartDesc);
+        _waiterRequests = pageData.items..sort(_reservationByCreatedAtAsc);
         _waiterPagination.markFetched(page: 1, loadedItemsCount: _waiterRequests.length, total: pageData.total);
         _kitchenBarRequests = [];
       } else {
