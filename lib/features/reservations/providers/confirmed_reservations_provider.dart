@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:gastrobotmanager/features/reservations/domain/constants/reservations_pagination.dart';
-import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/pagination_state.dart';
@@ -17,10 +17,10 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   String? _currentVenueId;
-  ActiveReservationsFilters? _filters;
+  ConfirmedReservationsFilters? _filters;
 
   List<ConfirmedReservation> get items => List.unmodifiable(_items);
-  ActiveReservationsFilters? get filters => _filters;
+  ConfirmedReservationsFilters? get filters => _filters;
 
   /// True after [load] has been called at least once (accepted tab opened).
   bool get hasLoadedOnce => _currentVenueId != null;
@@ -39,20 +39,27 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
 
   Future<void> load(
     String venueId, {
-    ActiveReservationsFilters? filters,
+    ConfirmedReservationsFilters? filters,
   }) async {
     _currentVenueId = venueId;
     if (filters != null) {
-      _filters = filters;
+      _filters = _normalizeFilters(filters);
     }
     await _fetch(venueId);
   }
 
-  Future<void> applyFilters(ActiveReservationsFilters? filters) async {
-    _filters = filters;
+  Future<void> applyFilters(ConfirmedReservationsFilters? filters) async {
+    _filters = _normalizeFilters(filters);
     final venueId = _currentVenueId;
     if (venueId == null) return;
     await _fetch(venueId);
+  }
+
+  static ConfirmedReservationsFilters? _normalizeFilters(
+    ConfirmedReservationsFilters? filters,
+  ) {
+    if (filters == null || filters.isEmpty) return null;
+    return filters;
   }
 
   Future<void> pullRefresh() async {

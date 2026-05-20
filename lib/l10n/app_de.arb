@@ -269,6 +269,13 @@
   "filterUniqueCodeHint": "Code eingeben...",
   "filterAllRegions": "Alle Bereiche",
   "filterDateFilter": "Datumsfilter",
+  "confirmedResFilterDefaultDateHint": "Ohne Datumsauswahl werden Reservierungen von {from} bis {to} angezeigt.",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "Innenbereich",
   "filterRegionGarden": "Garten",
   "filterReservationContent": "Reservierungsinhalt:",

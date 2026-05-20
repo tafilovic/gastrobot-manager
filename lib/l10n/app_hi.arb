@@ -269,6 +269,13 @@
   "filterUniqueCodeHint": "कोड दर्ज करें...",
   "filterAllRegions": "सभी क्षेत्र",
   "filterDateFilter": "तिथि फ़िल्टर",
+  "confirmedResFilterDefaultDateHint": "कस्टम तिथि के बिना, {from} से {to} तक की आरक्षण दिखाई जाती हैं।",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "अंदर",
   "filterRegionGarden": "बगीचा",
   "filterReservationContent": "आरक्षण सामग्री:",

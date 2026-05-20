@@ -1252,6 +1252,12 @@ abstract class AppLocalizations {
   /// **'Filter datuma'**
   String get filterDateFilter;
 
+  /// No description provided for @confirmedResFilterDefaultDateHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Bez izabranog datuma prikazuju se rezervacije od {from} do {to}.'**
+  String confirmedResFilterDefaultDateHint(String from, String to);
+
   /// No description provided for @filterRegionIndoors.
   ///
   /// In sr, this message translates to:

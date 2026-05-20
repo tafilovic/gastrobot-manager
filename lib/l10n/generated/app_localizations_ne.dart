@@ -627,6 +627,11 @@ class AppLocalizationsNe extends AppLocalizations {
   String get filterDateFilter => 'मिति फिल्टर';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'कस्टम मिति बिना, $from देखि $to सम्मका आरक्षणहरू देखाइन्छ।';
+  }
+
+  @override
   String get filterRegionIndoors => 'भित्र';
 
   @override

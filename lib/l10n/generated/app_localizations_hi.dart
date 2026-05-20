@@ -629,6 +629,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get filterDateFilter => 'तिथि फ़िल्टर';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'कस्टम तिथि के बिना, $from से $to तक की आरक्षण दिखाई जाती हैं।';
+  }
+
+  @override
   String get filterRegionIndoors => 'अंदर';
 
   @override

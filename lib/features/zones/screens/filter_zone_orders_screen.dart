@@ -5,6 +5,8 @@ import 'package:gastrobotmanager/core/currency/venue_currency_format.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
+import 'package:gastrobotmanager/core/widgets/filter/filter_form_fields.dart';
+import 'package:gastrobotmanager/core/widgets/filter/filter_screen_footer.dart';
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/features/zones/domain/models/zone_orders_filters.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
@@ -158,9 +160,9 @@ class _FilterZoneOrdersScreenState extends State<FilterZoneOrdersScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionLabel(l10n.filterDate),
+                    FilterSectionLabel(l10n.filterDate),
                     const SizedBox(height: 12),
-                    _buildDateField(
+                    FilterInlineDateField(
                       label: l10n.filterDateFrom,
                       value: isTodayFrom
                           ? l10n.filterDateToday
@@ -168,7 +170,7 @@ class _FilterZoneOrdersScreenState extends State<FilterZoneOrdersScreen> {
                       onTap: () => _pickDate(context, true),
                     ),
                     const SizedBox(height: 10),
-                    _buildDateField(
+                    FilterInlineDateField(
                       label: l10n.filterDateTo,
                       value: isTodayTo
                           ? l10n.filterDateToday
@@ -176,111 +178,28 @@ class _FilterZoneOrdersScreenState extends State<FilterZoneOrdersScreen> {
                       onTap: () => _pickDate(context, false),
                     ),
                     const SizedBox(height: 24),
-                    _buildSectionLabel(l10n.filterOrderContent),
+                    FilterSectionLabel(l10n.filterOrderContent),
                     const SizedBox(height: 12),
                     _buildOrderTypeChips(l10n),
                     const SizedBox(height: 24),
-                    _buildSectionLabel(l10n.tableOrdersFilterStatusLabel),
+                    FilterSectionLabel(l10n.tableOrdersFilterStatusLabel),
                     const SizedBox(height: 12),
                     _buildStatusChips(l10n),
                     const SizedBox(height: 24),
-                    _buildSectionLabel(l10n.filterBillAmount),
+                    FilterSectionLabel(l10n.filterBillAmount),
                     const SizedBox(height: 12),
                     _buildBillRangeSlider(),
                   ],
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                border: Border(top: BorderSide(color: AppColors.border)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: _reset,
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.accent,
-                        side: const BorderSide(color: AppColors.accent),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: Text(l10n.filterReset),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _apply,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.accent,
-                        foregroundColor: AppColors.onPrimary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: Text(l10n.filterApply),
-                    ),
-                  ),
-                ],
-              ),
+            FilterScreenFooter(
+              secondaryLabel: l10n.filterReset,
+              primaryLabel: l10n.filterApply,
+              onSecondary: _reset,
+              onPrimary: _apply,
+              layout: FilterFooterLayout.column,
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: AppColors.textPrimary,
-      ),
-    );
-  }
-
-  Widget _buildDateField({
-    required String label,
-    required String value,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Row(
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Icon(Icons.calendar_today, size: 20, color: AppColors.textMuted),
           ],
         ),
       ),

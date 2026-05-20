@@ -630,6 +630,11 @@ class AppLocalizationsHr extends AppLocalizations {
   String get filterDateFilter => 'Filter datuma';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'Bez odabranog datuma prikazuju se rezervacije od $from do $to.';
+  }
+
+  @override
   String get filterRegionIndoors => 'Unutrašnjost';
 
   @override

@@ -276,6 +276,13 @@
   "filterUniqueCodeHint": "Введите код...",
   "filterAllRegions": "Все регионы",
   "filterDateFilter": "Фильтр по дате",
+  "confirmedResFilterDefaultDateHint": "Без выбора дат показываются бронирования с {from} по {to}.",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "В помещении",
   "filterRegionGarden": "Сад",
   "filterReservationContent": "Содержимое брони:",

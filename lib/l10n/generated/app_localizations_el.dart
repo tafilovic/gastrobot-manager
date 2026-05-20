@@ -634,6 +634,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get filterDateFilter => 'Φίλτρο ημερομηνίας';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'Χωρίς προσαρμοσμένες ημερομηνίες, εμφανίζονται κρατήσεις από $from έως $to.';
+  }
+
+  @override
   String get filterRegionIndoors => 'Εσωτερικό';
 
   @override

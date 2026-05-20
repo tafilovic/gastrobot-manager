@@ -269,6 +269,13 @@
   "filterUniqueCodeHint": "कोड प्रविष्ट गर्नुहोस्...",
   "filterAllRegions": "सबै क्षेत्रहरू",
   "filterDateFilter": "मिति फिल्टर",
+  "confirmedResFilterDefaultDateHint": "कस्टम मिति बिना, {from} देखि {to} सम्मका आरक्षणहरू देखाइन्छ।",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "भित्र",
   "filterRegionGarden": "बगैंचा",
   "filterReservationContent": "आरक्षण सामग्री:",

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/models/paginated_result.dart';
 import 'package:gastrobotmanager/features/reservations/domain/errors/reservations_exception.dart';
-import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
 
@@ -19,11 +19,11 @@ class ConfirmedReservationsRemote implements ConfirmedReservationsApi {
     required String venueId,
     required int page,
     required int limit,
-    ActiveReservationsFilters? filters,
+    ConfirmedReservationsFilters? filters,
   }) async {
     final url = '${ApiConfig.baseUrl}/v1/venues/$venueId/reservations';
     final range =
-        filters?.apiDateRange ?? ActiveReservationsFilters.defaultApiDateRange();
+        filters?.apiDateRange ?? ConfirmedReservationsFilters.defaultApiDateRange();
 
     final queryParameters = <String, dynamic>{
       'page': page,

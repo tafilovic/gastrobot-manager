@@ -20,8 +20,8 @@ import 'package:gastrobotmanager/features/orders/screens/time_estimation_screen.
 import 'package:gastrobotmanager/features/preparing/screens/preparing_screen.dart';
 import 'package:gastrobotmanager/features/profile/screens/profile_screen.dart';
 import 'package:gastrobotmanager/features/ready_items/screens/ready_items_screen.dart';
-import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
-import 'package:gastrobotmanager/features/reservations/screens/active_reservations_filter_screen.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/screens/confirmed_reservations_filter_screen.dart';
 import 'package:gastrobotmanager/features/reservations/screens/reservations_screen.dart';
 import 'package:gastrobotmanager/features/zones/domain/models/zone_model.dart';
 import 'package:gastrobotmanager/features/zones/domain/models/zone_orders_filters.dart';
@@ -250,9 +250,9 @@ class AppRouter {
                       name: AppRouteNames.filterActiveReservations,
                       builder: (context, state) {
                         final initialFilters = state.extra;
-                        return ActiveReservationsFilterScreen(
+                        return ConfirmedReservationsFilterScreen(
                           initialFilters: initialFilters
-                              is ActiveReservationsFilters
+                              is ConfirmedReservationsFilters
                               ? initialFilters
                               : null,
                         );

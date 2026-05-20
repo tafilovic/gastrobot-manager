@@ -359,6 +359,13 @@
   "filterUniqueCodeHint": "Εισαγάγετε κωδικό...",
   "filterAllRegions": "Όλες οι περιοχές",
   "filterDateFilter": "Φίλτρο ημερομηνίας",
+  "confirmedResFilterDefaultDateHint": "Χωρίς προσαρμοσμένες ημερομηνίες, εμφανίζονται κρατήσεις από {from} έως {to}.",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "Εσωτερικό",
   "filterRegionGarden": "Κήπος",
   "filterReservationContent": "Περιεχόμενο κράτησης:",

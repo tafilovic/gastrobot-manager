@@ -633,6 +633,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get filterDateFilter => 'Datumsfilter';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'Ohne Datumsauswahl werden Reservierungen von $from bis $to angezeigt.';
+  }
+
+  @override
   String get filterRegionIndoors => 'Innenbereich';
 
   @override

@@ -2,8 +2,8 @@ import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 
 /// Filter state for confirmed (processed) reservations.
 /// Matches API: reservationNumber, regionId, from/to date range.
-class ActiveReservationsFilters {
-  ActiveReservationsFilters({
+class ConfirmedReservationsFilters {
+  ConfirmedReservationsFilters({
     this.reservationNumber,
     this.regionId,
     DateTime? dateFrom,
@@ -51,7 +51,10 @@ class ActiveReservationsFilters {
         : CalendarDayBounds.endOfDay(dateFrom!);
 
     if (from.isAfter(to)) {
-      return (from: CalendarDayBounds.startOfDay(to), to: CalendarDayBounds.endOfDay(from));
+      return (
+        from: CalendarDayBounds.startOfDay(to),
+        to: CalendarDayBounds.endOfDay(from),
+      );
     }
     return (from: from, to: to);
   }
@@ -62,7 +65,7 @@ class ActiveReservationsFilters {
     return raw.startsWith('#') ? raw.substring(1).trim() : raw;
   }
 
-  ActiveReservationsFilters copyWith({
+  ConfirmedReservationsFilters copyWith({
     String? reservationNumber,
     String? regionId,
     DateTime? dateFrom,
@@ -71,7 +74,7 @@ class ActiveReservationsFilters {
     bool clearRegionId = false,
     bool clearDateRange = false,
   }) {
-    return ActiveReservationsFilters(
+    return ConfirmedReservationsFilters(
       reservationNumber: clearReservationNumber
           ? null
           : (reservationNumber ?? this.reservationNumber),

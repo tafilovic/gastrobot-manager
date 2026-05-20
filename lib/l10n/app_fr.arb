@@ -269,6 +269,13 @@
   "filterUniqueCodeHint": "Saisir le code...",
   "filterAllRegions": "Toutes les zones",
   "filterDateFilter": "Filtre de date",
+  "confirmedResFilterDefaultDateHint": "Sans dates personnalisées, les réservations du {from} au {to} sont affichées.",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "Intérieur",
   "filterRegionGarden": "Terrasse / jardin",
   "filterReservationContent": "Contenu de la réservation :",

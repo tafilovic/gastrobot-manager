@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
 import 'package:gastrobotmanager/core/theme/app_colors.dart';
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
+import 'package:gastrobotmanager/core/widgets/filter/filter_form_fields.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/regions/domain/models/region_model.dart';
 import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
-import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/utils/format_filter_date.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
-/// Filter screen for confirmed reservations: unique code, region, date.
-/// Pops with [ActiveReservationsFilters] when the user navigates back.
-class ActiveReservationsFilterScreen extends StatefulWidget {
-  const ActiveReservationsFilterScreen({super.key, this.initialFilters});
+/// Filter screen for confirmed reservations: unique code, region, date range.
+/// Pops with [ConfirmedReservationsFilters] only when the user taps Apply.
+class ConfirmedReservationsFilterScreen extends StatefulWidget {
+  const ConfirmedReservationsFilterScreen({super.key, this.initialFilters});
 
-  final ActiveReservationsFilters? initialFilters;
+  final ConfirmedReservationsFilters? initialFilters;
 
   @override
-  State<ActiveReservationsFilterScreen> createState() =>
-      _ActiveReservationsFilterScreenState();
+  State<ConfirmedReservationsFilterScreen> createState() =>
+      _ConfirmedReservationsFilterScreenState();
 }
 
-class _ActiveReservationsFilterScreenState
-    extends State<ActiveReservationsFilterScreen> {
+class _ConfirmedReservationsFilterScreenState
+    extends State<ConfirmedReservationsFilterScreen> {
   late final TextEditingController _codeController;
   String? _regionId;
   DateTime? _dateFrom;
@@ -62,7 +63,7 @@ class _ActiveReservationsFilterScreenState
     }
   }
 
-  ActiveReservationsFilters get _currentFilters => ActiveReservationsFilters(
+  ConfirmedReservationsFilters get _currentFilters => ConfirmedReservationsFilters(
     reservationNumber: _codeController.text.trim().isEmpty
         ? null
         : _codeController.text.trim(),
@@ -71,8 +72,14 @@ class _ActiveReservationsFilterScreenState
     dateTo: _dateTo,
   );
 
-  void _cancel() {
+  bool get _showsDefaultDateHint => _dateFrom == null && _dateTo == null;
+
+  void _close() {
     Navigator.of(context).pop();
+  }
+
+  void _resetFilters() {
+    Navigator.of(context).pop(ConfirmedReservationsFilters());
   }
 
   void _apply() {
@@ -116,20 +123,27 @@ class _ActiveReservationsFilterScreenState
   }
 
   String _formatDate(DateTime? date, AppLocalizations l10n) {
-    if (date == null) return '—';
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final dateOnly = DateTime(date.year, date.month, date.day);
-    if (dateOnly == today) return l10n.filterDateToday;
-    final locale = Localizations.localeOf(context).toString();
-    return DateFormat('dd.MM.yyyy', locale).format(date);
+    return formatFilterDateOptional(
+      date,
+      emptyLabel: '—',
+      todayLabel: l10n.filterDateToday,
+      locale: Localizations.localeOf(context).toString(),
+    );
+  }
+
+  String _defaultDateHint(AppLocalizations l10n) {
+    final range = ConfirmedReservationsFilters.defaultApiDateRange();
+    return l10n.confirmedResFilterDefaultDateHint(
+      formatFilterDate(range.from),
+      formatFilterDate(range.to),
+    );
   }
 
   Future<void> _openRegionPicker(
     AppLocalizations l10n,
     List<RegionModel> regions,
   ) async {
-    final selected = await showDialog<String?>(
+    final result = await showDialog<_RegionPickerResult>(
       context: context,
       barrierDismissible: true,
       builder: (ctx) {
@@ -164,14 +178,20 @@ class _ActiveReservationsFilterScreenState
                         title: Text(l10n.filterAllRegions),
                         value: null,
                         groupValue: _regionId,
-                        onChanged: (value) => Navigator.pop(ctx, value),
+                        onChanged: (value) => Navigator.pop(
+                          ctx,
+                          _RegionPickerResult(regionId: value),
+                        ),
                       ),
                       ...regions.map(
                         (r) => RadioListTile<String?>(
                           title: Text(r.title),
                           value: r.id,
                           groupValue: _regionId,
-                          onChanged: (value) => Navigator.pop(ctx, value),
+                          onChanged: (value) => Navigator.pop(
+                            ctx,
+                            _RegionPickerResult(regionId: value),
+                          ),
                         ),
                       ),
                     ],
@@ -183,8 +203,8 @@ class _ActiveReservationsFilterScreenState
         );
       },
     );
-    if (mounted) {
-      setState(() => _regionId = selected);
+    if (mounted && result != null) {
+      setState(() => _regionId = result.regionId);
     }
   }
 
@@ -206,7 +226,7 @@ class _ActiveReservationsFilterScreenState
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: _cancel,
+          onPressed: _close,
         ),
         title: Text(l10n.filterTitle),
         centerTitle: true,
@@ -237,17 +257,17 @@ class _ActiveReservationsFilterScreenState
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _FilterFieldLabel(l10n.filterUniqueCode),
+                            FilterFieldLabel(l10n.filterUniqueCode),
                             const SizedBox(height: 8),
-                            _FilterTextField(
+                            FilterTextField(
                               controller: _codeController,
                               hint: l10n.filterUniqueCodeHint,
                               prefixText: '# ',
                             ),
                             const SizedBox(height: 16),
-                            _FilterFieldLabel(l10n.filterRegionLabel),
+                            FilterFieldLabel(l10n.filterRegionLabel),
                             const SizedBox(height: 8),
-                            _FilterTapField(
+                            FilterTapField(
                               value: _regionLabel(l10n, regions),
                               trailing: const Icon(
                                 Icons.keyboard_arrow_down,
@@ -257,11 +277,11 @@ class _ActiveReservationsFilterScreenState
                               onTap: () => _openRegionPicker(l10n, regions),
                             ),
                             const SizedBox(height: 16),
-                            _FilterFieldLabel(l10n.filterDateFilter),
+                            FilterFieldLabel(l10n.filterDateFilter),
                             const SizedBox(height: 8),
-                            _FilterFieldLabel(l10n.filterDateFrom),
+                            FilterFieldLabel(l10n.filterDateFrom),
                             const SizedBox(height: 8),
-                            _FilterTapField(
+                            FilterTapField(
                               value: _formatDate(_dateFrom, l10n),
                               trailing: const Icon(
                                 Icons.calendar_today_outlined,
@@ -271,9 +291,9 @@ class _ActiveReservationsFilterScreenState
                               onTap: () => _pickDate(true),
                             ),
                             const SizedBox(height: 12),
-                            _FilterFieldLabel(l10n.filterDateTo),
+                            FilterFieldLabel(l10n.filterDateTo),
                             const SizedBox(height: 8),
-                            _FilterTapField(
+                            FilterTapField(
                               value: _formatDate(_dateTo, l10n),
                               trailing: const Icon(
                                 Icons.calendar_today_outlined,
@@ -282,6 +302,17 @@ class _ActiveReservationsFilterScreenState
                               ),
                               onTap: () => _pickDate(false),
                             ),
+                            if (_showsDefaultDateHint) ...[
+                              const SizedBox(height: 10),
+                              Text(
+                                _defaultDateHint(l10n),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.textSecondary,
+                                  height: 1.35,
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -296,21 +327,24 @@ class _ActiveReservationsFilterScreenState
                 color: AppColors.surface,
                 border: Border(top: BorderSide(color: AppColors.border)),
               ),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: _cancel,
+                      onPressed: _resetFilters,
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.accent,
                         side: const BorderSide(color: AppColors.accent),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+                      child: Text(l10n.filterReset),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
                     child: FilledButton(
                       onPressed: _apply,
                       style: FilledButton.styleFrom(
@@ -331,102 +365,9 @@ class _ActiveReservationsFilterScreenState
   }
 }
 
-class _FilterFieldLabel extends StatelessWidget {
-  const _FilterFieldLabel(this.text);
+/// Non-null when the user picked a region; null when the dialog was dismissed.
+class _RegionPickerResult {
+  const _RegionPickerResult({required this.regionId});
 
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 13,
-        color: AppColors.textSecondary,
-        fontWeight: FontWeight.w400,
-      ),
-    );
-  }
+  final String? regionId;
 }
-
-class _FilterTextField extends StatelessWidget {
-  const _FilterTextField({
-    required this.controller,
-    required this.hint,
-    this.prefixText,
-  });
-
-  final TextEditingController controller;
-  final String hint;
-  final String? prefixText;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: AppColors.textSecondary),
-        prefixText: prefixText,
-        prefixStyle: const TextStyle(
-          fontSize: 15,
-          color: AppColors.textSecondary,
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        border: _fieldBorder(),
-        enabledBorder: _fieldBorder(),
-        focusedBorder: _fieldBorder(color: AppColors.accent),
-      ),
-    );
-  }
-
-  OutlineInputBorder _fieldBorder({Color color = AppColors.border}) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(color: color),
-    );
-  }
-}
-
-class _FilterTapField extends StatelessWidget {
-  const _FilterTapField({
-    required this.value,
-    required this.trailing,
-    required this.onTap,
-  });
-
-  final String value;
-  final Widget trailing;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-            trailing,
-          ],
-        ),
-      ),
-    );
-  }
-}
-

@@ -36,4 +36,9 @@ abstract final class AppColors {
   static const Color appBarForeground = Color(0xFF000000);
   /// Unread tab indicator (orders / reservations).
   static const Color unreadIndicator = Color(0xFFE53935);
+
+  /// Active filter chip on reservation lists.
+  static Color get filterChipBackground => accent.withValues(alpha: 0.08);
+
+  static const Color filterChipForeground = accent;
 }

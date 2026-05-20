@@ -359,6 +359,13 @@
   "filterUniqueCodeHint": "Daħħal il-kodiċi...",
   "filterAllRegions": "Ir-reġjuni kollha",
   "filterDateFilter": "Filtru tad-data",
+  "confirmedResFilterDefaultDateHint": "Bla dati personalizzati, ir-riżervazzjonijiet minn {from} sa {to} jintwerew.",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "Ġewwa",
   "filterRegionGarden": "Ġnien",
   "filterReservationContent": "Kontenut tar-riżervazzjoni:",

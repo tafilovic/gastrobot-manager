@@ -628,6 +628,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get filterDateFilter => 'Фильтр по дате';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'Без выбора дат показываются бронирования с $from по $to.';
+  }
+
+  @override
   String get filterRegionIndoors => 'В помещении';
 
   @override

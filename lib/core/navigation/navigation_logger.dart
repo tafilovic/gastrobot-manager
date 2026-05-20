@@ -34,7 +34,7 @@ class NavigationLogger {
     }
     if (location.startsWith('/preparing')) return 'PreparingScreen';
     if (location.startsWith('/reservations/filter/active')) {
-      return 'ActiveReservationsFilterScreen';
+      return 'ConfirmedReservationsFilterScreen';
     }
     if (location.startsWith('/reservations')) return 'ReservationsScreen';
     if (location.startsWith('/zones/overview/filter-orders')) {

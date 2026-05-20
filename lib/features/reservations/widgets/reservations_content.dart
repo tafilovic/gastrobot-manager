@@ -12,7 +12,7 @@ import 'package:gastrobotmanager/core/widgets/list_item_entrance.dart';
 import 'package:gastrobotmanager/features/auth/providers/auth_provider.dart';
 import 'package:gastrobotmanager/features/orders/domain/models/pending_order.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/pending_reservation.dart';
-import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/providers/confirmed_reservations_provider.dart';
 import 'package:gastrobotmanager/features/reservations/providers/reservations_provider.dart';
@@ -21,10 +21,10 @@ import 'package:gastrobotmanager/features/reservations/screens/reservation_detai
 import 'package:gastrobotmanager/features/reservations/screens/waiter_reservation_details_screen.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_details_content.dart';
+import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reservation_filter_chips.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/kitchen_bar_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_request_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
-import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reservations screen content: title, tabs (Zahtevi / Prihvaćeno), count, list of request cards.
@@ -49,7 +49,6 @@ class _ReservationsContentState extends State<ReservationsContent> {
   PendingReservation? _selectedWaiterRequest;
   PendingOrder? _selectedKitchenBarRequest;
   ConfirmedReservation? _selectedConfirmed;
-  ActiveReservationsFilters? _activeReservationsFilters;
   final ScrollController _waiterRequestsScrollController = ScrollController();
   final ScrollController _confirmedScrollController = ScrollController();
 
@@ -108,7 +107,6 @@ class _ReservationsContentState extends State<ReservationsContent> {
       _selectedKitchenBarRequest = null;
       _selectedConfirmed = null;
       if (idx != 1) {
-        _activeReservationsFilters = null;
         context.read<ConfirmedReservationsProvider>().applyFilters(null);
       }
     });
@@ -348,13 +346,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
                         ),
                       ),
               ),
-              if (_selectedTabIndex == 1 &&
-                  profileType == ProfileType.waiter &&
-                  _activeReservationsFilters != null &&
-                  !_activeReservationsFilters!.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-                  child: _buildActiveFilterChips(l10n),
+              if (_selectedTabIndex == 1 && profileType == ProfileType.waiter)
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+                  child: ConfirmedReservationFilterChips(),
                 ),
               Expanded(
                 child: LayoutBuilder(
@@ -459,87 +454,13 @@ class _ReservationsContentState extends State<ReservationsContent> {
   }
 
   Future<void> _openReservationFilters() async {
-    final result = await context.push<ActiveReservationsFilters>(
+    final confirmedProvider = context.read<ConfirmedReservationsProvider>();
+    final result = await context.push<ConfirmedReservationsFilters>(
       AppRouteNames.pathReservationsFilterActive,
-      extra: _activeReservationsFilters,
+      extra: confirmedProvider.filters,
     );
-    if (result == null || !mounted) return;
-    setState(() => _activeReservationsFilters = result);
-    await context.read<ConfirmedReservationsProvider>().applyFilters(result);
-  }
-
-  Widget _buildActiveFilterChips(AppLocalizations l10n) {
-    final filters = _activeReservationsFilters;
-    if (filters == null || filters.isEmpty) return const SizedBox.shrink();
-    final regions = context.watch<RegionsProvider>().regions;
-    final chips = <Widget>[];
-    final code = filters.trimmedReservationNumber;
-    if (code != null) {
-      chips.add(_ActiveFilterChip(label: '#$code', onRemove: _removeCodeFilter));
-    }
-    if (filters.regionId != null) {
-      String? regionTitle;
-      for (final region in regions) {
-        if (region.id == filters.regionId) {
-          regionTitle = region.title;
-          break;
-        }
-      }
-      chips.add(
-        _ActiveFilterChip(
-          label: regionTitle ?? l10n.filterRegionLabel,
-          onRemove: _removeRegionFilter,
-        ),
-      );
-    }
-    if (filters.hasCustomDateRange) {
-      chips.add(
-        _ActiveFilterChip(
-          label: _formatFilterDateRange(filters),
-          onRemove: _removeDateFilter,
-        ),
-      );
-    }
-    return Wrap(spacing: 8, runSpacing: 8, children: chips);
-  }
-
-  String _formatFilterDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    return '$day.$month.${date.year}';
-  }
-
-  String _formatFilterDateRange(ActiveReservationsFilters filters) {
-    final range = filters.apiDateRange;
-    final fromLabel = _formatFilterDate(range.from);
-    final toLabel = _formatFilterDate(range.to);
-    if (fromLabel == toLabel) return fromLabel;
-    return '$fromLabel - $toLabel';
-  }
-
-  Future<void> _removeCodeFilter() async {
-    final current = _activeReservationsFilters;
-    if (current == null) return;
-    await _applyFiltersFromChip(current.copyWith(clearReservationNumber: true));
-  }
-
-  Future<void> _removeRegionFilter() async {
-    final current = _activeReservationsFilters;
-    if (current == null) return;
-    await _applyFiltersFromChip(current.copyWith(clearRegionId: true));
-  }
-
-  Future<void> _removeDateFilter() async {
-    final current = _activeReservationsFilters;
-    if (current == null) return;
-    await _applyFiltersFromChip(current.copyWith(clearDateRange: true));
-  }
-
-  Future<void> _applyFiltersFromChip(ActiveReservationsFilters next) async {
-    if (!mounted) return;
-    final normalized = next.isEmpty ? null : next;
-    setState(() => _activeReservationsFilters = normalized);
-    await context.read<ConfirmedReservationsProvider>().applyFilters(normalized);
+    if (!mounted || result == null) return;
+    await confirmedProvider.applyFilters(result);
   }
 
   bool _pendingRequestsEmpty(
@@ -683,13 +604,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
                   ),
                 ),
         ),
-        if (_selectedTabIndex == 1 &&
-            profileType == ProfileType.waiter &&
-            _activeReservationsFilters != null &&
-            !_activeReservationsFilters!.isEmpty)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-            child: _buildActiveFilterChips(l10n),
+        if (_selectedTabIndex == 1 && profileType == ProfileType.waiter)
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: ConfirmedReservationFilterChips(),
           ),
         Expanded(
           child: _selectedTabIndex == 1
@@ -1037,50 +955,6 @@ class _ReservationsContentState extends State<ReservationsContent> {
               itemCount: totalCount,
               itemBuilder: (context, index) => buildCard(index),
             ),
-    );
-  }
-}
-
-class _ActiveFilterChip extends StatelessWidget {
-  const _ActiveFilterChip({
-    required this.label,
-    required this.onRemove,
-  });
-
-  final String label;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE8F0FE),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF1A73E8),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(width: 6),
-          InkWell(
-            onTap: onRemove,
-            borderRadius: BorderRadius.circular(12),
-            child: const Icon(
-              Icons.close,
-              size: 16,
-              color: Color(0xFF1A73E8),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

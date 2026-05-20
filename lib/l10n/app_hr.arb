@@ -276,6 +276,13 @@
   "filterUniqueCodeHint": "Unesite kod...",
   "filterAllRegions": "Svi regioni",
   "filterDateFilter": "Filter datuma",
+  "confirmedResFilterDefaultDateHint": "Bez odabranog datuma prikazuju se rezervacije od {from} do {to}.",
+  "@confirmedResFilterDefaultDateHint": {
+    "placeholders": {
+      "from": { "type": "String" },
+      "to": { "type": "String" }
+    }
+  },
   "filterRegionIndoors": "Unutrašnjost",
   "filterRegionGarden": "Bašta",
   "filterReservationContent": "Sadržaj rezervacije:",

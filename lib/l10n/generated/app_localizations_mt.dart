@@ -628,6 +628,11 @@ class AppLocalizationsMt extends AppLocalizations {
   String get filterDateFilter => 'Filtru tad-data';
 
   @override
+  String confirmedResFilterDefaultDateHint(String from, String to) {
+    return 'Bla dati personalizzati, ir-riżervazzjonijiet minn $from sa $to jintwerew.';
+  }
+
+  @override
   String get filterRegionIndoors => 'Ġewwa';
 
   @override
