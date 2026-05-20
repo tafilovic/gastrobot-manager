@@ -612,6 +612,21 @@ class AppLocalizationsNe extends AppLocalizations {
   String get filterRegion => 'क्षेत्र:';
 
   @override
+  String get filterRegionLabel => 'क्षेत्र';
+
+  @override
+  String get filterUniqueCode => 'अद्वितीय कोड';
+
+  @override
+  String get filterUniqueCodeHint => 'कोड प्रविष्ट गर्नुहोस्...';
+
+  @override
+  String get filterAllRegions => 'सबै क्षेत्रहरू';
+
+  @override
+  String get filterDateFilter => 'मिति फिल्टर';
+
+  @override
   String get filterRegionIndoors => 'भित्र';
 
   @override

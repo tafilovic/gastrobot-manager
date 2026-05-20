@@ -618,6 +618,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get filterRegion => 'Bereich:';
 
   @override
+  String get filterRegionLabel => 'Bereich';
+
+  @override
+  String get filterUniqueCode => 'Eindeutiger Code';
+
+  @override
+  String get filterUniqueCodeHint => 'Code eingeben...';
+
+  @override
+  String get filterAllRegions => 'Alle Bereiche';
+
+  @override
+  String get filterDateFilter => 'Datumsfilter';
+
+  @override
   String get filterRegionIndoors => 'Innenbereich';
 
   @override

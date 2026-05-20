@@ -613,6 +613,21 @@ class AppLocalizationsMt extends AppLocalizations {
   String get filterRegion => 'Reġjun:';
 
   @override
+  String get filterRegionLabel => 'Reġjun';
+
+  @override
+  String get filterUniqueCode => 'Kodi uniku';
+
+  @override
+  String get filterUniqueCodeHint => 'Daħħal il-kodiċi...';
+
+  @override
+  String get filterAllRegions => 'Ir-reġjuni kollha';
+
+  @override
+  String get filterDateFilter => 'Filtru tad-data';
+
+  @override
   String get filterRegionIndoors => 'Ġewwa';
 
   @override

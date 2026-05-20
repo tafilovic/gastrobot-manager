@@ -614,6 +614,21 @@ class AppLocalizationsHi extends AppLocalizations {
   String get filterRegion => 'क्षेत्र:';
 
   @override
+  String get filterRegionLabel => 'क्षेत्र';
+
+  @override
+  String get filterUniqueCode => 'विशिष्ट कोड';
+
+  @override
+  String get filterUniqueCodeHint => 'कोड दर्ज करें...';
+
+  @override
+  String get filterAllRegions => 'सभी क्षेत्र';
+
+  @override
+  String get filterDateFilter => 'तिथि फ़िल्टर';
+
+  @override
   String get filterRegionIndoors => 'अंदर';
 
   @override

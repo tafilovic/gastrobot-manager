@@ -1,63 +1,88 @@
 import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 
-/// Filter state for active (accepted) reservations.
-/// Used by [ActiveReservationsFilterScreen].
-/// Matches UI design: date, people count, region, reservation content, table ids.
+/// Filter state for confirmed (processed) reservations.
+/// Matches API: reservationNumber, regionId, from/to date range.
 class ActiveReservationsFilters {
   ActiveReservationsFilters({
+    this.reservationNumber,
+    this.regionId,
     DateTime? dateFrom,
     DateTime? dateTo,
-    this.peopleCounts = const {},
-    this.regions = const {},
-    this.reservationContents = const {},
-    this.tableIds = const {},
   }) : dateFrom = dateFrom != null
            ? CalendarDayBounds.startOfDay(dateFrom)
            : null,
        dateTo = dateTo != null ? CalendarDayBounds.endOfDay(dateTo) : null;
 
+  /// Search by reservation number (without leading `#`).
+  final String? reservationNumber;
+
+  /// Venue region id; null means all regions.
+  final String? regionId;
+
+  /// Custom range start; null with [dateTo] uses start of [dateTo] day.
   final DateTime? dateFrom;
+
+  /// Custom range end; null with [dateFrom] uses end of [dateFrom] day.
   final DateTime? dateTo;
-  final Set<int> peopleCounts;
-  final Set<String> regions;
-  final Set<String> reservationContents;
-  final Set<String> tableIds;
 
-  /// Region: indoors (Unutrašnjost).
-  static const String regionIndoors = 'indoors';
+  /// Default list range when no custom dates: today − 1 month → +4 months.
+  static ({DateTime from, DateTime to}) defaultApiDateRange([DateTime? now]) {
+    final today = now ?? DateTime.now();
+    final from = CalendarDayBounds.startOfDay(
+      DateTime(today.year, today.month - 1, today.day),
+    );
+    final to = CalendarDayBounds.endOfDay(
+      DateTime(from.year, from.month + 4, from.day),
+    );
+    return (from: from, to: to);
+  }
 
-  /// Region: garden (Bašta).
-  static const String regionGarden = 'garden';
+  bool get hasCustomDateRange => dateFrom != null || dateTo != null;
 
-  /// Reservation content: drink (Piće).
-  static const String contentDrink = 'drink';
+  /// ISO bounds sent as `from` / `to` query params.
+  ({DateTime from, DateTime to}) get apiDateRange {
+    if (!hasCustomDateRange) return defaultApiDateRange();
 
-  /// Reservation content: food (Hrana).
-  static const String contentFood = 'food';
+    final from = dateFrom != null
+        ? CalendarDayBounds.startOfDay(dateFrom!)
+        : CalendarDayBounds.startOfDay(dateTo!);
+    final to = dateTo != null
+        ? CalendarDayBounds.endOfDay(dateTo!)
+        : CalendarDayBounds.endOfDay(dateFrom!);
+
+    if (from.isAfter(to)) {
+      return (from: CalendarDayBounds.startOfDay(to), to: CalendarDayBounds.endOfDay(from));
+    }
+    return (from: from, to: to);
+  }
+
+  String? get trimmedReservationNumber {
+    final raw = reservationNumber?.trim();
+    if (raw == null || raw.isEmpty) return null;
+    return raw.startsWith('#') ? raw.substring(1).trim() : raw;
+  }
 
   ActiveReservationsFilters copyWith({
+    String? reservationNumber,
+    String? regionId,
     DateTime? dateFrom,
     DateTime? dateTo,
-    Set<int>? peopleCounts,
-    Set<String>? regions,
-    Set<String>? reservationContents,
-    Set<String>? tableIds,
+    bool clearReservationNumber = false,
+    bool clearRegionId = false,
+    bool clearDateRange = false,
   }) {
     return ActiveReservationsFilters(
-      dateFrom: dateFrom ?? this.dateFrom,
-      dateTo: dateTo ?? this.dateTo,
-      peopleCounts: peopleCounts ?? this.peopleCounts,
-      regions: regions ?? this.regions,
-      reservationContents: reservationContents ?? this.reservationContents,
-      tableIds: tableIds ?? this.tableIds,
+      reservationNumber: clearReservationNumber
+          ? null
+          : (reservationNumber ?? this.reservationNumber),
+      regionId: clearRegionId ? null : (regionId ?? this.regionId),
+      dateFrom: clearDateRange ? null : (dateFrom ?? this.dateFrom),
+      dateTo: clearDateRange ? null : (dateTo ?? this.dateTo),
     );
   }
 
   bool get isEmpty =>
-      dateFrom == null &&
-      dateTo == null &&
-      peopleCounts.isEmpty &&
-      regions.isEmpty &&
-      reservationContents.isEmpty &&
-      tableIds.isEmpty;
+      (trimmedReservationNumber == null) &&
+      regionId == null &&
+      !hasCustomDateRange;
 }

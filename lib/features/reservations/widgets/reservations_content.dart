@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:gastrobotmanager/core/utils/calendar_day_bounds.dart';
 import 'package:gastrobotmanager/core/layout/app_breakpoints.dart';
 import 'package:gastrobotmanager/core/navigation/app_router.dart';
 import 'package:gastrobotmanager/core/layout/constrained_content.dart';
@@ -25,7 +24,7 @@ import 'package:gastrobotmanager/features/reservations/widgets/confirmed_reserva
 import 'package:gastrobotmanager/features/reservations/widgets/kitchen_bar_reservation_request_details_content.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/reservation_request_card.dart';
 import 'package:gastrobotmanager/features/reservations/widgets/waiter_reservation_request_details_content.dart';
-import 'package:gastrobotmanager/features/zones/utils/venue_zone_id_match.dart';
+import 'package:gastrobotmanager/features/regions/providers/regions_provider.dart';
 import 'package:gastrobotmanager/l10n/generated/app_localizations.dart';
 
 /// Reservations screen content: title, tabs (Zahtevi / Prihvaćeno), count, list of request cards.
@@ -108,7 +107,10 @@ class _ReservationsContentState extends State<ReservationsContent> {
       _selectedWaiterRequest = null;
       _selectedKitchenBarRequest = null;
       _selectedConfirmed = null;
-      if (idx != 1) _activeReservationsFilters = null;
+      if (idx != 1) {
+        _activeReservationsFilters = null;
+        context.read<ConfirmedReservationsProvider>().applyFilters(null);
+      }
     });
     if (context.mounted) {
       final venueId = context.read<AuthProvider>().currentVenueId;
@@ -134,16 +136,13 @@ class _ReservationsContentState extends State<ReservationsContent> {
         kitchenRequests.fold<int>(0, (sum, o) => sum + o.itemCount);
 
     final confirmedProvider = context.watch<ConfirmedReservationsProvider>();
-    final filteredConfirmed = _applyReservationFilters(
-      confirmedProvider.items,
-      _activeReservationsFilters,
-    );
+    final confirmedItems = confirmedProvider.items;
 
     final isBar =
         profileType == ProfileType.bar || profileType == ProfileType.waiter;
     final countLabel = profileType == ProfileType.waiter
         ? (_selectedTabIndex == 1
-              ? l10n.reservationCountList(filteredConfirmed.length)
+              ? l10n.reservationCountList(confirmedItems.length)
               : l10n.reservationCountList(waiterRequests.length))
         : (isBar
               ? l10n.reservationCountDrinks(totalItems)
@@ -216,7 +215,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                     l10n,
                     provider,
                     confirmedProvider,
-                    filteredConfirmed,
+                    confirmedItems,
                     profileType,
                     countLabel,
                     itemCountForCard,
@@ -349,6 +348,14 @@ class _ReservationsContentState extends State<ReservationsContent> {
                         ),
                       ),
               ),
+              if (_selectedTabIndex == 1 &&
+                  profileType == ProfileType.waiter &&
+                  _activeReservationsFilters != null &&
+                  !_activeReservationsFilters!.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+                  child: _buildActiveFilterChips(l10n),
+                ),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, _) {
@@ -373,7 +380,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
                               context,
                               l10n,
                               confirmedProvider,
-                              filteredConfirmed,
+                              confirmedItems,
                               crossAxisCount,
                               onSeeConfirmedDetails,
                               highlightSelection: useMasterDetail,
@@ -456,79 +463,84 @@ class _ReservationsContentState extends State<ReservationsContent> {
       AppRouteNames.pathReservationsFilterActive,
       extra: _activeReservationsFilters,
     );
-    if (result != null && mounted) {
-      setState(() => _activeReservationsFilters = result);
+    if (result == null || !mounted) return;
+    setState(() => _activeReservationsFilters = result);
+    await context.read<ConfirmedReservationsProvider>().applyFilters(result);
+  }
+
+  Widget _buildActiveFilterChips(AppLocalizations l10n) {
+    final filters = _activeReservationsFilters;
+    if (filters == null || filters.isEmpty) return const SizedBox.shrink();
+    final regions = context.watch<RegionsProvider>().regions;
+    final chips = <Widget>[];
+    final code = filters.trimmedReservationNumber;
+    if (code != null) {
+      chips.add(_ActiveFilterChip(label: '#$code', onRemove: _removeCodeFilter));
     }
+    if (filters.regionId != null) {
+      String? regionTitle;
+      for (final region in regions) {
+        if (region.id == filters.regionId) {
+          regionTitle = region.title;
+          break;
+        }
+      }
+      chips.add(
+        _ActiveFilterChip(
+          label: regionTitle ?? l10n.filterRegionLabel,
+          onRemove: _removeRegionFilter,
+        ),
+      );
+    }
+    if (filters.hasCustomDateRange) {
+      chips.add(
+        _ActiveFilterChip(
+          label: _formatFilterDateRange(filters),
+          onRemove: _removeDateFilter,
+        ),
+      );
+    }
+    return Wrap(spacing: 8, runSpacing: 8, children: chips);
   }
 
-  List<ConfirmedReservation> _applyReservationFilters(
-    List<ConfirmedReservation> items,
-    ActiveReservationsFilters? filters,
-  ) {
-    if (filters == null || filters.isEmpty) return items;
-    return items.where((r) {
-      if (filters.dateFrom != null) {
-        final day = CalendarDayBounds.startOfDay(r.reservationStart);
-        final from = CalendarDayBounds.startOfDay(filters.dateFrom!);
-        if (day.isBefore(from)) return false;
-      }
-      if (filters.dateTo != null) {
-        final day = CalendarDayBounds.startOfDay(r.reservationStart);
-        final to = CalendarDayBounds.startOfDay(filters.dateTo!);
-        if (day.isAfter(to)) return false;
-      }
-      if (filters.peopleCounts.isNotEmpty) {
-        if (!filters.peopleCounts.contains(r.peopleCount)) return false;
-      }
-      if (filters.regions.isNotEmpty) {
-        final regionLower = r.regionTitle?.toLowerCase() ?? '';
-        final matches = filters.regions.any((reg) {
-          if (reg == ActiveReservationsFilters.regionIndoors) {
-            return _regionIndoorsKeywords.any((k) => regionLower.contains(k));
-          }
-          if (reg == ActiveReservationsFilters.regionGarden) {
-            return _regionGardenKeywords.any((k) => regionLower.contains(k));
-          }
-          return false;
-        });
-        if (!matches) return false;
-      }
-      if (filters.reservationContents.isNotEmpty) {
-        final hasFood = r.foodItems.isNotEmpty;
-        final hasDrink = r.drinkItems.isNotEmpty;
-        final matches = filters.reservationContents.every((c) {
-          if (c == ActiveReservationsFilters.contentFood) return hasFood;
-          if (c == ActiveReservationsFilters.contentDrink) return hasDrink;
-          return false;
-        });
-        if (!matches) return false;
-      }
-      if (filters.tableIds.isNotEmpty) {
-        final hasMatch = filters.tableIds.any(
-          (fid) => r.tables.any((t) => sameVenueTableId(fid, t.id)),
-        );
-        if (!hasMatch) return false;
-      }
-      return true;
-    }).toList();
+  String _formatFilterDate(DateTime date) {
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    return '$day.$month.${date.year}';
   }
 
-  static const _regionIndoorsKeywords = [
-    'unutrašnjost',
-    'indoors',
-    'innen',
-    'interior',
-    'interno',
-    'в помещении',
-  ];
-  static const _regionGardenKeywords = [
-    'bašta',
-    'garden',
-    'garten',
-    'jardín',
-    'giardino',
-    'сад',
-  ];
+  String _formatFilterDateRange(ActiveReservationsFilters filters) {
+    final range = filters.apiDateRange;
+    final fromLabel = _formatFilterDate(range.from);
+    final toLabel = _formatFilterDate(range.to);
+    if (fromLabel == toLabel) return fromLabel;
+    return '$fromLabel - $toLabel';
+  }
+
+  Future<void> _removeCodeFilter() async {
+    final current = _activeReservationsFilters;
+    if (current == null) return;
+    await _applyFiltersFromChip(current.copyWith(clearReservationNumber: true));
+  }
+
+  Future<void> _removeRegionFilter() async {
+    final current = _activeReservationsFilters;
+    if (current == null) return;
+    await _applyFiltersFromChip(current.copyWith(clearRegionId: true));
+  }
+
+  Future<void> _removeDateFilter() async {
+    final current = _activeReservationsFilters;
+    if (current == null) return;
+    await _applyFiltersFromChip(current.copyWith(clearDateRange: true));
+  }
+
+  Future<void> _applyFiltersFromChip(ActiveReservationsFilters next) async {
+    if (!mounted) return;
+    final normalized = next.isEmpty ? null : next;
+    setState(() => _activeReservationsFilters = normalized);
+    await context.read<ConfirmedReservationsProvider>().applyFilters(normalized);
+  }
 
   bool _pendingRequestsEmpty(
     ReservationsProvider provider,
@@ -577,7 +589,7 @@ class _ReservationsContentState extends State<ReservationsContent> {
     AppLocalizations l10n,
     ReservationsProvider provider,
     ConfirmedReservationsProvider confirmedProvider,
-    List<ConfirmedReservation> filteredConfirmed,
+    List<ConfirmedReservation> confirmedItems,
     ProfileType? profileType,
     String countLabel,
     String Function(PendingOrder) itemCountForCard,
@@ -671,13 +683,21 @@ class _ReservationsContentState extends State<ReservationsContent> {
                   ),
                 ),
         ),
+        if (_selectedTabIndex == 1 &&
+            profileType == ProfileType.waiter &&
+            _activeReservationsFilters != null &&
+            !_activeReservationsFilters!.isEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: _buildActiveFilterChips(l10n),
+          ),
         Expanded(
           child: _selectedTabIndex == 1
               ? _buildConfirmedList(
                   context,
                   l10n,
                   confirmedProvider,
-                  filteredConfirmed,
+                  confirmedItems,
                   1,
                   onSeeConfirmedDetails,
                   highlightSelection: true,
@@ -1017,6 +1037,50 @@ class _ReservationsContentState extends State<ReservationsContent> {
               itemCount: totalCount,
               itemBuilder: (context, index) => buildCard(index),
             ),
+    );
+  }
+}
+
+class _ActiveFilterChip extends StatelessWidget {
+  const _ActiveFilterChip({
+    required this.label,
+    required this.onRemove,
+  });
+
+  final String label;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE8F0FE),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF1A73E8),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(width: 6),
+          InkWell(
+            onTap: onRemove,
+            borderRadius: BorderRadius.circular(12),
+            child: const Icon(
+              Icons.close,
+              size: 16,
+              color: Color(0xFF1A73E8),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

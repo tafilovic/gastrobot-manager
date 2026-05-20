@@ -615,6 +615,21 @@ class AppLocalizationsHr extends AppLocalizations {
   String get filterRegion => 'Region:';
 
   @override
+  String get filterRegionLabel => 'Regija';
+
+  @override
+  String get filterUniqueCode => 'Jedinstveni kod';
+
+  @override
+  String get filterUniqueCodeHint => 'Unesite kod...';
+
+  @override
+  String get filterAllRegions => 'Svi regioni';
+
+  @override
+  String get filterDateFilter => 'Filter datuma';
+
+  @override
   String get filterRegionIndoors => 'Unutrašnjost';
 
   @override

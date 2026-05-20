@@ -1,4 +1,5 @@
 import 'package:gastrobotmanager/core/models/paginated_result.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 
 /// Contract for fetching confirmed reservations (waiter view).
@@ -8,5 +9,6 @@ abstract class ConfirmedReservationsApi {
     required String venueId,
     required int page,
     required int limit,
+    ActiveReservationsFilters? filters,
   });
 }

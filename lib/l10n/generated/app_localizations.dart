@@ -1222,6 +1222,36 @@ abstract class AppLocalizations {
   /// **'Region:'**
   String get filterRegion;
 
+  /// No description provided for @filterRegionLabel.
+  ///
+  /// In sr, this message translates to:
+  /// **'Region'**
+  String get filterRegionLabel;
+
+  /// No description provided for @filterUniqueCode.
+  ///
+  /// In sr, this message translates to:
+  /// **'Jedinstveni kod'**
+  String get filterUniqueCode;
+
+  /// No description provided for @filterUniqueCodeHint.
+  ///
+  /// In sr, this message translates to:
+  /// **'Unesite kod...'**
+  String get filterUniqueCodeHint;
+
+  /// No description provided for @filterAllRegions.
+  ///
+  /// In sr, this message translates to:
+  /// **'Svi regioni'**
+  String get filterAllRegions;
+
+  /// No description provided for @filterDateFilter.
+  ///
+  /// In sr, this message translates to:
+  /// **'Filter datuma'**
+  String get filterDateFilter;
+
   /// No description provided for @filterRegionIndoors.
   ///
   /// In sr, this message translates to:

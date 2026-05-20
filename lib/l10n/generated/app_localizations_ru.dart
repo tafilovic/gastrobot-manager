@@ -613,6 +613,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get filterRegion => 'Регион:';
 
   @override
+  String get filterRegionLabel => 'Регион';
+
+  @override
+  String get filterUniqueCode => 'Уникальный код';
+
+  @override
+  String get filterUniqueCodeHint => 'Введите код...';
+
+  @override
+  String get filterAllRegions => 'Все регионы';
+
+  @override
+  String get filterDateFilter => 'Фильтр по дате';
+
+  @override
   String get filterRegionIndoors => 'В помещении';
 
   @override

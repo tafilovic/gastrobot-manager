@@ -615,6 +615,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get filterRegion => 'Regione:';
 
   @override
+  String get filterRegionLabel => 'Regione';
+
+  @override
+  String get filterUniqueCode => 'Codice univoco';
+
+  @override
+  String get filterUniqueCodeHint => 'Inserisci codice...';
+
+  @override
+  String get filterAllRegions => 'Tutte le regioni';
+
+  @override
+  String get filterDateFilter => 'Filtro data';
+
+  @override
   String get filterRegionIndoors => 'Interno';
 
   @override

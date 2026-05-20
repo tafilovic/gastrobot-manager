@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:gastrobotmanager/core/api/api_config.dart';
 import 'package:gastrobotmanager/core/models/paginated_result.dart';
 import 'package:gastrobotmanager/features/reservations/domain/errors/reservations_exception.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
 
@@ -10,7 +11,7 @@ class ConfirmedReservationsRemote implements ConfirmedReservationsApi {
   ConfirmedReservationsRemote(Dio dio) : _dio = dio;
 
   final Dio _dio;
-  static const String _sortBy = 'createdAt';
+  static const String _sortBy = 'reservationStart';
   static const String _sortOrder = 'DESC';
 
   @override
@@ -18,19 +19,35 @@ class ConfirmedReservationsRemote implements ConfirmedReservationsApi {
     required String venueId,
     required int page,
     required int limit,
+    ActiveReservationsFilters? filters,
   }) async {
     final url = '${ApiConfig.baseUrl}/v1/venues/$venueId/reservations';
+    final range =
+        filters?.apiDateRange ?? ActiveReservationsFilters.defaultApiDateRange();
+
+    final queryParameters = <String, dynamic>{
+      'page': page,
+      'limit': limit,
+      'status': 'confirmed',
+      'sortBy': _sortBy,
+      'sortOrder': _sortOrder,
+      'from': range.from.toIso8601String(),
+      'to': range.to.toIso8601String(),
+    };
+
+    final reservationNumber = filters?.trimmedReservationNumber;
+    if (reservationNumber != null) {
+      queryParameters['reservationNumber'] = reservationNumber;
+    }
+    final regionId = filters?.regionId;
+    if (regionId != null && regionId.isNotEmpty) {
+      queryParameters['regionId'] = regionId;
+    }
 
     try {
       final response = await _dio.get<dynamic>(
         url,
-        queryParameters: <String, dynamic>{
-          'page': page,
-          'limit': limit,
-          'status': 'confirmed',
-          'sortBy': _sortBy,
-          'sortOrder': _sortOrder,
-        },
+        queryParameters: queryParameters,
         options: Options(
           validateStatus: (status) => status != null && status < 400,
         ),

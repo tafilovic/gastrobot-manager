@@ -619,6 +619,21 @@ class AppLocalizationsEl extends AppLocalizations {
   String get filterRegion => 'Περιοχή:';
 
   @override
+  String get filterRegionLabel => 'Περιοχή';
+
+  @override
+  String get filterUniqueCode => 'Μοναδικός κωδικός';
+
+  @override
+  String get filterUniqueCodeHint => 'Εισαγάγετε κωδικό...';
+
+  @override
+  String get filterAllRegions => 'Όλες οι περιοχές';
+
+  @override
+  String get filterDateFilter => 'Φίλτρο ημερομηνίας';
+
+  @override
   String get filterRegionIndoors => 'Εσωτερικό';
 
   @override

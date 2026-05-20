@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:gastrobotmanager/features/reservations/domain/constants/reservations_pagination.dart';
+import 'package:gastrobotmanager/features/reservations/domain/models/active_reservations_filters.dart';
 import 'package:gastrobotmanager/features/reservations/domain/models/confirmed_reservation.dart';
 import 'package:gastrobotmanager/features/reservations/domain/repositories/confirmed_reservations_api.dart';
 import 'package:gastrobotmanager/features/reservations/providers/pagination_state.dart';
@@ -16,8 +17,10 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   String? _currentVenueId;
+  ActiveReservationsFilters? _filters;
 
   List<ConfirmedReservation> get items => List.unmodifiable(_items);
+  ActiveReservationsFilters? get filters => _filters;
 
   /// True after [load] has been called at least once (accepted tab opened).
   bool get hasLoadedOnce => _currentVenueId != null;
@@ -34,8 +37,21 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
     return b.reservationStart.compareTo(a.reservationStart);
   }
 
-  Future<void> load(String venueId) async {
+  Future<void> load(
+    String venueId, {
+    ActiveReservationsFilters? filters,
+  }) async {
     _currentVenueId = venueId;
+    if (filters != null) {
+      _filters = filters;
+    }
+    await _fetch(venueId);
+  }
+
+  Future<void> applyFilters(ActiveReservationsFilters? filters) async {
+    _filters = filters;
+    final venueId = _currentVenueId;
+    if (venueId == null) return;
     await _fetch(venueId);
   }
 
@@ -58,6 +74,7 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
         venueId: venueId,
         page: nextPage,
         limit: reservationsPageSize,
+        filters: _filters,
       );
       _items = [..._items, ...pageData.items];
       _pagination.markFetched(
@@ -66,7 +83,6 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
         total: pageData.total,
       );
     } catch (_) {
-      // Keep current list and allow retry on next scroll.
       _pagination.stopLoadingMore();
     } finally {
       notifyListeners();
@@ -77,6 +93,7 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
     if (_isLoading) return;
     _isLoading = true;
     _error = null;
+    _pagination.reset();
     notifyListeners();
 
     try {
@@ -84,6 +101,7 @@ class ConfirmedReservationsProvider extends ChangeNotifier {
         venueId: venueId,
         page: 1,
         limit: reservationsPageSize,
+        filters: _filters,
       );
       _items = pageData.items..sort(_byReservationStartDesc);
       _pagination.markFetched(
